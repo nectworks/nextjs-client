@@ -1,10 +1,7 @@
-import Image from 'next/image';
-import styles from './page.module.css';
+import Home from "./home/home";
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div>Nectworks Migration</div>
-    </main>
-  );
+const HomePage = () => {
+  return <Home />;
 }
+
+export default HomePage;
