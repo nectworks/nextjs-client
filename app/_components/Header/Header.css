@@ -1,0 +1,152 @@
+/*
+  FileName - Header.css
+  Desc - This CSS file contains styles for creating a responsive header and navigation menu. These styles collectively create a responsive header and navigation menu design, providing an optimal user experience for different screen sizes, particularly in mobile views.
+*/
+/* Reset default list styles for all elements */
+/* Styling for the header container */
+.header {
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: #f3f3f3;
+  z-index: 5;
+}
+
+.header_navigation ul {
+  list-style: none;
+}
+
+/* Styling for the logo image */
+  .image{
+  aspect-ratio: 1;
+  width: 10rem;
+  height: 2.5rem;
+}
+
+/* Remove underline from anchor tags inside list items */
+li a {
+  text-decoration: none;
+}
+
+/* Styling for the navigation bar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 96px;
+}
+
+/* Styling for the logo anchor tag */
+.logo a {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Styling for a specific span inside the logo anchor tag */
+
+/* Styling for the menu (unordered list) */
+.menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styling for anchor tags inside the menu */
+.menu a {
+  display: block;
+  padding: 7px 15px;
+  font-size: 17px;
+  font-weight: 500;
+  transition: 0.2s all ease-in-out;
+  color: #0e0e0e;
+}
+
+/* Styling when hovering over the menu */
+.menu:hover a {
+  opacity: 1;
+}
+
+/* Styling when hovering over the anchor tags inside the menu */
+.menu a:hover {
+  opacity: 1;
+}
+
+/* Styling for the menu icon (hamburger) - initially hidden */
+.menu-icon {
+  display: none;
+}
+
+/* Styling for the menu toggle input checkbox - initially hidden */
+#menu-toggle {
+  display: none;
+}
+
+/* Styling for the menu when the toggle input is checked */
+#menu-toggle:checked~.menu {
+  transform: scale(1, 1);
+}
+
+.loginheader {
+  border: 1.6px solid #0057B1;
+  border-radius: 20px;
+  margin-right: 15px;
+}
+
+/* Media query for screen width less than or equal to 950px */
+/* Media query for screen width less than or equal to 950px */
+@media only screen and (max-width: 950px) {
+
+  /* Styling for the menu in mobile view */
+  .menu {
+    flex-direction: column;
+    background-color: #f3f3f3;
+    color: #000000;
+    align-items: start;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    transform: scale(1, 0);
+    transform-origin: top;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    justify-content: space-between;
+    /* Add this line to shift anchor tags to opposite ends */
+  }
+
+  /* Styling for anchor tags inside the menu in mobile view */
+  .menu a {
+    margin-left: 12px;
+    color: #000000;
+  }
+
+  /* Styling for list items inside the menu in mobile view */
+  .menu li {
+    margin-bottom: 10px;
+  }
+
+  /* Styling for the menu icon (hamburger) in mobile view */
+  .menu-icon {
+    display: block;
+    color: #000000;
+    font-size: 28px;
+    cursor: pointer;
+  }
+
+  /* Styling for the navigation bar in mobile view */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 16px;
+  }
+
+  .menu {
+    display: flex;
+    align-items: end;
+    text-align: left;
+  }
+}
