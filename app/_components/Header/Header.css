@@ -18,7 +18,7 @@
 }
 
 /* Styling for the logo image */
-  .image{
+.image {
   aspect-ratio: 1;
   width: 10rem;
   height: 2.5rem;
@@ -84,12 +84,12 @@ nav {
 }
 
 /* Styling for the menu when the toggle input is checked */
-#menu-toggle:checked~.menu {
+#menu-toggle:checked ~ .menu {
   transform: scale(1, 1);
 }
 
 .loginheader {
-  border: 1.6px solid #0057B1;
+  border: 1.6px solid #0057b1;
   border-radius: 20px;
   margin-right: 15px;
 }
@@ -97,7 +97,6 @@ nav {
 /* Media query for screen width less than or equal to 950px */
 /* Media query for screen width less than or equal to 950px */
 @media only screen and (max-width: 950px) {
-
   /* Styling for the menu in mobile view */
   .menu {
     flex-direction: column;

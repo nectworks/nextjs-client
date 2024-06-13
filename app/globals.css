@@ -1,82 +1,82 @@
 * {
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-    scroll-behavior: smooth !important;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth !important;
 }
 
 button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
+  width: 0;
+  background: transparent;
 }
 
 /* display message styles */
 .info-box {
-    display: none;
-    position: fixed;
-    z-index: 100;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #0057B1;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    /* Start with opacity 0 for fade-in effect */
-    transition: opacity 0.5s ease-in-out;
-    /* Use CSS transitions for opacity */
+  display: none;
+  position: fixed;
+  z-index: 100;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #0057b1;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  /* Start with opacity 0 for fade-in effect */
+  transition: opacity 0.5s ease-in-out;
+  /* Use CSS transitions for opacity */
 }
 
 /* CSS for the slide-down animation */
 .slide-down {
-    animation: slide-down 0.5s ease-in-out;
+  animation: slide-down 0.5s ease-in-out;
 }
 
 @keyframes slide-down {
-    from {
-        transform: translate(-50%, 0);
-    }
+  from {
+    transform: translate(-50%, 0);
+  }
 
-    to {
-        transform: translate(-50%, 100%);
-    }
+  to {
+    transform: translate(-50%, 100%);
+  }
 }
 
 /* Styles for loader that is displayed in UserContext */
 .authenticatingLoader {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* common dashboard styles */
 .admin_dashboard_loader {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
 .admin_dashboard_message {
-    margin: 1rem 0;
-    font-size: 1.3rem;
+  margin: 1rem 0;
+  font-size: 1.3rem;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 a:visited {
-    color: unset;
+  color: unset;
 }

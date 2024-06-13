@@ -22,15 +22,15 @@ function showBottomMessage(message, time = 8000) {
 
   infoBox.style.display = 'block';
   // Trigger the fade-in effect
-  setTimeout(function() {
+  setTimeout(function () {
     infoBox.style.opacity = '1';
   }, 10);
 
-  const currentTimeOut = setTimeout(function() {
+  const currentTimeOut = setTimeout(function () {
     infoBox.classList.add('slide-down'); // Apply slide-down animation class
 
     // Trigger the fade-out effect
-    setTimeout(function() {
+    setTimeout(function () {
       infoBox.style.opacity = '0';
       infoBox.style.display = 'none';
       infoBox.classList.remove('slide-down'); // Remove animation class

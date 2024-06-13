@@ -60,13 +60,13 @@ const profileInfoSteps = {
 
 // map event names to respective event objects.
 const allEvents = {
-  'view_resume': viewResume,
-  'view_document': viewDocument,
-  'refer_candidate': referCandidate,
-  'search_seekers': searchSeekers,
-  'help': helpRequest,
-  'contact_us': contactUs,
-  'profile_steps': profileInfoSteps,
+  view_resume: viewResume,
+  view_document: viewDocument,
+  refer_candidate: referCandidate,
+  search_seekers: searchSeekers,
+  help: helpRequest,
+  contact_us: contactUs,
+  profile_steps: profileInfoSteps,
 };
 
 // function to send the event
@@ -78,7 +78,7 @@ function sendGAEvent(eventName, data = null) {
   if (!event) return;
 
   // send the event
-  ReactGA.event({...event, ...data});
+  ReactGA.event({ ...event, ...data });
 }
 
 export default sendGAEvent;

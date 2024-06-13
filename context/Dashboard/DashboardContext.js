@@ -1,4 +1,4 @@
-'use client'
+'use client';
 /*
   File: DashboardContext.js
   Description: This file contains the state for userInfo that is displayed
@@ -6,12 +6,12 @@
   state is accessible in all the components in dashboard.
 */
 
-import {createContext, useEffect, useState} from 'react';
+import { createContext, useEffect, useState } from 'react';
 import usePrivateAxios from '../../Utils/usePrivateAxios';
 
 export const DashboardContext = createContext(null);
 
-const DashboardContextProvider = ({children}) => {
+const DashboardContextProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(null);
   const privateAxios = usePrivateAxios();
 
@@ -22,7 +22,7 @@ const DashboardContextProvider = ({children}) => {
     try {
       const res = await privateAxios.get(`/profile/user-info`);
 
-      const {data} = res.data;
+      const { data } = res.data;
       setUserInfo(data.userInfo);
     } catch (error) {
       // console.log(error);
@@ -46,10 +46,8 @@ const DashboardContextProvider = ({children}) => {
   }, [userInfo]);
 
   return (
-    <DashboardContext.Provider
-      value={[userInfo, setUserInfo]}
-    >
-    {children}
+    <DashboardContext.Provider value={[userInfo, setUserInfo]}>
+      {children}
     </DashboardContext.Provider>
   );
 };
