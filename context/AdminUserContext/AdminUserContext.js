@@ -1,18 +1,18 @@
-'use client'
+'use client';
 /*
   File: AdminUserContext.js
   Description: This file contains a context provider that stores data to
     identify the authenticated admin user.
 */
 
-import {createContext, useEffect, useState} from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { privateAxios } from '../../config/axiosInstance.js';
 import { useRouter } from 'next/router';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 export const AdminUserContext = createContext(null);
 
-export default function AdminUserContextProvider ({children}) {
+export default function AdminUserContextProvider({ children }) {
   const [admin, setAdmin] = useState(null);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -40,17 +40,21 @@ export default function AdminUserContextProvider ({children}) {
 
   return (
     <AdminUserContext.Provider value={[admin, setAdmin]}>
-      {(isLoading) ?
-        <div style={{
-          width: '100vw',
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+      {isLoading ? (
+        <div
+          style={{
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <ClipLoader size={50} />
-        </div>:{children}
-      }
+        </div>
+      ) : (
+        { children }
+      )}
     </AdminUserContext.Provider>
   );
-};
+}

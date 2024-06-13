@@ -1,4 +1,4 @@
-'use client'
+'use client';
 /*
   FileName - Home.js
   Desc - This file defines the main content of a web page using React
@@ -21,11 +21,11 @@ import Accordion from '../_components/Accordian/Accordion';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import arrowImg from '../../public/arrow_img.svg';
-import  scrollToTop  from '../../Utils/scrollToTop';
+import scrollToTop from '../../Utils/scrollToTop';
 import { UserContext } from '../../context/User/UserContext';
 
-export default function Home (){
-  const {userState} = useContext(UserContext);
+export default function Home() {
+  const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
   const [username, setUsername] = useState('');
   const router = useRouter();
@@ -64,31 +64,33 @@ export default function Home (){
           <Image
             className="cloudImage1"
             src={cloudImage1}
-            alt='cloud image'
+            alt="cloud image"
             loading="lazy"
           />
           <Image
             className="cloudImage2"
             src={cloudImage2}
-            alt='cloud image'
+            alt="cloud image"
             loading="lazy"
           />
           <div className="body__header__inner body__components">
             <div className="header__paragraph">
               {/* keeping the text as one unit */}
               <p className="company_moto main__paragraph">
-                The Future of Hiring and Job Referrals is<span className="color_change"> Here</span>
+                The Future of Hiring and Job Referrals is
+                <span className="color_change"> Here</span>
               </p>
               <p className="body_secondary_para color-black">
-                Find your <span className="color_change">dream job</span>, or become a top referrer. Connect with ease, ditch the cold messages.
-				Join our hiring revolution!
+                Find your <span className="color_change">dream job</span>, or
+                become a top referrer. Connect with ease, ditch the cold
+                messages. Join our hiring revolution!
               </p>
 
               {/* Sign In Link */}
               <div
                 className="signIn__link"
                 style={{
-                  display: (user !== null) ? 'none' : '',
+                  display: user !== null ? 'none' : '',
                 }}
               >
                 <span className="input__form">
@@ -108,7 +110,8 @@ export default function Home (){
                 {/* Button for user signIn */}
                 <Link href="/sign-up">
                   <button
-                    className={`landingSignupButton ${!username ? 'nocursor' : ''
+                    className={`landingSignupButton ${
+                      !username ? 'nocursor' : ''
                     }`}
                     disabled={!username}
                   >
@@ -117,7 +120,12 @@ export default function Home (){
                 </Link>
               </div>
             </div>
-            <Image src={boyImage} className="boy__img" loading="lazy" alt="not found" />
+            <Image
+              src={boyImage}
+              className="boy__img"
+              loading="lazy"
+              alt="not found"
+            />
           </div>
         </div>
       </div>
@@ -129,7 +137,7 @@ export default function Home (){
               src={illustration}
               className="bodyImg illustrationimg"
               loading="lazy"
-              alt='man working on his laptop'
+              alt="man working on his laptop"
             />
             <div className="paragraph__title">
               <div>
@@ -138,7 +146,6 @@ export default function Home (){
                   <span className="color_change"> AI Driven Referrers </span>
                 </h2>
                 <p className="body_secondary_para color-black">
-
                   By leveraging AI-driven insights and algorithms, you can
                   uncover hidden opportunities and match them with the right
                   candidates.
@@ -153,7 +160,6 @@ export default function Home (){
                 Refer <span className="color_change">2x faster</span>
               </h2>
               <p className="body_secondary_para">
-
                 Save time reviewing and referring candidates that aren’t
                 qualified or interested. Reduce your time to refer by hours, not
                 days.{' '}
@@ -172,7 +178,7 @@ export default function Home (){
               src={isolationImage}
               className="bodyImg"
               loading="lazy"
-              alt='People connected through a platform'
+              alt="People connected through a platform"
             />
             <div className="paragraph__title third__para">
               <h2 className="main__paragraph">
@@ -205,7 +211,7 @@ export default function Home (){
                   src={arrowImg}
                   className="arrowImg"
                   onClick={scrollToTop}
-                  alt='report fradulent activity'
+                  alt="report fradulent activity"
                 />
               </Link>
             </div>
@@ -213,7 +219,8 @@ export default function Home (){
         </div>
         <div className="qna__header">
           <h4>
-            <span className="color_change">Quick answers</span> to common questions
+            <span className="color_change">Quick answers</span> to common
+            questions
           </h4>
         </div>
       </div>
@@ -221,4 +228,3 @@ export default function Home (){
     </main>
   );
 }
-

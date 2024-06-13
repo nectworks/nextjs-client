@@ -1,4 +1,4 @@
-const axios = require("axios")
+const axios = require('axios');
 
 // Set the base URL for API requests
 const baseURL = process.env.NEXT_PUBLIC_APP_URL || '/api/v1';
@@ -39,7 +39,8 @@ const tokenResInterceptor = async (error) => {
     prevRequest.retry = true;
 
     // Send a network request to refresh token
-    return axios.get(`${baseURL}/auth/refresh`, { withCredentials: true })
+    return axios
+      .get(`${baseURL}/auth/refresh`, { withCredentials: true })
       .then((res) => {
         /* If the access token was successfully retrieved, retry the
           previous request */
@@ -57,4 +58,3 @@ const tokenResInterceptor = async (error) => {
 };
 
 module.exports = { privateAxios, publicAxios, tokenResInterceptor };
-

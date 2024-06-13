@@ -1,3 +1,8 @@
+/*
+Filename: checkFileExtension.js
+Description: A utility function for validating file extensions based on file type, used for checking uploaded files against allowed extensions.
+*/
+
 const checkFileExtension = (uploadedFile, isDocument) => {
   let allowedExtensions = [];
 

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /*
   FileName - Header.js
@@ -11,13 +11,13 @@
 import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image'; 
+import Image from 'next/image';
 import './Header.css';
 import companyName from '../../../public/nectworks-ssar04a-mil-11@2x.webp';
 import scrollToTop from '../../../Utils/scrollToTop';
 import { UserContext } from '../../../context/User/UserContext';
 
-const Header = ( ) => {
+const Header = () => {
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,40 +31,54 @@ const Header = ( ) => {
       router.pathname !== '/sign-up'
     ) {
       return (
-        <li className='loginheader'><Link href="/log-in">Log In</Link></li>
+        <li className="loginheader">
+          <Link href="/log-in">Log In</Link>
+        </li>
       );
     }
     return null;
   };
 
   useEffect(() => {
-    setIsLoggedIn((user !== null));
+    setIsLoggedIn(user !== null);
   }, [user]);
 
   return (
     <header className="header">
-      <nav className='header_navigation'>
+      <nav className="header_navigation">
         {/* <!-- Logo --> */}
         <div className="logo" onClick={scrollToTop}>
           <Link href="/">
-            <Image className='image' src={companyName} alt="Nectworks home page" />
+            <Image
+              className="image"
+              src={companyName}
+              alt="Nectworks home page"
+            />
           </Link>
         </div>
         {/* <!-- Responsive Menu Icon --> */}
         <input type="checkbox" id="menu-toggle" />
-        <label htmlFor="menu-toggle" className="menu-icon">&#9776;</label>
+        <label htmlFor="menu-toggle" className="menu-icon">
+          &#9776;
+        </label>
         {/* <!-- Menu Items --> */}
         <ul className="menu" onClick={scrollToTop}>
           <RenderMenu />
-          {(isLoggedIn) &&
-          <li><Link href="/profile">Profile</Link></li>
-          }
-          <li><Link href='/about-us'>About Us</Link></li>
-          <li><Link href="/faq">FAQ</Link></li>
+          {isLoggedIn && (
+            <li>
+              <Link href="/profile">Profile</Link>
+            </li>
+          )}
+          <li>
+            <Link href="/about-us">About Us</Link>
+          </li>
+          <li>
+            <Link href="/faq">FAQ</Link>
+          </li>
         </ul>
       </nav>
     </header>
   );
-}
+};
 
 export default Header;

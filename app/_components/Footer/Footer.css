@@ -1,4 +1,3 @@
-
 /*
   FileName - Footer.css
   Desc - This CSS file defines styles for the footer section of a web page, focusing on responsiveness for various screen sizes. These styles ensure that the footer section maintains a clean layout and readable text across various devices and screen sizes, with specific adjustments made to optimize the user experience on laptops, tablets, and mobile devices.
@@ -12,28 +11,28 @@
   height: 2.5rem;
 }
 
-.footer__copyright img{
-  width:23px;
+.footer__copyright img {
+  width: 23px;
   padding-top: 5px;
   padding-left: 15px;
 }
 
 .footer__outer__container {
-  background: #FFF;
+  background: #fff;
 }
 
-.footer__container__top img{
+.footer__container__top img {
   cursor: pointer;
 }
 
 .footer__container {
-    display: flex;
-    justify-content: center;
-    flex-shrink: 0;
-    background: #FFF;
-    text-decoration: none;  
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #fff;
+  text-decoration: none;
 
-    /* border: 2px solid green; */
+  /* border: 2px solid green; */
 }
 
 .footer__container__top {
@@ -43,11 +42,11 @@
   width: 76vw;
 }
 
-.link__tags{
-  display:flex;
+.link__tags {
+  display: flex;
 }
 
-.company__copyright{
+.company__copyright {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,17 +54,17 @@
 
 /* The a tag is used for routing so the default styleing is made none to avoid the undelineing */
 .footer__outer__container a {
-    text-decoration: none;
-    color: #000;
-    font-size: 1.25rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  text-decoration: none;
+  color: #000;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
-.logoMoto{
+.logoMoto {
   margin-top: 0.5rem;
-  color: #6C6C6C;
+  color: #6c6c6c;
 }
 
 .footer__copyright a {
@@ -77,7 +76,6 @@
   padding-left: 3rem;
   line-height: normal;
 }
-
 
 .footer__links {
   display: flex;
@@ -96,7 +94,7 @@
   background-color: #000;
 }
 
-.social__media__icons{
+.social__media__icons {
   height: 1.6rem;
 }
 
@@ -110,7 +108,7 @@
   text-decoration: none;
 }
 
-.footer__copyright{
+.footer__copyright {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -120,29 +118,33 @@
   margin: auto;
 }
 
-hr{
+hr {
   width: 85%;
   margin: auto;
 }
 
-.first__part{
+.first__part {
   display: flex;
   flex-direction: column;
   padding: 50px;
 }
 
-.second__part,.third__part, .fourth__part {
+.second__part,
+.third__part,
+.fourth__part {
   display: flex;
   flex-direction: column;
   padding: 50px;
 }
 
-.second__part a, .third__part a, .fourth__part a{
+.second__part a,
+.third__part a,
+.fourth__part a {
   padding: 10px 0px;
 }
 
 .footer__header {
-  color: #0057B1;
+  color: #0057b1;
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 500;
@@ -151,34 +153,33 @@ hr{
 }
 
 /* Laptop - 1024 (Max - Width)*/
-@media only screen and (min-width: 769px) and (max-width: 900px){
-  .link__tagss{
+@media only screen and (min-width: 769px) and (max-width: 900px) {
+  .link__tagss {
     width: 22vw !important;
   }
 
-  .company__copyright{
+  .company__copyright {
     width: 54vw !important;
   }
 }
-@media only screen and (min-width: 769px) and (max-width: 1024px){
-
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
   .footer__container__top {
     justify-content: space-between;
     width: 70vw;
     margin: 50px 0px;
   }
 
-  .link__tags{
+  .link__tags {
     width: 55vw;
     justify-content: space-evenly;
     padding-top: 8px;
   }
 
-  .link__tags a{
+  .link__tags a {
     font-size: 14px;
   }
-  
-  .link__tagss{
+
+  .link__tagss {
     display: flex;
     justify-content: space-between !important;
     width: 25vw;
@@ -186,27 +187,33 @@ hr{
     padding-bottom: 9px !important;
   }
 
-  .footer__copyright a{
+  .footer__copyright a {
     padding-left: 0 !important;
   }
 
-  .first__part{
+  .first__part {
     padding: 0px;
   }
-  
-  .first__part p{
-    font-size:  16px;
-  }
-  
-  .second__part,.third__part, .fourth__part {
-    padding: 5px;
-  }
-  
-  .second__part a, .third__part a, .fourth__part a{
+
+  .first__part p {
     font-size: 16px;
   }
 
-  .second__part p, .third__part p, .fourth__part p{
+  .second__part,
+  .third__part,
+  .fourth__part {
+    padding: 5px;
+  }
+
+  .second__part a,
+  .third__part a,
+  .fourth__part a {
+    font-size: 16px;
+  }
+
+  .second__part p,
+  .third__part p,
+  .fourth__part p {
     font-size: 18px;
   }
 
@@ -215,38 +222,37 @@ hr{
     height: 2.5rem;
   }
 
-  .footer__copyright{
+  .footer__copyright {
     padding: 20px;
     width: 80vw;
   }
 
-  .company__copyright{
+  .company__copyright {
     font-size: 14px;
     padding: 0 !important;
     width: 60vw;
     justify-content: space-between;
   }
 
-  .footer__links{
+  .footer__links {
     width: 13vw;
     justify-content: space-around;
   }
 
-  .footer__links p{
+  .footer__links p {
     font-size: 14px;
   }
 
-  .footer__copyright img{
-    width:20px;
+  .footer__copyright img {
+    width: 20px;
     padding-left: 5px;
     padding-top: 5px !important;
   }
 }
 
-
 /* Tablet - 768px (Max - Width)*/
-@media only screen and (min-width: 481px) and (max-width: 768px){
-  .logoMoto{
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  .logoMoto {
     padding-top: 0.6rem;
   }
 
@@ -256,47 +262,53 @@ hr{
     margin: 50px 0px;
   }
 
-  .link__tags{
+  .link__tags {
     width: 55vw;
     justify-content: space-evenly;
   }
 
-  .link__tags a{
+  .link__tags a {
     font-size: 10px;
   }
-  
-  .link__tagss{
+
+  .link__tagss {
     display: flex;
     justify-content: space-between !important;
     width: 24vw;
     margin-left: 5px;
   }
 
-  .footer__copyright a{
+  .footer__copyright a {
     padding-left: 0 !important;
   }
 
-  .first__part{
+  .first__part {
     padding: 0px;
   }
-  
-  .first__part p{
-    font-size:  14px;
-  }
-  
-  .second__part,.third__part, .fourth__part {
-    padding: 5px;
-  }
 
-  .second__part{
-    width: 17vw;
-  }
-  
-  .second__part a, .third__part a, .fourth__part a{
+  .first__part p {
     font-size: 14px;
   }
 
-  .second__part p, .third__part p, .fourth__part p{
+  .second__part,
+  .third__part,
+  .fourth__part {
+    padding: 5px;
+  }
+
+  .second__part {
+    width: 17vw;
+  }
+
+  .second__part a,
+  .third__part a,
+  .fourth__part a {
+    font-size: 14px;
+  }
+
+  .second__part p,
+  .third__part p,
+  .fourth__part p {
     font-size: 16px;
   }
 
@@ -305,36 +317,36 @@ hr{
     height: 2.5rem;
   }
 
-  .footer__copyright{
+  .footer__copyright {
     padding: 20px;
     width: 85vw;
   }
 
-  .company__copyright{
+  .company__copyright {
     font-size: 10px;
     padding: 0 !important;
     width: 58vw;
     justify-content: space-between;
   }
 
-  .footer__links{
+  .footer__links {
     width: 15vw;
     justify-content: space-around;
   }
 
-  .footer__links p{
+  .footer__links p {
     font-size: 10px;
   }
 
-  .footer__copyright img{
-    width:20px;
+  .footer__copyright img {
+    width: 20px;
     padding-left: 5px;
     padding-top: 5px !important;
   }
 }
 
 /* Mobile - 480px (Max - Width)*/
-@media only screen and (max-width: 480px){
+@media only screen and (max-width: 480px) {
   .footer__container__top {
     justify-content: space-between;
     width: 75vw;
@@ -343,17 +355,17 @@ hr{
     align-items: center;
   }
 
-  .link__tags{
+  .link__tags {
     width: 80vw;
     justify-content: space-between;
     margin-top: 3rem;
   }
 
-  .link__tags a{
+  .link__tags a {
     font-size: 10px;
   }
-  
-  .link__tagss{
+
+  .link__tagss {
     display: flex;
     justify-content: space-between !important;
     width: 45vw;
@@ -361,34 +373,40 @@ hr{
     margin-top: 0.8rem !important;
   }
 
-  .footer__copyright a{
+  .footer__copyright a {
     padding-left: 0 !important;
   }
 
-  .first__part{
+  .first__part {
     padding: 0px;
     align-items: center;
   }
-  
-  .first__part p{
-    font-size:  14px;
-  }
-  
-  .logoMoto{
-    padding-top: 0.5rem !important;
-  }
 
-  .second__part,.third__part, .fourth__part {
-    padding: 5px;
-  }
-  .second__part{
-    width: 32vw;
-  }
-  .second__part a, .third__part a, .fourth__part a{
+  .first__part p {
     font-size: 14px;
   }
 
-  .second__part p, .third__part p, .fourth__part p{
+  .logoMoto {
+    padding-top: 0.5rem !important;
+  }
+
+  .second__part,
+  .third__part,
+  .fourth__part {
+    padding: 5px;
+  }
+  .second__part {
+    width: 32vw;
+  }
+  .second__part a,
+  .third__part a,
+  .fourth__part a {
+    font-size: 14px;
+  }
+
+  .second__part p,
+  .third__part p,
+  .fourth__part p {
     font-size: 16px;
   }
 
@@ -397,12 +415,12 @@ hr{
     height: 2.5rem;
   }
 
-  .footer__copyright{
+  .footer__copyright {
     padding: 20px;
     width: 85vw;
   }
 
-  .company__copyright{
+  .company__copyright {
     flex-direction: column;
     font-size: 10px;
     padding: 0 !important;
@@ -410,34 +428,34 @@ hr{
     align-items: flex-start;
   }
 
-  .footer__links{
+  .footer__links {
     width: 25vw;
     justify-content: space-around;
     padding-bottom: 25px;
   }
 
-  .footer__links p{
+  .footer__links p {
     font-size: 10px;
   }
 
-  .footer__copyright img{
-    width:20px;
+  .footer__copyright img {
+    width: 20px;
     padding-left: 5px;
     padding-top: 5px !important;
   }
 }
 
 /* Mobile - 480px (Max - Width)*/
-@media only screen and (min-width: 1025px) and (max-width: 1492px){
+@media only screen and (min-width: 1025px) and (max-width: 1492px) {
   .footer__container__top {
     width: 80vw;
   }
 
-  .footer__copyright{
+  .footer__copyright {
     width: 85vw;
   }
 
-  hr{
+  hr {
     width: 90vw;
   }
 }

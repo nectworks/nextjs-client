@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /*
    File: ProfileReducer.js
@@ -61,13 +61,20 @@
 */
 
 // all the subsections in the profile page in order.
-const allSubSections = ['about', 'experience', 'education', 'socials',
-  'skills', 'achievements', 'projects'];
+const allSubSections = [
+  'about',
+  'experience',
+  'education',
+  'socials',
+  'skills',
+  'achievements',
+  'projects',
+];
 
 const initialState = JSON.parse(localStorage.getItem('dashboard')) || {};
 
 // function to update current state
-export function reducer(state = initialState, {type, payload}) {
+export function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case 'UPDATE_ABOUT': {
       updateDataLocally(payload);
@@ -186,7 +193,7 @@ export function reducer(state = initialState, {type, payload}) {
       const sectionToRemove = allSubSections[payload.step];
 
       // remove the section and save the new state
-      const newState = {...state};
+      const newState = { ...state };
       delete newState[sectionToRemove];
 
       localStorage.setItem('dashboard', JSON.stringify(newState));
@@ -220,4 +227,3 @@ export function updateDataLocally(updatedData) {
   // save the data to localStorage
   localStorage.setItem('dashboard', JSON.stringify(newDashboardData));
 }
-

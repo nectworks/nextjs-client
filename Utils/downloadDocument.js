@@ -4,15 +4,15 @@
   it's key.
 */
 
-import {publicAxios} from '../config/axiosInstance.js';
+import { publicAxios } from '../config/axiosInstance.js';
 
 async function downloadDocument(key, fileName) {
   // retrieve the `get` url of the document.
   const res = await publicAxios.get(`/file/s3-url-get?key=${key}`);
-  const {url} = res.data;
+  const { url } = res.data;
 
   // download the document as blob
-  const fileResponse = await publicAxios.get(url, {responseType: 'blob'});
+  const fileResponse = await publicAxios.get(url, { responseType: 'blob' });
 
   const blobUrl = window.URL.createObjectURL(new Blob([fileResponse.data]));
 
