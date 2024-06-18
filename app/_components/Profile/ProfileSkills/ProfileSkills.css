@@ -1,0 +1,51 @@
+.dashboard_profile_skills_container {
+  position: relative;
+  padding-bottom: 2rem;
+  padding-right: 1.08rem;
+}
+
+.dashboard_profile_skills_container input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  outline: none;
+  border: 1px solid;
+}
+
+.dashboard_all_skills_container {
+  margin: 1rem 0;
+}
+
+.dashboard_all_skills_container h6 {
+  color: #282828;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 1rem 0;
+}
+
+.dashboard_each_skill {
+  background-color: #0057b1;
+  color: white;
+  padding: 0.3rem 0.7rem;
+  border-radius: 1.3rem;
+  margin: 0.3rem;
+  margin-left: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dashboard_each_skill img {
+  margin-left: 0.3rem;
+  width: 1.4rem;
+  cursor: pointer;
+  filter: invert(100%) sepia(42%) saturate(2%) hue-rotate(342deg)
+    brightness(111%) contrast(101%);
+}
+
+.dashboard_suggested_skill {
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+}
+
+.dashboard_profile_skills_container .dashboard_profile_save {
+}

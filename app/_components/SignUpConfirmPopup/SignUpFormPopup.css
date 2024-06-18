@@ -1,0 +1,347 @@
+.signup_confirm_popup {
+  width: 500vw;
+  height: 500vh;
+  background-color: #fafafa;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.closeFormOptionForPopup {
+  position: absolute;
+  right: 30px;
+  top: 3px;
+  cursor: pointer;
+}
+
+.signup_confirm_popup_content {
+  width: 450px;
+  height: 600px;
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.signup_confirm_popup_contentfresher {
+  width: 450px;
+  height: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+.AutoSuggestions_PopUpFormPage {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.AutoSuggestions_PopUpFormPage li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.AutoSuggestions_PopUpFormPage li:hover {
+  background-color: #f0f0f0;
+}
+
+.AutoSuggestions_PopUpFormPage li.selected {
+  background-color: #cceeff;
+}
+
+.signup_confirm_popup_content h1 {
+  color: #0057b1;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.radioSignUp {
+  background-color: #fff;
+  border: 1px solid #fff;
+  position: sticky;
+  top: -2%;
+  padding-top: 35px;
+  z-index: 1000;
+}
+
+.RadioButtons {
+  font-size: 17px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 80%;
+  margin: 10px 0;
+  gap: 8px;
+  padding-left: 30px;
+  position: sticky;
+  top: 7%;
+  background-color: #fff;
+}
+
+.RadioButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.form__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0 2rem;
+}
+
+.form__container div {
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.form__container input {
+  height: 35px;
+  border: 0.6px solid #8e99a4;
+  border-radius: 8px;
+  padding: 0 1rem;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px;
+  background: inherit;
+  margin-left: 0px;
+}
+
+.heroForPopUp {
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+
+.form__container label {
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 21px;
+  /* 21px */
+  left: 5px;
+}
+
+.form__container .NextButton {
+  border: none;
+  color: white;
+  border-radius: 8px;
+  background: #0057b1;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  position: sticky;
+  top: 1%;
+  left: 0;
+  width: 100%;
+  cursor: pointer;
+}
+
+.form__container .NextButtondisabled {
+  border: none;
+  color: white;
+  border-radius: 8px;
+  background: grey;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.nextButtonDiv {
+  position: sticky;
+  bottom: 0%;
+  left: 0;
+  width: 100%;
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #fff;
+  z-index: 1000;
+  width: 102%;
+  height: 8vh;
+  padding-bottom: 15px;
+  margin-bottom: 5px;
+}
+
+.company-email {
+  position: relative;
+}
+
+.company-email input[type='email'] {
+  padding-right: 100px;
+  /* Adjust as needed based on the width of the button */
+}
+
+.company-email .sendOTPButtonverifyButtonDisabled {
+  border: none;
+  color: gray;
+  font-weight: 600;
+  font-size: 14px;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: inherit;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.company-email .sendOTPButton {
+  border: none;
+  color: #0057b1;
+  font-weight: 600;
+  font-size: 14px;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fafafa;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.company-email-wrapper .otpInputs {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: start;
+}
+
+.company-email-wrapper .otpInputs input {
+  width: 10px;
+  height: 30px;
+}
+
+.otpInputsForResendButton {
+  flex-direction: row !important;
+  justify-content: space-between;
+}
+
+.otpInputsForResendButton .resendOTPButtonverifyButtonDisabled {
+  border: none;
+  color: grey;
+  background: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.otpInputsForResendButton .resendOTPButton {
+  border: none;
+  color: #0057b1;
+  background: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.Experience_select {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.experienceSelectOption {
+  width: 100%;
+  height: 35px;
+  border: 0.6px solid var(--Stroke-Border, #8e99a4);
+  border-radius: 8px;
+  padding: 0 1rem;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px;
+  background: inherit;
+}
+label {
+  cursor: pointer;
+}
+@media screen and (min-width: 521px) and (max-width: 700px) {
+  .company-email-wrapper .otpInputs {
+    margin-right: 25px;
+  }
+
+  .otpInputsForResendButton {
+    flex-direction: row !important;
+    font-size: 10px;
+    gap: 0px;
+  }
+  .closeFormOptionForPopup {
+    position: absolute;
+    right: 5px;
+    top: 1px;
+  }
+}
+
+@media screen and (min-width: 406px) and (max-width: 520px) {
+  .signup_confirm_popup_content {
+    width: 350px;
+    top: 52%;
+  }
+
+  .signup_confirm_popup_contentfresher {
+    width: 350px;
+  }
+
+  .company-email-wrapper .otpInputs {
+    gap: 5px;
+  }
+
+  .closeFormOptionForPopup {
+    position: absolute;
+    right: 5px;
+    top: 1px;
+  }
+}
+
+@media screen and (max-width: 405px) {
+  .company-email-wrapper .otpInputs {
+    margin-right: 15px;
+  }
+
+  .company-email-wrapper .otpInputs {
+    gap: 2px;
+  }
+
+  .company-email-wrapper .otpInputs input {
+    width: 6px;
+    height: 30px;
+  }
+
+  .signup_confirm_popup_content {
+    width: 350px;
+    top: 53%;
+  }
+
+  .closeFormOptionForPopup {
+    position: absolute;
+    right: 5px;
+    top: 1px;
+  }
+}

@@ -1,0 +1,138 @@
+.dashboard_profile_experience_container {
+  position: relative;
+}
+
+.dashboard_experience_form_control label {
+  display: inline-block;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  margin: 2rem 0 0.5rem;
+}
+
+.dashboard_experience_form_control label span {
+  color: red;
+}
+
+.dashboard_experience_form_control input,
+.dashboard_experience_form_control select {
+  display: block;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid;
+  padding: 7px 0;
+  font-size: 16px;
+  min-width: 0;
+  width: 100%;
+}
+
+.dashboard_experience_options {
+  margin: 1rem 0 2rem;
+}
+
+.dashboard_experience_options span {
+  padding: 0.4rem 0.8rem;
+  margin-right: 10px;
+  border: 1px solid;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.dashboard_experience_active_opton {
+  background-color: #0057b1 !important;
+  color: white !important;
+}
+
+.dashboard_experience_form_prompt {
+  display: inline-block;
+}
+
+.dashboard_experience_form_control {
+  width: 100%;
+}
+
+.dashboard_experience_form_control input[type='checkbox'] {
+  display: inline-block;
+  width: 35px;
+  height: 20px;
+}
+
+.dashboard_experience_form_control span {
+  font-size: 0.8rem;
+}
+
+.dashboard_experience_form_row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.dashboard_experience_form_control textarea {
+  resize: none;
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid;
+}
+
+.dashboard_profile_experience_container button {
+  color: white;
+  background-color: #0057b1;
+  padding: 0.5rem 0.7rem;
+  border-radius: 18px;
+  border: none;
+  outline: none;
+  margin: 1rem 0;
+}
+
+.dashboard_experience_skill {
+  display: inline-flex;
+  align-items: center;
+  color: white;
+  background-color: #0057b1;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin: 5px 5px 0 0;
+}
+
+.dashboard_experience_skill img {
+  filter: invert(100%) sepia(42%) saturate(2%) hue-rotate(342deg)
+    brightness(111%) contrast(101%);
+  width: 20px;
+  margin-left: 0.3rem;
+  cursor: pointer;
+}
+
+.AutoSuggestions_profile_page {
+  width: 100%;
+  border: 1px solid;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.AutoSuggestions_profile_page li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.AutoSuggestions_profile_page li:hover {
+  background-color: #f0f0f0;
+}
+
+.AutoSuggestions_profile_page li.selected {
+  background-color: #cceeff;
+}
+
+.AutoSuggestions_profile_page li:not(:last-child) {
+  border-bottom: 1px solid #ddd;
+}
+
+@media screen and (max-width: 600px) {
+  .dashboard_experience_options span {
+    margin: 5px;
+    display: inline-block;
+  }
+}

@@ -1,0 +1,63 @@
+.dashboard_profile_education_container {
+  position: relative;
+}
+
+.dashboard_education_form_control {
+  width: 100%;
+}
+
+.dashboard_education_form_control label {
+  display: inline-block;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  margin: 2rem 0 0.5rem;
+}
+
+.dashboard_education_form_control .form_control_label_required {
+  color: red;
+}
+
+.dashboard_education_form_control span {
+  color: #6c6c6c;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.dashboard_education_form_control input,
+.dashboard_education_form_control select {
+  display: block;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid;
+  padding: 7px 0;
+  font-size: 16px;
+  min-width: 0;
+  width: 100%;
+}
+
+.dashboard_education_form_row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.dashboard_education_form_control textarea {
+  resize: none;
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid;
+}
+
+.dashboard_profile_education_container button {
+  color: white;
+  background-color: #0057b1;
+  padding: 0.5rem 0.7rem;
+  border-radius: 18px;
+  border: none;
+  outline: none;
+  margin: 1rem 0;
+}

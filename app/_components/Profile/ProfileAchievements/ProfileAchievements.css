@@ -1,0 +1,118 @@
+.dashboard_achievements_form_control {
+  width: 100%;
+}
+
+.dashboard_achievements_form_control label {
+  display: inline-block;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  margin: 2rem 0 0.5rem;
+}
+
+.dashboard_achievements_form_control label span {
+  color: red;
+}
+.dashboard_achievements_form_control input {
+  display: block;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid;
+  padding: 7px 0;
+  font-size: 16px;
+  min-width: 0;
+  width: 100%;
+}
+
+.dashboard_achievements_form_control textarea {
+  resize: none;
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid;
+  margin-bottom: 1rem;
+}
+
+.impAcievement {
+  color: white;
+  background-color: #0057b1;
+  padding: 0.5rem 0.7rem;
+  border-radius: 18px;
+  border: none;
+  outline: none;
+  margin: 1rem 0;
+}
+
+.dashboard_achievements_upload_message {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 150%;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.dashboard_achievements_last_row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashboard_achievements_last_row button {
+  min-width: 50px;
+  width: fit-content;
+}
+
+.dashboard_document_delete_button {
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  font-size: 0.8rem;
+  height: 36px;
+  font-size: 16px;
+  background: #f0f0f0;
+  color: #000;
+  margin: 0rem 0;
+}
+.deleteAchievement span {
+  font-size: 14px;
+}
+.deleteAchievement {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.deleteAchievement div button {
+  background-color: transparent;
+  color: #0057b1;
+  border: 1px solid #0057b1 !important;
+  margin: 0 5px;
+  padding: 0.4rem 0.1rem;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  font-size: 0.8rem;
+  height: 36px;
+  font-size: 16px;
+}
+
+.deleteAchievement div button:hover {
+  background-color: #0056b124;
+}
+
+@media screen and (max-width: 850px) {
+  .dashboard_achievements_last_row div:last-of-type {
+    flex-direction: column;
+  }
+
+  .dashboard_profile_achievements_container button {
+    margin: 0.4rem 0 0;
+    font: 0.8rem;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .dashboard_achievements_last_row {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,342 @@
+/*
+   FileName - DashboardMenu.css
+   Desc - This CSS file defines the styling for a dashboard menu container in a web application. The menu container provides a user interface for navigating through different sections and features of the dashboard.
+*/
+
+.dashboard_menu_hamburger_icon {
+  display: none;
+}
+
+.dashboard_menu_container {
+  box-sizing: border-box;
+  height: max(100vh, 480px);
+  width: 240px;
+  padding: 20px 10px;
+  background: #fff;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+  transition: all 0.4s ease-out;
+  position: sticky;
+  top: 0;
+}
+
+.dashboard_menu_icons_container {
+  display: flex;
+  align-items: center;
+}
+
+/* hide the close icon in desktop view */
+.dashboard_menu_container .dashboard_menu_close_icon {
+  width: 20px;
+  height: 20px;
+  display: none;
+  cursor: pointer;
+}
+
+.dashboard_menu_container .dashboard_menu_toggle_icon {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.dashboard_menu_logo {
+  width: 150px;
+  padding: 20px 10px;
+  margin-right: 2rem;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard_menu_logo .brand_logo {
+  display: inline-block;
+  width: 36px;
+  height: 45px;
+}
+
+.dashboard_menu_logo .brand_name {
+  width: 100px;
+  height: 20px;
+  transition: all 0.4s linear;
+}
+
+.dashboard_menu_item_list {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0.8rem;
+}
+
+.dashboard_menu_item_list li {
+  list-style: none;
+}
+
+.dashboard_menu_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0.8rem auto;
+  cursor: pointer;
+  font-size: 1rem;
+  color: black;
+}
+
+.dashboard_menu_subsection {
+  padding-left: 1rem;
+  margin: 20px 0 20px 0;
+  border-left: 2px solid #cccccc;
+  display: none;
+  transition: all 0.2s ease-in;
+}
+
+.dashboard_menu_item_icon img {
+  width: 20px;
+}
+
+.dashboard_menu_item_text {
+  margin: 0 0.1rem 0 1.5rem;
+  font-size: 1rem !important;
+  width: fit-content;
+  opacity: 1;
+  transition:
+    opacity 0.8s linear,
+    margin 0.4s linear;
+}
+
+.dashboard_menu_item:hover,
+.dashboard_menu_item_active {
+  color: #0057b1;
+  font-weight: 600;
+}
+
+.dashboard_menu_item a {
+  font: inherit;
+  color: inherit;
+}
+
+.dashboard_menu_item:hover img,
+.dashboard_menu_item_active img {
+  filter: invert(21%) sepia(76%) saturate(2641%) hue-rotate(198deg)
+    brightness(88%) contrast(101%);
+}
+
+.dashboard_arrow_icon {
+  margin-left: 4rem;
+}
+
+.dashboard_menu_container hr {
+  width: 80%;
+  border: 1px solid #6c6c6c85;
+}
+
+.dashboard_menu_container .dashboard_last_hr {
+  position: absolute;
+  bottom: 100px;
+  width: 70%;
+  left: 0;
+  right: 0;
+}
+
+.dashboard_logout {
+  width: 70%;
+  padding: 10px 20px;
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  margin: 10px;
+}
+
+/* styles to minimise dashboard menu */
+.dashboard_menu_container_mini {
+  width: 70px;
+  padding: 20px 10px;
+}
+
+.dashboard_menu_container_mini .dashboard_menu_logo {
+  padding: 20px 0;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.dashboard_menu_container_mini .dashboard_menu_logo img:last-of-type {
+  width: 0;
+  transition: all 0.4s linear;
+}
+
+.dashboard_menu_container_mini .dashboard_arrow_icon,
+.dashboard_menu_container_mini .dashboard_menu_toggle_icon {
+  display: none !important;
+}
+
+.hide {
+  width: 0;
+  opacity: 0;
+  margin: 0;
+  height: 0;
+  transition: all 0s linear;
+}
+
+/* styles for beta features */
+.dashboard_menu_item_beta {
+  color: #636363;
+}
+
+.dashboard_menu_item_beta:hover .dashboard_menu_item_text {
+  font-weight: 400;
+  color: #636363;
+  margin: 0 0.1rem 0 1.5rem;
+}
+
+.dashboard_menu_subsection .dashboard_menu_item_text {
+  margin-left: 0;
+  font-size: 0.9rem !important;
+}
+
+.dashboard_menu_subsection
+  .dashboard_menu_item_beta:hover
+  .dashboard_menu_item_text {
+  margin-left: 0;
+  margin-top: 0;
+}
+
+.dashboard_menu_item_beta img {
+  filter: invert(30%) sepia(100%) saturate(15%) hue-rotate(341deg)
+    brightness(103%) contrast(91%);
+}
+
+.dashboard_menu_item_beta:hover img {
+  filter: invert(29%) sepia(0%) saturate(2%) hue-rotate(149deg) brightness(102%)
+    contrast(88%) !important;
+}
+
+.dashboard_beta_feature_alert {
+  color: black;
+  font-size: 0.6rem;
+  margin: 0 0.5rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+  background-color: #ffaf38;
+  display: none;
+}
+
+.dashboard_menu_item_beta:hover .dashboard_beta_feature_alert {
+  display: inline;
+}
+
+/* Adding styles in for feedback in bottom bar */
+
+.bottomBarFeedback {
+  position: fixed;
+  right: 20px;
+  bottom: 30px;
+  z-index: 99999;
+  border-radius: 5px;
+  width: 310px;
+  background-color: #fff;
+  box-shadow: 1px 1px 3px #808080;
+  transition: right 0.5s linear;
+  border-left: 20px solid #0057b1;
+}
+
+.bottomBarFeedbackDesc {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-top: 10px;
+}
+
+.moveCardToRight .bottomBarFeedbackDesc::after {
+  content: 'Feedback';
+  position: absolute;
+  left: -40px;
+  top: 42px;
+  font-size: 13px;
+  transform: rotate(-90deg);
+  color: white;
+}
+
+.descDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.descDiv p {
+  font-size: 1.2rem;
+}
+
+.descDiv img {
+  height: 30px;
+  width: 30px;
+  margin-top: 3px;
+}
+
+.crossIconFeedback {
+  border: none;
+  background: none;
+}
+
+.feedbackbutton {
+  background-color: #0057b1;
+  padding: 8px 15px;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  margin-top: 0.3rem;
+}
+
+.moveCardToRight {
+  cursor: pointer;
+  right: -308px;
+  transition: right 0.5s linear;
+}
+
+@media screen and (max-width: 480px) {
+  .bottomBarFeedback {
+    width: 265px;
+  }
+
+  .descDiv p {
+    font-size: 1rem;
+  }
+
+  .descDiv img {
+    height: 30px;
+    width: 30px;
+    margin-top: 3px;
+  }
+
+  .bottomBarFeedbackDesc {
+    padding-right: 10;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .dashboard_menu_container {
+    position: fixed;
+    left: -250px;
+    transition: left 0.35s ease-out;
+    z-index: 5;
+    height: -webkit-fill-available;
+  }
+
+  .dashboard_menu_hamburger_icon {
+    display: block;
+    width: 35px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  /* display the close icon in tablet/mobile view */
+  .dashboard_menu_container .dashboard_menu_close_icon {
+    display: block;
+  }
+
+  /* hide the toggle dashboard icon in tablet/mobile view */
+  .dashboard_menu_container .dashboard_menu_toggle_icon {
+    display: none;
+  }
+}

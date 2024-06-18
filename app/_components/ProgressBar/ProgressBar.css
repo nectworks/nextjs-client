@@ -1,0 +1,26 @@
+.progress-container {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 0.2rem;
+  width: 200px;
+  border-radius: 0.4rem;
+}
+
+.progress-container .progress {
+  height: 100%;
+  width: 0;
+  border-radius: 0.4rem;
+  background: #0057b1;
+  transition: width 0.4s ease;
+}
+
+.progress-container .ProgressBarLogo {
+  position: relative;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  width: 160px;
+  height: 42px;
+}

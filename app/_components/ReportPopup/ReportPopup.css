@@ -1,0 +1,96 @@
+.report_popup_container * {
+  box-sizing: border-box;
+}
+
+.report_popup_container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000081;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+}
+
+.report_popup_window {
+  width: min(500px, 80vw);
+  background-color: #fff;
+  border-radius: 8px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.report_popup_header {
+  position: relative;
+  background: #fff;
+  padding: 1.5rem;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.report_popup_header h3 {
+  color: #0057b1;
+}
+
+.report_popup_header img {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.report_popup_header p {
+  margin-top: 1rem;
+}
+
+.report_popup_body {
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.report_popup_body h3 {
+  font-weight: 500;
+}
+
+.report_description_container textarea {
+  width: 100%;
+  resize: none;
+  border-radius: 8px;
+  border: 1px solid #000;
+  background: #fff;
+  margin: 1rem 0;
+  padding: 10px;
+}
+
+.report_option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 1rem;
+}
+
+.report_option div {
+  display: flex;
+  flex-direction: column;
+}
+
+.report_option input {
+  width: 25px;
+  height: 25px;
+}
+
+.report_popup_body button {
+  display: block;
+  background-color: #0057b1;
+  color: white;
+  padding: 0.5rem 0.3rem;
+  width: 150px;
+  margin: 0 auto;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
