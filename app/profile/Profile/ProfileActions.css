@@ -1,0 +1,225 @@
+/* further actions popup window */
+.dashboard_profile_actions_container * {
+  box-sizing: border-box;
+}
+
+.dashboard_profile_actions_container {
+  width: 500vw;
+  height: 500vh;
+  background-color: #00000081;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.dashboard_profile_actions_window {
+  width: min(800px, 75vw);
+  background-color: #fff;
+  border-radius: 8px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.dashboard_profile_actions_window h4 {
+  color: #0057b1;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* header for the actions window */
+.dashboard_profile_actions_header {
+  width: 100%;
+  padding: 2rem;
+  box-shadow: 1px 2px 4px #00000040;
+  background: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard_profile_actions_header p {
+  color: #959697;
+  margin-top: 10px;
+  padding-right: 2.5rem;
+  font-size: 14px;
+}
+
+.dashboard_profile_actions_header img {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  cursor: pointer;
+}
+
+/* footer for the actions window */
+.dashboard_profile_actions_footer {
+  position: relative;
+  width: 100%;
+  padding: 2rem 2rem 2rem;
+  padding-right: 2.8rem;
+  background: #fff;
+  box-shadow: 1px -1px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard_profile_primary_footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard_profile_message {
+  border-radius: 8px;
+  width: 40%;
+  display: inline-block;
+  margin: 0 auto 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.dashboard_profile_secondary_footer .dashboard_profile_message {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.dashboard_profile_actions_skip {
+  margin-right: 0.5rem;
+  color: #0057b1;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dashboard_profile_actions_footer button {
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  font-size: 0.8rem;
+  height: 36px;
+  font-size: 16px;
+}
+
+.dashboard_profile_actions_close_button2 {
+  position: absolute;
+  right: 35px;
+  background: #f0f0f0;
+  color: #000;
+}
+
+.dashboard_profile_actions_prev_button {
+  border: 1px solid !important;
+  margin-right: 1rem;
+  color: black;
+  background-color: transparent;
+}
+
+.dashboard_profile_actions_next_button,
+.dashboard_profile_actions_save_button {
+  background: #0057b1;
+  color: white;
+}
+
+.dashboard_disable_button {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+.dashboard_profile_delete_action {
+  display: inline-flex;
+  margin-left: 1rem;
+}
+
+.dashboard_profile_delete_action div button {
+  margin: 0 5px;
+}
+
+.dashboard_profile_delete_action span {
+  font-size: 0.8rem;
+}
+
+.dashboard_profile_delete_action div button {
+  background-color: transparent;
+  color: #0057b1;
+  border: 1px solid #0057b1;
+}
+
+.dashboard_profile_delete_action div button:hover {
+  background-color: #0056b124;
+}
+
+/* main section of the actions window */
+.dashboard_profile_actions_main_section {
+  padding: 2rem;
+  width: 100%;
+  z-index: -1;
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+/* Keep 'x' SVG image fixed for mobile view */
+@media only screen and (max-width: 550px) {
+  .dashboard_profile_actions_header img {
+    top: 12px; /* Adjust top position for mobile view */
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .dashboard_profile_actions_window {
+    width: 90vw;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .dashboard_profile_actions_header,
+  .dashboard_profile_actions_footer,
+  .dashboard_profile_actions_main_section {
+    padding: 1rem;
+  }
+
+  .dashboard_profile_message {
+    width: 80%;
+  }
+
+  .dashboard_profile_primary_footer {
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .dashboard_profile_secondary_footer {
+    margin-top: 1rem;
+  }
+}
+
+/* spinner */
+.loader {
+  border: 10px solid white;
+  border-radius: 50%;
+  border-top: 10px solid black;
+  border-bottom: 10px solid black;
+  width: 100px;
+  height: 100px;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.hide_message_window {
+  display: none;
+}
