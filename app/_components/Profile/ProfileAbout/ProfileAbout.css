@@ -1,0 +1,76 @@
+.dashboard_profile_about_container {
+  position: relative;
+}
+
+.dashboard_profile_about_container div {
+  position: relative;
+}
+
+.dashboard_profile_about_field {
+  resize: none;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.dashboard_about_chars {
+  display: inline-block;
+  font-size: 0.9rem;
+  position: absolute;
+  right: 0px;
+  bottom: -10px;
+}
+
+.dashboard_profile_additional_about {
+  margin-top: 2rem;
+}
+
+.dashboard_profile_additional_about h4 {
+  color: black;
+  display: inline-block;
+}
+
+.dashboard_profile_additional_about p {
+  display: inline-block;
+  color: #6c6c6c;
+  font-style: italic;
+  font-size: 0.9rem;
+  margin: 0 0.3rem;
+}
+
+.dashboard_profile_additional_about textarea {
+  margin: 10px 0;
+}
+
+.additional_about_heading {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: fit-content;
+}
+
+.dashboard_profile_additional_about .info_icon img {
+  width: 12px;
+  margin-left: 0.3rem;
+  filter: brightness(0.1);
+  cursor: pointer;
+}
+
+.email_verify_message {
+  display: none;
+  position: absolute;
+  background-color: #262626;
+  color: white;
+  padding: 5px 8px;
+  border-radius: 7px;
+  font-size: 0.7rem;
+  right: -50px;
+  top: -23px;
+}
+
+.info_icon:hover + .email_verify_message {
+  display: block !important;
+}

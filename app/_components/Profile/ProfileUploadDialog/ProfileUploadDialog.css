@@ -1,0 +1,196 @@
+/* profile upload dialog */
+.dashboard_profile_dialog_container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000081;
+  z-index: 20;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.dashboard_profile_dialog_window {
+  width: min(350px, 70vw);
+  background-color: #fff;
+  border-radius: 4px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+  padding-bottom: 0;
+  position: relative;
+  z-index: 5;
+}
+
+.dashboard_profile_dialog_window hr {
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+.dashboard_profile_dialog_header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.dashboard_profile_dialog_header img {
+  cursor: pointer;
+}
+
+.dashboard_profile_dialog_window h3 {
+  font-weight: 400;
+  text-align: left;
+}
+
+.dashboard_profile_dialog_preview {
+  /* width: min(350px, 80%); */
+  text-align: center;
+  margin: 1rem auto 2rem;
+}
+
+.dashboard_profile_dialog_preview img,
+.dashboard_profile_dialog_preview div {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.dashboard_profile_dialog_preview div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 5.4rem;
+  font-weight: bold;
+}
+
+.dashboard_profile_dialog_options {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.dashboard_profile_dialog_options button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  background-color: transparent;
+  font-size: 1rem;
+}
+
+.dashboard_profile_dialog_options button img {
+  margin: 0 10px;
+  width: 20px;
+  height: 20px;
+}
+
+.dashboard_profile_dialog_upload_button {
+  border-radius: 12px;
+  border: 1px solid black;
+  padding: 0.2rem;
+  padding-right: 0.7rem;
+}
+
+.dashboard_profile_dialog_delete_button {
+  border-radius: 50%;
+  border: 1px solid red !important;
+  padding: 6px;
+}
+
+.dashboard_profile_dialog_save_button,
+.dashboard_profile_dialog_edit_button,
+.dashboard_profile_dialog_crop_button,
+.dashboard_profile_dialog_cancel_button {
+  background-color: #0057b1 !important;
+  color: white;
+  padding: 0.35rem 0.55rem;
+  border-radius: 12px;
+  border: none;
+}
+
+.dashboard_profile_dialog_cancel_button {
+  border: 1px solid black;
+  background-color: transparent !important;
+  color: black;
+}
+
+.dashboard_profile_dialog_options img {
+  margin: 0.3rem 0;
+  width: 15px;
+}
+
+.profile_image_loader {
+  margin-top: 1rem !important;
+}
+
+/* styles for cropping image */
+#crop_image_container {
+  width: 300px;
+  height: 300px;
+}
+
+#crop_image_container div {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+#crop_image_container img {
+  border-radius: 0%;
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+#crop_input {
+  max-width: 100%;
+  display: block;
+}
+
+@media screen and (max-width: 450px) {
+  #crop_image_container {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .dashboard_profile_dialog_preview img,
+  .dashboard_profile_dialog_preview div {
+    width: 120px;
+    height: 120px;
+    font-size: 3rem;
+  }
+
+  .dashboard_profile_dialog_window {
+    padding: 1rem;
+    width: 80%;
+  }
+
+  .dashboard_profile_dialog_options {
+    padding: 1rem 0;
+  }
+
+  #crop_image_container {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+@media screen and (max-width: 250px) {
+  #crop_image_container {
+    width: 100px;
+    height: 100px;
+  }
+}
