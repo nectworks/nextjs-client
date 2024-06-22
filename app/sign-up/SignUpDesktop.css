@@ -1,0 +1,1231 @@
+/*
+  FileName - SignUpDesktop.css
+  Desc - This CSS file contains styles for creating an OTP verification interface and various UI components. The styles collectively create an interface for OTP verification, incorporating different design elements, alignments, and responsiveness for various screen sizes.
+*/
+.blurBG {
+  filter: blur(5px);
+}
+
+.changeButtonColor {
+  color: #6c6c6c !important;
+  cursor: default !important;
+}
+
+.colorLoginButton {
+  background-color: #0057b1 !important;
+  color: #f3f3f3 !important;
+  cursor: pointer !important;
+}
+
+.disabled {
+  pointer-events: none;
+  /* Prevent interactions with the disabled div */
+}
+
+.makeInputRed {
+  border-bottom: 2px solid #ff0000 !important;
+}
+
+.makeInputGreen {
+  border-bottom: 2px solid green !important;
+}
+
+.localStorageCheck {
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: -0.64rem;
+}
+
+.signIn-container *:before,
+.signIn-container *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.cont {
+  background: #6c6c6c;
+}
+
+.signIn-container input,
+.signIn-container button {
+  border: none;
+  outline: none;
+}
+
+.tip {
+  font-size: 20px;
+  margin: 40px auto 50px;
+  text-align: center;
+}
+
+.cont {
+  overflow: hidden;
+  position: relative;
+  width: 900px;
+  height: 600px;
+  margin: 0 auto 100px;
+  margin-top: 1rem;
+  background: #fff;
+}
+
+.form {
+  position: relative;
+  width: 735px;
+  height: 100%;
+  transition: transform 1s ease-in-out;
+  padding: 50px 0px 0;
+  background-color: #fff;
+}
+
+.sub-cont {
+  overflow: hidden;
+  position: absolute;
+  left: 640px;
+  top: 0;
+  width: 900px;
+  height: 100%;
+  padding-left: 260px;
+  background: #fff;
+  transition: transform 1s ease-in-out;
+}
+
+.cont.s--signup .sub-cont {
+  transform: translate3d(-640px, 0, 0);
+}
+
+.img {
+  overflow: hidden;
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 260px;
+  height: 100%;
+  padding-top: 360px;
+}
+
+.img:before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 900px;
+  height: 100%;
+  background-image: #0057b1;
+  background-size: cover;
+  transition: transform 1.2s ease-in-out;
+}
+
+.img:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #0057b1;
+}
+
+.cont.s--signup .img:before {
+  transform: translate3d(640px, 0, 0);
+}
+
+.img__text {
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  top: 80px;
+  padding: 0;
+  text-align: right;
+  color: #fff;
+  transition: transform 1.2s ease-in-out;
+}
+
+.img__text h2 {
+  font-weight: normal;
+}
+
+.img__text p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cont.s--signup .img__text.m--up {
+  transform: translateX(520px);
+}
+
+.img__text.m--in {
+  transform: translateX(-520px);
+}
+
+.cont.s--signup .img__text.m--in {
+  transform: translateX(0);
+}
+
+.rightAlignedHeading {
+  text-align: right !important;
+  padding: 10px 0px;
+}
+
+.rightAlignedPara {
+  text-align: right !important;
+  padding: 10px 35px;
+  width: 68%;
+  margin: 25px 0px;
+}
+
+.leftAlignedHeading {
+  text-align: left !important;
+  padding: 10px 35px;
+}
+
+.leftAlignedPara {
+  text-align: left !important;
+  padding: 10px 35px;
+  margin: 25px 0px;
+}
+
+.img__btn {
+  overflow: hidden;
+  z-index: 2;
+  position: relative;
+  width: 100px;
+  height: 36px;
+  margin: -40px auto;
+  background: transparent;
+  color: #0057b1;
+  text-transform: uppercase;
+  font-size: 15px;
+  cursor: pointer;
+  background-color: #f3f3f3 !important;
+  border-radius: 10px;
+}
+
+.img__btn:after {
+  content: '';
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #fff;
+  border-radius: 10px;
+}
+
+.img__btn span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  transition: transform 1.2s;
+}
+
+.img__btn span.m--in {
+  transform: translateY(-72px);
+}
+
+.cont.s--signup .img__btn span.m--in {
+  transform: translateY(0);
+}
+
+.cont.s--signup .img__btn span.m--up {
+  transform: translateY(72px);
+}
+
+.outerLayer__signIn h2 {
+  width: 80%;
+  font-size: 26px;
+  text-align: center;
+}
+
+.signIn-container label {
+  display: block;
+  width: 226px;
+  margin: 25px auto 0;
+  text-align: left;
+}
+
+.resend__otp {
+  text-align: center;
+  color: #000;
+  font-size: 0.9rem;
+  position: relative;
+  top: -10.5rem;
+}
+
+.submit {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  background: #d4af7a;
+  text-transform: uppercase;
+}
+
+.fb-btn {
+  border: 2px solid #d3dae9;
+  color: #8fa1c7;
+}
+
+.fb-btn span {
+  font-weight: bold;
+  color: #455a81;
+}
+
+.sign-in {
+  transition-timing-function: ease-out;
+  padding-left: 35px;
+}
+
+.cont.s--signup .sign-in {
+  transition-timing-function: ease-in-out;
+  transition-duration: 1.2s;
+  transform: translate3d(640px, 0, 0);
+}
+
+.sign-up {
+  transform: translate3d(-900px, 0, 0);
+  padding-left: 75px;
+}
+
+.cont.s--signup .sign-up {
+  transform: translate3d(0, 0, 0);
+}
+
+.icon-link {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  width: 32px;
+}
+
+.icon-link img {
+  width: 100%;
+  vertical-align: top;
+}
+
+.signIn-container .icon-link--twitter {
+  left: auto;
+  right: 5px;
+}
+
+/* The codepen styleing endes here */
+
+.signIn-container label {
+  text-align: left;
+}
+
+.signIn-container .form__text {
+  color: #000;
+  text-align: left;
+  justify-content: left;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  display: flex;
+  position: relative;
+  left: 1px;
+}
+
+.otp-input {
+  border: none;
+  outline: none;
+  background: none;
+  border-bottom: 2px solid #000;
+  /* Add a bottom border with color #000 */
+  width: 30px;
+  margin-right: 10px;
+}
+
+/* Optional: Add some spacing and transition for a smoother effect */
+.otp-input {
+  margin-bottom: 10px;
+  /* Add some space between input and other elements */
+  padding-bottom: 5px;
+  /* Add some padding to separate the text from the border */
+  transition: border-bottom-color 0.3s ease-in-out;
+  /* Smooth transition on bottom border color change */
+}
+
+.signIn-container input:focus {
+  border-bottom-color: #0057b1;
+}
+
+/* Style the bottom border differently when the input is focused */
+.otp-input:focus {
+  border-bottom-color: #0057b1;
+  /* Change the bottom border color when input is focused */
+}
+
+.signIn-container .otp-container {
+  position: relative;
+  left: 1.645rem;
+  top: -2.2rem;
+}
+
+.form-group {
+  display: flex;
+  gap: 10px;
+}
+
+.signIn-container .form__text {
+  color: #000;
+}
+
+.form__text.red {
+  color: #ff0000;
+}
+
+.sign__in__alignmemt {
+  position: relative;
+  right: 9rem;
+  top: 1rem;
+}
+
+.signIn-container .sign__in__email {
+  width: 28.5625rem;
+  position: relative;
+  bottom: 1.4rem;
+}
+
+.sign-in .welcome__back__header {
+  padding-right: 155px;
+}
+
+.sign-up .welcome__back__header {
+  padding-right: 225px;
+}
+
+.signIn-container .welcome__back__header {
+  color: #000;
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  text-align: center;
+}
+
+signIn-container .sign__in__alignmemt {
+  position: relative;
+  right: 8rem;
+}
+
+.send__otp {
+  border: none !important;
+  /* Add the specified styles */
+  color: #6c6c6c !important;
+  font-size: 1rem !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  line-height: normal !important;
+  /* Additional styles if needed */
+  background-color: transparent !important;
+  /* Remove button background color */
+  padding: 0 !important;
+  /* Optionally remove padding to make the button tighter */
+  cursor: pointer !important;
+  position: relative !important;
+  bottom: 4.3rem !important;
+  left: 19rem !important;
+}
+
+.otp__continer {
+  position: relative;
+  bottom: 4rem;
+}
+
+.left__align__input {
+  position: relative;
+  right: 3.5rem;
+}
+
+.info__icon {
+  text-align: center;
+  color: #fff;
+  background: #000;
+  border-radius: 50%;
+  justify-content: center;
+  width: 0.7999999999999998rem;
+  height: 0.8rem;
+  display: flex;
+  position: relative;
+  bottom: 3.5rem;
+  left: 10rem;
+}
+
+.info__icon__one {
+  text-align: center;
+  color: #fff;
+  background: #000;
+  border-radius: 50%;
+  justify-content: center;
+  width: 0.7999999999999998rem;
+  height: 0.8rem;
+  display: flex;
+  position: relative;
+  bottom: 4rem;
+  left: 4.5rem;
+}
+
+.changeSendOtpColor {
+  cursor: default !important;
+  color: #6c6c6c !important;
+}
+
+.info__icon__two {
+  text-align: center;
+  color: #fff;
+  background: #000;
+  border-radius: 50%;
+  justify-content: center;
+  width: 0.7999999999999998rem;
+  height: 0.8rem;
+  display: flex;
+  position: relative;
+  bottom: 3.75rem;
+  left: 5rem;
+}
+
+.tooltip {
+  border-bottom: 1px dotted #000;
+  border-radius: 50%;
+  left: 85px;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #000;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  top: 150%;
+  left: -180%;
+  margin-left: -79px;
+  font-size: 14px;
+}
+
+.inviteCodeIcon {
+  top: 1.2rem !important;
+}
+
+.invite__code__align {
+  position: relative;
+  top: 0.4rem;
+}
+
+.tooltip .tooltiptext::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.signIn-container .info__img {
+  width: 2rem;
+}
+
+.signIn-container .sign-up input {
+  margin-top: 20px;
+  padding-bottom: 5px;
+  font-size: 16px;
+  text-align: left;
+  width: 150px;
+}
+
+.sign_up_button {
+  position: relative;
+  left: 4rem;
+  border-radius: 0.5rem;
+  background: #6c6c6c;
+  padding: 0.5rem 2rem;
+  color: #fff;
+}
+
+.signIn-container .left__align_inputText {
+  position: relative;
+  right: 1.8rem;
+}
+
+.signIn-container .right__items__move {
+  position: relative;
+  right: 4rem;
+}
+
+.signIn-container .right__items__move img {
+  position: relative;
+  right: 4.3rem;
+}
+
+.signIn-container .email__align {
+  position: relative;
+  right: 12.3rem;
+}
+
+.outerLayer__signIn {
+  background: #f3f3f3;
+  margin-top: -1rem;
+  padding-top: 1.2rem;
+  padding-bottom: 1px;
+}
+
+.signIn-container .agreement__signIn {
+  width: 36rem;
+  position: relative;
+  left: 12rem;
+  bottom: 1rem;
+  padding: auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+.signIn-container .agreement__text {
+  padding-left: 12px;
+  width: 22rem;
+}
+
+/* Green circle styles inside the input */
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  left: 2rem;
+}
+
+.input-wrapper img {
+  position: relative;
+  margin-left: -1.8rem;
+  top: 0.9rem;
+  width: 1rem;
+}
+
+.second__block .input-wrapper img {
+  position: relative;
+  margin-left: -1.8rem;
+  top: 0.7rem;
+  width: 1rem;
+}
+
+.input-wrapper-1 {
+  content-visibility: hidden;
+}
+
+.input-wrapper-1.show {
+  content-visibility: visible;
+}
+
+.valid .green-circle {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-image: url('../../public/SignIn/greenTickIcon.webp');
+  background-size: contain;
+  position: absolute;
+  left: 10rem;
+  top: 71px;
+}
+
+.last__name__container .valid .green-circle {
+  top: 3.9rem;
+}
+
+.valid .red-circle {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-image: url('../../public/SignIn/alert.webp');
+  background-size: contain;
+  position: absolute;
+  left: 10rem;
+  top: 3.9rem;
+}
+
+.cliploaderclass {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-size: contain;
+  position: absolute;
+  left: 10rem;
+  top: 3.9rem;
+}
+
+.valid .green-circle-login {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-image: url('../../public/SignIn/greenTickIcon.webp');
+  background-size: contain;
+  position: absolute;
+  top: 3.25rem;
+  left: 18.5rem;
+}
+
+.third__block .green-circle {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-image: url('../../public/SignIn/greenTickIcon.webp');
+  background-size: contain;
+  position: absolute;
+  left: 19rem;
+  top: 3.8rem;
+}
+
+.valid .green-circle-first {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-image: url('../../public/SignIn/greenTickIcon.webp');
+  background-size: contain;
+  position: absolute;
+  left: 10rem;
+  top: 1px;
+}
+
+.container__whole form {
+  position: relative;
+  left: 2rem;
+}
+
+#input__width {
+  border: none;
+  width: 11rem;
+  outline: none;
+  background: none;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #000;
+  /* Add a bottom border with color #000 */
+  margin-right: 10px;
+  position: relative;
+  bottom: 0rem;
+  padding-bottom: 5px;
+}
+
+.second__block #input__width {
+  width: 25rem;
+  position: absolute;
+}
+
+.second__block .input-wrapper {
+  gap: 10px;
+}
+
+#input__email__width-signUp {
+  border: none;
+  width: 25.2rem;
+  outline: none;
+  background: none;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #000;
+  margin-right: 10px;
+  position: relative;
+  bottom: 1.5rem;
+  padding-bottom: 5px;
+}
+
+#input__email__width-Login {
+  border: none;
+  width: 25.2rem;
+  outline: none;
+  background: none;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #000;
+  margin-right: 10px;
+  position: relative;
+  bottom: 1.5rem;
+  padding-bottom: 5px;
+}
+
+.error-container {
+  position: relative;
+  /* Add relative positioning */
+}
+
+.error-message {
+  position: absolute;
+  /* Add absolute positioning */
+  top: 5.5rem;
+  /* Position below the input */
+  left: 0;
+  /* Align with the left edge of the input */
+  color: #ff0000;
+  font-size: 12px;
+}
+
+.second__block .error-message {
+  position: absolute;
+  top: 6rem;
+  left: 0;
+  color: rgb(255, 0, 0);
+  font-size: 12px;
+}
+
+.email__input__header {
+  position: relative !important;
+  left: -12rem !important;
+}
+
+.icon__img img {
+  width: 2rem;
+}
+
+.first__block {
+  display: flex;
+  width: 37rem;
+  justify-content: flex-start;
+  margin: 20px 0px;
+}
+
+.second__block {
+  display: flex;
+  width: 37rem;
+  justify-content: flex-start;
+  margin: 20px 0px;
+}
+
+.third__block {
+  display: flex;
+  width: 37rem;
+  justify-content: flex-start;
+  margin-top: -2.4rem;
+  margin-bottom: 20px;
+}
+
+.last__block {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  bottom: 0.5rem;
+  margin: 10px 0px;
+}
+
+.check__box__details {
+  display: flex;
+  justify-content: center;
+  width: 521px;
+  position: relative;
+  font-size: 12px;
+  margin-top: 40px;
+  left: -34px;
+}
+
+.check__box__details input {
+  position: relative;
+  bottom: 1rem;
+}
+
+.tooltiptext a {
+  font-size: 0.875rem !important;
+  color: #0057b1;
+  font-weight: bold;
+}
+
+.last__block button {
+  display: flex;
+  padding: 0.5rem 1.2rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  background: #6c6c6c;
+  cursor: no-drop;
+  color: white;
+}
+
+.cursorpointer {
+  cursor: pointer !important;
+  background-color: #0057b1 !important;
+  color: #f3f3f3 !important;
+}
+
+.loginNoCursor {
+  cursor: no-drop !important;
+}
+
+.send__otp__signUpcolor {
+  cursor: default !important;
+  color: #6c6c6c !important;
+}
+
+.third__block #input__email__width-signUp {
+  bottom: -4px !important;
+  position: relative !important;
+}
+
+.third__block #input__email__width-Login {
+  bottom: -4px !important;
+  position: relative !important;
+}
+
+.second__block {
+  position: relative;
+  bottom: 1rem;
+}
+
+/* ... (other styles) */
+/* OtpScreen.css (or in a separate CSS file) */
+
+.otp__style {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.5rem;
+  text-align: center;
+  width: 20%;
+  background-color: #f0f0f0;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+.otp__style h2 {
+  color: #000;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  text-align: center;
+}
+
+.otp__style hr {
+  width: 100%;
+  margin: 1rem 0;
+  border: none;
+  height: 1px;
+  background-color: grey;
+}
+
+.otp__style p {
+  color: grey;
+  padding-bottom: 1rem;
+  font-size: 14px;
+}
+
+.otp__input-container {
+  display: flex;
+  justify-content: left;
+}
+
+.otp__style .otp__input-container input {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  padding-bottom: 2rem;
+}
+
+.changeErrorColorGreen {
+  color: green !important;
+}
+
+.otp__button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+
+.otp__button-container button {
+  border: none;
+  margin: 0.5rem;
+  color: #0057b1;
+  text-align: center;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.bgloginblue {
+  background-color: #0057b1 !important;
+  color: #fff !important;
+}
+
+.otp__input__four {
+  border: none;
+  border-bottom: 1px solid #000;
+  width: 2rem !important;
+  margin-left: 1rem;
+  position: relative;
+  margin-top: -0.2rem !important;
+  margin-bottom: 1.25rem;
+  outline: none;
+  /* background-color: #f0f0f0; */
+  text-align: center !important;
+  background: none;
+}
+
+.otp__input__four:focus {
+  border: 1px solid #fff;
+}
+
+.signIn-container .sign-in .otp__style .otp__verify__button {
+  position: inherit !important;
+  width: 80% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 0 auto !important;
+  width: 17.0625rem !important;
+  padding: 0.5rem 2rem !important;
+  gap: 0.625rem;
+  border-radius: 0.5rem !important;
+  background: #0057b1 !important;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.otp__verify {
+  width: 85%;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #6c6c6c;
+  color: #f3f3f3;
+  margin: 10px 0px;
+  border: none;
+  cursor: default;
+}
+
+.sent__mail__otp {
+  color: #0057b1;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.send__otp__logIn {
+  position: relative;
+  right: 4.8rem;
+  cursor: pointer;
+  bottom: 1.5rem;
+  color: #0057b1;
+  font-weight: bold;
+  background: none;
+}
+
+.otp__expiry__desc {
+  text-align: center;
+  width: 95%;
+}
+
+.otp-popup {
+  position: absolute;
+  top: 20.3rem;
+  left: 18%;
+  color: #fff;
+  background-color: black;
+  border-radius: 20px;
+  z-index: 9999;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.otp-popup-inLoginDesktopPage {
+  position: absolute;
+  top: 40px;
+  left: 60%;
+  color: #fff;
+  background-color: black;
+  border-radius: 20px;
+  z-index: 9999;
+  padding: 8px;
+  font-size: 8px;
+}
+
+.otp-popup-again {
+  position: absolute;
+  top: 14.2rem;
+  left: 20%;
+  color: #fff;
+  background-color: black;
+  border-radius: 20px;
+  z-index: 9999;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.otp-popup-again-signup {
+  position: absolute;
+  top: 2.5rem;
+  left: 36%;
+  color: #fff;
+  background-color: black;
+  border-radius: 20px;
+  z-index: 9999;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.log__in__btn {
+  display: flex;
+  padding: 8px 32px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  background: #6c6c6c;
+  color: #fff;
+  position: relative;
+  left: 18.4rem;
+  bottom: 2rem;
+  cursor: pointer;
+  width: 7rem;
+  margin-top: -1.2rem !important;
+}
+
+.send__otp__signUp {
+  color: #0057b1;
+  position: relative;
+  top: 1.85rem;
+  right: 2.6rem;
+  cursor: pointer;
+  font-weight: bold;
+  background: none;
+}
+
+.increaseSendOTPWidth {
+  width: 4.2vw;
+}
+
+.increaseResendOTPWidth {
+  width: 9vw;
+}
+
+.increaseResendOTPWidthPopup {
+  width: 5vw;
+}
+
+.inputEmailLogin {
+  bottom: 0.9rem !important;
+}
+
+.web__sign__up {
+  position: relative;
+  left: 1rem;
+  top: 1rem;
+}
+
+.otp__container__log__in {
+  position: relative;
+}
+
+.otp__container__log__in img {
+  margin-left: -0.8rem !important;
+  right: 1rem;
+}
+
+.Link__color__blue {
+  color: #0057b1;
+  font-size: 12px;
+  font-weight: 530;
+  padding: 0;
+}
+
+.log__in__resend__otp {
+  position: relative;
+  bottom: -0.1rem;
+  left: 4rem;
+  color: #0057b1;
+  font-weight: bold;
+  background: none;
+}
+
+.othersigninbuttons {
+  display: flex;
+  justify-content: flex-start;
+  width: 90%;
+}
+
+.othersigninbuttons button {
+  width: 33%;
+  padding: 0.4rem;
+  justify-content: flex-start;
+  margin-top: 1rem;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid #6c6c6c;
+  background: #fff;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.othersigninbuttons button img {
+  width: 1.5rem;
+  position: static;
+  right: 3rem;
+  top: 0.9rem;
+}
+
+.othersigninbuttons button span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.othersigninoptions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  fill: #6c6c6c;
+  stroke-width: 2px;
+  stroke: #e1e1e1;
+  color: #6c6c6c;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}
+
+@media only screen and (max-width: 768px) {
+  .otp__style {
+    width: 39%;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .otp__style {
+    width: 25%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .otp__style {
+    width: 50%;
+  }
+}

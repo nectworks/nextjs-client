@@ -1,0 +1,126 @@
+.main {
+  margin-left: 95px;
+  margin-right: 95px;
+  max-width: 85%;
+}
+.justify-text {
+  text-align: justify;
+}
+
+.box {
+  padding: 50px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: left;
+  background-color: #c1d5ff;
+}
+
+.fraudulent_header h2 {
+  color: #333;
+  text-align: left;
+}
+
+.right-side p {
+  color: #666;
+  text-align: left;
+  margin-top: 20px;
+  text-align: justify;
+}
+
+.fraudulent_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.left-side {
+  flex: 1;
+  padding: 20px;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+.right-side {
+  flex: 2;
+  padding: 20px;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.fraudulent_btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 35px;
+}
+
+.fraudulent_btn:hover {
+  background-color: #0056b3;
+}
+
+/* Media query for screens smaller than 950px (tablets and smaller) */
+@media only screen and (max-width: 768px) and (max-height: 795px) {
+  .main {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .box {
+    padding: 20px;
+    margin-left: 30px;
+  }
+
+  .fraudulent_container {
+    padding: 20px 16px;
+  }
+
+  .left-side,
+  .right-side {
+    padding: 25px;
+    margin-top: 20px;
+  }
+}
+@media only screen and (max-width: 450px) and (max-height: 896px) {
+  .box {
+    padding: 20px;
+  }
+
+  .fraudulent_container {
+    flex-direction: column;
+    padding: 20px 16px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .left-side {
+    order: 1;
+    padding: 10px;
+    margin-top: 20px;
+  }
+  .right-side {
+    order: 2;
+    padding: 10px;
+    margin-top: 20px;
+  }
+  .fraudulent_header h2 {
+    font-size: 16px;
+    font-size: large;
+  }
+
+  .right-side p {
+    font-size: 16px;
+    margin-top: 20px;
+  }
+
+  .fraudulent_btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+}
