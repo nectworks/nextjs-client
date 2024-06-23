@@ -1,7 +1,15 @@
-import Home from './home/home';
+import Home from './(root)/home/Home';
+import Header from './_components/Header/Header';
+import Footer from './_components/Footer/Footer';
 
 const HomePage = () => {
-  return <Home />;
+  return (
+    <>
+      <Header />
+      <Home />
+      <Footer />
+    </>
+  );
 };
 
 export default HomePage;

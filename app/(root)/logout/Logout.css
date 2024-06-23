@@ -1,0 +1,21 @@
+/*
+    FileName - Logout.css
+    Desc - This file contains styles for a specific component or feature related to logging out in a web application. Below is a description of the styles defined in the file:
+*/
+.logoutContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 83vh;
+  width: 98.9vw;
+  background-color: #f3f3f3;
+}
+.blurBG {
+  background-color: #f3f3f3;
+  filter: blur(5px);
+}
+.cliploader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}

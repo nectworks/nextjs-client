@@ -1,7 +1,8 @@
-const axios = require('axios');
+import axios from 'axios';
 
 // Set the base URL for API requests
-const baseURL = process.env.NEXT_PUBLIC_APP_URL || '/api/v1';
+const baseURL = process.env.NEXT_PUBLIC_APP_URL;
+console.log(baseURL);
 /* 
   Axios instance without credentials.
   This instance doesn't send cookies on each request.

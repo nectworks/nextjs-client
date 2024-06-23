@@ -7,10 +7,10 @@
 
 import { useContext, useEffect, useState } from 'react';
 import './ProfileSkills.css';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import crossIcon from '../../../../public/SignUpConfirmPopup/crossIcon.svg';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
-import { privateAxios } from '../../../../config/axiosInstance';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
+import { privateAxios } from '@/config/axiosInstance';
 import Image from 'next/image';
 
 function ProfileSkills({

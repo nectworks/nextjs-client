@@ -1,0 +1,529 @@
+.referralRequestModal {
+  width: 60vw;
+  border-radius: 10px;
+  margin: 40px auto;
+}
+
+.makeTextFade {
+  color: #808080;
+  border-color: #808080;
+  border-color: #808080;
+}
+
+.makeButtonFade {
+  background-color: #6c6c6c !important;
+}
+
+.makeInputFade {
+  border-color: #808080 !important;
+}
+
+.replaceExistingResumeButton {
+  color: #0057b1;
+  text-decoration: underline;
+}
+
+.replaceExistingResumeButton:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.referralRequestDesc {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.referralRequestHeader {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  line-height: 1.7rem;
+  padding-right: 20px;
+  border-radius: none;
+  background: #fff;
+  padding-left: 10px;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.25);
+  margin-bottom: 2px;
+  padding-top: 10px;
+}
+
+.referralRequestHeader button {
+  border: none;
+  background: none;
+  font-weight: bold;
+}
+
+.referralRequestHeaderDesc {
+  background-color: #fff;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 20px;
+  margin-bottom: -10px;
+}
+
+.referralRequestDetails {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px;
+}
+
+.referralRequestDetails label {
+  font-weight: bold;
+}
+
+.firstNameAndLastName {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.firstNameAndLastName input {
+  width: 26vw !important;
+  border: none;
+  border-bottom: 1px solid #000;
+  outline: none;
+  margin-top: 20px;
+  font-size: 1rem;
+  padding: 2px 0px;
+  background-color: #fff;
+}
+
+.firstName {
+  display: flex;
+  flex-direction: column;
+}
+
+.lastName {
+  display: flex;
+  flex-direction: column;
+}
+
+.messageDetails {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0px;
+}
+
+.messageDetails textarea {
+  outline: none;
+  border: 1px solid #000;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-size: 1rem;
+}
+
+.emailDetailsAndUploadResume {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.errorMessage {
+  color: #f00;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.emailDetailsAndUploadResumeInput {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.emailDetailsAndUploadResumeInput input {
+  width: 52vw;
+  padding: 2px 0px;
+  background-color: #fff;
+}
+
+.emailDetailsAndUploadResume button {
+  border: none;
+  background: none;
+  font-weight: bold;
+  color: #0057b1;
+  font-size: 1rem;
+}
+
+.emailDetailsAndUploadResume input {
+  border: none;
+  border-bottom: 1px solid #000;
+  outline: none;
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+.uploadResume {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0px 10px;
+  margin-bottom: 30px;
+}
+
+.uploadResumeSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.uploadResumeButton {
+  display: flex;
+}
+
+.replaceResume {
+  background-color: #0057b1 !important;
+}
+
+.uploadResumeSection button {
+  color: #fff;
+  background: #6c6c6c;
+  border: none;
+  border-radius: 20px;
+  text-align: center;
+  padding: 10px 14px;
+}
+
+.submitButtonForReferral {
+  background: #6c6c6c;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 14px;
+}
+
+.jobDescriptionForReferral {
+  display: flex;
+  flex-direction: column;
+  margin-top: 35px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #d8ecff;
+  padding: 25px;
+}
+
+.jobDescription {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.copyJobIdButton {
+  background: none;
+  border: none;
+  cursor: default;
+  margin-top: 20px;
+}
+
+.addJobForReferral {
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #fff;
+  line-height: 10px;
+  box-shadow: 1px 1px 2px #808080;
+}
+
+.addIconJobDesc {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  padding: 8px 0px 5px 10px;
+  border-radius: 27px;
+  background: #fff;
+}
+
+.jobDescription input {
+  border: none;
+  border-bottom: 1px solid #000;
+  background: #d8ecff;
+  outline: none;
+  margin-top: 20px;
+  width: 20.5vw;
+  font-size: 1rem;
+}
+
+.jobIdDesc {
+  display: flex;
+  flex-direction: column;
+}
+
+.jobUrlDesc {
+  display: flex;
+  flex-direction: column;
+}
+
+.otpInputsInRequestReferral {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-direction: column;
+}
+
+.otpInputsInRequestReferral input {
+  width: 33px;
+  height: 33px;
+  margin: 0px 10px;
+  border-radius: 8px;
+  border: none;
+  border: 1px solid #000;
+  outline: none;
+  text-align: center;
+}
+
+.otpSentInfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 10px;
+}
+
+.makeButtonGreenColor {
+  color: #00b312 !important;
+  cursor: default;
+}
+
+.makeBgRed {
+  border: 2px solid red !important;
+}
+
+.disableButton {
+  color: #808080 !important;
+  cursor: default;
+}
+
+.otpInputs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cursorDefault {
+  cursor: default;
+}
+
+.cursorDefaultOfVerifyButton {
+  cursor: default;
+  color: #808080 !important;
+}
+
+.makeBgNone {
+  background: none;
+}
+
+.makeOtpGray {
+  background-color: #6c6c6c !important;
+}
+
+.makeBgBlur {
+  filter: blur(5px);
+}
+
+.messagePopupClose {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.messagePopupClose button {
+  border: none;
+  background: none;
+}
+
+.messagePopupClose img {
+  width: 40px;
+  height: 40px;
+}
+
+.goToSignupButton {
+  margin-top: 30px;
+  border: none;
+  background: #0057b1;
+  color: #fff;
+  border-radius: 20px;
+  padding: 8px 40px;
+}
+
+.makeBgBlue {
+  background-color: #0057b1 !important;
+}
+
+.notHavingProfessionalDetails {
+  background-color: #ffdbdb;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.notHavingProfessionalDetails p {
+  padding: 40px;
+}
+
+.linkToPublicProfile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: black;
+}
+
+.backToPublicProfile {
+  padding-left: 17px;
+  padding-right: 20px;
+  padding-bottom: 9px;
+  cursor: pointer;
+}
+
+.backToPublicProfile img {
+  height: 50px;
+  width: 50px;
+}
+
+.backToPublicProfile .profile_image {
+  padding: 0.6rem;
+  border-radius: 50%;
+  font-size: 1rem;
+}
+
+/* popup styles */
+
+#secondComerPopup {
+  flex-direction: row;
+  width: min(600px, 80vw);
+  padding-left: 0;
+}
+
+.popUpContainer {
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000081;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+}
+
+.popUpWindow {
+  width: min(400px, 80vw);
+  background-color: #fff;
+  border-radius: 8px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.sameUserWarningMessage {
+  color: red;
+}
+
+.loginPrompt p {
+  display: inline-block;
+  margin: 1rem;
+  margin-left: 0;
+}
+
+.loginPrompt button {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: white;
+  background-color: #0057b1;
+  padding: 0.5rem 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .referralRequestModal {
+    width: 90vw;
+  }
+
+  .firstNameAndLastName input {
+    width: 33vw !important;
+  }
+
+  .emailDetailsAndUploadResumeInput input {
+    width: 80vw;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .referralRequestModal {
+    width: 95vw;
+  }
+
+  .uploadResume {
+    gap: 1rem;
+  }
+
+  .emailDetailsAndUploadResumeInput {
+    gap: 0.2rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .referralRequestHeaderDesc {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin-bottom: 10px;
+  }
+
+  .referralRequestModal {
+    margin-top: 20px;
+  }
+
+  .referralRequestDetails {
+    padding: 0;
+  }
+
+  .addJobForReferral {
+    width: 30px;
+    height: 30px;
+  }
+
+  .jobDescriptionForReferral {
+    padding: 20px;
+  }
+
+  .uploadResume {
+    padding: 0;
+    position: relative;
+  }
+
+  .uploadResume .submitReferralLoader {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+  }
+
+  .secondComer {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .referralRequestModal {
+    width: 80vw;
+  }
+
+  .firstNameAndLastName input {
+    width: 33vw !important;
+  }
+
+  .emailDetailsAndUploadResumeInput input {
+    width: 70vw;
+  }
+}

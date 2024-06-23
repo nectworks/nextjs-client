@@ -7,15 +7,15 @@
 */
 
 import { useCallback, useContext, useEffect, useState } from 'react';
-import usePrivateAxios from '../../../Utils/usePrivateAxios';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
 import './NectCoins.css';
 import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
 import ProfileHeader from '../../_components/Profile/ProfileHeader/ProfileHeader';
-import nectCoinsImg from '../../../public/Profile/nectCoin.svg';
-import { UserContext } from '../../../context/User/UserContext';
+import nectCoinsImg from '@/public/Profile/nectCoin.svg';
+import { UserContext } from '@/context/User/UserContext';
 import ClipLoader from 'react-spinners/ClipLoader';
-import leftArrow from '../../../public/ReferCandidates/leftArrow.png';
-import rightArrow from '../../../public/ReferCandidates/rightArrow.png';
+import leftArrow from '@/public/ReferCandidates/leftArrow.png';
+import rightArrow from '@/public/ReferCandidates/rightArrow.png';
 import Image from 'next/image';
 
 function NectCoins() {
@@ -111,9 +111,7 @@ function NectCoins() {
   // function to highlight streaks
   const highlightProgress = useCallback(() => {
     // get all the coin images
-    const allCoins = Array.from(
-      document.querySelectorAll('.nectcoins_coin_img')
-    );
+    const allCoins = Array.from(document.querySelectorAll('.coin_img'));
 
     // coin till which the progress should be highlighted
     const highlightLvl = (user?.loginStreak - 1) % 5;
@@ -132,7 +130,7 @@ function NectCoins() {
 
       // when the last coins are to be animated, animate the extra coin
       if (highlightLvl === 4) {
-        const lastCoin = document.querySelector('.nectcoin_last_coin');
+        const lastCoin = document.querySelector('.last_coin');
         lastCoin.classList.add('animated_coin');
       }
     }
@@ -251,7 +249,7 @@ function NectCoins() {
               <div className="nectcoins_coin_progress">
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -259,7 +257,7 @@ function NectCoins() {
 
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -267,7 +265,7 @@ function NectCoins() {
 
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -275,7 +273,7 @@ function NectCoins() {
 
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -283,12 +281,12 @@ function NectCoins() {
 
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
                   <Image
-                    className="nectcoin_last_coin"
+                    className="last_coin"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -347,7 +345,6 @@ function NectCoins() {
               )}
             </>
           )}
-
           <div className="basic_nectcoins_queries">
             <div>
               <p className="nectcoin_question">What are Nectcoins?</p>
@@ -356,7 +353,6 @@ function NectCoins() {
                 site.
               </p>
             </div>
-
             <div>
               <p className="nectcoin_question">How do I get Nectcoins?</p>
               <p className="nectcoin_answer">
@@ -366,7 +362,6 @@ function NectCoins() {
                 consistent! 🎁
               </p>
             </div>
-
             <div>
               <p className="nectcoin_question">Where can I use Nectcoins?</p>
               <p className="nectcoin_answer">
@@ -375,7 +370,6 @@ function NectCoins() {
                 1 Nectcoin. 💰
               </p>
             </div>
-
             <div>
               <p className="nectcoin_question">Is that all?</p>
               <p className="nectcoin_answer">

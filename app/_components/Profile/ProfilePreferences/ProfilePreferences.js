@@ -7,10 +7,11 @@
 
 import { useContext, useEffect, useState } from 'react';
 import './ProfilePreferences.css';
-import crossIcon from '../../../Assets/SignUpConfirmPopup/crossIcon.svg';
-import { UserContext } from '../../../context/User/UserContext';
-import showBottomMessage from '../../../Utils/showBottomMessage';
-import usePrivateAxios from '../../../Utils/usePrivateAxios';
+import Image from 'next/image';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import { UserContext } from '@/context/User/UserContext';
+import showBottomMessage from '@/Utils/showBottomMessage';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
 
 function ProfilePreferences({
   isDataUpdated,
@@ -537,7 +538,7 @@ function ProfilePreferences({
                   key={index}
                 >
                   {skill}
-                  <img
+                  <Image
                     src={crossIcon}
                     onClick={removeInputs}
                     alt={`remove ${skill}`}
@@ -625,7 +626,7 @@ function ProfilePreferences({
                   key={index}
                 >
                   {location}
-                  <img
+                  <Image
                     src={crossIcon}
                     onClick={removeInputs}
                     alt={`remove ${location}`}
@@ -681,7 +682,7 @@ function ProfilePreferences({
                     key={index}
                   >
                     {company}
-                    <img
+                    <Image
                       src={crossIcon}
                       onClick={removeInputs}
                       alt={`remove ${company}`}

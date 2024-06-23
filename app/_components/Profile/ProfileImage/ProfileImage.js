@@ -7,7 +7,8 @@
 
 import { useContext, useEffect, useState } from 'react';
 import './ProfileImage.css';
-import { UserContext } from '../../../../context/User/UserContext';
+import Image from 'next/image';
+import { UserContext } from '@/context/User/UserContext';
 
 // function to get user profile image
 function ProfileImage({ otherUser, isLoggedInUser }) {
@@ -48,6 +49,9 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
 
   useEffect(() => {
     const a = isLoggedInUser ? user : otherUser;
+    console.log(`This is userState :${JSON.stringify(userState)}`);
+    console.log(`This is user :${JSON.stringify(user)}`);
+    console.log(`this user is: ${JSON.stringify(a)}`);
     const firstInitial = a?.firstName?.[0] || '-';
     const secondInitial = a?.lastName?.[0] || '-';
     setInitials(firstInitial.toUpperCase() + secondInitial.toUpperCase());
@@ -73,7 +77,7 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
   // if user has already uploaded a profile, display it.
   if (isLoggedInUser == true && user?.profile) {
     return (
-      <img
+      <Image
         className="profile_image"
         src={user?.profile}
         alt={`${user?.firstName || ''} Nectworks`}
@@ -81,7 +85,7 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
     );
   } else if (isLoggedInUser == false && otherUser?.profile) {
     return (
-      <img
+      <Image
         className="profile_image"
         src={otherUser?.profile}
         alt={`${otherUser?.firstName || ''} Nectworks`}

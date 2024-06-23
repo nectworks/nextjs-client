@@ -71,7 +71,7 @@ const allSubSections = [
   'projects',
 ];
 
-const initialState = JSON.parse(localStorage.getItem('dashboard')) || {};
+export const initialState = JSON.parse(localStorage.getItem('dashboard')) || {};
 
 // function to update current state
 export function reducer(state = initialState, { type, payload }) {

@@ -52,8 +52,9 @@
   width: fit-content;
 }
 
-.dashboard_profile_additional_about .info_icon img {
-  width: 12px;
+.Info_icon_img {
+  width: 14px;
+  height: 14px;
   margin-left: 0.3rem;
   filter: brightness(0.1);
   cursor: pointer;

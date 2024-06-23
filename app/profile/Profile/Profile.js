@@ -8,40 +8,37 @@
 
 import './Profile.css';
 import { Fragment, useContext, useEffect, useState, useRef } from 'react';
-import editIcon from '../../../public/Profile/editIcon.svg';
-import addIcon from '../../../public/Profile/addIcon.svg';
+import editIcon from '@/public/Profile/editIcon.svg';
+import addIcon from '@/public/Profile/addIcon.svg';
 import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import SignUpConfirmPopup from '../../_components/SignUpConfirmPopup/SignUpConfirmPopup';
 import ProfileActions from './ProfileActions';
-import { ProfileContextProvider } from '../../../context/UpdateProfile/ProfileContext';
-import {
-  initialState,
-  reducer,
-} from '../../../context/UpdateProfile/ProfileReducer';
-import seperatorIcon from '../../../public/Profile/speratorIcon.svg';
-import linkedInIcon from '../../../public/linkedinImage.webp';
-import otherLinkIcon from '../../../public/Profile/otherLinkIcon.svg';
-import documentLinkIcon from '../../../public/Profile/documentLinkIcon.svg';
-import { UserContext } from '../../../context/User/UserContext';
-import { DashboardContext } from '../../../context/Dashboard/DashboardContext';
+import ProfileContextProvider from '@/context/UpdateProfile/ProfileContext';
+import { initialState, reducer } from '@/context/UpdateProfile/ProfileReducer';
+import seperatorIcon from '@/public/Profile/speratorIcon.svg';
+import linkedInIcon from '@/public/linkedinImage.webp';
+import otherLinkIcon from '@/public/Profile/otherLinkIcon.svg';
+import documentLinkIcon from '@/public/Profile/documentLinkIcon.svg';
+import { UserContext } from '@/context/User/UserContext';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
 import ProfileHeader from '../../_components/Profile/ProfileHeader/ProfileHeader';
 import ProfileImage from '../../_components/Profile/ProfileImage/ProfileImage';
 import ProfileUploadDialog from '../../_components/Profile/ProfileUploadDialog/ProfileUploadDialog';
-import viewDocumentInNewTab from '../../../Utils/viewDocument';
-import showBottomMessage from '../../../Utils/showBottomMessage';
-import usePrivateAxios from '../../../Utils/usePrivateAxios';
+import viewDocumentInNewTab from '@/Utils/viewDocument';
+import showBottomMessage from '@/Utils/showBottomMessage';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
 import SignUpFormPopup from '../../_components/SignUpConfirmPopup/SignUpFormPopup';
-import { publicAxios } from '../../../config/axiosInstance';
+import { publicAxios } from '@/config/axiosInstance';
 import axios from 'axios';
-import locationIcon from '../../../public/Profile/locationIcon.svg';
-import workIcon from '../../../public/Profile/workIcon.svg';
-import emailIcon from '../../../public/Profile/emailIcon.svg';
-import phoneIcon from '../../../public/Profile/phoneIcon.svg';
-import editProfileIcon from '../../../public/Profile/editIcon.svg';
-import resumeUploadIcon from '../../../public/Profile/resumeUploadIcon.svg';
+import locationIcon from '@/public/Profile/locationIcon.svg';
+import workIcon from '@/public/Profile/workIcon.svg';
+import emailIcon from '@/public/Profile/emailIcon.svg';
+import phoneIcon from '@/public/Profile/phoneIcon.svg';
+import editProfileIcon from '@/public/Profile/editIcon.svg';
+import resumeUploadIcon from '@/public/Profile/resumeUploadIcon.svg';
 import {
   FaBriefcase,
   FaMedal,
@@ -52,17 +49,17 @@ import {
   FaFacebookF,
   FaLinkedin,
 } from 'react-icons/fa';
-import deleteResume from '../../../public/Profile/deleteResume.svg';
-import downloadResume from '../../../public/Profile/downloadResume.svg';
+import deleteResume from '@/public/Profile/deleteResume.svg';
+import downloadResume from '@/public/Profile/downloadResume.svg';
 import {
   FaRegMessage,
   FaXTwitter,
   FaArrowUpRightFromSquare,
 } from 'react-icons/fa6';
-import crossIcon from '../../../public/SignUpConfirmPopup/crossIcon.svg';
-import downloadDocument from '../../../Utils/downloadDocument';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import downloadDocument from '@/Utils/downloadDocument';
+// import DatePicker from 'react-datepicker';
+// import 'react-datepicker/dist/react-datepicker.css';
 
 /*
   Note about using localStorage and sessionStorage:
@@ -74,7 +71,7 @@ import 'react-datepicker/dist/react-datepicker.css';
       browser.
 */
 
-function Profile() {
+const ProfilePage = () => {
   // state for opening profile image upload dialog box.
   const [openProfileUploadDialog, setOpenFileUploadDialog] = useState(false);
 
@@ -102,9 +99,9 @@ function Profile() {
   const [user, setUser] = userState;
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [openDateForm, setOpenDateForm] = useState(false);
-  const location = useLocation();
-
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const { pathname, query } = router;
+  const searchParams = new URLSearchParams(query);
   const privateAxios = usePrivateAxios();
 
   // function to get appropriate icon based on the link
@@ -287,37 +284,40 @@ function Profile() {
   useEffect(() => {
     // Fetch initial value of activelySeekingJob from the database
     const fetchData = async () => {
-      try {
-        const response = await publicAxios.get(
-          '/signUpCards/getActivelySeekingJob',
-          {
-            params: {
-              userId: user._id,
-            },
-          }
-        );
-        setActivelySeekingJob(response.data.activelySeekingJob);
-      } catch (error) {
-        console.error('Error fetching actively seeking job status:', error);
-      }
-      try {
-        const response = await publicAxios.get(
-          '/signUpCards/getImmediatejoiner',
-          {
-            params: {
-              userId: user._id,
-            },
-          }
-        );
-        setToggle(response.data.isOpen);
-        setSelectedDate(response.data.date);
-      } catch (error) {
-        console.error('Error fetching actively seeking job status:', error);
+      if (user && user._id) {
+        // Check if user and user._id exist
+        try {
+          const response = await publicAxios.get(
+            '/signUpCards/getActivelySeekingJob',
+            {
+              params: {
+                userId: user._id,
+              },
+            }
+          );
+          setActivelySeekingJob(response.data.activelySeekingJob);
+        } catch (error) {
+          console.error('Error fetching actively seeking job status:', error);
+        }
+        try {
+          const response = await publicAxios.get(
+            '/signUpCards/getImmediatejoiner',
+            {
+              params: {
+                userId: user._id,
+              },
+            }
+          );
+          setToggle(response.data.isOpen);
+          setSelectedDate(response.data.date);
+        } catch (error) {
+          console.error('Error fetching actively seeking job status:', error);
+        }
       }
     };
 
     fetchData();
-  }, [user._id]);
+  }, [user]);
 
   const [shouldDisplayMessage, setShouldDisplayMessage] = useState(false);
 
@@ -586,45 +586,47 @@ function Profile() {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const userId = user._id;
-      try {
-        const response = await publicAxios.get(
-          `/signUpCards/getUserInfo/${userId}`
-        );
-        const userInfo = response.data.userInfo;
-        // Count the number of filled fields
-        let filledFieldsCount = 0;
-        for (const key in userInfo) {
-          if (Array.isArray(userInfo[key]) && userInfo[key].length > 0) {
+      if (user && user._id) {
+        // Check if user and user._id exist
+        const userId = user._id;
+        try {
+          const response = await publicAxios.get(
+            `/signUpCards/getUserInfo/${userId}`
+          );
+          const userInfo = response.data.userInfo;
+          // Count the number of filled fields
+          let filledFieldsCount = 0;
+          for (const key in userInfo) {
+            if (Array.isArray(userInfo[key]) && userInfo[key].length > 0) {
+              filledFieldsCount++;
+            }
+          }
+
+          if (userInfo.about) {
             filledFieldsCount++;
           }
+
+          if (user.userDetails.fileKey) {
+            filledFieldsCount++;
+          }
+
+          // Calculate completion percentage
+          let totalFieldsCount = Object.keys(userInfo).filter((key) =>
+            Array.isArray(userInfo[key])
+          ).length;
+          totalFieldsCount += 2;
+
+          const completionPercentage = Math.ceil(
+            (filledFieldsCount / totalFieldsCount) * 100
+          );
+          setCompletion(completionPercentage);
+        } catch (error) {
+          console.error('Error fetching user information:', error);
         }
-
-        if (userInfo.about) {
-          filledFieldsCount++;
-        }
-
-        if (user.userDetails.fileKey) {
-          filledFieldsCount++;
-        }
-
-        // Calculate completion percentage
-        let totalFieldsCount = Object.keys(userInfo).filter((key) =>
-          Array.isArray(userInfo[key])
-        ).length;
-        totalFieldsCount += 2;
-
-        const completionPercentage = Math.ceil(
-          (filledFieldsCount / totalFieldsCount) * 100
-        );
-        setCompletion(completionPercentage);
-      } catch (error) {
-        console.error('Error fetching user information:', error);
       }
     };
-
     fetchUserInfo();
-  }, [user._id, user.userDetails.fileKey]);
+  }, [user]);
 
   useEffect(() => {
     // show the pop up only if redirected from signup page
@@ -641,9 +643,8 @@ function Profile() {
     const sharePostParam = searchParams.get('post_shared');
     if (sharePostParam && sharePostParam === 'success') {
       showBottomMessage('Successfully shared the post');
-      setSearchParams({});
     }
-  }, []);
+  }, [searchParams]);
 
   const [showSignUpForm, setShowSignUpForm] = useState(false);
   const handleEditClick = () => {
@@ -654,20 +655,21 @@ function Profile() {
   const [userPopUpInfo, setUserPopUpInfo] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Make request to experienced/get/:userId
-        const experiencedResponse = await publicAxios.get(
-          `/signUpCards/get/${user._id}`
-        );
-        setUserData(experiencedResponse.data.userDetails);
-      } catch (error) {
-        console.error('Error fetching experienced user data:', error);
-      }
-    };
-
-    fetchData();
-  }, [user._id]);
+    if (user && user._id) {
+      const fetchData = async () => {
+        try {
+          // Make request to experienced/get/:userId
+          const experiencedResponse = await publicAxios.get(
+            `/signUpCards/get/${user._id}`
+          );
+          setUserData(experiencedResponse.data.userDetails);
+        } catch (error) {
+          console.error('Error fetching experienced user data:', error);
+        }
+      };
+      fetchData();
+    }
+  }, [user]);
 
   return (
     <ProfileContextProvider initialState={initialState} reducer={reducer}>
@@ -895,14 +897,14 @@ function Profile() {
                         </div>
                         {openDateForm && (
                           <div className="joining_toggle_message_dateForm">
-                            <DatePicker
+                            {/*<DatePicker
                               selected={selectedDate}
                               onChange={handleDateChange}
                               minDate={new Date()} // Set minimum date to today
                               maxDate={maxDate}
                               dateFormat="yyyy-MM-dd" // Date format
                               placeholderText="Select a date" // Placeholder text
-                            />
+                            />*/}
                           </div>
                         )}
                         <button
@@ -984,7 +986,7 @@ function Profile() {
               </span>
               <a
                 className="dashboard_profile_new_tab"
-                href={`/profile/${user.username}`}
+                href={`/profile/${user?.username}`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -1639,6 +1641,6 @@ function Profile() {
       </div>
     </ProfileContextProvider>
   );
-}
+};
 
-export default Profile;
+export default ProfilePage;

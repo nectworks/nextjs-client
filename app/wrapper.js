@@ -2,14 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import ProgressBar from './_components/ProgressBar/ProgressBar';
-import Footer from './_components/Footer/Footer';
-import Header from './_components/Header/Header';
 import UserContextProvider from '@/context/User/UserContext';
 import DashboardContextProvider from '@/context/Dashboard/DashboardContext';
+import ProfileContextProvider from '@/context/UpdateProfile/ProfileContext';
 
 const Wrapper = ({ children }) => {
   // State to track loading status
   const [loading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (document.location.hostname.search('nectworks.com') !== -1) {
+      ReactGA.initialize(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID);
+    }
+  }, []);
 
   useEffect(() => {
     // Simulate loading time
@@ -26,10 +31,9 @@ const Wrapper = ({ children }) => {
       ) : (
         <>
           <UserContextProvider>
-            <DashboardContextProvider />
-            <Header />
-            {children}
-            <Footer />
+            <DashboardContextProvider>
+              <ProfileContextProvider>{children}</ProfileContextProvider>
+            </DashboardContextProvider>
           </UserContextProvider>
         </>
       )}

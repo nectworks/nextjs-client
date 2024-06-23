@@ -15,9 +15,6 @@
     "*.{js,jsx,ts,tsx,json,css,md}": "prettier --write"
   },
   "dependencies": {
-    "next": "14.2.3",
-    "react": "^18",
-    "react-dom": "^18",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-free": "^6.5.1",
@@ -25,10 +22,14 @@
     "@mui/x-data-grid": "^6.18.5",
     "axios": "^1.4.0",
     "cropperjs": "^1.6.1",
+    "date-fns": "^3.6.0",
     "install": "^0.13.0",
     "jodit-react": "^4.0.9",
+    "next": "14.2.3",
+    "react": "^18",
     "react-awesome-reveal": "^4.2.8",
     "react-datepicker": "^6.6.0",
+    "react-dom": "^18",
     "react-ga4": "^2.1.0",
     "react-helmet": "^6.1.0",
     "react-helmet-async": "^2.0.4",
@@ -38,20 +39,20 @@
     "react-spinners": "^0.13.8"
   },
   "devDependencies": {
+    "assert": "^2.1.0",
+    "buffer": "^6.0.3",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.5",
-    "prettier": "^3.3.0",
     "eslint-config-google": "^0.14.0",
+    "eslint-config-next": "14.2.3",
     "eslint-plugin-react": "^7.33.2",
     "events": "^3.3.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
     "path-browserify": "^1.0.1",
     "popper.js": "^1.16.1",
+    "prettier": "^3.3.0",
     "process": "^0.11.10",
     "url": "^0.11.3",
-    "util": "^0.12.5",
-    "assert": "^2.1.0",
-    "buffer": "^6.0.3"
+    "util": "^0.12.5"
   }
 }

@@ -7,9 +7,9 @@
 
 import { useContext, useEffect, useState } from 'react';
 import './ProfileSocials.css';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import addIcon from '../../../../public/Profile/addIcon.svg';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import addIcon from '@/public/Profile/addIcon.svg';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
 import Image from 'next/image';
 
 function ProfileSocials({

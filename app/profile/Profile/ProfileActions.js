@@ -7,7 +7,7 @@
 */
 
 import './ProfileActions.css';
-import crossIcon from '../../../public/SignUpConfirmPopup/crossIcon.svg';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import ProfileAbout from '../../_components/Profile/ProfileAbout/ProfileAbout.js';
 import ProfileEducation from '../../_components/Profile/ProfileEducation/ProfileEducation.js';
 import ProfileExperience from '../../_components/Profile/ProfileExperience/ProfileExperience.js';
@@ -16,14 +16,15 @@ import ProfileSocials from '../../_components/Profile/ProfileSocials/ProfileSoci
 import ProfileSkills from '../../_components/Profile/ProfileSkills/ProfileSkills.js';
 import ProfileProjects from '../../_components/Profile/ProfileProjects/ProfileProjects.js';
 import { useContext, useEffect, useState } from 'react';
-import { ProfileContext } from '../../../context/UpdateProfile/ProfileContext';
-import usePrivateAxios from '../../../Utils/usePrivateAxios.js';
-import { DashboardContext } from '../../../context/Dashboard/DashboardContext.js';
-import showBottomMessage from '../../../Utils/showBottomMessage.js';
-import sendGAEvent from '../../../Utils/gaEvents.js';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import usePrivateAxios from '@/Utils/usePrivateAxios.js';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext.js';
+import showBottomMessage from '@/Utils/showBottomMessage.js';
+import sendGAEvent from '@/Utils/gaEvents.js';
+import Image from 'next/image';
 
 /*
-   A JSX function to get the corresponding action based on step number
+  A JSX function to get the corresponding action based on step number
 */
 function GetProfileAction({ step, ...otherProps }) {
   switch (step) {
@@ -47,13 +48,13 @@ function GetProfileAction({ step, ...otherProps }) {
   }
 }
 
-function ProfileActions({
+const ProfileActions = ({
   setActionPopup,
   setUserInfo,
   subSection,
   subSectionIndex,
   isDataUpdated,
-}) {
+}) => {
   /* This component is reused for the user input process initially
      and to edit and add new information later. */
 
@@ -122,8 +123,7 @@ function ProfileActions({
     if (disableSkip === true) {
       displayMessage(
         [
-          `Current input data will be lost, press 'skip'
-       again to continue`,
+          `Current input data will be lost, press 'skip' again to continue`,
           'error',
         ],
         5500
@@ -350,8 +350,8 @@ function ProfileActions({
           <h4>Add {header}</h4>
           <p>{description}</p>
 
-          <img
-            onClick={(e) => {
+          <Image
+            onClick={() => {
               if (isDataUpdated) {
                 // Display confirmation dialog
                 if (
@@ -520,6 +520,6 @@ function ProfileActions({
       </div>
     </div>
   );
-}
+};
 
 export default ProfileActions;

@@ -7,18 +7,18 @@
 */
 
 import './ProfileHeader.css';
-import shareProfile from '../../../../public/Profile/shareProfile.svg';
-import copyProfile from '../../../../public/Profile/copyProfile.svg';
-import nectCoinImg from '../../../../public/Profile/nectCoin.svg';
+import shareProfile from '@/public/Profile/shareProfile.svg';
+import copyProfile from '@/public/Profile/copyProfile.svg';
+import nectCoinImg from '@/public/Profile/nectCoin.svg';
 import { useContext, useEffect, useState, useRef } from 'react';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import { UserContext } from '../../../../context/User/UserContext';
-import showBottomMessage from '../../../../Utils/showBottomMessage';
-import usePrivateAxios from '../../../../Utils/usePrivateAxios';
-import notification from '../../../../public/Profile/notification.png';
-import close from '../../../../public/SignUpConfirmPopup/crossIcon.svg';
-import noNotifications from '../../../../public/Profile/noNotifications.png';
-import { publicAxios } from '../../../../config/axiosInstance';
+import { UserContext } from '@/context/User/UserContext';
+import showBottomMessage from '@/Utils/showBottomMessage';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
+import notification from '@/public/Profile/notification.png';
+import close from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import noNotifications from '@/public/Profile/noNotifications.png';
+import { publicAxios } from '@/config/axiosInstance';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Slide } from 'react-awesome-reveal';

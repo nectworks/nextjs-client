@@ -1,3 +1,5 @@
+'use client';
+
 /*
    File: gaEvents.js
    Description: This file contains custom events sent to google analytics.

@@ -1,0 +1,17 @@
+.manage_blog_outer_container * {
+  box-sizing: border-box;
+}
+
+.manage_blog_outer_container {
+  width: 100vw;
+  display: flex;
+}
+
+.manage_blog_inner_container {
+  padding: 3rem;
+  flex-grow: 1;
+}
+
+.blog_draft {
+  margin: 1rem;
+}

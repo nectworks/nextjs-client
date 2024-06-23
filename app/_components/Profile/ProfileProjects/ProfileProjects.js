@@ -7,12 +7,12 @@
 
 import { useCallback, useContext, useEffect, useState } from 'react';
 import './ProfileProjects.css';
-import fileUploadIcon from '../../../../public/Profile/fileUploadIcon.svg';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import crossIcon from '../../../../public/SignUpConfirmPopup/crossIcon.svg';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
+import fileUploadIcon from '@/public/Profile/fileUploadIcon.svg';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
 import ClipLoader from 'react-spinners/ClipLoader';
-import usePrivateAxios from '../../../../Utils/usePrivateAxios';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
 import Image from 'next/image';
 
 function ProfileProjects({
@@ -100,16 +100,13 @@ function ProfileProjects({
   };
 
   // include new input update into the state
-  const handleFormInputChange = useCallback(
-    (e, field) => {
-      const newFormInput = { ...formInput };
-      newFormInput[`${field}`] = e.target.value;
+  const handleFormInputChange = useCallback((e, field) => {
+    const newFormInput = { ...formInput };
+    newFormInput[`${field}`] = e.target.value;
 
-      setFormInput(newFormInput);
-      saveChanges(newFormInput);
-    },
-    [formInput, saveChanges]
-  );
+    setFormInput(newFormInput);
+    saveChanges(newFormInput);
+  }, []);
 
   // function to save the current changes to context
   const saveChanges = useCallback(

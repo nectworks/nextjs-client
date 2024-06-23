@@ -1,3 +1,5 @@
+'use client';
+
 /*
    File: viewdocument.js
    Description: This file contains a function that takes file's key
@@ -20,10 +22,10 @@ async function viewDocumentInNewTab(key) {
     if (res.status === 200) {
       window.open(url);
     } else {
-      showBottomMessage(`Couldn't view document.`);
+      showBottomMessage("Couldn't view document.");
     }
   } catch (error) {
-    showBottomMessage(`Couldn't view document.`);
+    showBottomMessage("Couldn't view document.");
   }
 }
 

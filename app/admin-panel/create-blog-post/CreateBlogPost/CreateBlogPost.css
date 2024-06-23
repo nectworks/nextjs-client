@@ -1,0 +1,32 @@
+.create_blog_outer_container * {
+  box-sizing: border-box;
+}
+
+.create_blog_outer_container {
+  width: 100vw;
+  display: flex;
+}
+
+.create_blog_inner_container {
+  padding: 3rem;
+  flex-grow: 0;
+}
+
+.create_blog_inner_container h1 {
+  font-weight: 500;
+  margin: 2rem 0;
+}
+
+/* jodit editor styles */
+.jodit-wysiwyg ul {
+  list-style: inside;
+}
+
+.jodit-wysiwyg ol {
+  list-style: inside;
+  list-style-type: number;
+}
+
+.jodit-wysiwyg td {
+  border: solid 1px;
+}

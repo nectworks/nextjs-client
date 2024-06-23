@@ -7,7 +7,7 @@
 
 import { createContext, useEffect, useState } from 'react';
 import { privateAxios } from '../../config/axiosInstance.js';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 export const AdminUserContext = createContext(null);

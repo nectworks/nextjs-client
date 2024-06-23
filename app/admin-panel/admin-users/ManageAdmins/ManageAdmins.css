@@ -1,0 +1,59 @@
+.manage_admin_outer_container * {
+  box-sizing: border-box;
+}
+
+.manage_admin_outer_container {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+}
+
+.manage_admin_inner_container {
+  padding: 3rem;
+  flex-grow: 0;
+}
+
+.manage_admin_inner_container h1 {
+  font-weight: 400;
+}
+
+.admin_users_data_grid {
+  height: 500px;
+  width: 100%;
+}
+
+.admin_user_actions button {
+  margin: 0 0.5rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid;
+  outline: none;
+  border-radius: 6px;
+}
+
+.create_new_admin_form {
+  background-color: white;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.create_new_admin_form h3 {
+  font-weight: 500;
+}
+
+.create_new_admin_form button {
+  padding: 0.3rem 0.5rem;
+}
+
+.admin_form_control {
+  margin: 1rem 0;
+}
+
+.admin_form_control label {
+  display: inline-block;
+  width: 100px;
+}
+
+.admin_form_control input,
+.admin_form_control select {
+  padding: 0.3rem;
+}

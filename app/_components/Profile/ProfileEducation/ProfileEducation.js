@@ -7,8 +7,8 @@
 
 import { useContext, useEffect, useState } from 'react';
 import './ProfileEducation.css';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
 
 function ProfileEducation({
   setHeader,

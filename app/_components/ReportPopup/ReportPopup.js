@@ -5,11 +5,12 @@
 */
 
 import './ReportPopup.css';
-import crossIcon from '../../../public/SignUpConfirmPopup/crossIcon.svg';
-import showBottomMessage from '../../../Utils/showBottomMessage';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import showBottomMessage from '@/Utils/showBottomMessage';
 import { useState } from 'react';
+import Image from 'next/image';
 import ClipLoader from 'react-spinners/ClipLoader';
-import usePrivateAxios from '../../../Utils/usePrivateAxios';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
 
 function ReportPopup({ setShowReportPopup, referral, reportedReferral }) {
   const [title, setTitle] = useState('');
@@ -57,14 +58,14 @@ function ReportPopup({ setShowReportPopup, referral, reportedReferral }) {
       <div className="report_popup_window">
         <div className="report_popup_header">
           <h3>Report</h3>
-          <img
+          <Image
             onClick={() => setShowReportPopup(false)}
             src={crossIcon}
             alt="close report window"
           />
           <p>
-            If you see an issue with this profile, let us know here, and we'll
-            check it out.
+            If you see an issue with this profile, let us know here, and
+            we&apos;ll check it out.
           </p>
         </div>
 

@@ -8,12 +8,13 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import './SignUpFormPopup.css';
-import { publicAxios } from '../../../config/axiosInstance';
-import usePrivateAxios from '../../../Utils/usePrivateAxios';
-import crossIcon from '../../../public/SignUpConfirmPopup/crossIcon.svg';
+import Image from 'next/image';
+import { publicAxios } from '@/config/axiosInstance';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-import showBottomMessage from '../../../Utils/showBottomMessage';
+import showBottomMessage from '@/Utils/showBottomMessage';
 
 function SignUpFormPopup({ user, closePopUp }) {
   const privateAxios = usePrivateAxios();
@@ -436,9 +437,9 @@ function SignUpFormPopup({ user, closePopUp }) {
       >
         <div className="radioSignUp">
           <div className="heroForPopUp">
-            <h1>What's your job status?</h1>
+            <h1>What&apos;s your job status?</h1>
             <div className="closeFormOptionForPopup" onClick={closePopUp}>
-              <img src={crossIcon} alt="close" />
+              <Image src={crossIcon} alt="close" />
             </div>
           </div>
           <div className="RadioButtons">

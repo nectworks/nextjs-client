@@ -1,7 +1,8 @@
-import React from 'react';
+import SeekerPublicPage from '@/app/(root)/jobseeker/seekerPublicPage';
+import ProtectedRoute from '@/app/_components/ProtectedRoute/ProtectedRoute';
 
-const page = () => {
-  return <div>page</div>;
+const ProfilePage = () => {
+  return <SeekerPublicPage />;
 };
 
-export default page;
+export default ProfilePage;

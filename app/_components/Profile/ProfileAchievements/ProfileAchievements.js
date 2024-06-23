@@ -7,11 +7,11 @@
 import Image from 'next/image';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import './ProfileAchievements.css';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import fileUploadIcon from '../../../../public/Profile/fileUploadIcon.svg';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import fileUploadIcon from '@/public/Profile/fileUploadIcon.svg';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
 import ClipLoader from 'react-spinners/ClipLoader';
-import usePrivateAxios from '../../../../Utils/usePrivateAxios';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
 import { useRouter } from 'next/navigation';
 
 function ProfileAchievements({
@@ -24,12 +24,10 @@ function ProfileAchievements({
   isDataUpdated,
   subSectionIndex,
 }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [state, dispatch] = useContext(ProfileContext);
   const [userInfo, setUserInfo] = useContext(DashboardContext);
   const privateAxios = usePrivateAxios();
-
-  const router = useRouter();
 
   const initialFormInput = {
     heading: '',
@@ -185,7 +183,7 @@ function ProfileAchievements({
       // if the user was unauthorised, redirect them to login page after 1s
       if (error.response.status === 401) {
         setTimeout(() => {
-          return navigate('/log-in');
+          return router.push('/log-in');
         }, [1400]);
       }
     }

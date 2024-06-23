@@ -6,23 +6,23 @@
 */
 
 import { useContext, useEffect, useState, useCallback } from 'react';
-import companyLogo from '../../../../public/Dashboard/companyLogo.webp';
-import companyName from '../../../../public/Dashboard/companyName.webp';
-import myProfileIcon from '../../../../public/Dashboard/myProfile.svg';
-import dashboardIcon from '../../../../public/Dashboard/dashboard.svg';
-import helpIcon from '../../../../public/Dashboard/help.svg';
-import postAJobIcon from '../../../../public/Dashboard/postAJob.svg';
-import settingsIcon from '../../../../public/Dashboard/settings.svg';
-import arrowIcon from '../../../../public/Dashboard/arrow.svg';
-import crossIcon from '../../../../public/SignUpConfirmPopup/crossIcon.svg';
-import hamburgerIcon from '../../../../public/Dashboard/hamburgerIcon.svg';
-import logoutIcon from '../../../../public/Dashboard/logout.svg';
-import toggleIcon from '../../../../public/Dashboard/toggleIcon.svg';
+import companyLogo from '@/public/Dashboard/companyLogo.webp';
+import companyName from '@/public/Dashboard/companyName.webp';
+import myProfileIcon from '@/public/Dashboard/myProfile.svg';
+import dashboardIcon from '@/public/Dashboard/dashboard.svg';
+import helpIcon from '@/public/Dashboard/help.svg';
+import postAJobIcon from '@/public/Dashboard/postAJob.svg';
+import settingsIcon from '@/public/Dashboard/settings.svg';
+import arrowIcon from '@/public/Dashboard/arrow.svg';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import hamburgerIcon from '@/public/Dashboard/hamburgerIcon.svg';
+import logoutIcon from '@/public/Dashboard/logout.svg';
+import toggleIcon from '@/public/Dashboard/toggleIcon.svg';
 import './DashboardMenu.css';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { UserContext } from '../../../../context/User/UserContext';
+import { UserContext } from '@/context/User/UserContext';
 
 function DashboardMenu() {
   const { userModeState } = useContext(UserContext);

@@ -1,19 +1,22 @@
+'use client';
 /*
   File: AdminDashboardMenu.js
   Description: This component contains the dashboard menu for the admin panel
 */
 
 import './AdminDashboardMenu.css';
-import companyLogo from '../../Assets/Dashboard/companyLogo.webp';
-import companyName from '../../Assets/Dashboard/companyName.webp';
-import { Link, useNavigate } from 'react-router-dom';
+import companyLogo from '../../../public/Dashboard/companyLogo.webp';
+import companyName from '../../../public/Dashboard/companyName.webp';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { privateAxios } from '../../Config/axiosInstance';
 import showBottomMessage from '../../Utils/showBottomMessage';
 import { useState, useContext, useEffect } from 'react';
 import { AdminUserContext } from '../../context/AdminUserContext/AdminUserContext';
 
 function AdminDashboardMenu() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [admin, setAdmin] = useContext(AdminUserContext);
 
   const [privilegeLvl, setPrivilegeLvl] = useState(2);
@@ -24,7 +27,7 @@ function AdminDashboardMenu() {
 
       if (res.status === 200) {
         setAdmin(null);
-        navigate('/admin-panel/login');
+        router.push('/admin-panel/login');
       }
     } catch (error) {
       showBottomMessage("Couldn't logout");
@@ -38,18 +41,18 @@ function AdminDashboardMenu() {
   return (
     <div className="admin_dashboard_menu_container">
       <div className="admin_dashboard_menu_icons">
-        <img src={companyLogo} alt="nectworks job referrals logo" />
-        <img src={companyName} alt="nectworks technology" />
+        <Image src={companyLogo} alt="nectworks job referrals logo" />
+        <Image src={companyName} alt="nectworks technology" />
       </div>
       <hr></hr>
 
       {privilegeLvl === 1 && (
         <ul className="admin_only_pages">
           <li>
-            <Link to="/admin-panel/reported-jobs">
+            <Link href="/admin-panel/reported-jobs">
               <div className="admin_dashboard_menu_item">
                 <span className="admin_dashboard_menu_item_icon">
-                  {/* <img src={myProfileIcon} alt='user profile' /> */}
+                  {/* <Image src={myProfileIcon} alt='user profile' /> */}
                 </span>
                 <span className="admin_dashboard_menu_item_text">
                   Reported Jobs
@@ -59,10 +62,10 @@ function AdminDashboardMenu() {
           </li>
 
           <li>
-            <Link to="/admin-panel/contact-us">
+            <Link href="/admin-panel/contact-us">
               <div className="admin_dashboard_menu_item">
                 <span className="admin_dashboard_menu_item_icon">
-                  {/* <img src={helpIcon} alt='help' /> */}
+                  {/* <Image src={helpIcon} alt='help' /> */}
                 </span>
 
                 <span className="admin_dashboard_menu_item_text">
@@ -73,10 +76,10 @@ function AdminDashboardMenu() {
           </li>
 
           {/* <li>
-            <Link to='/'>
+            <Link href='/'>
               <div className='admin_dashboard_menu_item'>
                 <span className='admin_dashboard_menu_item_icon'>
-                  <img src={settingsIcon} alt='settings icon' />
+                  <Image src={settingsIcon} alt='settings icon' />
                 </span>
 
                 <span className='admin_dashboard_menu_item_text'>
@@ -87,10 +90,10 @@ function AdminDashboardMenu() {
           </li> */}
 
           <li>
-            <Link to="/admin-panel/reviews">
+            <Link href="/admin-panel/reviews">
               <div className="admin_dashboard_menu_item">
                 <span className="admin_dashboard_menu_item_icon">
-                  {/* <img src={settingsIcon} alt='settings icon' /> */}
+                  {/* <Image src={settingsIcon} alt='settings icon' /> */}
                 </span>
 
                 <span className="admin_dashboard_menu_item_text">
@@ -101,10 +104,10 @@ function AdminDashboardMenu() {
           </li>
 
           <li>
-            <Link to="/admin-panel/users">
+            <Link href="/admin-panel/users">
               <div className="admin_dashboard_menu_item">
                 <span className="admin_dashboard_menu_item_icon">
-                  {/* <img src={settingsIcon} alt='settings icon' /> */}
+                  {/* <Image src={settingsIcon} alt='settings icon' /> */}
                 </span>
 
                 <span className="admin_dashboard_menu_item_text">
@@ -115,10 +118,10 @@ function AdminDashboardMenu() {
           </li>
 
           <li>
-            <Link to="/admin-panel/view-user">
+            <Link href="/admin-panel/view-user">
               <div className="admin_dashboard_menu_item">
                 <span className="admin_dashboard_menu_item_icon">
-                  {/* <img src={settingsIcon} alt='settings icon' /> */}
+                  {/* <Image src={settingsIcon} alt='settings icon' /> */}
                 </span>
 
                 <span className="admin_dashboard_menu_item_text">
@@ -129,7 +132,7 @@ function AdminDashboardMenu() {
           </li>
 
           <li>
-            <Link to="/admin-panel/admin-users">
+            <Link href="/admin-panel/admin-users">
               <div className="admin_dashboard_menu_item">
                 <span className="admin_dashboard_menu_item_icon"></span>
 
@@ -141,10 +144,10 @@ function AdminDashboardMenu() {
           </li>
 
           <li>
-            <Link to="/admin-panel/help">
+            <Link href="/admin-panel/help">
               <div className="admin_dashboard_menu_item">
                 <span className="admin_dashboard_menu_item_icon">
-                  {/* <img src={settingsIcon} alt='settings icon' /> */}
+                  {/* <Image src={settingsIcon} alt='settings icon' /> */}
                 </span>
 
                 <span className="admin_dashboard_menu_item_text">Help</span>
@@ -156,7 +159,7 @@ function AdminDashboardMenu() {
 
       <ul>
         <li>
-          <Link to="/admin-panel/manage-blog">
+          <Link href="/admin-panel/manage-blog">
             <div className="admin_dashboard_menu_item">
               <span className="admin_dashboard_menu_item_icon"></span>
 
@@ -168,7 +171,7 @@ function AdminDashboardMenu() {
         </li>
 
         <li>
-          <Link to="/admin-panel/create-blog-post">
+          <Link href="/admin-panel/create-blog-post">
             <div className="admin_dashboard_menu_item">
               <span className="admin_dashboard_menu_item_icon"></span>
 
@@ -187,7 +190,7 @@ function AdminDashboardMenu() {
         onClick={logoutAdmin}
       >
         <span className="admin_dashboard_menu_item_icon">
-          {/* <img src={settingsIcon} alt='settings icon' /> */}
+          {/* <Image src={settingsIcon} alt='settings icon' /> */}
         </span>
 
         <span className="admin_dashboard_menu_item_text">Logout</span>

@@ -36,16 +36,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: -20px;
+  height: 8px;
 }
 
-.nectcoins_coin_progress img {
+.coin_img {
   width: 35px;
 }
 
-.nectcoin_last_coin {
+.last_coin {
   position: absolute;
-  right: 105px;
+  right: 110px;
+  width: 35px;
 }
 
 .nectcoins_timeline {
@@ -177,7 +178,7 @@
 }
 
 .basic_nectcoins_queries {
-  margin: 5rem 0;
+  margin: 0rem 0;
 }
 
 .basic_nectcoins_queries div {
@@ -200,7 +201,7 @@
     padding: 3rem;
   }
 
-  .nectcoin_last_coin {
+  .last_coin {
     right: 75px;
   }
 
@@ -225,7 +226,7 @@
     padding: 3rem 2rem;
   }
 
-  .nectcoin_last_coin {
+  .last_coin {
     right: 60px;
   }
 }
@@ -273,7 +274,7 @@
     margin-top: -15px;
   }
 
-  .nectcoins_coin_progress img {
+  .coin_img {
     width: 25px;
   }
 

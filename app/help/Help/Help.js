@@ -13,15 +13,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
 import './Help.css';
 import Image from 'next/image';
-import green_tick from '../../../public/greenTick.svg';
+import green_tick from '@/public/greenTick.svg';
 import ClipLoader from 'react-spinners/ClipLoader';
 import ProfileHeader from '../../_components/Profile/ProfileHeader/ProfileHeader';
-import showBottomMessage from '../../../Utils/showBottomMessage';
-import checkFileSize from '../../../Utils/checkFileSize';
-import checkFileExtension from '../../../Utils/checkFileExtension';
+import showBottomMessage from '@/Utils/showBottomMessage';
+import checkFileSize from '@/Utils/checkFileSize';
+import checkFileExtension from '@/Utils/checkFileExtension';
 import Link from 'next/link';
-import usePrivateAxios from '../../../Utils/usePrivateAxios';
-import sendGAEvent from '../../../Utils/gaEvents';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
+import sendGAEvent from '@/Utils/gaEvents';
 
 const Help = () => {
   const privateAxios = usePrivateAxios();

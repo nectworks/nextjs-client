@@ -1,0 +1,69 @@
+.admin_help_outer_container * {
+  box-sizing: border-box;
+}
+
+.admin_help_outer_container {
+  width: 100vw;
+  display: flex;
+}
+
+.admin_help_inner_container {
+  padding: 3rem;
+  flex-grow: 0;
+}
+
+.admin_help_inner_container h1 {
+  font-weight: 400;
+}
+
+.admin_help_inner_container h3 {
+  font-weight: 400;
+  margin: 1rem 0;
+}
+
+.admin_help_data_grid {
+  margin: 3rem 0;
+  height: 80%;
+  width: 100%;
+}
+
+.admin_help_data_grid .link_to_user_profile {
+  color: #0057b1;
+}
+
+.resolve_help_tickets_switch {
+  padding: 0.5rem;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 1px solid;
+}
+
+.resolve_help_tickets_active {
+  background-color: #0057b1;
+  color: white;
+  border: 1px #0057b1;
+}
+
+.admin_help_selected_data {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.admin_help_selected_data p {
+  margin: 0.4rem 0;
+}
+
+.admin_help_selected_data p span {
+  font-weight: 500;
+}
+
+.admin_help_selected_data button {
+  border: 1px solid;
+  outline: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}

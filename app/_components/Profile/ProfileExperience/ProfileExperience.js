@@ -7,10 +7,11 @@
 
 import { useContext, useEffect, useState } from 'react';
 import './ProfileExperience.css';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import crossIcon from '../../../../public/SignUpConfirmPopup/crossIcon.svg';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
-import { privateAxios } from '../../../../config/axiosInstance';
+import Image from 'next/image';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
+import { privateAxios } from '@/config/axiosInstance';
 
 function ProfileExperience({
   setHeader,
@@ -639,7 +640,7 @@ function ProfileExperience({
             return (
               <span className="dashboard_experience_skill" key={index}>
                 {skill}
-                <img
+                <Image
                   src={crossIcon}
                   onClick={(e) => deleteSkill(e, index)}
                   alt="delete skill"

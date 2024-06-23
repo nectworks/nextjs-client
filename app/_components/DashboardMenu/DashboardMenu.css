@@ -324,7 +324,7 @@
     display: block;
     width: 35px;
     position: absolute;
-    top: 20px;
+    top: -45px;
     left: 20px;
     cursor: pointer;
     z-index: 2;
