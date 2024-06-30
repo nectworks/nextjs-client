@@ -150,7 +150,7 @@ function ProfileHeader() {
       );
 
       // Redirect the user to the specified URL to request a referral
-      const url = `https://nectworks.com/request-referral/${username}`;
+      const url = `${process.env.NEXT_PUBLIC_CLIENT_URL}/request-referral/${username}`;
       window.open(url, '_blank');
     } catch (error) {
       // Log and handle errors if they occur during the API request
@@ -198,7 +198,7 @@ function ProfileHeader() {
   const [unlockProfile, setUnlockProfile] = useState(false);
   const profileOptionsRef = useRef(null);
 
-  const publicProfileURL = `https://nectworks.com/user/${user?.username}`;
+  const publicProfileURL = `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`;
 
   // function to get time of the day, i.e., Morning, Afternoon, Evening
   function getTimeOfDay() {
@@ -288,7 +288,7 @@ function ProfileHeader() {
                     <li key={referral._id}>
                       <span className="profileImage">
                         <a
-                          href={`https://nectworks.com/user/${referral.professionalUserId.username}`}
+                          href={`${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${referral.professionalUserId.username}`}
                         >
                           <ProfileImage
                             isLoggedInUser={false}

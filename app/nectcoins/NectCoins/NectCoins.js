@@ -6,7 +6,7 @@
     the coins earned by the user.
 */
 
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import usePrivateAxios from '@/Utils/usePrivateAxios';
 import './NectCoins.css';
 import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
@@ -48,7 +48,7 @@ function NectCoins() {
   ];
 
   // function to fetch data about coins activity of the user
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     setIsLoading(true);
     setMessage('Fetching activity data...');
 
@@ -79,10 +79,10 @@ function NectCoins() {
     } finally {
       setIsLoading(false);
     }
-  }, [data, paginationModel.limit, paginationModel.page, privateAxios]);
+  };
 
   // update the data of the current page when state changes
-  const updateCurrentPageItems = useCallback(() => {
+  const updateCurrentPageItems = () => {
     const pageStart = (paginationModel.page - 1) * paginationModel.limit;
     const pageEnd = pageStart + paginationModel.limit;
 
@@ -100,16 +100,10 @@ function NectCoins() {
         activity: data.activity.slice(pageStart, pageEnd),
       });
     }
-  }, [
-    activityCount,
-    data,
-    fetchData,
-    paginationModel.limit,
-    paginationModel.page,
-  ]);
+  };
 
   // function to highlight streaks
-  const highlightProgress = useCallback(() => {
+  const highlightProgress = () => {
     // get all the coin images
     const allCoins = Array.from(document.querySelectorAll('.coin_img'));
 
@@ -134,7 +128,7 @@ function NectCoins() {
         lastCoin.classList.add('animated_coin');
       }
     }
-  }, [user?.loginStreak]);
+  };
 
   // get special activity message
   function getNectCoinsSpecialActivity(activity) {
@@ -209,11 +203,11 @@ function NectCoins() {
     });
 
     resizeObserver.observe(progressBar);
-  }, [highlightProgress]);
+  }, []);
 
   useEffect(() => {
     updateCurrentPageItems();
-  }, [paginationModel, data, updateCurrentPageItems]);
+  }, [paginationModel, data]);
 
   return (
     <div className="dashboard_outer_container">

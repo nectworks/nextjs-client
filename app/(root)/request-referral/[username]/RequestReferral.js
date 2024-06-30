@@ -6,14 +6,7 @@
     of referral requests. Additionally, it displays modals and popups
     to communicate with the user.
 */
-import {
-  Fragment,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import deleteIcon from '@/public/PublicProfile/deleteIcon.png';
 import dashedInsideCircle from '@/public//PublicProfile/dashedInsideCircle.png';
 import plusIcon from '@/public/PublicProfile/plusIcon.png';
@@ -28,7 +21,7 @@ import { useParams, useRouter, usePathname } from 'next/navigation';
 import { UserContext } from '@/context/User/UserContext';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import defaultProfile from '@/public/Profile/defaultProfile.webp';
-import ProfileImage from '../../_components/Profile/ProfileImage/ProfileImage';
+import ProfileImage from '../../../_components/Profile/ProfileImage/ProfileImage';
 import checkFileExtension from '@/Utils/checkFileExtension';
 import checkFileSize from '@/Utils/checkFileSize';
 import { publicAxios } from '@/config/axiosInstance';
@@ -355,7 +348,7 @@ const RequestReferral = (props) => {
   const [registeredUserId, setRegisteredUserId] = useState(null);
 
   // function to check if the user is registered or not.
-  const checkForRegisteredUser = useCallback(async () => {
+  const checkForRegisteredUser = async () => {
     if (user) {
       return;
     }
@@ -380,11 +373,11 @@ const RequestReferral = (props) => {
       // if the user is not registered, check if he has already visited once
       setIsRegisteredUser(false);
     }
-  }, [getUnregisteredUserData, user, userInformation.email]);
+  };
 
   /* check if the user with the entered email already used their free
     referral without registration, if yes display the popup */
-  const getUnregisteredUserData = useCallback(async () => {
+  const getUnregisteredUserData = async () => {
     if (user) {
       return;
     }
@@ -407,7 +400,7 @@ const RequestReferral = (props) => {
     } catch (err) {
       console.log(err);
     }
-  }, [user, userInformation.email]);
+  };
 
   // this function is an event handler for file input
   const handleFileInputChange = async (event) => {
@@ -630,7 +623,7 @@ const RequestReferral = (props) => {
     if (isEmailValid(userInformation.email)) {
       checkForRegisteredUser();
     }
-  }, [checkForRegisteredUser, userInformation.email]);
+  }, [userInformation.email]);
 
   // when user is entering otp, verify as soon as they enter 4 characters.
   useEffect(() => {

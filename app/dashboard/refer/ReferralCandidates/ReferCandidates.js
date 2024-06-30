@@ -6,7 +6,7 @@
   received and update it.
 */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DashboardMenu from '../../../_components/DashboardMenu/DashboardMenu';
 import './ReferCandidates.css';
 import Image from 'next/image';
@@ -134,7 +134,7 @@ const ReferCandidates = () => {
   };
 
   //function to get data about referrals received.
-  const getReferralData = useCallback(async () => {
+  const getReferralData = async () => {
     setIsLoading(true);
 
     try {
@@ -174,22 +174,14 @@ const ReferCandidates = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [
-    currentPage,
-    pendingPageRef,
-    privateAxios,
-    referredPageRef,
-    showPendingCandidates,
-    showReferredCandidates,
-  ]);
+  };
 
   // this function is used to update data displayed
-  const updateCurrentPageItems = useCallback(
-    (retreivedReferrals, dbReferralCount) => {
-      const currPageStart = (currentPage - 1) * itemsPerPage;
-      const currPageEnd = currPageStart + itemsPerPage;
+  const updateCurrentPageItems = (retreivedReferrals, dbReferralCount) => {
+    const currPageStart = (currentPage - 1) * itemsPerPage;
+    const currPageEnd = currPageStart + itemsPerPage;
 
-      /*
+    /*
       (1). currPageStart and currPageEnd are indices of the objects for
         the current page. (ex., for page 1, currPageStart = 0, currPageEnd = 5).
       (2). retreivedReferrals -> reflects the array of objects that's
@@ -218,19 +210,17 @@ const ReferCandidates = () => {
       are already fetched and there's no need to fetch again.
     */
 
-      if (
-        dbReferralCount === -1 ||
-        (retreivedReferrals.length - 1 < currPageEnd - 1 &&
-          retreivedReferrals.length < dbReferralCount &&
-          !searchValue)
-      ) {
-        getReferralData();
-      } else {
-        setCurrPageData(retreivedReferrals.slice(currPageStart, currPageEnd));
-      }
-    },
-    [currentPage, getReferralData, searchValue]
-  );
+    if (
+      dbReferralCount === -1 ||
+      (retreivedReferrals.length - 1 < currPageEnd - 1 &&
+        retreivedReferrals.length < dbReferralCount &&
+        !searchValue)
+    ) {
+      getReferralData();
+    } else {
+      setCurrPageData(retreivedReferrals.slice(currPageStart, currPageEnd));
+    }
+  };
 
   // function to refresh the section
   const [rotateAngle, setRotateAngle] = useState(0);
@@ -275,13 +265,10 @@ const ReferCandidates = () => {
     showPendingCandidates,
     pendingReferrals,
     referredCandidates,
-    pendingCount,
-    updateCurrentPageItems,
-    referredCount,
   ]);
 
   // function to get users based on the search input value
-  const searchUsers = useCallback(async () => {
+  const searchUsers = async () => {
     // if the search bar is empty, do not search users.
     if (!searchQuery || searchQuery.length === 0) return;
 
@@ -316,14 +303,7 @@ const ReferCandidates = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [
-    pendingReferrals,
-    privateAxios,
-    referredCandidates,
-    searchQuery,
-    showPendingCandidates,
-    showReferredCandidates,
-  ]);
+  };
 
   // when there are changes in search input, fetch the users based on it
   useEffect(() => {
@@ -342,7 +322,7 @@ const ReferCandidates = () => {
     } else {
       setSearchValue(true);
     }
-  }, [searchQuery, searchValue, tempRefsOne, tempRefsTwo]);
+  }, [searchQuery]);
 
   // Calculating Total Experience
   const allMonths = [

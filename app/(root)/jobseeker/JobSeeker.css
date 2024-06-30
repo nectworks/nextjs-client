@@ -182,7 +182,7 @@
     overflow: hidden;
     display: block;
 
-    /* background-image: url('../../public/JobSeeker/jobseekerHeroImg.webp'); */
+    background-image: url('../../../public/JobSeeker/jobseekerHeroImg.webp');
     background-size: cover;
     background-position: 70px;
     background-repeat: no-repeat;

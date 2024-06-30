@@ -5,7 +5,7 @@
   reviewed in the admin panel
 */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { privateAxios } from '@/config/axiosInstance';
 import './ReportedJobs.css';
@@ -59,7 +59,7 @@ function ReportedJobs() {
     }
   }
 
-  const updateCurrPageItems = useCallback(() => {
+  const updateCurrPageItems = () => {
     const pageStart = paginationModel.page * paginationModel.pageSize;
     const pageEnd = pageStart + paginationModel.pageSize;
 
@@ -71,7 +71,7 @@ function ReportedJobs() {
     } else {
       setCurrPageData(data.slice(pageStart, pageEnd));
     }
-  }, [data, fetchData]);
+  };
 
   // function to view selected data.
   function viewData({ row }) {
@@ -187,7 +187,7 @@ function ReportedJobs() {
 
   useEffect(() => {
     updateCurrPageItems();
-  }, [paginationModel, data, updateCurrPageItems]);
+  }, [paginationModel, data]);
 
   return (
     <div className="admin_reports_outer_container">

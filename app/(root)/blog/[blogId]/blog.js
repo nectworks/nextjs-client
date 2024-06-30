@@ -6,7 +6,7 @@
   the id from the url
 */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { publicAxios } from '@/config/axiosInstance';
@@ -16,7 +16,7 @@ const Blog = () => {
   const { blogId } = params;
   const [blogData, setBlogData] = useState(null);
 
-  const fetchBlog = useCallback(async () => {
+  const fetchBlog = async () => {
     try {
       const res = await publicAxios.get(`/blog/${blogId}`);
       setBlogData(res.data.blog);
@@ -26,11 +26,11 @@ const Blog = () => {
 
       showBottomMessage(message);
     }
-  }, [blogId]);
+  };
 
   useEffect(() => {
     fetchBlog();
-  }, [fetchBlog]);
+  }, []);
 
   return <div dangerouslySetInnerHTML={{ __html: blogData?.content }} />;
 };

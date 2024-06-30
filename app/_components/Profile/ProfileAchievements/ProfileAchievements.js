@@ -5,7 +5,7 @@
   in the user's profile.
 */
 import Image from 'next/image';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './ProfileAchievements.css';
 import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
 import fileUploadIcon from '@/public/Profile/fileUploadIcon.svg';
@@ -69,7 +69,7 @@ function ProfileAchievements({
   }
 
   // simple validation of the form input
-  const validateFormData = useCallback(() => {
+  const validateFormData = () => {
     const requiredFields = ['heading'];
 
     for (const requiredField of requiredFields) {
@@ -79,7 +79,7 @@ function ProfileAchievements({
     }
 
     return true;
-  }, [formInput]);
+  };
 
   const [revealDeleteMsg, setRevealDeleteMsg] = useState(false);
   function showDeleteConfirmationMessage(e) {
@@ -232,15 +232,7 @@ function ProfileAchievements({
         setFormInput(currAchievement);
       }
     }
-  }, [
-    dispatch,
-    formInput,
-    isDataUpdated,
-    setDescription,
-    setHeader,
-    subSectionIndex,
-    userInfo,
-  ]);
+  }, []);
 
   useEffect(() => {
     /* if any of the required fields is missing, or there was no data input
@@ -264,14 +256,7 @@ function ProfileAchievements({
     } else {
       setDisableSkip(false);
     }
-  }, [
-    formInput,
-    initialFormInput,
-    setDisableNext,
-    setDisableSkip,
-    setMessage,
-    validateFormData,
-  ]);
+  }, [formInput]);
 
   return (
     <div className="dashboard_profile_achievements_container">

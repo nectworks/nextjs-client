@@ -6,7 +6,7 @@
  * achievements, projects, and social links.
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './seekerPublicPage.css';
 import iconSrc from '@/public/download_icon.svg';
 import AboutIcon from '@/public/JobSeeker/seekerPublicPage/me_icon.svg';
@@ -95,7 +95,7 @@ function SeekerPublicPage() {
   const [projects, setProjects] = useState([]);
 
   // function to fetch `user` information
-  const getUserViaUsername = useCallback(async () => {
+  const getUserViaUsername = async () => {
     setShowLoader(true);
     try {
       const res = await publicAxios.get(`/getUser/${username}`);
@@ -108,10 +108,10 @@ function SeekerPublicPage() {
       router.push('/page-not-found', { replace: true });
       setShowLoader(false);
     }
-  }, [router, username]);
+  };
 
   // function to fetch information about user's profile
-  const getProfileDetails = useCallback(async () => {
+  const getProfileDetails = async () => {
     setShowLoader(true);
     try {
       const res = await publicAxios.get(`/profile/profile-info/${username}`);
@@ -130,7 +130,7 @@ function SeekerPublicPage() {
     } catch (err) {
       setShowLoader(false);
     }
-  }, [username]);
+  };
 
   // Get the current date
   const allMonths = [
@@ -252,7 +252,7 @@ function SeekerPublicPage() {
 
   useEffect(() => {
     getUserViaUsername().then(() => getProfileDetails());
-  }, [getProfileDetails, getUserViaUsername]);
+  }, []);
 
   return (
     <>

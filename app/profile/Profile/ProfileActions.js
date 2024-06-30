@@ -22,6 +22,8 @@ import { DashboardContext } from '@/context/Dashboard/DashboardContext.js';
 import showBottomMessage from '@/Utils/showBottomMessage.js';
 import sendGAEvent from '@/Utils/gaEvents.js';
 import Image from 'next/image';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 /*
   A JSX function to get the corresponding action based on step number

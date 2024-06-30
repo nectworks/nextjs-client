@@ -87,6 +87,7 @@ function SignUpFormPopup({ user, closePopUp }) {
 
   const [userData, setUserData] = useState(null);
   const [username, setUsername] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -401,6 +402,7 @@ function SignUpFormPopup({ user, closePopUp }) {
     }
   };
   const [widthForFresherRadio, setWidthForFresherRadio] = useState(false);
+
   useEffect(() => {
     if (formData.jobStatus === 'Fresher') {
       setWidthForFresherRadio(true);

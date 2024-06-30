@@ -1,4 +1,5 @@
 'use client';
+
 /*
     File - PublicProfile.js
     Desc -  This file is responsible for displaying a public profile
@@ -7,7 +8,7 @@
     copying a referral code to the clipboard and scrolling to specific
     sections of the page.
 */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import rightIcon from '@/public/PublicProfile/rightIcon.png';
 import copyIcon from '@/public/PublicProfile/copyIcon.png';
@@ -17,12 +18,12 @@ import generalLinkIcon from '@/public/PublicProfile/generalLinkIcon.svg';
 import './PublicProfile.css';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter, useParams } from 'next/navigation';
 import { publicAxios } from '@/config/axiosInstance';
 import { privateAxios } from '@/config/axiosInstance';
-import ProfileImage from '../../../_components/Profile/ProfileImage/ProfileImage';
+import ProfileImage from '../../_components/Profile/ProfileImage/ProfileImage';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { useContext } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { UserContext } from '@/context/User/UserContext';
 import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import close from '@/public/SignUpConfirmPopup/crossIcon.svg';
@@ -247,10 +248,8 @@ const PublicProfile = () => {
   // copy the url of the public profile on click
   function copyProfileUrl() {
     if (!user) return;
-
-    const publicProfileURL = `https://nectworks.com/user/${user?.username}`;
+    const publicProfileURL = `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`;
     navigator.clipboard.writeText(publicProfileURL);
-
     // display a message after copying url successfully
     showBottomMessage('Public URL copied!');
   }
@@ -260,37 +259,34 @@ const PublicProfile = () => {
   }, []);
 
   // prompt user to login
-  const handleOneTapLogin = useCallback(
-    async (response) => {
-      try {
-        const res = await privateAxios.post(`/google/one-tap/register`, {
-          data: response,
-        });
+  async function handleOneTapLogin(response) {
+    try {
+      const res = await privateAxios.post(`/google/one-tap/register`, {
+        data: response,
+      });
 
-        // if user is successfully signed up redirect them to profile page
-        const { signUp, user } = res.data;
+      // if user is successfully signed up redirect them to profile page
+      const { signUp, user } = res.data;
 
-        setUser(user);
+      setUser(user);
 
-        if (res.status === 200) {
-          showBottomMessage('Successfully authenticated.');
-          if (signUp === true) {
-            router.push('/profile', {
-              state: {
-                from: `/user/${username}`,
-              },
-              replace: true,
-            });
-          } else {
-            router.push('/profile');
-          }
+      if (res.status === 200) {
+        showBottomMessage('Successfully authenticated.');
+        if (signUp === true) {
+          router.push('/profile', {
+            state: {
+              from: `/user/${username}`,
+            },
+            replace: true,
+          });
+        } else {
+          router.push('/profile');
         }
-      } catch (error) {
-        showBottomMessage('Error while signing up');
       }
-    },
-    [router, setUser, username]
-  );
+    } catch (error) {
+      showBottomMessage('Error while signing up');
+    }
+  }
 
   useEffect(() => {
     // <!-- google identity client library (for one tap signup) -->
@@ -310,11 +306,11 @@ const PublicProfile = () => {
     };
 
     document.body.appendChild(script);
-  }, [handleOneTapLogin, user]);
+  }, []);
 
   async function getLinkedinShareUrl(e) {
     const userProfileUrl = encodeURIComponent(
-      `https://nectworks.com/user/${user?.username}`
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
     );
     const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${userProfileUrl}`;
     window.open(shareUrl, '_blank');
@@ -348,7 +344,7 @@ const PublicProfile = () => {
 
   const handleClick = () => {
     const url = encodeURIComponent(
-      `https://nectworks.com/user/${user?.username}`
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
     ); // URL of your website
     const text = encodeURIComponent(''); // Text for the tweet to add a placeholder text
     const via = encodeURIComponent('nectworks'); // Your Twitter handle
@@ -360,7 +356,7 @@ const PublicProfile = () => {
   // function to share on Facebook as a post
   const handleClickFacebook = () => {
     const userProfileUrl = encodeURIComponent(
-      `https://nectworks.com/user/${user?.username}`
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
     );
     const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${userProfileUrl}`;
     window.open(shareUrl, '_blank');
@@ -824,10 +820,14 @@ const PublicProfile = () => {
             </div>
           </div>
           <div className="introSectionDetailsButtonsMobile">
-            <Link href={linkToRequestRefer}>
+            <Link href={`/request-referral/${username}`}>
               <button>Request Referral</button>
             </Link>
-            <a href="http://nectworks.com/" target="_blank" rel="noreferrer">
+            <a
+              href={`${process.env.NEXT_PUBLIC_CLIENT_URL}`}
+              target="_blank"
+              rel="noreferrer"
+            >
               <button>Explore Nectworks</button>
             </a>
           </div>
@@ -1040,7 +1040,7 @@ const PublicProfile = () => {
           <Image
             src={crossIcon}
             alt="close the profile preview message"
-            onClick={() => {
+            onClick={(e) => {
               const previewBox = document.querySelector(
                 '.profile_preview_info_box'
               );
@@ -1061,8 +1061,9 @@ const PublicProfile = () => {
             <br></br>
             <i>
               Don&apos;t forget, you can also{' '}
-              <Link onClick={copyProfileUrl}>copy your profile URL</Link> and
-              share it on LinkedIn or other platforms to attract more referrals.
+              <button onClick={copyProfileUrl}>Copy your profile URL</button>{' '}
+              and share it on LinkedIn or other platforms to attract more
+              referrals.
             </i>
           </p>
         </div>

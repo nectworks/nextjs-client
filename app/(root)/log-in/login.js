@@ -7,6 +7,7 @@
 
 import { useContext, useEffect, useState } from 'react';
 import '../sign-up/SignUpMobile.css';
+import '../sign-up/SignUpDesktop.css';
 import emailIcon from '@/public/SignIn/emailIcon.svg';
 import otpIcon from '@/public/SignIn/otpIcon.svg';
 import Link from 'next/link';
@@ -234,12 +235,16 @@ export default function Login() {
   }
 
   const handleLoginButtonColour = () => {
-    if (email && otpInput) {
+    if (email && otpInput.length >= 3) {
       setLoginButtonBg(true);
     } else {
       setLoginButtonBg(false);
     }
   };
+
+  useEffect(() => {
+    handleLoginButtonColour();
+  }, [otpInput]);
 
   useEffect(() => {
     if (router.query && router.query.from) {
@@ -328,15 +333,16 @@ export default function Login() {
                     onChange={(e) => {
                       const { value } = e.target;
                       // Filter out non-numeric characters
-                      const numericValue = value.replace(/\D/g, '');
+                      const numericValue = value.replace(/\D/g, '').slice(0, 4); // Limit to 4 digits
                       // Update the state with the filtered value
-                      setOtpInput(numericValue);
-                      if (numericValue.length === 4) {
-                        handleLoginButtonColour();
-                      }
+                      setOtpInput((prevOtp) => {
+                        // Call handleLoginButtonColour after state update
+                        setTimeout(() => handleLoginButtonColour(), 0);
+                        return numericValue;
+                      });
                     }}
                     maxLength={4}
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         // Trigger click event on the "Send OTP" button
                         document.getElementById('sendOTPButton').click();
@@ -366,6 +372,7 @@ export default function Login() {
               <button
                 disabled={!loginButtonBg}
                 type="button"
+                id="sendOTPButton"
                 className={`colorBgg ${!loginEmailDisable ? 'loginNoCursor' : ''} ${loginButtonBg ? 'colorLoginButton' : ''}`}
                 onClick={handleLogin}
               >

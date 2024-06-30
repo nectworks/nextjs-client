@@ -7,7 +7,7 @@
 */
 
 import { Fragment, useEffect, useState } from 'react';
-import AdminDashboardMenu from '../../../../_components/AdminDashboardMenu/AdminDashboardMenu';
+import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDashboardMenu';
 import { privateAxios } from '@/config/axiosInstance';
 import './ViewUser.css';
 import showBottomMessage from '@/Utils/showBottomMessage';

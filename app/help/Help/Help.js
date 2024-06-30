@@ -9,7 +9,7 @@
   provides feedback to the user throughout the process.
 */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
 import './Help.css';
 import Image from 'next/image';
@@ -191,7 +191,8 @@ const Help = () => {
   }
 
   const [requestUnderProcess, setRequestUnderProcess] = useState(false);
-  const getUserData = useCallback(async () => {
+
+  const getUserData = async () => {
     try {
       const res = await privateAxios.get(`/others/help`);
 
@@ -209,11 +210,11 @@ const Help = () => {
     } catch (err) {
       showBottomMessage(`Couldn't fetch previously submitted data...`);
     }
-  }, [privateAxios]);
+  };
 
   useEffect(() => {
     getUserData();
-  }, [getUserData]);
+  }, []);
 
   return (
     <div className="dashboard_outer_container">

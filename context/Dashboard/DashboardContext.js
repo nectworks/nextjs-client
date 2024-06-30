@@ -6,7 +6,7 @@
   state is accessible in all the components in dashboard.
 */
 
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import usePrivateAxios from '../../Utils/usePrivateAxios';
 
 export const DashboardContext = createContext(null);
@@ -16,7 +16,7 @@ const DashboardContextProvider = ({ children }) => {
   const privateAxios = usePrivateAxios();
 
   // function to fetch data required for user profile
-  const fetchProfileData = useCallback(async () => {
+  const fetchProfileData = async () => {
     // fetch the user profile info from the API
 
     try {
@@ -27,7 +27,7 @@ const DashboardContextProvider = ({ children }) => {
     } catch (error) {
       // console.log(error);
     }
-  }, [privateAxios]);
+  };
 
   useEffect(() => {
     /* fetch the data only if it is not saved in sessionStorage
@@ -38,7 +38,7 @@ const DashboardContextProvider = ({ children }) => {
     } else {
       setUserInfo(currUserInfo);
     }
-  }, [fetchProfileData]);
+  }, []);
 
   useEffect(() => {
     // update the sessionStorage each time state is updated.

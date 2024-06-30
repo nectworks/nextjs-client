@@ -72,7 +72,7 @@ function ProfilePreferences({
   );
 
   // maintain the array of all the inputs, to display it below the input element
-  function addInputs(e) {
+  const addInputs = (e) => {
     if (e.target.value.trim().length == 0) return;
     const attributeToAdd = e.target.dataset.attribute;
     if (e.keyCode === 13) {
@@ -111,7 +111,7 @@ function ProfilePreferences({
         }
       }
     }
-  }
+  };
 
   // function to remove the input.
   function removeInputs(e) {
@@ -242,7 +242,7 @@ function ProfilePreferences({
   }
 
   // function to validate the input
-  function validateInputData() {
+  const validateInputData = () => {
     /* The validation is simple, it checks if the length is of the arrays are
        in allowed range. */
 
@@ -276,7 +276,7 @@ function ProfilePreferences({
     }
 
     return setIsDataValid(true);
-  }
+  };
 
   // function to fetch auto suggestions from the backend
   async function fetchAutoSuggestions(url, data) {
@@ -320,7 +320,7 @@ function ProfilePreferences({
 
         suggestions.forEach((suggestion) => {
           /* for each suggestion, check if the user has
-            already added that value. */
+              already added that value. */
           const idx = allSkills.findIndex((skill) => {
             return skill.toLowerCase() === suggestion.skill.toLowerCase();
           });
@@ -410,7 +410,6 @@ function ProfilePreferences({
       }
     }
   }, [isProfessional]);
-
   useEffect(() => {
     // update the state when the context is changed
     setIsProfessional(userMode === 'professional');

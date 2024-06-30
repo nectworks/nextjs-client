@@ -55,7 +55,7 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
     const firstInitial = a?.firstName?.[0] || '-';
     const secondInitial = a?.lastName?.[0] || '-';
     setInitials(firstInitial.toUpperCase() + secondInitial.toUpperCase());
-  }, []);
+  }, [isLoggedInUser, otherUser, user, userState]);
 
   // calculate random index within 0 to colors.length
   const randomIdx = Math.floor(Math.random() * colors.length);

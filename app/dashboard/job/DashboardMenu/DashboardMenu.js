@@ -5,7 +5,7 @@
    for the dashboard and is served at /dashboard
 */
 
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import companyLogo from '@/public/Dashboard/companyLogo.webp';
 import companyName from '@/public/Dashboard/companyName.webp';
 import myProfileIcon from '@/public/Dashboard/myProfile.svg';
@@ -134,14 +134,14 @@ function DashboardMenu() {
   }
 
   // when window is below certain width, display a popup message
-  const handleResize = useCallback(() => {
+  const handleResize = (e) => {
     if (window.innerWidth <= 800) {
       const menu = document.querySelector('.dashboard_menu_container');
       if (menu.classList.contains('dashboard_menu_container_mini')) {
         toggleDashboardMenu();
       }
     }
-  }, []);
+  };
 
   useEffect(() => {
     handleResize();

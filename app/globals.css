@@ -1,8 +1,22 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('../public/font/Inter/Inter-VariableFont_slnt,wght.ttf')
+    format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body,
+html {
+  font-family: 'Inter', Arial, sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth !important;
+  font-family: 'Inter';
 }
 
 button {

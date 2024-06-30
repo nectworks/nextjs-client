@@ -12,7 +12,7 @@
   and user creation are also included. It utilizes several state variables,
   refs, and event handlers to manage user input and interactions effectively.
 */
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import './SignUpDesktop.css';
 import infoIcon from '@/public/SignIn/userIcon.png';
@@ -97,7 +97,8 @@ const SignUpDesktop = () => {
   const [showUsername, setShowUsername] = useState(false);
   const [showLoadingOnusernameChange, setShowLoadingOnusernameChange] =
     useState(false);
-  const checkUsername = useCallback(async () => {
+
+  const checkUsername = async () => {
     setShowLoadingOnusernameChange(true);
     try {
       const checkUser = await publicAxios.post('/signup/findusername', {
@@ -114,13 +115,13 @@ const SignUpDesktop = () => {
       setShowUsername(true);
       setcheckUsernameExist(false);
     }
-  }, [username]);
+  };
 
   useEffect(() => {
     if (isUsernameValid(username)) {
       checkUsername();
     }
-  }, [checkUsername, username]);
+  }, [username]);
 
   const handleOtpButtonClickSignUp = async (e) => {
     setIsActive(false);

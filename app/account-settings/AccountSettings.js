@@ -296,7 +296,6 @@ const AccountSettings = () => {
   const [isEmailVerified, setIsEmailVerified] = useState(
     !!user?.userDetails?.emailID
   );
-  console.log(isEmailVerified);
   const [showSignupOTPError, setShowSignupOTPError] = useState(false);
   const [showSignupOTPSuccess, setShowSignupOTPSuccess] = useState(false);
   const [showSpinnerForVerifyOTP, setShowSpinnerForVerifyOTP] = useState(false);

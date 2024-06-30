@@ -9,7 +9,7 @@ import './Reviews.css';
 import Image from 'next/image';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { privateAxios } from '@/config/axiosInstance';
-import AdminDashboardMenu from '../../../../_components/AdminDashboardMenu/AdminDashboardMenu';
+import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDashboardMenu';
 import copyIcon from '@/public/PublicProfile/copyIcon.png';
 
 function Reviews() {

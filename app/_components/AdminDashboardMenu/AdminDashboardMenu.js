@@ -10,10 +10,10 @@ import companyName from '../../../public/Dashboard/companyName.webp';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { privateAxios } from '../../Config/axiosInstance';
-import showBottomMessage from '../../Utils/showBottomMessage';
+import { privateAxios } from '../../../config/axiosInstance';
+import showBottomMessage from '../../../Utils/showBottomMessage';
 import { useState, useContext, useEffect } from 'react';
-import { AdminUserContext } from '../../context/AdminUserContext/AdminUserContext';
+import { AdminUserContext } from '../../../context/AdminUserContext/AdminUserContext';
 
 function AdminDashboardMenu() {
   const router = useRouter();

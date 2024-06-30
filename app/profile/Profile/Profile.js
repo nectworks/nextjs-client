@@ -58,8 +58,8 @@ import {
 } from 'react-icons/fa6';
 import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import downloadDocument from '@/Utils/downloadDocument';
-// import DatePicker from 'react-datepicker';
-// import 'react-datepicker/dist/react-datepicker.css';
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 
 /*
   Note about using localStorage and sessionStorage:
@@ -222,7 +222,7 @@ const ProfilePage = () => {
         setShowDeleteConfirmation(false);
         showBottomMessage('Resume deleted successfully');
         //It will refresh the page when resume is deleted successfully
-        window.location.reload();
+        setResumeFileUrl(null);
       }
     } catch (error) {
       showBottomMessage(`Couldn't delete resume`);
@@ -267,7 +267,7 @@ const ProfilePage = () => {
 
   async function getLinkedinShareUrl(e) {
     const userProfileUrl = encodeURIComponent(
-      `https://nectworks.com/user/${user?.username}`
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
     );
     const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${userProfileUrl}`;
     window.open(shareUrl, '_blank');
@@ -357,7 +357,7 @@ const ProfilePage = () => {
       // Update the toggle state
       if (toggle == true) {
         setToggle(false);
-        window.location.reload();
+        setImmediatejoiner(false);
       } else {
         setToggle(true);
       }
@@ -404,7 +404,7 @@ const ProfilePage = () => {
         });
       }
       setShouldDisplayMessage(false);
-      window.location.reload();
+      setImmediatejoiner(true);
     } catch (error) {
       console.error('Error updating immediate joiner status:', error);
     }
@@ -430,7 +430,7 @@ const ProfilePage = () => {
 
   const handleClick = () => {
     const url = encodeURIComponent(
-      `https://nectworks.com/user/${user?.username}`
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
     ); // URL of your website
     const text = encodeURIComponent(''); // Text for the tweet to add a placeholder text
     const via = encodeURIComponent('nectworks'); // Nectworks Twitter handle
@@ -442,7 +442,7 @@ const ProfilePage = () => {
   // function to share on Facebook as a post
   const handleClickFacebook = () => {
     const userProfileUrl = encodeURIComponent(
-      `https://nectworks.com/user/${user?.username}`
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
     );
     const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${userProfileUrl}`;
     window.open(shareUrl, '_blank');
@@ -570,7 +570,7 @@ const ProfilePage = () => {
           setResumeUploadStatus(false);
           alert('File uploaded successfully');
           //It will refresh the page when resume is uploaded successfully
-          window.location.reload();
+          setResumeFileUrl(res.url);
         } else {
           console.error('Failed final upload file');
         }
@@ -897,7 +897,7 @@ const ProfilePage = () => {
                         </div>
                         {openDateForm && (
                           <div className="joining_toggle_message_dateForm">
-                            {/*<DatePicker
+                            {/* <DatePicker
                               selected={selectedDate}
                               onChange={handleDateChange}
                               minDate={new Date()} // Set minimum date to today

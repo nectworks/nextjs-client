@@ -5,7 +5,7 @@
   in the user's profile.
 */
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo } from 'react';
 import './ProfileAbout.css';
 import Image from 'next/image';
 import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';

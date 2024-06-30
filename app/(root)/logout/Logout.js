@@ -5,7 +5,7 @@
     Desc - This JavaScript file defines a React component called Logout. The primary purpose of this component is to handle the logout process for a user. It includes logic to send a request to a server to log the user out and provides visual feedback during the logout process.
 */
 // Import necessary dependencies and styles
-import { useCallback, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import usePrivateAxios from '@/Utils/usePrivateAxios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -25,22 +25,19 @@ const Logout = () => {
   const router = useRouter();
 
   // Function to handle the logout process
-  const logout = useCallback(
-    async (url) => {
-      try {
-        // Send a POST request to the logout endpoint
-        await privateAxios.post(url);
-        sessionStorage.clear();
-        setUser(null);
-        // navigate user to the login page.
-        router.push('/log-in');
-      } catch (error) {
-        // An error occurred during logout process
-        showBottomMessage(`Could not logout`);
-      }
-    },
-    [privateAxios, router, setUser]
-  );
+  const logout = async (url) => {
+    try {
+      // Send a POST request to the logout endpoint
+      await privateAxios.post(url);
+      sessionStorage.clear();
+      setUser(null);
+      // navigate user to the login page.
+      router.push('/log-in');
+    } catch (error) {
+      // An error occurred during logout process
+      showBottomMessage(`Could not logout`);
+    }
+  };
 
   // Run the logout function when the component mounts
   useEffect(() => {
@@ -58,7 +55,7 @@ const Logout = () => {
     } else {
       logout(`/auth/logout`);
     }
-  }, [searchParams, logout]);
+  }, []);
 
   // Return the JSX elements
   return (

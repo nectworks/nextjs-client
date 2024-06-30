@@ -6,7 +6,7 @@
 */
 
 import Image from 'next/image';
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import companyLogo from '../../../public/Dashboard/companyLogo.webp';
 import companyName from '../../../public/Dashboard/companyName.webp';
 import myProfileIcon from '../../../public/Dashboard/myProfile.svg';
@@ -135,14 +135,14 @@ function DashboardMenu() {
   }
 
   // when window is below certain width, display a popup message
-  const handleResize = useCallback(() => {
+  const handleResize = () => {
     if (window.innerWidth <= 800) {
       const menu = document.querySelector('.dashboard_menu_container');
       if (menu.classList.contains('dashboard_menu_container_mini')) {
         toggleDashboardMenu();
       }
     }
-  }, []);
+  };
 
   useEffect(() => {
     handleResize();
@@ -191,7 +191,7 @@ function DashboardMenu() {
         revealSubSection({ target });
       }
     }
-  }, [pathName, router.asPath, router.pathname]);
+  }, [router.pathname]);
 
   const [disableFeedbackCard, setDisableFeedbackCard] = useState(true);
 
