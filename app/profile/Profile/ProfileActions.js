@@ -224,9 +224,6 @@ const ProfileActions = ({
 
         // change the data in sessionStorage
         dispatch({ type: 'CLEAR_STATE' });
-
-        // Reload the page
-        window.location.reload();
       }
     } catch (error) {
       const errorData = error?.response?.data?.error;
@@ -260,9 +257,6 @@ const ProfileActions = ({
 
       // save the new data into state
       setUserInfo(resData.userInfo);
-
-      // Reload the page
-      window.location.reload();
     } catch (error) {
       console.log(error);
       // TODO: remove log statement with popup message
@@ -317,9 +311,6 @@ const ProfileActions = ({
 
         // clear the `edit data` state.
         dispatch({ type: 'CLEAR_STATE' });
-
-        // Reload the page
-        window.location.reload();
       }
     } catch (error) {
       console.log(error);
@@ -336,8 +327,59 @@ const ProfileActions = ({
     sendGAEvent('profile_steps', { vaule: step });
   }, [step]);
 
+  const handleImageClick = () => {
+    console.log('close Image');
+    if (isDataUpdated) {
+      toast.warn('Any unsaved changes will be lost.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        onClose: () => {
+          // Clear the changes if confirmed
+          dispatch({
+            type: 'CLEAR_STATE',
+          });
+          setActionPopup(false); // Close the window
+        },
+      });
+    } else {
+      // Close the window without confirmation if no data is being updated
+      setActionPopup(false);
+    }
+  };
+
+  const handleClose = (e) => {
+    console.log('close');
+    if (isDataUpdated) {
+      toast.warn('Any unsaved changes will be lost.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        onClose: () => {
+          // Clear the changes if confirmed
+          dispatch({
+            type: 'CLEAR_STATE',
+          });
+          setActionPopup(false); // Close the window
+        },
+      });
+    } else {
+      // Close the window without confirmation if no data is being updated
+      setActionPopup(false);
+    }
+  };
+
   return (
     <div className="dashboard_profile_actions_container">
+      <ToastContainer />
       <div
         style={{ display: `${!isLoading ? 'none' : 'block'}` }}
         className="loader"
@@ -353,25 +395,7 @@ const ProfileActions = ({
           <p>{description}</p>
 
           <Image
-            onClick={() => {
-              if (isDataUpdated) {
-                // Display confirmation dialog
-                if (
-                  window.confirm(
-                    'Are you sure you want to close? Any unsaved changes will be lost.'
-                  )
-                ) {
-                  // Clear the changes if confirmed
-                  dispatch({
-                    type: 'CLEAR_STATE',
-                  });
-                  setActionPopup(false); // Close the window
-                }
-              } else {
-                // Close the window without confirmation if no data is being updated
-                setActionPopup(false);
-              }
-            }}
+            onClick={handleImageClick}
             src={crossIcon}
             alt="close window"
           />
@@ -469,25 +493,7 @@ const ProfileActions = ({
               </button>
               <button
                 className="dashboard_profile_actions_close_button2"
-                onClick={(e) => {
-                  if (isDataUpdated) {
-                    // Display confirmation dialog
-                    if (
-                      window.confirm(
-                        'Are you sure you want to close? Any unsaved changes will be lost.'
-                      )
-                    ) {
-                      // Clear the changes if confirmed
-                      dispatch({
-                        type: 'CLEAR_STATE',
-                      });
-                      setActionPopup(false); // Close the window
-                    }
-                  } else {
-                    // Close the window without confirmation if no data is being updated
-                    setActionPopup(false);
-                  }
-                }}
+                onClick={handleClose}
               >
                 Close
               </button>

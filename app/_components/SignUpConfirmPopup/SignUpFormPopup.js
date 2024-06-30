@@ -42,7 +42,7 @@ function SignUpFormPopup({ user, closePopUp }) {
   }, []);
 
   const [formData, setFormData] = useState({
-    jobStatus: 'experienced',
+    jobStatus: user.isExperienced ? 'experienced' : 'Fresher',
     jobTitle: '',
     companyName: '',
     location: '',
@@ -372,7 +372,6 @@ function SignUpFormPopup({ user, closePopUp }) {
           localStorage.setItem('filledForm', 'true');
           setEmailChanged(false);
           closePopUp();
-          window.location.reload();
         }
         if (firstTimeFill) {
           // Check if it's the first time filling the form
@@ -394,7 +393,6 @@ function SignUpFormPopup({ user, closePopUp }) {
         if (response.status === 201 || response.status === 200) {
           localStorage.setItem('filledForm', 'true');
           closePopUp();
-          window.location.reload();
         }
       } catch (error) {
         console.error('Error submitting data:', error);
