@@ -23,6 +23,7 @@ function ProfileAchievements({
   setDisableSkip,
   isDataUpdated,
   subSectionIndex,
+  setHasUnsavedChanges,
 }) {
   const router = useRouter();
   const [state, dispatch] = useContext(ProfileContext);
@@ -52,6 +53,7 @@ function ProfileAchievements({
     // update current state in the component
     setFormInput({ ...newFormInput });
     saveChanges(newFormInput);
+    setHasUnsavedChanges(true);
   }
 
   // function to save the current changes to context

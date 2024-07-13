@@ -3,18 +3,28 @@
 }
 
 .dashboard_socials_form_control {
+  display: flex;
+  gap: 10px;
   width: 100%;
   position: relative;
   padding-right: 1.2rem;
+  width: 100%;
+}
+
+.dashboard_profile_socials_container_links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .dashboard_socials_form_control label {
-  display: inline-block;
+  display: flex;
   font-size: 1rem;
   font-style: normal;
   font-weight: 600;
   line-height: 150%;
   margin: 2rem 0 0.5rem;
+  width: 100%;
 }
 
 .dashboard_socials_form_control span {
@@ -38,6 +48,7 @@
   font-size: 16px;
   min-width: 0;
   width: 100%;
+  flex-grow: 1;
 }
 
 .dashboard_socials_form_control div {

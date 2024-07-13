@@ -21,6 +21,7 @@ function ProfileExperience({
   setDisableSkip,
   isDataUpdated,
   subSectionIndex,
+  setHasUnsavedChanges,
 }) {
   // this context helps in storing the data, when the user is editing it
   const [state, dispatch] = useContext(ProfileContext);
@@ -238,6 +239,7 @@ function ProfileExperience({
       updateJobTitleSuggestions(newFormInput[field]);
     }
     saveChanges(newFormInput);
+    setHasUnsavedChanges(true);
   };
 
   // function to validate user input data

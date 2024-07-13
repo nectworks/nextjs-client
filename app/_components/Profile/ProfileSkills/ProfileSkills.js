@@ -21,6 +21,7 @@ function ProfileSkills({
   setDisableSkip,
   isDataUpdated,
   displayMessage,
+  setHasUnsavedChanges,
 }) {
   const [state, dispatch] = useContext(ProfileContext);
   const [userInfo, setUserInfo] = useContext(DashboardContext);
@@ -86,6 +87,7 @@ function ProfileSkills({
     setSkills(updatedSkills);
     setInputVal('');
     saveChanges(updatedSkills);
+    setHasUnsavedChanges(true);
   }
 
   // remove the skill at given index
@@ -96,6 +98,7 @@ function ProfileSkills({
     // save the updated skills in state.
     setSkills(updatedSkills);
     saveChanges(updatedSkills);
+    setHasUnsavedChanges(true);
   }
 
   // function to save changes to context

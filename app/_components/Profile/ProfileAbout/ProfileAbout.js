@@ -19,6 +19,7 @@ function ProfileAbout({
   setMessage,
   setDisableNext,
   isDataUpdated,
+setHasUnsavedChanges,
 }) {
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
@@ -87,6 +88,7 @@ function ProfileAbout({
     updatedAbout[type] = e.target.value;
 
     setAboutInput(updatedAbout);
+    setHasUnsavedChanges(true); 
     dispatch({
       type: 'UPDATE_ABOUT',
       payload: { about: updatedAbout },

@@ -23,6 +23,7 @@ function ProfileProjects({
   displayMessage,
   isDataUpdated,
   subSectionIndex,
+  setHasUnsavedChanges,
 }) {
   const [state, dispatch] = useContext(ProfileContext);
   const [userInfo, setUserInfo] = useContext(DashboardContext);
@@ -107,6 +108,7 @@ function ProfileProjects({
 
     setFormInput(newFormInput);
     saveChanges(newFormInput);
+    setHasUnsavedChanges(true);
   }
 
   // function to save the current changes to context
