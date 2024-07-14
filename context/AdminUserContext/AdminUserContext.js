@@ -28,7 +28,7 @@ export default function AdminUserContextProvider({ children }) {
 
       setIsLoading(false);
     } catch (error) {
-      // if the user in not authenticated, redirect them to login
+      // if the user is not authenticated, redirect them to login
       router.push('/admin-panel/login');
       setIsLoading(false);
     }
@@ -53,7 +53,7 @@ export default function AdminUserContextProvider({ children }) {
           <ClipLoader size={50} />
         </div>
       ) : (
-        { children }
+        children
       )}
     </AdminUserContext.Provider>
   );

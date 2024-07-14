@@ -21,7 +21,7 @@ import { useParams, useRouter, usePathname } from 'next/navigation';
 import { UserContext } from '@/context/User/UserContext';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import defaultProfile from '@/public/Profile/defaultProfile.webp';
-import ProfileImage from '../../../_components/Profile/ProfileImage/ProfileImage';
+import ProfileImage from '../../_components/Profile/ProfileImage/ProfileImage';
 import checkFileExtension from '@/Utils/checkFileExtension';
 import checkFileSize from '@/Utils/checkFileSize';
 import { publicAxios } from '@/config/axiosInstance';
@@ -334,7 +334,7 @@ const RequestReferral = (props) => {
     document.body.style.overflow = 'auto';
     router.push('/sign-up', {
       state: {
-        from: `/request-referral/${username}`,
+        from: `/${username}/request-referral`,
         username: username,
       },
     });
