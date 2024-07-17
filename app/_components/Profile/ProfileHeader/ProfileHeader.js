@@ -22,6 +22,7 @@ import { publicAxios } from '@/config/axiosInstance';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Slide } from 'react-awesome-reveal';
+import formatNectCoins from '@/Utils/formatNectCoins';
 
 function ProfileHeader() {
   const { userState } = useContext(UserContext);
@@ -345,7 +346,7 @@ function ProfileHeader() {
 
       <Link href={'/nectcoins'} className="dashboard_profile_header_nectcoins">
         <Image src={nectCoinImg} alt="nect_coins" />
-        <span>{user?.totalCoins}</span>
+        <span>{formatNectCoins(user?.totalCoins)}</span>
       </Link>
 
       <div

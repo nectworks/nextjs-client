@@ -17,14 +17,14 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
   const [initials, setInitials] = useState('');
 
   /* if the user doesn't have a profile image, display their
-   initials as profile image
+     initials as profile image
 
-   (1). Displaying profile image is through 'img' tag
-   (2). Displaying initials is through 'div' tag
+     (1). Displaying profile image is through 'img' tag
+     (2). Displaying initials is through 'div' tag
 
-   Where this component is reused, the edge case of initials in
-   'div' tag should be handled properly.
-  */
+     Where this component is reused, the edge case of initials in
+     'div' tag should be handled properly.
+    */
   const colors = [
     '#1abc9c',
     '#2ecc71',
@@ -81,6 +81,8 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
         className="profile_image"
         src={user?.profile}
         alt={`${user?.firstName || ''} Nectworks`}
+        width={200}
+        height={200}
       />
     );
   } else if (isLoggedInUser == false && otherUser?.profile) {
@@ -88,6 +90,8 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
       <Image
         className="profile_image"
         src={otherUser?.profile}
+        width={200}
+        height={200}
         alt={`${otherUser?.firstName || ''} Nectworks`}
       />
     );

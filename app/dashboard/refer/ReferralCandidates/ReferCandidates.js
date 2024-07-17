@@ -40,10 +40,13 @@ import usePrivateAxios from '@/Utils/usePrivateAxios';
 import ReportPopup from '../../../_components/ReportPopup/ReportPopup';
 import sendGAEvent from '@/Utils/gaEvents';
 import downloadDocument from '@/Utils/downloadDocument';
+import io from 'socket.io-client';
+
+let socket;
 
 const ReferCandidates = () => {
   const privateAxios = usePrivateAxios();
-
+  const URL = process.env.NEXT_PUBLIC_SOCKET_URL;
   const [showTalentPoolSection, setShowTalentPoolSection] = useState(true);
   const [showjobPostingSection, setShowjobPostingSection] = useState(false);
   const [goRight, setGoRight] = useState(false);
@@ -80,12 +83,12 @@ const ReferCandidates = () => {
   );
 
   /*
-    These states indicate total number of pages available.
-    Initially it is -1, indicating we never retreived any details from db.
-    It could be initialised to 0, but we are using this property to check
-    if there are >= documents in db compared to client. If there are no
-    documents in db, the comparison doesn't work.
-  */
+      These states indicate total number of pages available.
+      Initially it is -1, indicating we never retreived any details from db.
+      It could be initialised to 0, but we are using this property to check
+      if there are >= documents in db compared to client. If there are no
+      documents in db, the comparison doesn't work.
+    */
   const [pendingCount, setPendingCount] = useState(-1);
   const [referredCount, setReferredCount] = useState(-1);
 
@@ -133,6 +136,20 @@ const ReferCandidates = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
+  const filterUniqueReferrals = (referrals) => {
+    const uniqueReferrals = [];
+    const referralIds = new Set();
+
+    referrals.forEach((referral) => {
+      if (!referralIds.has(referral._id)) {
+        referralIds.add(referral._id);
+        uniqueReferrals.push(referral);
+      }
+    });
+
+    return uniqueReferrals;
+  };
+
   //function to get data about referrals received.
   const getReferralData = async () => {
     setIsLoading(true);
@@ -151,16 +168,18 @@ const ReferCandidates = () => {
         const { referralData, count, next } = res.data.data;
 
         /* update the correct array of referrals,
-        segregate based on referral status */
+                segregate based on referral status */
         if (showPendingCandidates) {
           setPendingReferrals((prevReferrals) => {
-            return [...prevReferrals, ...referralData];
+            const updatedReferrals = [...prevReferrals, ...referralData];
+            return filterUniqueReferrals(updatedReferrals);
           });
           setPendingPageRef(next);
           setPendingCount(count);
         } else {
           setReferredCandidates((prevReferrals) => {
-            return [...prevReferrals, ...referralData];
+            const updatedReferrals = [...prevReferrals, ...referralData];
+            return filterUniqueReferrals(updatedReferrals);
           });
           setReferredPageRef(next);
           setReferredCount(count);
@@ -182,33 +201,33 @@ const ReferCandidates = () => {
     const currPageEnd = currPageStart + itemsPerPage;
 
     /*
-      (1). currPageStart and currPageEnd are indices of the objects for
-        the current page. (ex., for page 1, currPageStart = 0, currPageEnd = 5).
-      (2). retreivedReferrals -> reflects the array of objects that's
-        already retreived from db and is stored in state.
-      (3). dbRefferalCount -> reflects total number of objects in database.
+          (1). currPageStart and currPageEnd are indices of the objects for
+            the current page. (ex., for page 1, currPageStart = 0, currPageEnd = 5).
+          (2). retreivedReferrals -> reflects the array of objects that's
+            already retreived from db and is stored in state.
+          (3). dbRefferalCount -> reflects total number of objects in database.
 
-      fetch the data if
-      (i). current page items is not fetched yet.
-      (ii). the no. of items retreived is less than required and
-          more items are available in db (i.e., in the current page,
-        no. of items < 5, but there are items in db)
+          fetch the data if
+          (i). current page items is not fetched yet.
+          (ii). the no. of items retreived is less than required and
+              more items are available in db (i.e., in the current page,
+            no. of items < 5, but there are items in db)
 
-      logic:
+          logic:
 
-      ((retreivedReferrals.length - 1 < currPageEnd - 1) &&
-      (retreivedReferrals.length - 1 < dbReferralCount)) -> true when
-      (no. of objects retreived) < (no. of items required per page) and
-      (no. of objects retreived) < (no. of items in the db)
+          ((retreivedReferrals.length - 1 < currPageEnd - 1) &&
+          (retreivedReferrals.length - 1 < dbReferralCount)) -> true when
+          (no. of objects retreived) < (no. of items required per page) and
+          (no. of objects retreived) < (no. of items in the db)
 
-      edge case:
-      (1). initial request won't occur because of the checks implemented above,
-      for initial request to occur, we have simple condition that surpasses the
-      above conditions. (dbReferralCount === -1) indicates that we never checked
-      the database and should do it at least once.
-      (2). (!searchValue): if we are searching, all the matching candidates
-      are already fetched and there's no need to fetch again.
-    */
+          edge case:
+          (1). initial request won't occur because of the checks implemented above,
+          for initial request to occur, we have simple condition that surpasses the
+          above conditions. (dbReferralCount === -1) indicates that we never checked
+          the database and should do it at least once.
+          (2). (!searchValue): if we are searching, all the matching candidates
+          are already fetched and there's no need to fetch again.
+        */
 
     if (
       dbReferralCount === -1 ||
@@ -224,7 +243,7 @@ const ReferCandidates = () => {
 
   // function to refresh the section
   const [rotateAngle, setRotateAngle] = useState(0);
-  function refreshSection() {
+  function refreshSection(e) {
     // get the image and rotate it by 180 degree on click
     const refreshIcon = document.querySelector('.referralsRefreshImage');
     const newAngle = rotateAngle + 180;
@@ -232,8 +251,8 @@ const ReferCandidates = () => {
     setRotateAngle(newAngle);
 
     /* By removing these states, the `useEffect` below this function is
-      triggered which in turn calls `updateCurrentPageItems` which refreshes
-      the section */
+          triggered which in turn calls `updateCurrentPageItems` which refreshes
+          the section */
     if (showPendingCandidates == true) {
       setPendingReferrals([]);
       setPendingCount(-1);
@@ -267,6 +286,22 @@ const ReferCandidates = () => {
     referredCandidates,
   ]);
 
+  useEffect(() => {
+    socket = io(URL);
+
+    socket.on('new-referral', (data) => {
+      console.log(data);
+      setPendingReferrals([]);
+      setPendingCount(-1);
+      setPendingPageRef(null);
+      setCurrentPage(1);
+      setCurrPageData([]);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   // function to get users based on the search input value
   const searchUsers = async () => {
     // if the search bar is empty, do not search users.
@@ -290,7 +325,7 @@ const ReferCandidates = () => {
           setTempRefsOne(pendingReferrals);
 
           /* update the pending referrals, and currPageData will be updated
-          by useEffect */
+                    by useEffect */
           setPendingReferrals(searchedReferrals);
         } else {
           setTempRefsTwo(referredCandidates);
@@ -490,7 +525,7 @@ const ReferCandidates = () => {
     setShowJobsSectionDeleteButton(true);
 
     /* update the selected items, if the item is already
-    present add the element, else remove it */
+        present add the element, else remove it */
     const updatedSelectedItems = selectedItems.includes(itemId)
       ? selectedItems.filter((id) => id !== itemId)
       : [...selectedItems, itemId];
@@ -643,7 +678,7 @@ const ReferCandidates = () => {
   };
 
   /* function to calculate the number of days difference between dates
-  and return appropriate message */
+    and return appropriate message */
   function calculateDaysDifference(inputDate) {
     // Parse the input date as a Date object
     const inputDateTime = new Date(inputDate);
@@ -717,7 +752,7 @@ const ReferCandidates = () => {
   }, [searchUsers]);
 
   /* function to send 'view resume' event to google analytics
-    and view document in new tab */
+      and view document in new tab */
   function sendViewResumeEvent(resume) {
     // send event to Google analytics
     sendGAEvent('view_resume');
@@ -806,7 +841,7 @@ const ReferCandidates = () => {
       )}
 
       <div
-        className={`dashboard_outer_container referCandidatesOuterContainer  
+        className={`dashboard_outer_container referCandidatesOuterContainer
         ${showDevMessage ? 'blurBackgroundContainer' : ''}`}
       >
         {/* import dashboard menu */}
@@ -1357,7 +1392,7 @@ const ReferCandidates = () => {
                         return (
                           <div
                             className="candidateListForReferContentFieldsValues"
-                            key={idx}
+                            key={referral._id}
                           >
                             <div className="nameWithCheckboxAndReferralAskedTime">
                               <input

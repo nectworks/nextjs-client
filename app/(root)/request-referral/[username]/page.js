@@ -1,7 +1,7 @@
 import RequestReferral from '@/app/(root)/referrals/RequestReferral';
 
 const RequestReferralPage = () => {
-    return <RequestReferral />;
+  return <RequestReferral />;
 };
 
 export default RequestReferralPage;
