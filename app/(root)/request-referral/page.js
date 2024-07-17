@@ -1,4 +1,4 @@
-import RequestReferral from './[username]/RequestReferral';
+import RequestReferral from './[username]/page';
 
 const RequestReferralPage = () => {
   return <RequestReferral />;

@@ -1,4 +1,4 @@
-import RequestReferral from '@/app/(root)/referrals/RequestReferral';
+import RequestReferral from '../../referrals/RequestReferral';
 
 const RequestReferralPage = () => {
   return <RequestReferral />;
