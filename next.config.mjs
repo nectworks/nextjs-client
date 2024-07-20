@@ -4,6 +4,5 @@ const nextConfig = {
     domains: ['nectworks-docs.s3.ap-south-2.amazonaws.com'],
   },
 };
-  
-  export default nextConfig;
-  
+
+export default nextConfig;

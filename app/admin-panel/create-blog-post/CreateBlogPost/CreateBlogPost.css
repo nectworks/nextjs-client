@@ -30,3 +30,24 @@
 .jodit-wysiwyg td {
   border: solid 1px;
 }
+
+.save_btn {
+  background-color: white;
+  color: #0057b1;
+  border-color: #0057b1;
+  border-width: 1px;
+  outline: none;
+  padding: 10px;
+  margin: 20px 0;
+  border-radius: 10px;
+}
+
+.review_btn {
+  background-color: #0057b1;
+  color: white;
+  border: none;
+  outline: none;
+  padding: 10px;
+  margin: 20px 0;
+  border-radius: 10px;
+}

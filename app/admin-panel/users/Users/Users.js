@@ -62,19 +62,22 @@ function Users() {
           prevDocId: nextUserRef,
         },
       });
-      const { users, count, next } = res.data;
-
-      setUsers((prevUsers) => [...prevUsers, ...users]);
+      const { users: fetchedUsers, count, next } = res.data;
+      setUsers((prevUsers) => {
+        const newUserIds = new Set(prevUsers.map((user) => user._id));
+        const newUsers = fetchedUsers.filter(
+          (user) => !newUserIds.has(user._id)
+        );
+        return [...prevUsers, ...newUsers];
+      });
       setUserCount(count);
       setNextUserRef(next);
       showBottomMessage(`Successfully fetched users...`);
     } catch (error) {
       let message = `Couldn't fetch all users...`;
-
       if (error?.response?.data.message) {
         message = error?.response?.data.message;
       }
-
       showBottomMessage(message);
     } finally {
       setIsLoading(false);
@@ -169,9 +172,15 @@ function Users() {
           prevDocId: nextUnRegisteredUserRef,
         },
       });
-      const { users, count, next } = res.data;
+      const { users: fetchedUsers, count, next } = res.data;
 
-      setUnRegisteredUsers((prevUsers) => [...prevUsers, ...users]);
+      setUnRegisteredUsers((prevUsers) => {
+        const newUserIds = new Set(prevUsers.map((user) => user._id));
+        const newUsers = fetchedUsers.filter(
+          (user) => !newUserIds.has(user._id)
+        );
+        return [...prevUsers, ...newUsers];
+      });
       setUnregisteredUserCount(count);
       setUnRegisteredUserRef(next);
       showBottomMessage(`Successfully fetched users...`);

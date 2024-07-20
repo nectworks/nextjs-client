@@ -11,6 +11,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { privateAxios, publicAxios } from '@/config/axiosInstance';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { useRouter } from 'next/navigation';
+import { Card, CardContent, Grid, TextField, Typography } from '@mui/material';
 
 function CreateBlogPost() {
   const router = useRouter();
@@ -66,6 +67,7 @@ function CreateBlogPost() {
 
   // function to save the current blog as draft in database
   async function saveBlogAsDraft(updateBlog = false) {
+    console.log('here');
     let url = `/blog/draft`;
 
     if (updateBlog === true) {
@@ -75,10 +77,29 @@ function CreateBlogPost() {
     if (!title) {
       showBottomMessage('Title of blog post can not be empty');
       return;
+    } else if (title.length < 20) {
+      showBottomMessage('Title should be atleast 20 characters');
+      return;
+    }
+
+    if (!author) {
+      showBottomMessage('Author of blog post can not be empty');
+      return;
+    } else if (author.length < 10) {
+      showBottomMessage('Author should be atleast 10 characters');
+      return;
+    }
+
+    if (timeTakenToRead < 0) {
+      showBottomMessage('Time taken to read should be atleast 0');
+      return;
     }
 
     if (!content) {
       showBottomMessage('Content of blog post can not be empty');
+      return;
+    } else if (content.length < 100) {
+      showBottomMessage('Content should be atleast 100 characters');
       return;
     }
 
@@ -92,12 +113,13 @@ function CreateBlogPost() {
       //   imageUrl, // Include image URL
       // });
 
-      console.log("response of the submit: ",
+      console.log(
+        'response of the submit: ',
         title,
         author, // Include author
         content,
         timeTakenToRead,
-        imageUrl, // Include image URL
+        imageUrl // Include image URL
       );
 
       showBottomMessage(`Successfully submitted blog as draft`);
@@ -113,6 +135,36 @@ function CreateBlogPost() {
 
   // function to submit the blog for review before publishing
   async function submitBlogToReview() {
+    if (!title) {
+      showBottomMessage('Title of blog post can not be empty');
+      return;
+    } else if (title.length < 20) {
+      showBottomMessage('Title should be atleast 20 characters');
+      return;
+    }
+
+    if (!author) {
+      showBottomMessage('Author of blog post can not be empty');
+      return;
+    } else if (author.length < 10) {
+      showBottomMessage('Author should be atleast 10 characters');
+      return;
+    }
+
+    if (timeTakenToRead < 0) {
+      showBottomMessage('Time taken to read should be atleast 0');
+      return;
+    }
+
+    if (!content) {
+      showBottomMessage('Content of blog post can not be empty');
+      return;
+    } else if (content.length < 100) {
+      showBottomMessage('Content should be atleast 100 characters');
+      return;
+    }
+
+    console.log('here');
     try {
       let url = `/blog/review`;
       let params = '';
@@ -146,13 +198,13 @@ function CreateBlogPost() {
   async function handleImageUpload(e) {
     const profileImageField = document.getElementById('blog_image_field');
     const uploadedFile = profileImageField.files[0];
-    console.log("uploaded Image: ", uploadedFile);
+    console.log('uploaded Image: ', uploadedFile);
 
     try {
       if (!uploadedFile) {
-        console.log("No file uploaded");
+        console.log('No file uploaded');
       }
-      console.log("uploaded Image inside try: ", uploadedFile);
+      console.log('uploaded Image inside try: ', uploadedFile);
       // Fetch a signed URL for the image upload
       let res = await publicAxios.get('/blog/s3-url-put-blog', {
         headers: {
@@ -183,7 +235,7 @@ function CreateBlogPost() {
       setImageUrl(fileName);
       showBottomMessage('Image uploaded successfully');
     } catch (error) {
-      console.error("Error in handleImageUpload: ", error);
+      console.error('Error in handleImageUpload: ', error);
       showBottomMessage("Couldn't upload image. Try again!!", error);
     }
   }
@@ -209,67 +261,244 @@ function CreateBlogPost() {
   return (
     <div className="create_blog_outer_container">
       <AdminDashboardMenu />
-
-      <div className="create_blog_inner_container">
-        <h1>Create a new blog post</h1>
-
-        <div className="create_blog_title_container">
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            placeholder="Enter title of the blog"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-
-        <div className="create_blog_author_container">
-          <label htmlFor="author">Author</label>
-          <input
-            type="text"
-            placeholder="Enter author's name"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-        </div>
-
-        <div className="create_blog_time_container">
-          <label htmlFor="timeTaken">
-            Time taken to read the blog (in minutes)
-          </label>
-          <input
-            type="number"
-            value={timeTakenToRead}
-            onChange={(e) => setTimeTakenToRead(e.target.value)}
-          />
-        </div>
-
-        <div className="create_blog_image_container">
-          <label htmlFor="image">Upload Image</label>
-          <input
-          id="blog_image_field"
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-          />
-          {imageUrl && <img src={imageUrl} alt="Blog" style={{ maxWidth: '100%' }} />}
-        </div>
-
-        <JoditEditor
-          className="jodit_editor"
-          ref={editor}
-          value={content}
-          config={config}
-          tabIndex={1}
-          onChange={(newContent) => setContent(newContent)}
-        />
-        {isEditing === true ? (
-          <button onClick={(e) => saveBlogAsDraft(true)}>Update draft</button>
-        ) : (
-          <button onClick={saveBlogAsDraft}>Save as draft</button>
-        )}
-        <button onClick={submitBlogToReview}>Submit for review</button>
-      </div>
+      <Card variant="elevation" style={{ padding: '20px', maxWidth: '1070px' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>
+            Create a new blog post
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                variant="outlined"
+                InputProps={{
+                  style: {
+                    borderRadius: '15px',
+                    fontSize: '1rem',
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: 'grey',
+                    fontWeight: 'normal',
+                  },
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'grey',
+                      borderWidth: '1px',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                    '&.MuiInputLabel-shrink': {
+                      transform: 'translate(14px, -6px) scale(0.75)',
+                      backgroundColor: 'white',
+                      padding: '0 4px',
+                    },
+                  },
+                  '& .MuiInputLabel-outlined': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                  },
+                  '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                    transform: 'translate(14px, -6px) scale(0.75)',
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Author"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                variant="outlined"
+                InputProps={{
+                  style: {
+                    borderRadius: '15px',
+                    fontSize: '1rem',
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: 'grey',
+                    fontWeight: 'normal',
+                  },
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'grey',
+                      borderWidth: '1px',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                    '&.MuiInputLabel-shrink': {
+                      transform: 'translate(14px, -6px) scale(0.75)',
+                      backgroundColor: 'white',
+                      padding: '0 4px',
+                    },
+                  },
+                  '& .MuiInputLabel-outlined': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                  },
+                  '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                    transform: 'translate(14px, -6px) scale(0.75)',
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Time taken to read (minutes)"
+                type="number"
+                value={timeTakenToRead}
+                onChange={(e) => setTimeTakenToRead(e.target.value)}
+                variant="outlined"
+                InputProps={{
+                  style: {
+                    borderRadius: '15px',
+                    fontSize: '1rem',
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: 'grey',
+                    fontWeight: 'normal',
+                  },
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'grey',
+                      borderWidth: '1px',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                    '&.MuiInputLabel-shrink': {
+                      transform: 'translate(14px, -6px) scale(0.75)',
+                      backgroundColor: 'white',
+                      padding: '0 4px',
+                    },
+                  },
+                  '& .MuiInputLabel-outlined': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                  },
+                  '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                    transform: 'translate(14px, -6px) scale(0.75)',
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                type="file"
+                helperText="Upload Image"
+                onChange={handleImageUpload}
+                variant="outlined"
+                InputProps={{
+                  id: 'blog_image_field',
+                  accept: 'image/*',
+                  style: {
+                    borderRadius: '15px',
+                    fontSize: '1rem',
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: 'grey',
+                    fontWeight: 'normal',
+                  },
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'grey',
+                      borderWidth: '1px',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                    '&.MuiInputLabel-shrink': {
+                      transform: 'translate(14px, -6px) scale(0.75)',
+                      backgroundColor: 'white',
+                      padding: '0 4px',
+                    },
+                  },
+                  '& .MuiInputLabel-outlined': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                  },
+                  '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                    transform: 'translate(14px, -6px) scale(0.75)',
+                  },
+                }}
+              />
+              {imageUrl && (
+                <img
+                  src={imageUrl}
+                  alt="Blog"
+                  style={{ maxWidth: '100%', marginTop: 10 }}
+                />
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <JoditEditor
+                ref={editor}
+                value={content}
+                config={config}
+                tabIndex={1}
+                onBlur={(newContent) => setContent(newContent)}
+              />
+            </Grid>
+            <Grid item style={{ display: 'flex', gap: '10px' }}>
+              <button
+                variant="contained"
+                onClick={
+                  isEditing ? () => saveBlogAsDraft(true) : saveBlogAsDraft
+                }
+                className="save_btn"
+              >
+                {isEditing ? 'Update Draft' : 'Save as Draft'}
+              </button>
+              <button className="review_btn" onClick={submitBlogToReview}>
+                Submit for Review
+              </button>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
     </div>
   );
 }

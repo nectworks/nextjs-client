@@ -59,7 +59,7 @@ const ProfileActions = ({
 }) => {
   /* This component is reused for the user input process initially
      and to edit and add new information later. */
-     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const [state, dispatch] = useContext(ProfileContext);
   const [userInfo, setUser] = useContext(DashboardContext);
@@ -328,17 +328,20 @@ const ProfileActions = ({
     sendGAEvent('profile_steps', { vaule: step });
   }, [step]);
 
-    const handleImageClick = () => {
-    if(hasUnsavedChanges){
-      toast.warn('You have unsaved changes, please save them before you close.', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+  const handleImageClick = () => {
+    if (hasUnsavedChanges) {
+      toast.warn(
+        'You have unsaved changes, please save them before you close.',
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
     } else {
       // Close the window without confirmation if no data is being updated
       setActionPopup(false);
@@ -346,16 +349,19 @@ const ProfileActions = ({
   };
 
   const handleClose = (e) => {
-    if(hasUnsavedChanges){
-      toast.warn('You have unsaved changes, please save them before you close.', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+    if (hasUnsavedChanges) {
+      toast.warn(
+        'You have unsaved changes, please save them before you close.',
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
     } else {
       // Close the window without confirmation if no data is being updated
       setActionPopup(false);

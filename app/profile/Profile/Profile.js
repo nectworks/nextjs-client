@@ -123,9 +123,9 @@ const ProfilePage = () => {
   function getLinkIcon(url) {
     if (!url || url.length == 0) return null;
     const { hostname } = new URL(url);
-  
+
     let linkIcon = otherLinkIcon;
-  
+
     if (hostname.includes('linkedin')) {
       linkIcon = linkedInIcon;
     } else if (hostname.includes('twitter')) {
@@ -159,7 +159,7 @@ const ProfilePage = () => {
     } else if (hostname.includes('hashnode')) {
       linkIcon = hashnodeLogo;
     }
-  
+
     return linkIcon;
   }
 
@@ -615,7 +615,7 @@ const ProfilePage = () => {
         if (res.status === 200) {
           setResumeUploadStatus(false);
           alert('File uploaded successfully');
-          console.log("Res: ", res);
+          console.log('Res: ', res);
           //It will refresh the page when resume is uploaded successfully
           setResumeFileUrl(res.url);
         } else {

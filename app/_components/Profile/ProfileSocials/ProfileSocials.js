@@ -41,21 +41,45 @@ function ProfileSocials({
   const [userInfo, setUserInfo] = useContext(DashboardContext);
 
   const socialMedia = [
-    { name: 'LinkedIn', baseURL: 'https://www.linkedin.com/in/', icon: linkedinLogo },
+    {
+      name: 'LinkedIn',
+      baseURL: 'https://www.linkedin.com/in/',
+      icon: linkedinLogo,
+    },
     { name: 'Twitter', baseURL: 'https://twitter.com/', icon: twitterLogo },
-    { name: 'GitHub', baseURL: 'https://github.com/', icon: githubLogo }, 
+    { name: 'GitHub', baseURL: 'https://github.com/', icon: githubLogo },
     { name: 'Dev.to', baseURL: 'https://dev.to/', icon: devLogo },
-    { name: 'Instagram', baseURL: 'https://www.instagram.com/', icon: instagramLogo },
-    { name: 'Facebook', baseURL: 'https://www.facebook.com/', icon: facebookLogo },
+    {
+      name: 'Instagram',
+      baseURL: 'https://www.instagram.com/',
+      icon: instagramLogo,
+    },
+    {
+      name: 'Facebook',
+      baseURL: 'https://www.facebook.com/',
+      icon: facebookLogo,
+    },
     { name: 'Medium', baseURL: 'https://medium.com/@', icon: mediumLogo },
     { name: 'Figma', baseURL: 'https://www.figma.com/@', icon: figmaLogo },
-    { name: 'Substack', baseURL: 'https://substack.com/profile/', icon: substackLogo },
+    {
+      name: 'Substack',
+      baseURL: 'https://substack.com/profile/',
+      icon: substackLogo,
+    },
     { name: 'TikTok', baseURL: 'https://www.tiktok.com/@', icon: tiktokLogo },
     { name: 'Twitch', baseURL: 'https://www.twitch.tv/', icon: twitchLogo },
-    { name: 'YouTube', baseURL: 'https://www.youtube.com/c/', icon: youtubeLogo },
+    {
+      name: 'YouTube',
+      baseURL: 'https://www.youtube.com/c/',
+      icon: youtubeLogo,
+    },
     { name: 'Behance', baseURL: 'https://www.behance.net/', icon: behanceLogo },
     { name: 'Dribble', baseURL: 'https://dribbble.com/', icon: dribbleLogo },
-    { name: 'Crunchbase', baseURL: 'https://www.crunchbase.com/person/', icon: crunchbaseLogo },
+    {
+      name: 'Crunchbase',
+      baseURL: 'https://www.crunchbase.com/person/',
+      icon: crunchbaseLogo,
+    },
     { name: 'Hashnode', baseURL: 'https://hashnode.com/@', icon: hashnodeLogo },
   ];
 
@@ -65,9 +89,10 @@ function ProfileSocials({
 
   // Update the links in local state and the context
   function updateLink(e, platform) {
-    
-    if (!platform.includes("other")){
-      const platformData = socialMedia.find((social) => social.name === platform);
+    if (!platform.includes('other')) {
+      const platformData = socialMedia.find(
+        (social) => social.name === platform
+      );
       const trimmedValue = e.target.value.trim();
       const updatedLinks = {
         ...links,
@@ -87,7 +112,6 @@ function ProfileSocials({
       setHasUnsavedChanges(true);
     }
   }
-  
 
   // Function to save changes to context
   function saveChanges(data) {
@@ -106,12 +130,15 @@ function ProfileSocials({
   }
 
   function isValidLinkedInURL(url) {
-    const linkedInPattern = /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/i;
+    const linkedInPattern =
+      /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/i;
     return linkedInPattern.test(url);
   }
 
   useEffect(() => {
-    const initialOtherLinksCount = Object.keys(links).filter(key => key.startsWith('other_')).length;
+    const initialOtherLinksCount = Object.keys(links).filter((key) =>
+      key.startsWith('other_')
+    ).length;
     setOtherLinksLen(initialOtherLinksCount);
   }, [links]);
 
@@ -128,18 +155,22 @@ function ProfileSocials({
     // Set the header and description for this component
     const header = 'Social Profile';
     const description = 'Let others find you online. 🔍';
-  
+
     setHeader(header);
     setDescription(description);
-  
+
     // Scroll to top on first render
-    const firstFormControl = document.querySelectorAll('.dashboard_socials_form_control')[0];
+    const firstFormControl = document.querySelectorAll(
+      '.dashboard_socials_form_control'
+    )[0];
     firstFormControl.scrollIntoView({ behavior: 'smooth' });
-  
+
     // If the data is being updated, prepopulate the fields
     if (isDataUpdated && userInfo) {
       const tempLinksObj = userInfo.socials.reduce((acc, link) => {
-        const platform = socialMedia.find(social => link.startsWith(social.baseURL));
+        const platform = socialMedia.find((social) =>
+          link.startsWith(social.baseURL)
+        );
         if (platform) {
           acc[platform.name] = link;
         }
@@ -148,7 +179,7 @@ function ProfileSocials({
 
       // Separate "other" links and predefined social media links
       const tempOtherLinksObj = userInfo.socials.reduce((acc, link, index) => {
-        if (!socialMedia.some(social => link.startsWith(social.baseURL))) {
+        if (!socialMedia.some((social) => link.startsWith(social.baseURL))) {
           acc[`other_${index + 1}`] = link;
         }
         return acc;
@@ -160,11 +191,13 @@ function ProfileSocials({
   }, [isDataUpdated, userInfo, setHeader, setDescription]);
 
   useEffect(() => {
-    const linksArr = Object.entries({ ...links, ...otherLinks }).map(([key, value]) => ({
-      platform: key,
-      url: value,
-    }));
-  
+    const linksArr = Object.entries({ ...links, ...otherLinks }).map(
+      ([key, value]) => ({
+        platform: key,
+        url: value,
+      })
+    );
+
     if (linksArr.length < 1 || !isValidLinkedInURL(links.LinkedIn)) {
       setDisableNext(true);
       setDisableSkip(false);
@@ -172,10 +205,12 @@ function ProfileSocials({
     } else {
       setDisableNext(false);
       setDisableSkip(true);
-  
+
       // Check if other URLs are valid
       linksArr.slice(1).forEach((link) => {
-        const platformData = socialMedia.find((social) => social.name === link.platform);
+        const platformData = socialMedia.find(
+          (social) => social.name === link.platform
+        );
         if (link.url && !isValidURL(link.url)) {
           setMessage(['Invalid URL in other links', 'error']);
           setDisableNext(true);
@@ -194,7 +229,9 @@ function ProfileSocials({
               {platform.baseURL}
               <input
                 type="text"
-                value={links[platform.name]?.replace(platform.baseURL, '') || ''}
+                value={
+                  links[platform.name]?.replace(platform.baseURL, '') || ''
+                }
                 onChange={(e) => updateLink(e, platform.name)}
               />
             </label>
@@ -232,6 +269,5 @@ function ProfileSocials({
     </div>
   );
 }
-
 
 export default ProfileSocials;
