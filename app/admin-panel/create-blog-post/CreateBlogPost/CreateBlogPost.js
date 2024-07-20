@@ -1,5 +1,4 @@
 'use client';
-
 /*
   File: CreateBlogPost.js
   Description: This file contains a rich text editor to create blog posts.
@@ -9,28 +8,26 @@ import JoditEditor from 'jodit-react';
 import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDashboardMenu';
 import './CreateBlogPost.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { privateAxios } from '@/config/axiosInstance';
+import { privateAxios, publicAxios } from '@/config/axiosInstance';
 import showBottomMessage from '@/Utils/showBottomMessage';
-import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
 function CreateBlogPost() {
   const router = useRouter();
 
-  // state to differentiate between new blog and old blog being editedc
+  // state to differentiate between new blog and old blog being edited
   const [isEditing, setIsEditing] = useState(false);
   const [editingBlogId, setEditingBlogId] = useState(null);
 
   const editor = useRef(null);
 
-  // title of the blog
+  // state variables for blog details
   const [title, setTitle] = useState('');
-
-  // time taken to read the blog (in minutes)
+  const [author, setAuthor] = useState(''); // New state for author's name
   const [timeTakenToRead, setTimeTakenToRead] = useState(0);
-
-  // this state holds the content in the editor
   const [content, setContent] = useState('');
+  const [image, setImage] = useState(null); // New state for image file
+  const [imageUrl, setImageUrl] = useState(''); // New state for image URL
 
   // all options from https://xdsoft.net/jodit/docs/,
   const config = useMemo(
@@ -58,8 +55,10 @@ function CreateBlogPost() {
       const { blog } = res.data;
 
       setTitle(blog.title);
+      setAuthor(blog.author || ''); // Set author if available
       setTimeTakenToRead(blog.timeTakenToRead || 0);
       setContent(blog.content);
+      setImageUrl(blog.imageUrl || ''); // Set image URL if available
     } catch (error) {
       showBottomMessage(`Couldn't fetch draft to edit`);
     }
@@ -84,17 +83,29 @@ function CreateBlogPost() {
     }
 
     try {
-      const res = await privateAxios.post(url, {
+      // const res = await privateAxios.post(url, {
+      //   title,
+      //   author, // Include author
+      //   content,
+      //   status: 'draft',
+      //   timeTakenToRead,
+      //   imageUrl, // Include image URL
+      // });
+
+      console.log("response of the submit: ",
         title,
+        author, // Include author
         content,
-        status: 'draft',
         timeTakenToRead,
-      });
+        imageUrl, // Include image URL
+      );
 
       showBottomMessage(`Successfully submitted blog as draft`);
       setTitle('');
+      setAuthor(''); // Clear author
       setContent('');
       setTimeTakenToRead(0);
+      setImageUrl(''); // Clear image URL
     } catch (error) {
       showBottomMessage(`Couldn't submit blog as draft`);
     }
@@ -107,9 +118,11 @@ function CreateBlogPost() {
       let params = '';
       const data = {
         title,
+        author, // Include author
         content,
         status: 'under review',
         timeTakenToRead,
+        imageUrl, // Include image URL
       };
 
       if (isEditing === true) {
@@ -121,10 +134,57 @@ function CreateBlogPost() {
 
       showBottomMessage(`Successfully submitted blog for review`);
       setTitle('');
+      setAuthor(''); // Clear author
       setContent('');
       setTimeTakenToRead(0);
+      setImageUrl(''); // Clear image URL
     } catch (error) {
       showBottomMessage(`Couldn't submit blog for review`);
+    }
+  }
+
+  async function handleImageUpload(e) {
+    const profileImageField = document.getElementById('blog_image_field');
+    const uploadedFile = profileImageField.files[0];
+    console.log("uploaded Image: ", uploadedFile);
+
+    try {
+      if (!uploadedFile) {
+        console.log("No file uploaded");
+      }
+      console.log("uploaded Image inside try: ", uploadedFile);
+      // Fetch a signed URL for the image upload
+      let res = await publicAxios.get('/blog/s3-url-put-blog', {
+        headers: {
+          fileContentType: uploadedFile.type,
+          fileSubType: 'profile',
+          fileName: uploadedFile.name,
+          addTimeStamp: true, // add timestamp to the image name
+        },
+      });
+
+      const { signedUrl, fileName } = res.data;
+
+      // Upload the image to S3
+      res = await fetch(signedUrl, {
+        method: 'PUT',
+        body: uploadedFile,
+        headers: {
+          'Content-Type': uploadedFile.type,
+          'Content-Disposition': 'inline',
+        },
+      });
+
+      if (res.status !== 200) {
+        throw new Error("Couldn't upload file. Try again!!");
+      }
+
+      // Set the image URL in state
+      setImageUrl(fileName);
+      showBottomMessage('Image uploaded successfully');
+    } catch (error) {
+      console.error("Error in handleImageUpload: ", error);
+      showBottomMessage("Couldn't upload image. Try again!!", error);
     }
   }
 
@@ -139,8 +199,10 @@ function CreateBlogPost() {
       fetchBlogToEdit(blogId);
     } else {
       setTitle('');
+      setAuthor(''); // Clear author
       setContent('');
       setTimeTakenToRead(0);
+      setImageUrl(''); // Clear image URL
     }
   }, [router]);
 
@@ -161,7 +223,17 @@ function CreateBlogPost() {
           />
         </div>
 
-        <div className="create_blog_title_container">
+        <div className="create_blog_author_container">
+          <label htmlFor="author">Author</label>
+          <input
+            type="text"
+            placeholder="Enter author's name"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
+        </div>
+
+        <div className="create_blog_time_container">
           <label htmlFor="timeTaken">
             Time taken to read the blog (in minutes)
           </label>
@@ -170,6 +242,17 @@ function CreateBlogPost() {
             value={timeTakenToRead}
             onChange={(e) => setTimeTakenToRead(e.target.value)}
           />
+        </div>
+
+        <div className="create_blog_image_container">
+          <label htmlFor="image">Upload Image</label>
+          <input
+          id="blog_image_field"
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+          />
+          {imageUrl && <img src={imageUrl} alt="Blog" style={{ maxWidth: '100%' }} />}
         </div>
 
         <JoditEditor

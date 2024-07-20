@@ -15,22 +15,21 @@ export const AdminUserContext = createContext(null);
 export default function AdminUserContextProvider({ children }) {
   const [admin, setAdmin] = useState(null);
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start loading state as true
 
   async function authenticateAdmin() {
-    setIsLoading(true);
     try {
       const res = await privateAxios.get('/admin/authenticate');
-
       if (res.status === 200) {
         setAdmin(res.data.admin);
+      } else {
+        throw new Error('Not authenticated');
       }
-
-      setIsLoading(false);
     } catch (error) {
-      // if the user is not authenticated, redirect them to login
+      console.error('Authentication error:', error);
       router.push('/admin-panel/login');
-      setIsLoading(false);
+    } finally {
+      setIsLoading(false); // Always stop loading, regardless of success or error
     }
   }
 

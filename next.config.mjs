@@ -1,15 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'nectworks-docs.s3.amazonaws.com',
-        port: '',
-        pathname: '/originalDocs/images/**',
-      },
-    ],
+    domains: ['nectworks-docs.s3.ap-south-2.amazonaws.com'],
   },
 };
-
-export default nextConfig;
+  
+  export default nextConfig;
+  

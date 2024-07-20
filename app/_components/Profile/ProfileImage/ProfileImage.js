@@ -81,8 +81,8 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
         className="profile_image"
         src={user?.profile}
         alt={`${user?.firstName || ''} Nectworks`}
-        width={200}
-        height={200}
+        width={50}
+        height={50}
       />
     );
   } else if (isLoggedInUser == false && otherUser?.profile) {

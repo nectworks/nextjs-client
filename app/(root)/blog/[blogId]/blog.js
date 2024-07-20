@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { publicAxios } from '@/config/axiosInstance';
+import './blog.css';
 
 const Blog = () => {
   const params = useParams();
@@ -32,7 +33,19 @@ const Blog = () => {
     fetchBlog();
   }, []);
 
-  return <div dangerouslySetInnerHTML={{ __html: blogData?.content }} />;
+  if (!blogData) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="card">
+      <div className="card-header">{blogData.title}</div>
+      <div
+        className="card-content"
+        dangerouslySetInnerHTML={{ __html: blogData.content }}
+      />
+    </div>
+  );
 };
 
 export default Blog;

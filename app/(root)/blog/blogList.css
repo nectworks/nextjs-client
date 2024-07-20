@@ -1,0 +1,75 @@
+.blogList {
+  max-width: 1200px; /* Adjusted for 4-column layout */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.blogGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.blogCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  flex: 1 1 calc(25% - 20px); /* Four cards in a row with 20px gap */
+}
+
+.blogTitle {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.blogDate {
+  font-size: 0.9em;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.blogExcerpt {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.readMore {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.readMore:hover {
+  text-decoration: underline;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pageButton {
+  border: none;
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pageButton.active {
+  background-color: #0070f3;
+  color: #fff;
+}
+
+.pageButton:hover:not(.active) {
+  background-color: #ddd;
+}
