@@ -1,4 +1,4 @@
-import CreateBlogPost from './CreateBlogPost';
+import CreateBlogPost from './CreateBlogPost/CreateBlogPost';
 
 const CreateBlogPage = () => {
   return <CreateBlogPost />;

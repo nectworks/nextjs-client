@@ -5,7 +5,7 @@
   the database.
 */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDashboardMenu';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { privateAxios } from '@/config/axiosInstance';
@@ -50,7 +50,7 @@ function Users() {
     });
 
   // function to fetch the users from the database.
-  async function fetchUsers() {
+  const fetchUsers = useCallback(async () => {
     setIsLoading(true);
     showBottomMessage(`Fetching data...`);
 
@@ -79,10 +79,10 @@ function Users() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [userPaginationModel.page, userPaginationModel.pageSize, nextUserRef]);
 
   // function to update current data as the page changes.
-  function updateUserPageItems() {
+  const updateUserPageItems = useCallback(() => {
     const currPageStart =
       userPaginationModel.page * userPaginationModel.pageSize;
     const currPageEnd = currPageStart + userPaginationModel.pageSize;
@@ -100,7 +100,13 @@ function Users() {
       // else display the data
       setUserPageData(users.slice(currPageStart, currPageEnd));
     }
-  }
+  }, [
+    fetchUsers,
+    userPaginationModel.page,
+    userPaginationModel.pageSize,
+    userCount,
+    users,
+  ]);
 
   // the columns for displaying user data.
   const userCols = [
@@ -151,7 +157,7 @@ function Users() {
   ];
 
   // function to fetch unregistered users from database
-  async function fetchUnRegisteredUsers() {
+  const fetchUnRegisteredUsers = useCallback(async () => {
     setIsLoading(true);
     showBottomMessage(`Fetching data...`);
 
@@ -180,9 +186,13 @@ function Users() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [
+    unRegisteredUserPaginationModel.page,
+    unRegisteredUserPaginationModel.pageSize,
+    nextUnRegisteredUserRef,
+  ]);
 
-  function updateUnRegisteredUserPage() {
+  const updateUnRegisteredUserPage = useCallback(() => {
     const currPageStart =
       unRegisteredUserPaginationModel.page *
       unRegisteredUserPaginationModel.pageSize;
@@ -204,7 +214,13 @@ function Users() {
         unregisteredUsers.slice(currPageStart, currPageEnd)
       );
     }
-  }
+  }, [
+    fetchUnRegisteredUsers,
+    unRegisteredUserPaginationModel.page,
+    unRegisteredUserPaginationModel.pageSize,
+    unregisteredUserCount,
+    unregisteredUsers,
+  ]);
 
   const unRegisteredUserCols = [
     {
@@ -271,14 +287,14 @@ function Users() {
         <h1>All Users</h1>
 
         <button
-          className={`users_switch_btn 
+          className={`users_switch_btn
             ${showRegisteredUsers ? 'users_switch_active' : ''}`}
           onClick={() => setShowRegisteredUsers(true)}
         >
           Registered
         </button>
         <button
-          className={`users_switch_btn 
+          className={`users_switch_btn
           ${!showRegisteredUsers ? 'users_switch_active' : ''}`}
           onClick={() => setShowRegisteredUsers(false)}
         >

@@ -12,11 +12,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { privateAxios } from '@/config/axiosInstance';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 function CreateBlogPost() {
-  const [searchParams, setSearchParams] = useParams();
+  const router = useRouter();
 
-  // state to differentiate between new blog and old blog being edited
+  // state to differentiate between new blog and old blog being editedc
   const [isEditing, setIsEditing] = useState(false);
   const [editingBlogId, setEditingBlogId] = useState(null);
 
@@ -129,8 +130,8 @@ function CreateBlogPost() {
 
   // if the user is editing previously saved blog, fetch it and fill the state
   useEffect(() => {
-    const isEditing = searchParams.get('edit');
-    const blogId = searchParams.get('blogId');
+    const isEditing = router?.query?.edit;
+    const blogId = router?.query?.blogId;
 
     if (isEditing && isEditing === true.toString()) {
       setIsEditing(true);
@@ -141,7 +142,7 @@ function CreateBlogPost() {
       setContent('');
       setTimeTakenToRead(0);
     }
-  }, [searchParams]);
+  }, [router]);
 
   return (
     <div className="create_blog_outer_container">

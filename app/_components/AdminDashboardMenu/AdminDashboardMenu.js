@@ -41,8 +41,16 @@ function AdminDashboardMenu() {
   return (
     <div className="admin_dashboard_menu_container">
       <div className="admin_dashboard_menu_icons">
-        <Image src={companyLogo} alt="nectworks job referrals logo" />
-        <Image src={companyName} alt="nectworks technology" />
+        <Image
+          className="brand_logo"
+          src={companyLogo}
+          alt="nectworks job referrals logo"
+        />
+        <Image
+          className="brand_name"
+          src={companyName}
+          alt="nectworks technology"
+        />
       </div>
       <hr></hr>
 
