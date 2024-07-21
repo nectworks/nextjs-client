@@ -133,12 +133,11 @@ function ManageBlogPosts() {
               <p>
                 {blog.title}
                 <button
-                  onClick={(e) => {
-                    router.push(`/admin-panel/preview-blog-post`, {
-                      state: {
-                        content: blog.content,
-                      },
-                    });
+                  onClick={() => {
+                    const encodedContent = encodeURIComponent(blog.content);
+                    router.push(
+                      `/admin-panel/preview-blog-post?content=${encodedContent}`
+                    );
                   }}
                 >
                   Preview
