@@ -1,6 +1,5 @@
 .blogList {
-  max-width: 1200px; /* Adjusted for 4-column layout */
-  margin: 0 auto;
+  margin: 20px;
   padding: 20px;
 }
 
@@ -21,7 +20,7 @@
   border-radius: 8px;
   padding: 20px;
   background-color: #fff;
-  flex: 1 1 calc(25% - 20px); /* Four cards in a row with 20px gap */
+  flex: 1 1 calc(20% - 20px); /* Four cards in a row with 20px gap */
 }
 
 .blogTitle {

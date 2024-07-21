@@ -48,7 +48,13 @@ function BlogList() {
     (currentPage - 1) * blogsPerPage,
     currentPage * blogsPerPage
   );
-
+  console.log(
+    'currentBlogs: ',
+    currentBlogs,
+    totalPages,
+    blogsPerPage,
+    currentPage
+  );
   return (
     <div className="blogList">
       <h1 className="title">Published Blogs</h1>

@@ -10,11 +10,13 @@ import './CreateBlogPost.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { privateAxios, publicAxios } from '@/config/axiosInstance';
 import showBottomMessage from '@/Utils/showBottomMessage';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import axios from 'axios';
 import { Card, CardContent, Grid, TextField, Typography } from '@mui/material';
 
 function CreateBlogPost() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // state to differentiate between new blog and old blog being edited
   const [isEditing, setIsEditing] = useState(false);
@@ -24,7 +26,6 @@ function CreateBlogPost() {
 
   // state variables for blog details
   const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState(''); // New state for author's name
   const [timeTakenToRead, setTimeTakenToRead] = useState(0);
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null); // New state for image file
@@ -56,7 +57,6 @@ function CreateBlogPost() {
       const { blog } = res.data;
 
       setTitle(blog.title);
-      setAuthor(blog.author || ''); // Set author if available
       setTimeTakenToRead(blog.timeTakenToRead || 0);
       setContent(blog.content);
       setImageUrl(blog.imageUrl || ''); // Set image URL if available
@@ -106,25 +106,19 @@ function CreateBlogPost() {
     try {
       // const res = await privateAxios.post(url, {
       //   title,
-      //   author, // Include author
       //   content,
       //   status: 'draft',
       //   timeTakenToRead,
       //   imageUrl, // Include image URL
       // });
-
-      console.log(
-        'response of the submit: ',
+      console.log('Data to submit saveBlogAsDraft: ', {
         title,
-        author, // Include author
         content,
         timeTakenToRead,
-        imageUrl // Include image URL
-      );
-
+        imageUrl, // Include image URL
+      });
       showBottomMessage(`Successfully submitted blog as draft`);
       setTitle('');
-      setAuthor(''); // Clear author
       setContent('');
       setTimeTakenToRead(0);
       setImageUrl(''); // Clear image URL
@@ -170,7 +164,6 @@ function CreateBlogPost() {
       let params = '';
       const data = {
         title,
-        author, // Include author
         content,
         status: 'under review',
         timeTakenToRead,
@@ -182,11 +175,12 @@ function CreateBlogPost() {
         url += params;
       }
 
-      const res = await privateAxios.post(url, data);
+      console.log('Data to submit submitBlogToReview: ', data);
+
+      // const res = await privateAxios.post(url, data);
 
       showBottomMessage(`Successfully submitted blog for review`);
       setTitle('');
-      setAuthor(''); // Clear author
       setContent('');
       setTimeTakenToRead(0);
       setImageUrl(''); // Clear image URL
@@ -196,29 +190,32 @@ function CreateBlogPost() {
   }
 
   async function handleImageUpload(e) {
-    const profileImageField = document.getElementById('blog_image_field');
-    const uploadedFile = profileImageField.files[0];
-    console.log('uploaded Image: ', uploadedFile);
+    const blogImageField = document.getElementById('blog_image_field');
+    const uploadedFile = blogImageField.files[0];
 
     try {
       if (!uploadedFile) {
         console.log('No file uploaded');
+        return;
       }
-      console.log('uploaded Image inside try: ', uploadedFile);
-      // Fetch a signed URL for the image upload
+
+      console.log('Uploaded Image inside try: ', uploadedFile);
+
+      // Step 1: Fetch the signed URL from the backend
       let res = await publicAxios.get('/blog/s3-url-put-blog', {
         headers: {
           fileContentType: uploadedFile.type,
-          fileSubType: 'profile',
+          fileSubType: 'blog',
           fileName: uploadedFile.name,
-          addTimeStamp: true, // add timestamp to the image name
+          addTimeStamp: true,
         },
       });
 
+      console.log('Response of the signed URL: ', res);
       const { signedUrl, fileName } = res.data;
 
-      // Upload the image to S3
-      res = await fetch(signedUrl, {
+      // Step 2: Upload the file directly to S3 using the signed URL
+      const uploadRes = await fetch(signedUrl, {
         method: 'PUT',
         body: uploadedFile,
         headers: {
@@ -227,12 +224,31 @@ function CreateBlogPost() {
         },
       });
 
-      if (res.status !== 200) {
+      if (uploadRes.status !== 200) {
         throw new Error("Couldn't upload file. Try again!!");
       }
 
-      // Set the image URL in state
-      setImageUrl(fileName);
+      console.log('Uploaded Image uploadRes: ', uploadRes);
+
+      // Step 3: Notify the backend that the image has been uploaded
+      const uploadResponse = await publicAxios.post(
+        `/blog/upload-image/?fileName=${fileName}`,
+        {},
+        {
+          headers: {
+            fileContentType: uploadedFile.type,
+            fileSubType: 'blog',
+          },
+        }
+      );
+      console.log('Response of the uploaded image final: ', uploadResponse);
+      if (res.status !== 200) {
+        throw new Error("Couldn't save image info. Try again!!");
+      }
+
+      // Update the UI with the new image URL or other relevant information
+      const { url } = res.data;
+      setImageUrl(url); // Set the URL or filename for the blog image
       showBottomMessage('Image uploaded successfully');
     } catch (error) {
       console.error('Error in handleImageUpload: ', error);
@@ -242,21 +258,20 @@ function CreateBlogPost() {
 
   // if the user is editing previously saved blog, fetch it and fill the state
   useEffect(() => {
-    const isEditing = router?.query?.edit;
-    const blogId = router?.query?.blogId;
+    const isEditing = searchParams.get('edit');
+    const blogId = searchParams.get('blogId');
 
-    if (isEditing && isEditing === true.toString()) {
+    if (isEditing && isEditing === 'true') {
       setIsEditing(true);
       setEditingBlogId(blogId);
       fetchBlogToEdit(blogId);
     } else {
       setTitle('');
-      setAuthor(''); // Clear author
       setContent('');
       setTimeTakenToRead(0);
       setImageUrl(''); // Clear image URL
     }
-  }, [router]);
+  }, [searchParams]);
 
   return (
     <div className="create_blog_outer_container">
