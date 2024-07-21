@@ -43,7 +43,6 @@ function ManageBlogPosts() {
   async function fetchBlogsUnderReview() {
     try {
       const res = await privateAxios.get('/blog/review');
-      console.log('res: ', res);
 
       if (res.status === 200) {
         setBlogsUnderReview(res.data.blogs);

@@ -64,7 +64,6 @@ function CreateBlogPost() {
       setLoading(true);
       const res = await privateAxios.get(`/blog/edit/${blogId}`);
       const { blog } = res.data;
-      console.log('blog: ', blog);
 
       setTitle(blog.title);
       setTimeTakenToRead(blog.timeTakenToRead || 0);
@@ -80,7 +79,6 @@ function CreateBlogPost() {
 
   // function to save the current blog as draft in database
   async function saveBlogAsDraft(updateBlog = false) {
-    console.log('here');
     let url = `/blog/draft`;
 
     if (updateBlog === true) {
@@ -127,13 +125,6 @@ function CreateBlogPost() {
         content,
         author,
         status: 'draft',
-        timeTakenToRead,
-        imageUrl, // Include image URL
-      });
-      console.log('Data to submit saveBlogAsDraft: ', res.data);
-      console.log('Data to submit saveBlogAsDraft: ', {
-        title,
-        content,
         timeTakenToRead,
         imageUrl, // Include image URL
       });
@@ -187,8 +178,6 @@ function CreateBlogPost() {
       showBottomMessage('Image of blog post can not be empty');
       return;
     }
-
-    console.log('here');
     try {
       let url = `/blog/review`;
       let params = '';
@@ -201,17 +190,12 @@ function CreateBlogPost() {
         imageUrl, // Include image URL
       };
 
-      console.log('isEditing: ', isEditing);
-
       if (isEditing === true) {
         params = `?edit=true&blogId=${editingBlogId}`;
         url += params;
       }
 
-      console.log('Data to submit submitBlogToReview: ', data);
-
       const res = await privateAxios.post(url, data);
-      console.log('res: ', res.data);
       showBottomMessage(`Successfully submitted blog for review`);
       setTitle('');
       setContent('');
@@ -228,13 +212,11 @@ function CreateBlogPost() {
 
     try {
       if (!uploadedFile) {
-        console.log('No file uploaded');
+        showBottomMessage('No file uploaded');
         return;
       }
 
       setLoading(true);
-
-      console.log('Uploaded Image inside try: ', uploadedFile);
 
       // Step 1: Fetch the signed URL from the backend
       let res = await publicAxios.get('/blog/s3-url-put-blog', {
@@ -245,8 +227,6 @@ function CreateBlogPost() {
           addTimeStamp: true,
         },
       });
-
-      console.log('Response of the signed URL: ', res);
       const { signedUrl, fileName } = res.data;
 
       // Step 2: Upload the file directly to S3 using the signed URL
@@ -263,8 +243,6 @@ function CreateBlogPost() {
         throw new Error("Couldn't upload file. Try again!!");
       }
 
-      console.log('Uploaded Image uploadRes: ', uploadRes);
-
       // Step 3: Notify the backend that the image has been uploaded
       const uploadResponse = await publicAxios.post(
         `/blog/upload-image/?fileName=${fileName}`,
@@ -276,14 +254,12 @@ function CreateBlogPost() {
           },
         }
       );
-      console.log('Response of the uploaded image final: ', uploadResponse);
       if (res.status !== 200) {
         throw new Error("Couldn't save image info. Try again!!");
       }
 
       // Update the UI with the new image URL or other relevant information
       const { url } = uploadResponse.data;
-      console.log('URL inside handleImageUpload: ', url);
       setImageUrl(url); // Set the URL or filename for the blog image
       showBottomMessage('Image uploaded successfully');
       setLoading(false);
