@@ -11,8 +11,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { privateAxios, publicAxios } from '@/config/axiosInstance';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { useRouter, useSearchParams } from 'next/navigation';
-import axios from 'axios';
-import { Card, CardContent, Grid, TextField, Typography } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 function CreateBlogPost() {
   const router = useRouter();
@@ -28,8 +34,10 @@ function CreateBlogPost() {
   const [title, setTitle] = useState('');
   const [timeTakenToRead, setTimeTakenToRead] = useState(0);
   const [content, setContent] = useState('');
-  const [image, setImage] = useState(null); // New state for image file
+  const [author, setAuthor] = useState('');
+  const [_, setImage] = useState(null); // New state for image file
   const [imageUrl, setImageUrl] = useState(''); // New state for image URL
+  const [loading, setLoading] = useState(false);
 
   // all options from https://xdsoft.net/jodit/docs/,
   const config = useMemo(
@@ -53,14 +61,19 @@ function CreateBlogPost() {
   // function to fetch the blog that is being edited
   async function fetchBlogToEdit(blogId) {
     try {
+      setLoading(true);
       const res = await privateAxios.get(`/blog/edit/${blogId}`);
       const { blog } = res.data;
+      console.log('blog: ', blog);
 
       setTitle(blog.title);
       setTimeTakenToRead(blog.timeTakenToRead || 0);
+      setAuthor(blog.author);
       setContent(blog.content);
-      setImageUrl(blog.imageUrl || ''); // Set image URL if available
+      setImageUrl(blog.image.url || ''); // Set image URL if available
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       showBottomMessage(`Couldn't fetch draft to edit`);
     }
   }
@@ -77,8 +90,8 @@ function CreateBlogPost() {
     if (!title) {
       showBottomMessage('Title of blog post can not be empty');
       return;
-    } else if (title.length < 20) {
-      showBottomMessage('Title should be atleast 20 characters');
+    } else if (title.length < 10) {
+      showBottomMessage('Title should be atleast 10 characters');
       return;
     }
 
@@ -103,14 +116,21 @@ function CreateBlogPost() {
       return;
     }
 
+    if (!imageUrl || imageUrl.length == 0) {
+      showBottomMessage('Image of blog post can not be empty');
+      return;
+    }
+
     try {
-      // const res = await privateAxios.post(url, {
-      //   title,
-      //   content,
-      //   status: 'draft',
-      //   timeTakenToRead,
-      //   imageUrl, // Include image URL
-      // });
+      const res = await privateAxios.post(url, {
+        title,
+        content,
+        author,
+        status: 'draft',
+        timeTakenToRead,
+        imageUrl, // Include image URL
+      });
+      console.log('Data to submit saveBlogAsDraft: ', res.data);
       console.log('Data to submit saveBlogAsDraft: ', {
         title,
         content,
@@ -119,9 +139,14 @@ function CreateBlogPost() {
       });
       showBottomMessage(`Successfully submitted blog as draft`);
       setTitle('');
+      setAuthor('');
       setContent('');
       setTimeTakenToRead(0);
       setImageUrl(''); // Clear image URL
+      const fileInput = document.getElementById('blog_image_field');
+      if (fileInput) {
+        fileInput.value = ''; // Reset the file input
+      }
     } catch (error) {
       showBottomMessage(`Couldn't submit blog as draft`);
     }
@@ -132,8 +157,8 @@ function CreateBlogPost() {
     if (!title) {
       showBottomMessage('Title of blog post can not be empty');
       return;
-    } else if (title.length < 20) {
-      showBottomMessage('Title should be atleast 20 characters');
+    } else if (title.length < 10) {
+      showBottomMessage('Title should be atleast 10 characters');
       return;
     }
 
@@ -158,6 +183,11 @@ function CreateBlogPost() {
       return;
     }
 
+    if (!imageUrl || imageUrl.length == 0) {
+      showBottomMessage('Image of blog post can not be empty');
+      return;
+    }
+
     console.log('here');
     try {
       let url = `/blog/review`;
@@ -165,10 +195,13 @@ function CreateBlogPost() {
       const data = {
         title,
         content,
+        author,
         status: 'under review',
         timeTakenToRead,
         imageUrl, // Include image URL
       };
+
+      console.log('isEditing: ', isEditing);
 
       if (isEditing === true) {
         params = `?edit=true&blogId=${editingBlogId}`;
@@ -177,8 +210,8 @@ function CreateBlogPost() {
 
       console.log('Data to submit submitBlogToReview: ', data);
 
-      // const res = await privateAxios.post(url, data);
-
+      const res = await privateAxios.post(url, data);
+      console.log('res: ', res.data);
       showBottomMessage(`Successfully submitted blog for review`);
       setTitle('');
       setContent('');
@@ -198,6 +231,8 @@ function CreateBlogPost() {
         console.log('No file uploaded');
         return;
       }
+
+      setLoading(true);
 
       console.log('Uploaded Image inside try: ', uploadedFile);
 
@@ -247,10 +282,13 @@ function CreateBlogPost() {
       }
 
       // Update the UI with the new image URL or other relevant information
-      const { url } = res.data;
+      const { url } = uploadResponse.data;
+      console.log('URL inside handleImageUpload: ', url);
       setImageUrl(url); // Set the URL or filename for the blog image
       showBottomMessage('Image uploaded successfully');
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error('Error in handleImageUpload: ', error);
       showBottomMessage("Couldn't upload image. Try again!!", error);
     }
@@ -279,7 +317,7 @@ function CreateBlogPost() {
       <Card variant="elevation" style={{ padding: '20px', maxWidth: '1070px' }}>
         <CardContent>
           <Typography variant="h5" gutterBottom>
-            Create a new blog post
+            {isEditing ? 'Edit Blog Post' : 'Create a New Blog Post'}
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -434,7 +472,8 @@ function CreateBlogPost() {
               <TextField
                 fullWidth
                 type="file"
-                helperText="Upload Image"
+                disabled={loading}
+                helperText={isEditing ? 'Update Image' : 'Upload Image'}
                 onChange={handleImageUpload}
                 variant="outlined"
                 InputProps={{
@@ -480,7 +519,19 @@ function CreateBlogPost() {
                   },
                 }}
               />
-              {imageUrl && (
+              {loading && (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '10px',
+                  }}
+                >
+                  <CircularProgress style={{ color: '#0057b1' }} size={24} />
+                </div>
+              )}
+              {imageUrl && !loading && (
                 <img
                   src={imageUrl}
                   alt="Blog"
