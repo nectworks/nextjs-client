@@ -40,7 +40,7 @@ function ProfileSocials({
   const [state, dispatch] = useContext(ProfileContext);
   const [userInfo, setUserInfo] = useContext(DashboardContext);
 
-  const socialMedia = [
+  const [socialMedia, setSocialMedia] = useState([
     {
       name: 'LinkedIn',
       baseURL: 'https://www.linkedin.com/in/',
@@ -81,7 +81,7 @@ function ProfileSocials({
       icon: crunchbaseLogo,
     },
     { name: 'Hashnode', baseURL: 'https://hashnode.com/@', icon: hashnodeLogo },
-  ];
+  ]);
 
   const [links, setLinks] = useState(state?.socials || {});
   const [otherLinks, setOtherLinks] = useState({});
@@ -187,6 +187,17 @@ function ProfileSocials({
 
       setLinks(tempLinksObj);
       setOtherLinks(tempOtherLinksObj);
+      const sortedSocialMedia = [...socialMedia].sort((a, b) => {
+        const aHasValue =
+          tempLinksObj[a.name] && tempLinksObj[a.name].length > 0;
+        const bHasValue =
+          tempLinksObj[b.name] && tempLinksObj[b.name].length > 0;
+        if (aHasValue && !bHasValue) return -1;
+        if (!aHasValue && bHasValue) return 1;
+        return 0;
+      });
+
+      setSocialMedia(sortedSocialMedia);
     }
   }, [isDataUpdated, userInfo, setHeader, setDescription]);
 
