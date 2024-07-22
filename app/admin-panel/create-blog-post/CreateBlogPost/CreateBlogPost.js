@@ -199,6 +199,7 @@ function CreateBlogPost() {
       showBottomMessage(`Successfully submitted blog for review`);
       setTitle('');
       setContent('');
+      setAuthor('');
       setTimeTakenToRead(0);
       setImageUrl(''); // Clear image URL
     } catch (error) {
