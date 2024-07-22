@@ -6,7 +6,7 @@
   search for users and review their information.
 */
 
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDashboardMenu';
 import { privateAxios } from '@/config/axiosInstance';
 import './ViewUser.css';
@@ -29,9 +29,9 @@ function Users() {
   const [isLoading, setIsLoading] = useState(false);
 
   /*
-    if both email and username are added as parameter in the url, email
-    takes precedence over username.
-  */
+          if both email and username are added as parameter in the url, email
+          takes precedence over username.
+        */
 
   // state to store typed string by the user.
   const [searchString, setSearchString] = useState(
@@ -45,7 +45,7 @@ function Users() {
   const [isUnRegisteredUser, setIsUnRegisteredUser] = useState(false);
 
   /* state to store reported users and help submission
-     and state required for their pagination */
+           and state required for their pagination */
   // all the reports fetched so far
   const [reportedUsers, setReportedUsers] = useState([]);
 
@@ -189,23 +189,6 @@ function Users() {
     }
   }
 
-  // change the data in the current page as page no. and rows no. are changed
-  function updateReportsCurrPage() {
-    const pageStart =
-      reportsPaginationModel.page * reportsPaginationModel.pageSize;
-    const pageEnd = pageStart + reportsPaginationModel.pageSize;
-
-    if (
-      reportsCount === -1 ||
-      (reportedUsers.length - 1 < pageEnd - 1 &&
-        reportedUsers.length < reportsCount)
-    ) {
-      fetchReportedUsers();
-    } else {
-      setReportPageData(reportedUsers.slice(pageStart, pageEnd));
-    }
-  }
-
   // columns for the data grid to display reported users
   const reportedUserCols = [
     {
@@ -280,7 +263,7 @@ function Users() {
   }
 
   // function to update data in the help submissions of the user.
-  function updateHelpCurrPage() {
+  const updateHelpCurrPage = useCallback(() => {
     const pageStart = helpPaginationModel.page * helpPaginationModel.pageSize;
     const pageEnd = pageStart + helpPaginationModel.pageSize;
 
@@ -290,9 +273,21 @@ function Users() {
     ) {
       fetchHelpSubmissions();
     } else {
-      setHelpPageData(helpData.slice(pageStart, pageEnd));
+      const newPageData = helpData.slice(pageStart, pageEnd);
+      setHelpPageData((prevData) => {
+        if (JSON.stringify(newPageData) !== JSON.stringify(prevData)) {
+          return newPageData;
+        }
+        return prevData;
+      });
     }
-  }
+  }, [
+    helpData,
+    helpPaginationModel.page,
+    helpPaginationModel.pageSize,
+    helpSubCount,
+    helpPageData,
+  ]);
 
   // columns for the data grid of help submission of each user
   const helpSubmissionCols = [
@@ -322,7 +317,7 @@ function Users() {
         if (!attachmentUrl) return '-';
 
         return (
-          <Link to={attachmentUrl} target="_blank">
+          <Link href={attachmentUrl} target="_blank">
             <Image src={documentLinkIcon} alt="" />
           </Link>
         );
@@ -360,9 +355,9 @@ function Users() {
   }
 
   /* define a small component to view profile image of the searched user
-    the already defined one can not be used since it uses UserContext which
-    is irrelevant for admin panel.
-  */
+          the already defined one can not be used since it uses UserContext which
+          is irrelevant for admin panel.
+        */
   function UserProfileImage() {
     if (!user) return;
 
@@ -374,6 +369,8 @@ function Users() {
           className="profile_image"
           src={user?.profile}
           alt={`${user?.firstName || ''} Nectworks`}
+          width={90}
+          height={90}
         />
       );
     }
@@ -400,7 +397,7 @@ function Users() {
   }, [emailParam, searchUser, usernameParam]);
 
   /* when any section is selected based on the selected option,
-    fetch relevant data */
+          fetch relevant data */
   useEffect(() => {
     if (showSection === 'help_submission' && helpData.length === 0) {
       fetchHelpSubmissions();
@@ -420,12 +417,30 @@ function Users() {
   ]);
 
   useEffect(() => {
-    updateReportsCurrPage();
-  }, [reportedUsers, reportsPaginationModel, updateReportsCurrPage]);
+    const pageStart =
+      reportsPaginationModel.page * reportsPaginationModel.pageSize;
+    const pageEnd = pageStart + reportsPaginationModel.pageSize;
+
+    if (
+      reportsCount === -1 ||
+      (reportedUsers.length - 1 < pageEnd - 1 &&
+        reportedUsers.length < reportsCount)
+    ) {
+      fetchReportedUsers();
+    } else {
+      const newPageData = reportedUsers.slice(pageStart, pageEnd);
+      setReportPageData((prevData) => {
+        if (JSON.stringify(newPageData) !== JSON.stringify(prevData)) {
+          return newPageData;
+        }
+        return prevData;
+      });
+    }
+  }, [reportsPaginationModel, reportedUsers, reportsCount]);
 
   useEffect(() => {
     updateHelpCurrPage();
-  }, [helpData, helpPaginationModel, updateHelpCurrPage]);
+  }, [updateHelpCurrPage]);
 
   return (
     <div className="admin_view_user_outer_container">
@@ -621,7 +636,7 @@ function Users() {
                               <h4>{project?.heading}</h4>
 
                               {project.link?.length > 0 && (
-                                <Link to={project?.link} target="_blank">
+                                <Link href={project?.link} target="_blank">
                                   <Image
                                     src={linkIcon}
                                     alt="achievement link icon"
@@ -671,7 +686,7 @@ function Users() {
                               <h4>{achievement?.heading}</h4>
 
                               {achievement?.link.length > 0 && (
-                                <Link to={achievement?.link} target="_blank">
+                                <Link href={achievement?.link} target="_blank">
                                   <Image
                                     src={linkIcon}
                                     alt="achievement link icon"
@@ -719,7 +734,7 @@ function Users() {
                       {userProfile?.socials.map((social, idx) => {
                         return (
                           <Fragment key={idx}>
-                            <Link to={social} target="_blank">
+                            <Link href={social} target="_blank">
                               {social}
                             </Link>
                             <br />

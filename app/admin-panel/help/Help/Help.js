@@ -179,7 +179,7 @@ function Help() {
         if (!attachmentUrl) return '-';
 
         return (
-          <Link to={attachmentUrl} target="_blank">
+          <Link href={attachmentUrl} target="_blank">
             <Image src={documentLinkIcon} alt="" />
           </Link>
         );
@@ -226,7 +226,7 @@ function Help() {
         <h3>View help submission here</h3>
 
         <button
-          className={`${showResolved ? 'resolve_help_tickets_active' : ''} 
+          className={`${showResolved ? 'resolve_help_tickets_active' : ''}
             resolve_help_tickets_switch`}
           onClick={switchBetweenData}
         >
