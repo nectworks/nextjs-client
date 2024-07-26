@@ -535,9 +535,11 @@ function CreateBlogPost() {
               >
                 {isEditing ? 'Update Draft' : 'Save as Draft'}
               </button>
-              <button className="review_btn" onClick={submitBlogToReview}>
-                Submit for Review
-              </button>
+              {isEditing && (
+                <button className="review_btn" onClick={submitBlogToReview}>
+                  Submit for Review
+                </button>
+              )}
             </Grid>
           </Grid>
         </CardContent>

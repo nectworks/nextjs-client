@@ -92,6 +92,22 @@ function ManageBlogPosts() {
     }
   }
 
+  async function hadleDeleteBlog(blogId) {
+    try {
+      const res = await privateAxios.delete(`/blog/delete/${blogId}`);
+      showBottomMessage(res.data.message);
+      setPublishedBlogs(publishedBlogs.filter((blog) => blog._id !== blogId));
+    } catch (error) {
+      let { message } = error?.response?.data;
+
+      if (!message || message.length === 0) {
+        message = `Couldn't delete blog with id ${blogId}`;
+      }
+
+      showBottomMessage(message);
+    }
+  }
+
   useEffect(() => {
     fetchAllDrafts().then(fetchBlogsUnderReview).then(fetchPublishedBlogs);
 
@@ -327,8 +343,8 @@ function ManageBlogPosts() {
           {publishedBlogs.length > 0 ? (
             <Slider {...publishedSettings}>
               {publishedBlogs.map((blog, idx) => (
-                <Link href={`/blog/${blog._id}`} target="_blank" key={idx}>
-                  <div className="blog_card" key={idx}>
+                <div className="blog_card" key={idx}>
+                  <Link href={`/blog/${blog._id}`} target="_blank">
                     <img src={blog.image.url} alt={blog.title} />
                     <div className="blog_content">
                       <h3>{blog.title}</h3>
@@ -340,8 +356,18 @@ function ManageBlogPosts() {
                         </span>
                       </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                  {isAdmin && (
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      <button
+                        className="cta_btn_delete"
+                        onClick={() => hadleDeleteBlog(blog._id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
               ))}
             </Slider>
           ) : (

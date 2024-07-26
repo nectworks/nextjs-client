@@ -90,6 +90,20 @@
   background-color: #006ce0;
 }
 
+.cta_btn_delete {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: #d60000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cta_btn_delete:hover {
+  background-color: #e30101;
+}
+
 .slick-slide {
   padding-left: 15px;
   padding-right: 15px;
