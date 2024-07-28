@@ -32,6 +32,24 @@ import sendGAEvent from '@/Utils/gaEvents';
 import downloadDocument from '@/Utils/downloadDocument';
 import Image from 'next/image';
 
+// Import skill socialsLogo
+import twitterLogo from '@/public/socialsLogo/twitterLogo.svg';
+import githubLogo from '@/public/socialsLogo/githubLogo.svg';
+import devLogo from '@/public/socialsLogo/devToLogo.svg';
+import instagramLogo from '@/public/socialsLogo/instagramLogo.svg';
+import facebookLogo from '@/public/socialsLogo/facebookLogo.svg';
+import mediumLogo from '@/public/socialsLogo/mediumLogo.svg';
+import figmaLogo from '@/public/socialsLogo/figmaLogo.svg';
+import substackLogo from '@/public/socialsLogo/substackLogo.svg';
+import tiktokLogo from '@/public/socialsLogo/tiktokLogo.svg';
+import twitchLogo from '@/public/socialsLogo/twitchLogo.svg';
+import youtubeLogo from '@/public/socialsLogo/youtubeLogo.svg';
+import behanceLogo from '@/public/socialsLogo/behanceLogo.svg';
+import dribbleLogo from '@/public/socialsLogo/dribbleLogo.svg';
+import crunchbaseLogo from '@/public/socialsLogo/crunchbaseLogo.svg';
+import hashnodeLogo from '@/public/socialsLogo/hashnodeLogo.svg';
+// Add more logo imports as needed
+
 function SeekerPublicPage() {
   const params = useParams();
   const router = useRouter();
@@ -79,6 +97,36 @@ function SeekerPublicPage() {
 
     if (hostname.includes('linkedin')) {
       linkIcon = linkdin;
+    } else if (hostname.includes('twitter')) {
+      linkIcon = twitterLogo;
+    } else if (hostname.includes('github')) {
+      linkIcon = githubLogo;
+    } else if (hostname.includes('dev.to')) {
+      linkIcon = devLogo;
+    } else if (hostname.includes('instagram')) {
+      linkIcon = instagramLogo;
+    } else if (hostname.includes('facebook')) {
+      linkIcon = facebookLogo;
+    } else if (hostname.includes('medium')) {
+      linkIcon = mediumLogo;
+    } else if (hostname.includes('figma')) {
+      linkIcon = figmaLogo;
+    } else if (hostname.includes('substack')) {
+      linkIcon = substackLogo;
+    } else if (hostname.includes('tiktok')) {
+      linkIcon = tiktokLogo;
+    } else if (hostname.includes('twitch')) {
+      linkIcon = twitchLogo;
+    } else if (hostname.includes('youtube')) {
+      linkIcon = youtubeLogo;
+    } else if (hostname.includes('behance')) {
+      linkIcon = behanceLogo;
+    } else if (hostname.includes('dribbble')) {
+      linkIcon = dribbleLogo;
+    } else if (hostname.includes('crunchbase')) {
+      linkIcon = crunchbaseLogo;
+    } else if (hostname.includes('hashnode')) {
+      linkIcon = hashnodeLogo;
     }
 
     return linkIcon;
@@ -118,6 +166,7 @@ function SeekerPublicPage() {
 
       if (res.status === 200) {
         const data = res.data.data;
+        console.log(data.socials);
         setShowLoader(false);
         setAbout(data.about);
         setExperience(data.experience);

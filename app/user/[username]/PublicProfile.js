@@ -29,6 +29,22 @@ import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import close from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import { FaFacebookF, FaLinkedin } from 'react-icons/fa';
 import { FaXTwitter, FaArrowUpRightFromSquare } from 'react-icons/fa6';
+import LinkBtn from '@/public/JobSeeker/seekerPublicPage/link_btn.svg';
+import twitterLogo from '@/public/socialsLogo/twitterLogo.svg';
+import githubLogo from '@/public/socialsLogo/githubLogo.svg';
+import devLogo from '@/public/socialsLogo/devToLogo.svg';
+import instagramLogo from '@/public/socialsLogo/instagramLogo.svg';
+import facebookLogo from '@/public/socialsLogo/facebookLogo.svg';
+import mediumLogo from '@/public/socialsLogo/mediumLogo.svg';
+import figmaLogo from '@/public/socialsLogo/figmaLogo.svg';
+import substackLogo from '@/public/socialsLogo/substackLogo.svg';
+import tiktokLogo from '@/public/socialsLogo/tiktokLogo.svg';
+import twitchLogo from '@/public/socialsLogo/twitchLogo.svg';
+import youtubeLogo from '@/public/socialsLogo/youtubeLogo.svg';
+import behanceLogo from '@/public/socialsLogo/behanceLogo.svg';
+import dribbleLogo from '@/public/socialsLogo/dribbleLogo.svg';
+import crunchbaseLogo from '@/public/socialsLogo/crunchbaseLogo.svg';
+import hashnodeLogo from '@/public/socialsLogo/hashnodeLogo.svg';
 
 const PublicProfile = () => {
   // get the loggedin user from the context
@@ -48,6 +64,50 @@ const PublicProfile = () => {
   const [handleInvite, setHandleInvite] = useState(false);
   const [emailList, setEmailList] = useState('');
   const [sending, setSending] = useState(false);
+
+  function getLinkIcon(url) {
+    if (!url || url.length == 0) return null;
+
+    const { hostname } = new URL(url);
+
+    let linkIcon = LinkBtn;
+
+    if (hostname.includes('linkedin')) {
+      linkIcon = linkedInIcon;
+    } else if (hostname.includes('twitter')) {
+      linkIcon = twitterLogo;
+    } else if (hostname.includes('github')) {
+      linkIcon = githubLogo;
+    } else if (hostname.includes('dev.to')) {
+      linkIcon = devLogo;
+    } else if (hostname.includes('instagram')) {
+      linkIcon = instagramLogo;
+    } else if (hostname.includes('facebook')) {
+      linkIcon = facebookLogo;
+    } else if (hostname.includes('medium')) {
+      linkIcon = mediumLogo;
+    } else if (hostname.includes('figma')) {
+      linkIcon = figmaLogo;
+    } else if (hostname.includes('substack')) {
+      linkIcon = substackLogo;
+    } else if (hostname.includes('tiktok')) {
+      linkIcon = tiktokLogo;
+    } else if (hostname.includes('twitch')) {
+      linkIcon = twitchLogo;
+    } else if (hostname.includes('youtube')) {
+      linkIcon = youtubeLogo;
+    } else if (hostname.includes('behance')) {
+      linkIcon = behanceLogo;
+    } else if (hostname.includes('dribbble')) {
+      linkIcon = dribbleLogo;
+    } else if (hostname.includes('crunchbase')) {
+      linkIcon = crunchbaseLogo;
+    } else if (hostname.includes('hashnode')) {
+      linkIcon = hashnodeLogo;
+    }
+
+    return linkIcon;
+  }
 
   // Function to scroll to a specific content
   function scrollToContent(e) {
@@ -740,20 +800,13 @@ const PublicProfile = () => {
                 <div id="social" className="social">
                   {socials &&
                     socials.map((ele, id) => {
-                      return ele.includes('linkedin.com') ? (
-                        <a key={id} href={ele} target="_blank" rel="noreferrer">
-                          <Image
-                            className="linkedInIcon"
-                            src={linkedInIcon}
-                            alt="linkedin link"
-                          />
-                        </a>
-                      ) : (
+                      const linkIcon = getLinkIcon(ele);
+                      return (
                         <a key={id} href={ele} target="_blank" rel="noreferrer">
                           <Image
                             className="generalIcon"
-                            src={generalLinkIcon}
-                            alt="other social link"
+                            src={linkIcon}
+                            alt="social link"
                           />
                         </a>
                       );
