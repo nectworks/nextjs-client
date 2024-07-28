@@ -138,6 +138,8 @@ export default function Home() {
               className="bodyImg illustrationimg"
               loading="lazy"
               alt="man working on his laptop"
+              width={550}
+              height={250}
             />
             <div className="paragraph__title">
               <div>
@@ -170,6 +172,8 @@ export default function Home() {
               loading="lazy"
               className="bodyImg studyImage"
               alt="Man studying in his laptop productively"
+              width={550}
+              height={250}
             />
           </div>
 
@@ -179,6 +183,8 @@ export default function Home() {
               className="bodyImg"
               loading="lazy"
               alt="People connected through a platform"
+              width={550}
+              height={250}
             />
             <div className="paragraph__title third__para">
               <h2 className="main__paragraph">
@@ -212,6 +218,8 @@ export default function Home() {
                   className="arrowImg"
                   onClick={scrollToTop}
                   alt="report fradulent activity"
+                  width={550}
+                  height={250}
                 />
               </Link>
             </div>

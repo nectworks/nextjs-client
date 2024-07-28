@@ -4,26 +4,39 @@
 }
 
 .title {
-  font-size: 1.5em;
+  font-size: 2.0em;
   margin-bottom: 20px;
-  color: #333;
+  color: #000;
 }
 
 .blogGrid {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
 }
 
 .blogCard {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 3px;
+  max-width: 345px;
+  min-width: 330px;
   background-color: #fff;
-  flex: 1 1 calc(20% - 20px); /* Four cards in a row with 20px gap */
+  flex: 1 1 calc(25% - 20px);
+  transition: box-shadow 0.3s, transform 0.3s;
+  cursor: pointer;
+}
+
+.blogCard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
 }
 
 .blogTitle {
+  color: #000; /* Ensure titles are in black */
   font-size: 1.2em;
   margin-bottom: 10px;
 }
@@ -31,7 +44,27 @@
 .blogDate {
   font-size: 0.9em;
   color: #777;
-  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.blogCard-header{
+  padding: 20px;
+}
+
+.blogCard-footer{
+  padding: 20px;
+}
+
+.blogImage {
+  width: 100%;
+  height: 200px; /* Adjust height as needed */
+  object-fit: cover;
+}
+
+.blogAuthor {
+  font-size: 0.9em;
+  color: #777;
+  margin-top: 10px;
 }
 
 .blogExcerpt {
@@ -40,8 +73,13 @@
   margin-bottom: 10px;
 }
 
+a {
+  text-decoration: none;
+  color: #000;
+}
+
 .readMore {
-  color: #0070f3;
+  color: #0057b1 !important;
   text-decoration: none;
 }
 
@@ -65,10 +103,23 @@
 }
 
 .pageButton.active {
-  background-color: #0070f3;
+  background-color: #0057b1;
   color: #fff;
 }
 
 .pageButton:hover:not(.active) {
   background-color: #ddd;
+}
+
+.viewingCount {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .blogCard {
+    width: 100%; /* Full width for mobile */
+  }
 }

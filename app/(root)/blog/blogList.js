@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { publicAxios } from '@/config/axiosInstance';
+import Image from 'next/image';
 import './blogList.css'; // Import CSS module
 
 function BlogList() {
@@ -18,7 +19,6 @@ function BlogList() {
   async function fetchBlogs() {
     try {
       const res = await publicAxios.get(`/blog/all`);
-      console.log('blogs: ', res.data.blogs);
       setBlogs(res.data.blogs);
     } catch (error) {
       let { message } = error?.response?.data;
@@ -48,48 +48,87 @@ function BlogList() {
     (currentPage - 1) * blogsPerPage,
     currentPage * blogsPerPage
   );
-  console.log(
-    'currentBlogs: ',
-    currentBlogs,
-    totalPages,
-    blogsPerPage,
-    currentPage
-  );
+
+  const formattedDate = (date) => {
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  const viewingCount = () => {
+    const start = (currentPage - 1) * blogsPerPage + 1;
+    const end = Math.min(currentPage * blogsPerPage, blogs.length);
+    return `Viewing ${start} - ${end} of ${blogs.length}`;
+  };
+
   return (
     <div className="blogList">
-      <h1 className="title">Published Blogs</h1>
+      <h1 className="title">Nectworks Blog</h1>
       <div className="blogGrid">
         {currentBlogs.map((blog, index) => (
           <div key={`${blog._id}-${index}`} className="blogCard">
-            <h2 className="blogTitle">
-              <Link href={`/blog/${blog._id}`}>{blog.title}</Link>
-            </h2>
-            <p className="blogDate">
-              {new Date(blog.createdOn).toLocaleDateString()}
-            </p>
-            <div className="blogExcerpt">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: getSnippet(blog.content, 50),
-                }}
-              ></div>
-              <Link href={`/blog/${blog._id}`} className="readMore">
-                Read more
-              </Link>
+            {blog.image && blog.image.url && (
+              <Image
+                src={blog.image.url}
+                alt={blog.title}
+                width={400}
+                height={200}
+                className="blogImage"
+              />
+            )}
+            <div className="blogCard-header">
+              <h2 className="blogTitle">
+                <Link href={`/blog/${blog._id}`}>{blog.title}</Link>
+              </h2>
+              <div className="blogExcerpt">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: getSnippet(blog.content, 30),
+                  }}
+                ></div>
+                <Link href={`/blog/${blog._id}`} className="readMore">
+                  Read more
+                </Link>
+              </div>
+            </div>
+            <div className="blogCard-footer">
+              <p className="blogAuthor">{blog.author}</p>
+              <p className="blogDate">{formattedDate(blog.createdOn)}</p>
             </div>
           </div>
         ))}
       </div>
       <div className="pagination">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            className={`pageButton ${currentPage === i + 1 ? 'active' : ''}`}
-            onClick={() => handlePageChange(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
+        <button
+          className="pageButton"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .slice(Math.max(0, currentPage - 2), Math.min(totalPages, currentPage + 1))
+          .map((page) => (
+            <button
+              key={page}
+              className={`pageButton ${currentPage === page ? 'active' : ''}`}
+              onClick={() => handlePageChange(page)}
+            >
+              {page}
+            </button>
+          ))}
+        <button
+          className="pageButton"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
+        </button>
+      </div>
+      <div className="viewingCount">
+        {viewingCount()}
       </div>
     </div>
   );

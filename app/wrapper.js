@@ -15,14 +15,12 @@ const Wrapper = ({ children }) => {
       document.location.hostname.search(process.env.NEXT_PUBLIC_CLIENT_URL) !==
       -1
     ) {
-      console.log(process.env.NEXT_PUBLIC_VITE_GA_MEASUREMENT_ID);
       ReactGA.initialize(process.env.NEXT_PUBLIC_VITE_GA_MEASUREMENT_ID);
       ReactGA.send('pageview');
     }
   }, []);
 
   useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_CLIENT_URL);
     // Simulate loading time
     const timer = setTimeout(() => {
       setLoading(false);

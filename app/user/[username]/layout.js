@@ -4,13 +4,11 @@ export async function generateMetadata({ params }) {
   const username = params.username;
   try {
     const res = await publicAxios.get(`/getUser/${username}`);
-    console.log('res in layout', res.data.user);
     const userData = res.data.user;
 
     const profileRes = await publicAxios.get(
       `/profile/profile-info/${username}`
     );
-    console.log('profile data', profileRes.data.data);
     const profileData = profileRes.data.data;
 
     const baseUrl =

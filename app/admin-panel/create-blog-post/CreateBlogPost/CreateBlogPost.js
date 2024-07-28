@@ -18,6 +18,8 @@ import {
   Grid,
   TextField,
   Typography,
+  Box,
+  Chip,
 } from '@mui/material';
 
 function CreateBlogPost() {
@@ -38,6 +40,8 @@ function CreateBlogPost() {
   const [_, setImage] = useState(null); // New state for image file
   const [imageUrl, setImageUrl] = useState(''); // New state for image URL
   const [loading, setLoading] = useState(false);
+  const [tags, setTags] = useState([]);
+
 
   // all options from https://xdsoft.net/jodit/docs/,
   const config = useMemo(
@@ -70,6 +74,7 @@ function CreateBlogPost() {
       setAuthor(blog.author);
       setContent(blog.content);
       setImageUrl(blog.image.url || ''); // Set image URL if available
+      setTags(blog.tags || []);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -127,6 +132,7 @@ function CreateBlogPost() {
         status: 'draft',
         timeTakenToRead,
         imageUrl, // Include image URL
+        tags,
       });
       showBottomMessage(`Successfully submitted blog as draft`);
       setTitle('');
@@ -188,6 +194,7 @@ function CreateBlogPost() {
         status: 'under review',
         timeTakenToRead,
         imageUrl, // Include image URL
+        tags,
       };
 
       if (isEditing === true) {
@@ -286,6 +293,20 @@ function CreateBlogPost() {
       setImageUrl(''); // Clear image URL
     }
   }, [searchParams]);
+
+  const [inputValue, setInputValue] = useState('');
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && inputValue.trim()) {
+      event.preventDefault();
+      setTags([...tags, inputValue.trim()]);
+      setInputValue('');
+    }
+  };
+
+  const handleDelete = (tagToDelete) => {
+    setTags(tags.filter(tag => tag !== tagToDelete));
+  };
 
   return (
     <div className="create_blog_outer_container">
@@ -515,6 +536,67 @@ function CreateBlogPost() {
                 />
               )}
             </Grid>
+            <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Enter tag"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        variant="outlined"
+        InputProps={{
+          style: {
+            borderRadius: '15px',
+            fontSize: '1rem',
+          },
+        }}
+        InputLabelProps={{
+          style: {
+            color: 'grey',
+            fontWeight: 'normal',
+          },
+        }}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: 'grey',
+              borderWidth: '1px',
+            },
+            '&:hover fieldset': {
+              borderColor: '#0057b1',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#0057b1',
+            },
+          },
+          '& .MuiInputLabel-root': {
+            transform: 'translate(14px, 16px) scale(1)',
+            '&.MuiInputLabel-shrink': {
+              transform: 'translate(14px, -6px) scale(0.75)',
+              backgroundColor: 'white',
+              padding: '0 4px',
+            },
+          },
+          '& .MuiInputLabel-outlined': {
+            transform: 'translate(14px, 16px) scale(1)',
+          },
+          '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+            transform: 'translate(14px, -6px) scale(0.75)',
+          },
+        }}
+      />
+      <Box mt={2}>
+        {tags.map((tag, index) => (
+          <Chip
+            key={index}
+            label={tag}
+            onDelete={() => handleDelete(tag)}
+            style={{ margin: '5px' }}
+          />
+        ))}
+      </Box>
+</Grid>
+
             <Grid item xs={12}>
               <JoditEditor
                 ref={editor}
