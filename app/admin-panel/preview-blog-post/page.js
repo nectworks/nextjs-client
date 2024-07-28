@@ -1,4 +1,4 @@
-import PreviewBlog from './PreviewBlog';
+import PreviewBlog from './PreviewBlog/PreviewBlog';
 
 const PreviewBlogpage = () => {
   return <PreviewBlog />;

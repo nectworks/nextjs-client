@@ -206,6 +206,7 @@ function CreateBlogPost() {
       showBottomMessage(`Successfully submitted blog for review`);
       setTitle('');
       setContent('');
+      setAuthor('');
       setTimeTakenToRead(0);
       setImageUrl(''); // Clear image URL
     } catch (error) {
@@ -616,9 +617,11 @@ function CreateBlogPost() {
               >
                 {isEditing ? 'Update Draft' : 'Save as Draft'}
               </button>
-              <button className="review_btn" onClick={submitBlogToReview}>
-                Submit for Review
-              </button>
+              {isEditing && (
+                <button className="review_btn" onClick={submitBlogToReview}>
+                  Submit for Review
+                </button>
+              )}
             </Grid>
           </Grid>
         </CardContent>

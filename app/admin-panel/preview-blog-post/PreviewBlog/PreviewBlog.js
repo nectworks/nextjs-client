@@ -6,18 +6,18 @@
 */
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 function PreviewBlog() {
-  const router = useRouter();
-  const { content } = router.query;
+  const searchParams = useSearchParams();
   const [blogContent, setBlogContent] = useState('');
 
   useEffect(() => {
-    if (typeof content === 'string') {
-      setBlogContent(content);
+    const content = searchParams.get('content');
+    if (content) {
+      setBlogContent(decodeURIComponent(content));
     }
-  }, [content]);
+  }, [searchParams]);
 
   return <div dangerouslySetInnerHTML={{ __html: blogContent }} />;
 }

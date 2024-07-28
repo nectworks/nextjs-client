@@ -41,7 +41,12 @@
 }
 
 .create_new_admin_form button {
-  padding: 0.3rem 0.5rem;
+  padding: 0.6rem 0.6rem;
+  color: white;
+  background-color: #0057b1;
+  border: none;
+  outline: none;
+  border-radius: 10px;
 }
 
 .admin_form_control {
@@ -53,7 +58,16 @@
   width: 100px;
 }
 
-.admin_form_control input,
+.admin_form_control input {
+  padding: 5px 10px;
+  background-color: transparent;
+  border: 1px solid gray;
+  border-radius: 15px;
+  width: 250px;
+  font-size: 1rem;
+}
 .admin_form_control select {
-  padding: 0.3rem;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 1rem;
 }
