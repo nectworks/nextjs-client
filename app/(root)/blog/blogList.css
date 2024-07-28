@@ -4,7 +4,7 @@
 }
 
 .title {
-  font-size: 2.0em;
+  font-size: 2em;
   margin-bottom: 20px;
   color: #000;
 }
@@ -26,7 +26,9 @@
   min-width: 330px;
   background-color: #fff;
   flex: 1 1 calc(25% - 20px);
-  transition: box-shadow 0.3s, transform 0.3s;
+  transition:
+    box-shadow 0.3s,
+    transform 0.3s;
   cursor: pointer;
 }
 
@@ -47,11 +49,11 @@
   margin-top: 10px;
 }
 
-.blogCard-header{
+.blogCard-header {
   padding: 20px;
 }
 
-.blogCard-footer{
+.blogCard-footer {
   padding: 20px;
 }
 

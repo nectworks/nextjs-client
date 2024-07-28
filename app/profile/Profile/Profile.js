@@ -544,18 +544,15 @@ const ProfilePage = () => {
       setResumeFile(selectedFile);
       uploadFile(selectedFile);
     } else {
-      toast.warn(
-        'Please select a file less than 5MB.',
-        {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
-      );
+      toast.warn('Please select a file less than 5MB.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -573,18 +570,15 @@ const ProfilePage = () => {
       setResumeFile(droppedFile);
       uploadFile(droppedFile);
     } else {
-      toast.warn(
-        'Please select a file less than 5MB.',
-        {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
-      );
+      toast.warn('Please select a file less than 5MB.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
     setIsDragging(false);
   };
@@ -638,18 +632,15 @@ const ProfilePage = () => {
         });
         if (res.status === 200) {
           setResumeUploadStatus(false);
-          toast.success(
-            'Resume uploaded successfully.',
-            {
-              position: 'top-right',
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            }
-          );
+          toast.success('Resume uploaded successfully.', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           console.log('Res: ', res);
           //It will refresh the page when resume is uploaded successfully
           setResumeFileUrl(res.url);

@@ -9,7 +9,7 @@ export function middleware(request) {
     // If user is not authenticated, redirect to login page
     return NextResponse.redirect(new URL('/log-in', request.url));
   }
-  
+
   return NextResponse.next();
 }
 

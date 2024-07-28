@@ -42,7 +42,6 @@ function CreateBlogPost() {
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState([]);
 
-
   // all options from https://xdsoft.net/jodit/docs/,
   const config = useMemo(
     () => ({
@@ -306,7 +305,7 @@ function CreateBlogPost() {
   };
 
   const handleDelete = (tagToDelete) => {
-    setTags(tags.filter(tag => tag !== tagToDelete));
+    setTags(tags.filter((tag) => tag !== tagToDelete));
   };
 
   return (
@@ -538,65 +537,65 @@ function CreateBlogPost() {
               )}
             </Grid>
             <Grid item xs={12}>
-      <TextField
-        fullWidth
-        label="Enter tag"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-        variant="outlined"
-        InputProps={{
-          style: {
-            borderRadius: '15px',
-            fontSize: '1rem',
-          },
-        }}
-        InputLabelProps={{
-          style: {
-            color: 'grey',
-            fontWeight: 'normal',
-          },
-        }}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: 'grey',
-              borderWidth: '1px',
-            },
-            '&:hover fieldset': {
-              borderColor: '#0057b1',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: '#0057b1',
-            },
-          },
-          '& .MuiInputLabel-root': {
-            transform: 'translate(14px, 16px) scale(1)',
-            '&.MuiInputLabel-shrink': {
-              transform: 'translate(14px, -6px) scale(0.75)',
-              backgroundColor: 'white',
-              padding: '0 4px',
-            },
-          },
-          '& .MuiInputLabel-outlined': {
-            transform: 'translate(14px, 16px) scale(1)',
-          },
-          '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-            transform: 'translate(14px, -6px) scale(0.75)',
-          },
-        }}
-      />
-      <Box mt={2}>
-        {tags.map((tag, index) => (
-          <Chip
-            key={index}
-            label={tag}
-            onDelete={() => handleDelete(tag)}
-            style={{ margin: '5px' }}
-          />
-        ))}
-      </Box>
-</Grid>
+              <TextField
+                fullWidth
+                label="Enter tag"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                variant="outlined"
+                InputProps={{
+                  style: {
+                    borderRadius: '15px',
+                    fontSize: '1rem',
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: 'grey',
+                    fontWeight: 'normal',
+                  },
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'grey',
+                      borderWidth: '1px',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#0057b1',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                    '&.MuiInputLabel-shrink': {
+                      transform: 'translate(14px, -6px) scale(0.75)',
+                      backgroundColor: 'white',
+                      padding: '0 4px',
+                    },
+                  },
+                  '& .MuiInputLabel-outlined': {
+                    transform: 'translate(14px, 16px) scale(1)',
+                  },
+                  '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                    transform: 'translate(14px, -6px) scale(0.75)',
+                  },
+                }}
+              />
+              <Box mt={2}>
+                {tags.map((tag, index) => (
+                  <Chip
+                    key={index}
+                    label={tag}
+                    onDelete={() => handleDelete(tag)}
+                    style={{ margin: '5px' }}
+                  />
+                ))}
+              </Box>
+            </Grid>
 
             <Grid item xs={12}>
               <JoditEditor

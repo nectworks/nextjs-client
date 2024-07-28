@@ -40,7 +40,7 @@
   margin: 20px auto;
   padding: 20px;
   gap: 20px;
-  border-bottom: 1px solid #D0D0D0;
+  border-bottom: 1px solid #d0d0d0;
 }
 
 .blog-title-frame {
@@ -49,7 +49,7 @@
 }
 
 .blog-title-content {
-  text-align: left; 
+  text-align: left;
 }
 
 .blog-title {
@@ -77,17 +77,16 @@
     flex-direction: row;
     align-items: center;
   }
-  
+
   .blog-title-frame {
     flex: 1;
     margin-right: 20px;
   }
-  
+
   .blog-title-content {
     flex: 2;
   }
 }
-
 
 .navigation-container {
   max-width: 800px;
@@ -139,7 +138,7 @@
 .navigation-divider {
   height: 40px;
   width: 1.5px;
-  background-color:#e1e1e1;
+  background-color: #e1e1e1;
 }
 
 /* blog.css */

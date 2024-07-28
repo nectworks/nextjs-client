@@ -8,7 +8,11 @@ import Image from 'next/image';
 import linkedinLogo from '@/public/socialsLogo/linkedinLogo.svg';
 import twitterLogo from '@/public/socialsLogo/twitterLogo.svg';
 import facebookLogo from '@/public/socialsLogo/facebookLogo.svg';
-import { AiOutlineClockCircle, AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+import {
+  AiOutlineClockCircle,
+  AiOutlineArrowLeft,
+  AiOutlineArrowRight,
+} from 'react-icons/ai';
 import frame from '@/public/frame.webp';
 import './blog.css';
 
@@ -56,16 +60,19 @@ const Blog = () => {
 
   useEffect(() => {
     if (blogs.length > 0 && blogData) {
-      const index = blogs.findIndex(blog => blog._id === blogId);
+      const index = blogs.findIndex((blog) => blog._id === blogId);
       setCurrentBlogIndex(index);
     }
   }, [blogs, blogData]);
 
-  const formattedDate = new Date(blogData?.lastUpdateOn).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  const formattedDate = new Date(blogData?.lastUpdateOn).toLocaleDateString(
+    'en-US',
+    {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }
+  );
 
   const goToPreviousBlog = () => {
     if (currentBlogIndex > 0) {
@@ -85,30 +92,46 @@ const Blog = () => {
 
   return (
     <div>
-      <div className='blog-title-container'>
-        <div className='blog-title-frame'>
-          <Image src={blogData.image.url} alt="Frame" width={395} height={300} />
+      <div className="blog-title-container">
+        <div className="blog-title-frame">
+          <Image
+            src={blogData.image.url}
+            alt="Frame"
+            width={395}
+            height={300}
+          />
         </div>
-        <div className='blog-title-content'>
-          <h1 className='blog-title'>{blogData.title}</h1>
+        <div className="blog-title-content">
+          <h1 className="blog-title">{blogData.title}</h1>
+          <p className="timestamp">Posted by {blogData.author}</p>
           <p className="timestamp">
-            Posted by {blogData.author}
-          </p>
-          <p className="timestamp">
-            Last Updated {formattedDate} | <AiOutlineClockCircle /> {blogData.timeTakenToRead} min read
+            Last Updated {formattedDate} | <AiOutlineClockCircle />{' '}
+            {blogData.timeTakenToRead} min read
           </p>
         </div>
       </div>
       <div className="blog-container">
         <div className="social-share">
           <div className="social-icons">
-            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(blogData.title)}&url=${window.location.href}`} target="_blank" rel="noopener noreferrer">
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(blogData.title)}&url=${window.location.href}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Image src={twitterLogo} alt="Twitter" width={20} height={20} />
             </a>
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`} target="_blank" rel="noopener noreferrer">
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Image src={facebookLogo} alt="Facebook" width={20} height={20} />
             </a>
-            <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}&title=${encodeURIComponent(blogData.title)}`} target="_blank" rel="noopener noreferrer">
+            <a
+              href={`https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}&title=${encodeURIComponent(blogData.title)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Image src={linkedinLogo} alt="LinkedIn" width={20} height={20} />
             </a>
           </div>
@@ -121,32 +144,38 @@ const Blog = () => {
         </div>
       </div>
       <div className="navigation-container">
-  {currentBlogIndex > 0 && (
-    <div className="navigation-button-left" onClick={goToPreviousBlog}>
-      <AiOutlineArrowLeft className="icon" />
-      <div className="navigation-content">
-        <span className="navigation-text">Previous Article</span>
-        <div className="navigation-title">{blogs[currentBlogIndex - 1].title}</div>
+        {currentBlogIndex > 0 && (
+          <div className="navigation-button-left" onClick={goToPreviousBlog}>
+            <AiOutlineArrowLeft className="icon" />
+            <div className="navigation-content">
+              <span className="navigation-text">Previous Article</span>
+              <div className="navigation-title">
+                {blogs[currentBlogIndex - 1].title}
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="navigation-divider"></div>
+        {currentBlogIndex < blogs.length - 1 && (
+          <div className="navigation-button-right" onClick={goToNextBlog}>
+            <div className="navigation-content">
+              <span className="navigation-text">Next Article</span>
+              <div className="navigation-title">
+                {blogs[currentBlogIndex + 1].title}
+              </div>
+            </div>
+            <AiOutlineArrowRight className="icon" />
+          </div>
+        )}
       </div>
-    </div>
-  )}
-  <div className="navigation-divider"></div>
-  {currentBlogIndex < blogs.length - 1 && (
-    <div className="navigation-button-right" onClick={goToNextBlog}>
-      <div className="navigation-content">
-        <span className="navigation-text">Next Article</span>
-        <div className="navigation-title">{blogs[currentBlogIndex + 1].title}</div>
-      </div>
-      <AiOutlineArrowRight className="icon" />
-    </div>
-  )}
-</div>
-<div className="tags-container">
+      <div className="tags-container">
         <span className="tags-label">Tags: </span>
         {blogData.tags.map((tag, index) => (
           <span key={index} className="tag">
             {tag}
-            {index < blogData.tags.length - 1 && <span className="tag-divider">|</span>}
+            {index < blogData.tags.length - 1 && (
+              <span className="tag-divider">|</span>
+            )}
           </span>
         ))}
       </div>

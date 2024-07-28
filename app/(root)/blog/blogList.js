@@ -109,7 +109,10 @@ function BlogList() {
           &lt;
         </button>
         {Array.from({ length: totalPages }, (_, i) => i + 1)
-          .slice(Math.max(0, currentPage - 2), Math.min(totalPages, currentPage + 1))
+          .slice(
+            Math.max(0, currentPage - 2),
+            Math.min(totalPages, currentPage + 1)
+          )
           .map((page) => (
             <button
               key={page}
@@ -127,9 +130,7 @@ function BlogList() {
           &gt;
         </button>
       </div>
-      <div className="viewingCount">
-        {viewingCount()}
-      </div>
+      <div className="viewingCount">{viewingCount()}</div>
     </div>
   );
 }
