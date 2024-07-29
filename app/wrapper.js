@@ -1,4 +1,14 @@
 'use client';
+/*
+    FileName - Wrapper.js
+    Desc - This file defines the Wrapper component which wraps its children with 
+    multiple context providers: UserContextProvider, DashboardContextProvider, and 
+    ProfileContextProvider. It initializes Google Analytics (ReactGA) for page views 
+    if the hostname matches the specified client URL. The component tracks a loading 
+    state, displaying a ProgressBar component during loading and rendering the 
+    children within the context providers after a simulated loading time.
+*/
+
 
 import { useEffect, useState } from 'react';
 import ProgressBar from './_components/ProgressBar/ProgressBar';

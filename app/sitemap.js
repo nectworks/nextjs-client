@@ -1,3 +1,14 @@
+/*
+    FileName - sitemap.js
+    Desc - This file defines a function that generates a static sitemap for the 
+    Nectworks website. It returns an array of objects, each representing a URL 
+    on the website with its last modified date set to the current date. This 
+    sitemap includes URLs for the homepage, about us, contact us, FAQ, fraudulent 
+    activity, login, logout, privacy policy, professional page, sign-up, and terms 
+    and conditions pages. There is a placeholder comment indicating that blog URLs 
+    should be dynamically generated in the future.
+*/
+
 export default function sitemap() {
   return [
     {

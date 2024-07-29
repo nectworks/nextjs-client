@@ -1,3 +1,14 @@
+/*
+    FileName - layout.js
+    Desc - This file defines two main exports: the `generateMetadata` function 
+    and a default `Layout` component. The `generateMetadata` function dynamically 
+    generates metadata for a blog post based on its ID by fetching data from the server. 
+    It constructs the metadata including the title, description, open graph data, and 
+    twitter card information. The `Layout` component is a simple wrapper that renders 
+    its children components, serving as a layout container for the blog post.
+*/
+
+
 import { publicAxios } from '@/config/axiosInstance';
 
 export async function generateMetadata({ params }) {

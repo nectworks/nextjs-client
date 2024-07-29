@@ -1,5 +1,15 @@
 'use client';
 
+/*
+    FileName - Blog.js
+    Desc - This file defines the Blog component that renders individual blog posts. 
+    It fetches blog data from the server, manages state for the current blog and list 
+    of all blogs, and provides navigation to previous and next blog posts. The component 
+    includes social media sharing links, formatted timestamps, and dynamically displays 
+    blog content using the fetched data. It also styles the blog post layout, integrates 
+    social sharing icons, and manages navigation to adjacent blog posts.
+*/
+
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import showBottomMessage from '@/Utils/showBottomMessage';
