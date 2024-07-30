@@ -1,3 +1,5 @@
+'use client';
+
 /*
    File: displayMessage.js
    Description: This file contains a single function to display the

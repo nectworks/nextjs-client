@@ -1,0 +1,320 @@
+.whole_page {
+  padding: 2rem 7rem;
+}
+
+.JobSeeker_heading_first {
+  text-align: center;
+  font-family: 'Inter';
+  font-size: 40px;
+  margin-top: 3%;
+  font-weight: bold;
+}
+
+.placeholders_mobile_first {
+  display: none;
+}
+
+.placeholders_mobile {
+  display: none;
+}
+
+.JobSeeker_heading_first_span {
+  color: #0057b1;
+  font-family: 'Inter';
+  font-weight: bold;
+  font-size: 40px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.JobSeeker_subheading_first {
+  text-align: center;
+  font-family: 'Inter';
+  font-size: 24px;
+  margin-top: 1%;
+}
+
+.containers {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 3rem;
+  margin: 1.5rem 0;
+  gap: 1.5rem;
+}
+
+.content_first {
+  margin-bottom: 20px;
+  flex-direction: column;
+  width: 100%;
+}
+
+.placeholders {
+  width: 476px;
+  height: 507px;
+}
+
+.placeholders > img {
+  width: 100%;
+  margin-top: 25px;
+}
+
+.content_heading {
+  font-size: 40px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.second_content_heading {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.first_paragraph {
+  text-align: center;
+}
+
+.content_paragraphs {
+  font-size: 24px;
+}
+
+.center-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  margin: 0;
+  margin-bottom: 3rem;
+}
+
+.JobSeekerHeroImg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.banner-container {
+  width: 92%;
+  box-sizing: border-box;
+  background-color: rgba(0, 87, 177, 1);
+  color: rgb(255, 255, 255);
+  padding: 65px 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4rem auto;
+  gap: 5.5rem;
+}
+
+.text-left {
+  width: 80%;
+}
+
+.text-left > h3 {
+  margin-bottom: 48px;
+  font-size: 32px;
+}
+
+.text-left > p {
+  font-size: 24px;
+}
+
+.btn-right {
+  display: flex;
+  align-items: center;
+  column-gap: 24px;
+  flex-direction: row;
+}
+
+.JobSeeker-btn {
+  display: flex;
+  padding: 8px 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 38px;
+  background: #fff;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+  border: none;
+  font-size: 16px;
+  width: max-content;
+}
+
+.second_content_heading_left {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.content_paragraphs_left {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.mobile-image {
+  display: none;
+}
+
+@media screen and (max-width: 1200px) {
+  .whole_page {
+    padding: 2rem 4rem;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .whole_page {
+    padding: 2rem;
+  }
+
+  .containers {
+    padding: 1rem;
+  }
+
+  .banner-container {
+    width: 95%;
+    padding: 2rem 3rem;
+    margin: 2rem auto;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .mobile-image {
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    display: block;
+
+    background-image: url('../../../public/JobSeeker/jobseekerHeroImg.webp');
+    background-size: cover;
+    background-position: 70px;
+    background-repeat: no-repeat;
+  }
+
+  .center-image {
+    display: none;
+  }
+
+  .JobSeeker_heading_first {
+    text-align: center;
+    font-family: 'Inter';
+    font-size: 28px;
+    margin-top: 2rem;
+    text-align: left;
+  }
+
+  .JobSeeker_heading_first p {
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .JobSeeker_heading_first_span {
+    color: #0057b1;
+    display: inline-block;
+    font-size: 28px;
+    margin-right: 10px;
+    margin-left: 0%;
+  }
+
+  .JobSeeker_subheading_first {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .second_content_heading_left {
+    font-size: 26px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+  }
+
+  .content_paragraphs_left {
+    font-size: 20px;
+    margin-right: 10px;
+    margin-left: 15px;
+  }
+
+  .placeholder_mobile {
+    margin-top: 75px;
+    margin-bottom: 35px;
+  }
+
+  .placeholder_mobile_first {
+    margin-top: 75px;
+    margin-bottom: 35px;
+    margin-left: 12px;
+  }
+
+  .placeholders {
+    width: 400px;
+    height: 450px;
+    display: none;
+  }
+
+  .placeholders > img {
+    width: 100%;
+    display: none;
+  }
+
+  .content_heading {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .second_content_heading {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+
+  .content_paragraphs {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+
+  .JobSeekerHeroImg {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .banner-container {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .text-left {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .text-left > h3 {
+    width: 100%;
+    margin-top: 5%;
+    margin-bottom: 52px;
+    margin-top: 28px;
+    text-align: center;
+    font-size: 26px;
+  }
+
+  .text-left > p {
+    font-size: 18px;
+    margin-top: -6%;
+    text-align: center;
+    width: 100%;
+  }
+
+  .btn-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 24px;
+    max-width: 100%;
+    margin: 2rem auto;
+  }
+
+  .content_paragraphs_left {
+    margin-left: 15px;
+    margin-right: 10px;
+    font-size: 20px;
+    margin-top: 25px;
+  }
+}

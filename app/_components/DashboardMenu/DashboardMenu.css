@@ -324,7 +324,7 @@
     display: block;
     width: 35px;
     position: absolute;
-    top: 20px;
+    top: -45px;
     left: 20px;
     cursor: pointer;
     z-index: 2;
@@ -339,4 +339,14 @@
   .dashboard_menu_container .dashboard_menu_toggle_icon {
     display: none;
   }
+}
+
+.notification-badge {
+  background-color: #ffaf38;
+  color: black;
+  font-size: 0.6rem;
+  margin: 0 0.5rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+  display: inline;
 }

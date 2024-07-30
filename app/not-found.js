@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import notFound from '../public/not_found.webp';
+import notFound from '@/public/not_found.webp';
 import './notfound.css';
 
 const PageNotFound = ({ statusCode }) => {

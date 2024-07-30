@@ -7,8 +7,8 @@
 
 import { useContext, useEffect, useState } from 'react';
 import './ProfileEducation.css';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
 
 function ProfileEducation({
   setHeader,
@@ -18,6 +18,7 @@ function ProfileEducation({
   setDisableSkip,
   isDataUpdated,
   subSectionIndex,
+  setHasUnsavedChanges,
 }) {
   const [state, dispatch] = useContext(ProfileContext);
   const [userInfo, setUserInfo] = useContext(DashboardContext);
@@ -46,6 +47,7 @@ function ProfileEducation({
     // update current state in the component and the context
     setFormInput({ ...newFormInput });
     saveChanges(newFormInput);
+    setHasUnsavedChanges(true);
   }
 
   // function to save the current changes to context

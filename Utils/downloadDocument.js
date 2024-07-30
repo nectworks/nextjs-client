@@ -1,3 +1,4 @@
+'use client';
 /*
   File: downloadDocument.js
   Description: This file contains a single function to download a file given

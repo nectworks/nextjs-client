@@ -8,40 +8,40 @@
     Component) if the user is authenticated. If the user is not authenticated,
     they are redirected to the login page.
 */
-// Import necessary dependencies from React and react-router-dom libraries
+// Import necessary dependencies from React and Next.js libraries
 import { useContext } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { UserContext } from '../../context/User/UserContext';
+import { useRouter } from 'next/navigation';
+import { UserContext } from '@/context/User/UserContext';
 
 // Define the ProtectedRoute component
 const ProtectedRoute = ({ element: Component, requireProfessional }) => {
   // State to manage user authentication status
-
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
 
-  // Get the current location using react-router-dom's useLocation hook
-  const location = useLocation();
+  // Get the current location using Next.js useRouter hook
+  const router = useRouter();
+  const location = router.asPath;
 
   // if the user is not found, redirect them to login page
   if (!user) {
-    return <Navigate to="/log-in" state={{ path: location.pathname }} />;
+    router.push(`/log-in?redirect=${location}`);
+    return null; // Return null to prevent the component from rendering
   }
 
   /* if any route requires user to be a professional but user
     is a seeker, redirect them to profile page with a message */
 
-  if (requireProfessional === true && !!user?.userDetails?.emailID === false) {
-    return (
-      <Navigate
-        to="/account-settings"
-        state={{
-          path: location.pathname,
-          message: 'Verify work email to access the feature.',
-          displayMessage: true,
-        }}
-      />
-    );
+  if (requireProfessional === true && !user.emailID) {
+    router.push({
+      pathname: '/account-settings',
+      query: {
+        path: location,
+        message: 'Verify work email to access the feature.',
+        displayMessage: true,
+      },
+    });
+    return null; // Return null to prevent the component from rendering
   }
 
   return <Component />;

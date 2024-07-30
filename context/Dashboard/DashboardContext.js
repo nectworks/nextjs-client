@@ -16,18 +16,18 @@ const DashboardContextProvider = ({ children }) => {
   const privateAxios = usePrivateAxios();
 
   // function to fetch data required for user profile
-  async function fetchProfileData() {
+  const fetchProfileData = async () => {
     // fetch the user profile info from the API
 
     try {
-      const res = await privateAxios.get(`/profile/user-info`);
+      const res = await privateAxios.get('/profile/user-info');
 
       const { data } = res.data;
       setUserInfo(data.userInfo);
     } catch (error) {
       // console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     /* fetch the data only if it is not saved in sessionStorage

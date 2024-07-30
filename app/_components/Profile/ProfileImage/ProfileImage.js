@@ -7,7 +7,8 @@
 
 import { useContext, useEffect, useState } from 'react';
 import './ProfileImage.css';
-import { UserContext } from '../../../../context/User/UserContext';
+import Image from 'next/image';
+import { UserContext } from '@/context/User/UserContext';
 
 // function to get user profile image
 function ProfileImage({ otherUser, isLoggedInUser }) {
@@ -16,14 +17,14 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
   const [initials, setInitials] = useState('');
 
   /* if the user doesn't have a profile image, display their
-   initials as profile image
+     initials as profile image
 
-   (1). Displaying profile image is through 'img' tag
-   (2). Displaying initials is through 'div' tag
+     (1). Displaying profile image is through 'img' tag
+     (2). Displaying initials is through 'div' tag
 
-   Where this component is reused, the edge case of initials in
-   'div' tag should be handled properly.
-  */
+     Where this component is reused, the edge case of initials in
+     'div' tag should be handled properly.
+    */
   const colors = [
     '#1abc9c',
     '#2ecc71',
@@ -48,10 +49,13 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
 
   useEffect(() => {
     const a = isLoggedInUser ? user : otherUser;
+    console.log(`This is userState :${JSON.stringify(userState)}`);
+    console.log(`This is user :${JSON.stringify(user)}`);
+    console.log(`this user is: ${JSON.stringify(a)}`);
     const firstInitial = a?.firstName?.[0] || '-';
     const secondInitial = a?.lastName?.[0] || '-';
     setInitials(firstInitial.toUpperCase() + secondInitial.toUpperCase());
-  }, []);
+  }, [isLoggedInUser, otherUser, user, userState]);
 
   // calculate random index within 0 to colors.length
   const randomIdx = Math.floor(Math.random() * colors.length);
@@ -73,17 +77,21 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
   // if user has already uploaded a profile, display it.
   if (isLoggedInUser == true && user?.profile) {
     return (
-      <img
+      <Image
         className="profile_image"
         src={user?.profile}
         alt={`${user?.firstName || ''} Nectworks`}
+        width={50}
+        height={50}
       />
     );
   } else if (isLoggedInUser == false && otherUser?.profile) {
     return (
-      <img
+      <Image
         className="profile_image"
         src={otherUser?.profile}
+        width={200}
+        height={200}
         alt={`${otherUser?.firstName || ''} Nectworks`}
       />
     );

@@ -6,16 +6,16 @@
     the coins earned by the user.
 */
 
-import { useCallback, useContext, useEffect, useState } from 'react';
-import usePrivateAxios from '../../../Utils/usePrivateAxios';
+import { useContext, useEffect, useState } from 'react';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
 import './NectCoins.css';
 import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
 import ProfileHeader from '../../_components/Profile/ProfileHeader/ProfileHeader';
-import nectCoinsImg from '../../../public/Profile/nectCoin.svg';
-import { UserContext } from '../../../context/User/UserContext';
+import nectCoinsImg from '@/public/Profile/nectCoin.svg';
+import { UserContext } from '@/context/User/UserContext';
 import ClipLoader from 'react-spinners/ClipLoader';
-import leftArrow from '../../../public/ReferCandidates/leftArrow.png';
-import rightArrow from '../../../public/ReferCandidates/rightArrow.png';
+import leftArrow from '@/public/ReferCandidates/leftArrow.png';
+import rightArrow from '@/public/ReferCandidates/rightArrow.png';
 import Image from 'next/image';
 
 function NectCoins() {
@@ -48,7 +48,7 @@ function NectCoins() {
   ];
 
   // function to fetch data about coins activity of the user
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     setIsLoading(true);
     setMessage('Fetching activity data...');
 
@@ -79,10 +79,10 @@ function NectCoins() {
     } finally {
       setIsLoading(false);
     }
-  }, [data, paginationModel.limit, paginationModel.page, privateAxios]);
+  };
 
   // update the data of the current page when state changes
-  const updateCurrentPageItems = useCallback(() => {
+  const updateCurrentPageItems = () => {
     const pageStart = (paginationModel.page - 1) * paginationModel.limit;
     const pageEnd = pageStart + paginationModel.limit;
 
@@ -100,20 +100,12 @@ function NectCoins() {
         activity: data.activity.slice(pageStart, pageEnd),
       });
     }
-  }, [
-    activityCount,
-    data,
-    fetchData,
-    paginationModel.limit,
-    paginationModel.page,
-  ]);
+  };
 
   // function to highlight streaks
-  const highlightProgress = useCallback(() => {
+  const highlightProgress = () => {
     // get all the coin images
-    const allCoins = Array.from(
-      document.querySelectorAll('.nectcoins_coin_img')
-    );
+    const allCoins = Array.from(document.querySelectorAll('.coin_img'));
 
     // coin till which the progress should be highlighted
     const highlightLvl = (user?.loginStreak - 1) % 5;
@@ -132,11 +124,11 @@ function NectCoins() {
 
       // when the last coins are to be animated, animate the extra coin
       if (highlightLvl === 4) {
-        const lastCoin = document.querySelector('.nectcoin_last_coin');
+        const lastCoin = document.querySelector('.last_coin');
         lastCoin.classList.add('animated_coin');
       }
     }
-  }, [user?.loginStreak]);
+  };
 
   // get special activity message
   function getNectCoinsSpecialActivity(activity) {
@@ -211,11 +203,11 @@ function NectCoins() {
     });
 
     resizeObserver.observe(progressBar);
-  }, [highlightProgress]);
+  }, []);
 
   useEffect(() => {
     updateCurrentPageItems();
-  }, [paginationModel, data, updateCurrentPageItems]);
+  }, [paginationModel, data]);
 
   return (
     <div className="dashboard_outer_container">
@@ -251,7 +243,7 @@ function NectCoins() {
               <div className="nectcoins_coin_progress">
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -259,7 +251,7 @@ function NectCoins() {
 
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -267,7 +259,7 @@ function NectCoins() {
 
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -275,7 +267,7 @@ function NectCoins() {
 
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -283,12 +275,12 @@ function NectCoins() {
 
                 <div>
                   <Image
-                    className="nectcoins_coin_img"
+                    className="coin_img"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
                   <Image
-                    className="nectcoin_last_coin"
+                    className="last_coin"
                     src={nectCoinsImg}
                     alt="nectcoin image"
                   />
@@ -347,7 +339,6 @@ function NectCoins() {
               )}
             </>
           )}
-
           <div className="basic_nectcoins_queries">
             <div>
               <p className="nectcoin_question">What are Nectcoins?</p>
@@ -356,7 +347,6 @@ function NectCoins() {
                 site.
               </p>
             </div>
-
             <div>
               <p className="nectcoin_question">How do I get Nectcoins?</p>
               <p className="nectcoin_answer">
@@ -366,7 +356,6 @@ function NectCoins() {
                 consistent! 🎁
               </p>
             </div>
-
             <div>
               <p className="nectcoin_question">Where can I use Nectcoins?</p>
               <p className="nectcoin_answer">
@@ -375,7 +364,6 @@ function NectCoins() {
                 1 Nectcoin. 💰
               </p>
             </div>
-
             <div>
               <p className="nectcoin_question">Is that all?</p>
               <p className="nectcoin_answer">

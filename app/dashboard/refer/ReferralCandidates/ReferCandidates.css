@@ -32,6 +32,7 @@
 }
 
 .referredCandidateButtonAndInput {
+  height: 50px;
   display: flex;
   justify-content: space-between;
   width: max(50vw, 700px);

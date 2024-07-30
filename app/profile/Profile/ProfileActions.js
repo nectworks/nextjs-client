@@ -7,7 +7,7 @@
 */
 
 import './ProfileActions.css';
-import crossIcon from '../../../public/SignUpConfirmPopup/crossIcon.svg';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import ProfileAbout from '../../_components/Profile/ProfileAbout/ProfileAbout.js';
 import ProfileEducation from '../../_components/Profile/ProfileEducation/ProfileEducation.js';
 import ProfileExperience from '../../_components/Profile/ProfileExperience/ProfileExperience.js';
@@ -16,14 +16,17 @@ import ProfileSocials from '../../_components/Profile/ProfileSocials/ProfileSoci
 import ProfileSkills from '../../_components/Profile/ProfileSkills/ProfileSkills.js';
 import ProfileProjects from '../../_components/Profile/ProfileProjects/ProfileProjects.js';
 import { useContext, useEffect, useState } from 'react';
-import { ProfileContext } from '../../../context/UpdateProfile/ProfileContext';
-import usePrivateAxios from '../../../Utils/usePrivateAxios.js';
-import { DashboardContext } from '../../../context/Dashboard/DashboardContext.js';
-import showBottomMessage from '../../../Utils/showBottomMessage.js';
-import sendGAEvent from '../../../Utils/gaEvents.js';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import usePrivateAxios from '@/Utils/usePrivateAxios.js';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext.js';
+import showBottomMessage from '@/Utils/showBottomMessage.js';
+import sendGAEvent from '@/Utils/gaEvents.js';
+import Image from 'next/image';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 /*
-   A JSX function to get the corresponding action based on step number
+  A JSX function to get the corresponding action based on step number
 */
 function GetProfileAction({ step, ...otherProps }) {
   switch (step) {
@@ -47,15 +50,16 @@ function GetProfileAction({ step, ...otherProps }) {
   }
 }
 
-function ProfileActions({
+const ProfileActions = ({
   setActionPopup,
   setUserInfo,
   subSection,
   subSectionIndex,
   isDataUpdated,
-}) {
+}) => {
   /* This component is reused for the user input process initially
      and to edit and add new information later. */
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const [state, dispatch] = useContext(ProfileContext);
   const [userInfo, setUser] = useContext(DashboardContext);
@@ -122,8 +126,7 @@ function ProfileActions({
     if (disableSkip === true) {
       displayMessage(
         [
-          `Current input data will be lost, press 'skip'
-       again to continue`,
+          `Current input data will be lost, press 'skip' again to continue`,
           'error',
         ],
         5500
@@ -222,9 +225,6 @@ function ProfileActions({
 
         // change the data in sessionStorage
         dispatch({ type: 'CLEAR_STATE' });
-
-        // Reload the page
-        window.location.reload();
       }
     } catch (error) {
       const errorData = error?.response?.data?.error;
@@ -258,9 +258,6 @@ function ProfileActions({
 
       // save the new data into state
       setUserInfo(resData.userInfo);
-
-      // Reload the page
-      window.location.reload();
     } catch (error) {
       console.log(error);
       // TODO: remove log statement with popup message
@@ -315,9 +312,6 @@ function ProfileActions({
 
         // clear the `edit data` state.
         dispatch({ type: 'CLEAR_STATE' });
-
-        // Reload the page
-        window.location.reload();
       }
     } catch (error) {
       console.log(error);
@@ -334,8 +328,49 @@ function ProfileActions({
     sendGAEvent('profile_steps', { vaule: step });
   }, [step]);
 
+  const handleImageClick = () => {
+    if (hasUnsavedChanges) {
+      toast.warn(
+        'You have unsaved changes, please save them before you close.',
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
+    } else {
+      // Close the window without confirmation if no data is being updated
+      setActionPopup(false);
+    }
+  };
+
+  const handleClose = (e) => {
+    if (hasUnsavedChanges) {
+      toast.warn(
+        'You have unsaved changes, please save them before you close.',
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
+    } else {
+      // Close the window without confirmation if no data is being updated
+      setActionPopup(false);
+    }
+  };
+
   return (
     <div className="dashboard_profile_actions_container">
+      <ToastContainer />
       <div
         style={{ display: `${!isLoading ? 'none' : 'block'}` }}
         className="loader"
@@ -350,26 +385,8 @@ function ProfileActions({
           <h4>Add {header}</h4>
           <p>{description}</p>
 
-          <img
-            onClick={(e) => {
-              if (isDataUpdated) {
-                // Display confirmation dialog
-                if (
-                  window.confirm(
-                    'Are you sure you want to close? Any unsaved changes will be lost.'
-                  )
-                ) {
-                  // Clear the changes if confirmed
-                  dispatch({
-                    type: 'CLEAR_STATE',
-                  });
-                  setActionPopup(false); // Close the window
-                }
-              } else {
-                // Close the window without confirmation if no data is being updated
-                setActionPopup(false);
-              }
-            }}
+          <Image
+            onClick={handleImageClick}
             src={crossIcon}
             alt="close window"
           />
@@ -386,6 +403,7 @@ function ProfileActions({
             setDisableSkip={setDisableSkip}
             isDataUpdated={isDataUpdated}
             subSectionIndex={subSectionIndex}
+            setHasUnsavedChanges={setHasUnsavedChanges}
           />
         </section>
 
@@ -467,25 +485,7 @@ function ProfileActions({
               </button>
               <button
                 className="dashboard_profile_actions_close_button2"
-                onClick={(e) => {
-                  if (isDataUpdated) {
-                    // Display confirmation dialog
-                    if (
-                      window.confirm(
-                        'Are you sure you want to close? Any unsaved changes will be lost.'
-                      )
-                    ) {
-                      // Clear the changes if confirmed
-                      dispatch({
-                        type: 'CLEAR_STATE',
-                      });
-                      setActionPopup(false); // Close the window
-                    }
-                  } else {
-                    // Close the window without confirmation if no data is being updated
-                    setActionPopup(false);
-                  }
-                }}
+                onClick={handleClose}
               >
                 Close
               </button>
@@ -520,6 +520,6 @@ function ProfileActions({
       </div>
     </div>
   );
-}
+};
 
 export default ProfileActions;

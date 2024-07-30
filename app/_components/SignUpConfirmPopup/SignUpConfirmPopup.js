@@ -6,12 +6,12 @@
 */
 
 import './SignUpConfirmPopup.css';
-import popUpIllustration from '../../../public/SignUpConfirmPopup/signUpConfirmation.webp';
+import popUpIllustration from '@/public/SignUpConfirmPopup/signUpConfirmation.webp';
 import Image from 'next/image';
-import crossIcon from '../../../public/SignUpConfirmPopup/crossIcon.svg';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import Link from 'next/link';
 import { useContext } from 'react';
-import { UserContext } from '../../../context/User/UserContext';
+import { UserContext } from '@/context/User/UserContext';
 
 function SignUpConfirmPopup({ closePopUp }) {
   const { userState } = useContext(UserContext);

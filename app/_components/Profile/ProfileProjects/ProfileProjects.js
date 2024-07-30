@@ -5,14 +5,14 @@
   in the user's profile.
 */
 
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './ProfileProjects.css';
-import fileUploadIcon from '../../../../public/Profile/fileUploadIcon.svg';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import crossIcon from '../../../../public/SignUpConfirmPopup/crossIcon.svg';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
+import fileUploadIcon from '@/public/Profile/fileUploadIcon.svg';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
 import ClipLoader from 'react-spinners/ClipLoader';
-import usePrivateAxios from '../../../../Utils/usePrivateAxios';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
 import Image from 'next/image';
 
 function ProfileProjects({
@@ -23,6 +23,7 @@ function ProfileProjects({
   displayMessage,
   isDataUpdated,
   subSectionIndex,
+  setHasUnsavedChanges,
 }) {
   const [state, dispatch] = useContext(ProfileContext);
   const [userInfo, setUserInfo] = useContext(DashboardContext);
@@ -73,6 +74,7 @@ function ProfileProjects({
 
     setSkillSuggestions(filteredSuggestions);
   }
+
   const handleSkillInputChange = (e) => {
     const inputText = e.target.value;
     setSkillInput(inputText);
@@ -100,56 +102,48 @@ function ProfileProjects({
   };
 
   // include new input update into the state
-  const handleFormInputChange = useCallback(
-    (e, field) => {
-      const newFormInput = { ...formInput };
-      newFormInput[`${field}`] = e.target.value;
+  function handleFormInputChange(e, field) {
+    const newFormInput = { ...formInput };
+    newFormInput[`${field}`] = e.target.value;
 
-      setFormInput(newFormInput);
-      saveChanges(newFormInput);
-    },
-    [formInput, saveChanges]
-  );
+    setFormInput(newFormInput);
+    saveChanges(newFormInput);
+    setHasUnsavedChanges(true);
+  }
 
   // function to save the current changes to context
-  const saveChanges = useCallback(
-    (data) => {
-      // update state in the context
-      dispatch({
-        type: 'UPDATE_PROJECTS',
-        payload: {
-          projects: data,
-          index: projectIdx,
-        },
-      });
+  function saveChanges(data) {
+    // update state in the context
+    dispatch({
+      type: 'UPDATE_PROJECTS',
+      payload: {
+        projects: data,
+        index: projectIdx,
+      },
+    });
 
-      setMessage(['Data saved successfully', 'success']);
-    },
-    [dispatch, projectIdx, setMessage]
-  );
+    setMessage(['Data saved successfully', 'success']);
+  }
 
   // add skill on 'enter' keypress in the input element
-  const addSkill = useCallback(
-    (e) => {
-      if (e.keyCode === 13) {
-        // get the input skill and add it to the formInput
-        const newSkill = e.target.value.trim();
+  function addSkill(e) {
+    if (e.keyCode === 13) {
+      // get the input skill and add it to the formInput
+      const newSkill = e.target.value.trim();
 
-        // if the skill limit has reached do not add new skills
-        if (formInput?.skills.length >= 5) return;
+      // if the skill limit has reached do not add new skills
+      if (formInput?.skills.length >= 5) return;
 
-        // clear the input value on enter
-        setSkillInput('');
+      // clear the input value on enter
+      setSkillInput('');
 
-        if (newSkill.length === 0) return;
+      if (newSkill.length === 0) return;
 
-        // save the newly added skill
-        const currSkills = [...formInput.skills, newSkill];
-        handleFormInputChange({ target: { value: currSkills } }, 'skills');
-      }
-    },
-    [formInput.skills, handleFormInputChange]
-  );
+      // save the newly added skill
+      const currSkills = [...formInput.skills, newSkill];
+      handleFormInputChange({ target: { value: currSkills } }, 'skills');
+    }
+  }
 
   // function to delete skills
   function deleteSkill(e, index) {
@@ -163,7 +157,7 @@ function ProfileProjects({
   }
 
   // simple validation of the form input
-  const validateFormData = useCallback(() => {
+  const validateFormData = () => {
     const requiredFields = ['heading'];
 
     for (const requiredField of requiredFields) {
@@ -171,9 +165,8 @@ function ProfileProjects({
         return false;
       }
     }
-
     return true;
-  }, [formInput]);
+  };
 
   // function to upload document to backend
   async function uploadDocument(e) {
@@ -309,15 +302,7 @@ function ProfileProjects({
         setFormInput(currProject);
       }
     }
-  }, [
-    dispatch,
-    formInput,
-    isDataUpdated,
-    setDescription,
-    setHeader,
-    subSectionIndex,
-    userInfo,
-  ]);
+  }, []);
 
   const [revealDeleteMsg, setRevealDeleteMsg] = useState(false);
   function showDeleteConfirmationMessage() {
@@ -333,13 +318,12 @@ function ProfileProjects({
     } else {
       setDisableNext(false);
     }
-  }, [formInput, setDisableNext, setMessage, validateFormData]);
+  }, [formInput]);
 
   useEffect(() => {
     // set 'enter' key listener for the input element
     const skillInputEle = document.querySelector('.projects_form_skills_input');
     skillInputEle.addEventListener('keyup', addSkill);
-
     return () => {
       skillInputEle.removeEventListener('keyup', addSkill);
     };

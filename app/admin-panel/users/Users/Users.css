@@ -1,0 +1,42 @@
+.admin_users_outer_container * {
+  box-sizing: border-box;
+}
+
+.admin_users_outer_container {
+  width: 100vw;
+  display: flex;
+}
+
+.admin_users_inner_container {
+  padding: 3rem;
+  flex-grow: 0;
+}
+
+.admin_users_inner_container h1 {
+  font-weight: 400;
+}
+
+.admin_users_inner_container h3 {
+  margin-top: 1rem;
+  font-weight: 400;
+}
+
+.admin_users_inner_container .users_switch_btn {
+  padding: 0.2rem 0.5rem;
+  margin: 1rem 0.5rem 0 0;
+  border: 1px solid;
+  outline: none;
+  border-radius: 6px;
+}
+
+.admin_users_inner_container .users_switch_active {
+  color: white;
+  background-color: #0057b1;
+  border: 1px solid #0057b1;
+}
+
+.admin_users_data_grid {
+  margin: 3rem 0;
+  height: 80%;
+  width: 100%;
+}

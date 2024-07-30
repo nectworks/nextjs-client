@@ -1,0 +1,55 @@
+.accountDeletionMessageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.accountDeletionMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 555px;
+  margin: auto;
+}
+
+.accountDeletionMessage img {
+  width: 211px;
+  height: 55px;
+  margin-bottom: 2rem;
+}
+
+.accountDeletionMessage p {
+  text-align: center;
+  margin: 0.8rem 0rem;
+}
+
+.accountDeletionMessage span {
+  color: #808080;
+}
+
+.accountDeletionMessageButtons {
+  display: flex;
+  margin: 3rem 0rem;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
+}
+
+.accountDeletionMessageButtons button {
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: 1px solid #808080;
+}
+
+.makeBgBlueFeedback {
+  background-color: #0057b1;
+  color: #fff;
+}
+
+@media screen and (max-width: 480px) {
+  .accountDeletionMessage {
+    width: 98vw !important;
+  }
+}

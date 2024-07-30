@@ -6,7 +6,7 @@
 */
 
 import Image from 'next/image';
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import companyLogo from '../../../public/Dashboard/companyLogo.webp';
 import companyName from '../../../public/Dashboard/companyName.webp';
 import myProfileIcon from '../../../public/Dashboard/myProfile.svg';
@@ -23,6 +23,9 @@ import './DashboardMenu.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '../../../context/User/UserContext';
+import io from 'socket.io-client';
+
+let socket;
 
 function DashboardMenu() {
   const { userModeState } = useContext(UserContext);
@@ -30,16 +33,21 @@ function DashboardMenu() {
   const [pathName, setPathName] = useState('');
   const router = useRouter();
 
+  const URL = process.env.NEXT_PUBLIC_SOCKET_URL;
+
   // state to indicate if the user is a professional
   const [isProfessional, setIsProfessional] = useState(false);
+
+  // state to indicate if the user has a new referral
+  const [newReferral, setNewReferral] = useState(false);
 
   // function to toggle the dashboard menu in desktop view
   function toggleDashboardMenu(e = null) {
     e?.stopPropagation();
     /* changes in UI to toggle dashboard menu
-     1. display/hide the menu item text and all sub sections
-     2. change the width of the menu
-     3. toggle the company name (done in css) */
+                 1. display/hide the menu item text and all sub sections
+                 2. change the width of the menu
+                 3. toggle the company name (done in css) */
 
     const dashboardContainer = document.querySelector(
       '.dashboard_menu_container'
@@ -59,24 +67,24 @@ function DashboardMenu() {
     ];
 
     /* change 1.
-     if the menu is closed, hide the text in each menu item
-     else display the text in items */
+                 if the menu is closed, hide the text in each menu item
+                 else display the text in items */
     allItemsToHide.forEach((dashboardItem) => {
       dashboardItem.classList.toggle('hide');
     });
 
     /* change 2.
-     reduce the width of the menu */
+                 reduce the width of the menu */
     dashboardContainer.classList.toggle('dashboard_menu_container_mini');
   }
 
   // function to reveal the subsection in dashboard menu item
   /*
-    This function is reused twice
-    1. as a onClick listener
-    2. to reveal the subsection on certain pathways
-    (see useEffect for more info)
-  */
+          This function is reused twice
+          1. as a onClick listener
+          2. to reveal the subsection on certain pathways
+          (see useEffect for more info)
+        */
   function revealSubSection(e = null) {
     // get the reference to the subsection
     const sectionParent = e.target.closest('li');
@@ -129,20 +137,20 @@ function DashboardMenu() {
       menuContainer.style.left = '0px';
     } else {
       /* if menu has positive 'left' value, it is visible
-       hide the menu */
+                         hide the menu */
       menuContainer.style.left = '-250px';
     }
   }
 
   // when window is below certain width, display a popup message
-  const handleResize = useCallback(() => {
+  const handleResize = () => {
     if (window.innerWidth <= 800) {
       const menu = document.querySelector('.dashboard_menu_container');
       if (menu.classList.contains('dashboard_menu_container_mini')) {
         toggleDashboardMenu();
       }
     }
-  }, []);
+  };
 
   useEffect(() => {
     handleResize();
@@ -168,7 +176,7 @@ function DashboardMenu() {
     }
 
     /* pathname and the corresponding menu items are linked
-     using data-path attribute */
+                 using data-path attribute */
 
     // get the corresponding menu item from dashboard
     const menuItem = document.querySelector(`[data-path='${pathName}']`);
@@ -181,7 +189,7 @@ function DashboardMenu() {
     }
 
     /* if the items in sub section of the 'dashboard' menu item is selected
-     reveal the subsection on start */
+                 reveal the subsection on start */
     if (pathName.includes('dashboard/')) {
       const target = document.querySelectorAll('li')[1];
       const subSection = target.querySelector('.dashboard_menu_subsection');
@@ -191,7 +199,7 @@ function DashboardMenu() {
         revealSubSection({ target });
       }
     }
-  }, [pathName, router.asPath, router.pathname]);
+  }, [router.pathname]);
 
   const [disableFeedbackCard, setDisableFeedbackCard] = useState(true);
 
@@ -199,6 +207,28 @@ function DashboardMenu() {
     // when the user mode changes, update the local state.
     setIsProfessional(userMode === 'professional');
   }, [userMode]);
+
+  useEffect(() => {
+    socket = io(URL);
+
+    socket.on('new-referral', (data) => {
+      setNewReferral(true);
+      localStorage.setItem('hasNewReferral', 'true');
+    });
+    const hasNewReferral = localStorage.getItem('hasNewReferral') === 'true';
+    setNewReferral(hasNewReferral);
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    // Clear the notification when the user navigates to the 'Refer candidates' page
+    if (location.pathname === '/dashboard/refer') {
+      setNewReferral(false);
+      localStorage.removeItem('hasNewReferral');
+    }
+  }, [location]);
 
   return (
     <>
@@ -293,13 +323,16 @@ function DashboardMenu() {
                 }}
               >
                 <div
-                  className={`dashboard_menu_item 
+                  className={`dashboard_menu_item
                   ${isProfessional === false ? 'dashboard_menu_item_beta' : ''}`}
                   data-path="dashboard/refer"
                 >
                   <span className="dashboard_menu_item_text">
                     Refer candidates
                   </span>
+                  {newReferral && (
+                    <span className="notification-badge">New</span>
+                  )}
                 </div>
               </Link>
             </div>
@@ -355,7 +388,7 @@ function DashboardMenu() {
 
       <div
         onClick={() => setDisableFeedbackCard(false)}
-        className={`bottomBarFeedback 
+        className={`bottomBarFeedback
         ${disableFeedbackCard ? 'moveCardToRight' : ''}`}
       >
         <div className="bottomBarFeedbackDesc">

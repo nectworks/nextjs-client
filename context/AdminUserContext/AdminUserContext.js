@@ -7,7 +7,7 @@
 
 import { createContext, useEffect, useState } from 'react';
 import { privateAxios } from '../../config/axiosInstance.js';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 export const AdminUserContext = createContext(null);
@@ -15,22 +15,21 @@ export const AdminUserContext = createContext(null);
 export default function AdminUserContextProvider({ children }) {
   const [admin, setAdmin] = useState(null);
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start loading state as true
 
   async function authenticateAdmin() {
-    setIsLoading(true);
     try {
       const res = await privateAxios.get('/admin/authenticate');
-
       if (res.status === 200) {
         setAdmin(res.data.admin);
+      } else {
+        throw new Error('Not authenticated');
       }
-
-      setIsLoading(false);
     } catch (error) {
-      // if the user in not authenticated, redirect them to login
+      console.error('Authentication error:', error);
       router.push('/admin-panel/login');
-      setIsLoading(false);
+    } finally {
+      setIsLoading(false); // Always stop loading, regardless of success or error
     }
   }
 
@@ -53,7 +52,7 @@ export default function AdminUserContextProvider({ children }) {
           <ClipLoader size={50} />
         </div>
       ) : (
-        { children }
+        children
       )}
     </AdminUserContext.Provider>
   );

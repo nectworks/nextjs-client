@@ -1,7 +1,4 @@
-/*
-Filename: checkFileSize.js
-Description: A utility function to check the file size and give boolean output if file size is more than 5MB.
-*/
+'use client';
 
 const checkFileSize = (uploadedFile) => {
   if (uploadedFile.size > 5 * 1024 * 1024) {

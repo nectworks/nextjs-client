@@ -5,12 +5,13 @@
   in the user's profile.
 */
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo } from 'react';
 import './ProfileAbout.css';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
-import { UserContext } from '../../../../context/User/UserContext';
-import infoIcon from '../../../../public/SignIn/information.webp';
+import Image from 'next/image';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
+import { UserContext } from '@/context/User/UserContext';
+import infoIcon from '@/public/SignIn/information.webp';
 
 function ProfileAbout({
   setHeader,
@@ -18,6 +19,7 @@ function ProfileAbout({
   setMessage,
   setDisableNext,
   isDataUpdated,
+  setHasUnsavedChanges,
 }) {
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
@@ -29,10 +31,13 @@ function ProfileAbout({
   const [state, dispatch] = useContext(ProfileContext);
   const [userInfo, setUserInfo] = useContext(DashboardContext);
 
-  const formInput = {
-    bio: '',
-    additionalInfo: '',
-  };
+  const formInput = useMemo(
+    () => ({
+      bio: '',
+      additionalInfo: '',
+    }),
+    []
+  );
 
   // states contain the input value.
   const [aboutInput, setAboutInput] = useState(state?.about || formInput);
@@ -65,7 +70,16 @@ function ProfileAbout({
 
       setAboutInput(currAbout || formInput);
     }
-  }, []);
+  }, [
+    description,
+    dispatch,
+    formInput,
+    isDataUpdated,
+    isProfessional,
+    setDescription,
+    setHeader,
+    userInfo,
+  ]);
 
   // save the changes in state and context
   function handleFormInputChange(e, type) {
@@ -74,6 +88,7 @@ function ProfileAbout({
     updatedAbout[type] = e.target.value;
 
     setAboutInput(updatedAbout);
+    setHasUnsavedChanges(true);
     dispatch({
       type: 'UPDATE_ABOUT',
       payload: { about: updatedAbout },
@@ -88,7 +103,7 @@ function ProfileAbout({
       setMessage(['Data saved successfully', 'success']);
       setDisableNext(false);
     }
-  }, [aboutInput]);
+  }, [aboutInput, setDisableNext, setMessage]);
 
   return (
     <div className="dashboard_profile_about_container">
@@ -117,7 +132,7 @@ function ProfileAbout({
           {isProfessional === false && (
             <>
               <div className="info_icon">
-                <img src={infoIcon} alt="info" />
+                <Image className="Info_icon_img" src={infoIcon} alt="info" />
               </div>
               <span className="email_verify_message">
                 Verify your work email to add this field.

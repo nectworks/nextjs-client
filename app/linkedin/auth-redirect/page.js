@@ -1,7 +1,7 @@
-import React from 'react';
+import SignUpRedirect from './LinkedInRedirect';
 
-const page = () => {
-  return <div>page</div>;
+const LinkedInRedirect = () => {
+  return <SignUpRedirect />;
 };
 
-export default page;
+export default LinkedInRedirect;

@@ -7,10 +7,11 @@
 
 import { useContext, useEffect, useState } from 'react';
 import './ProfileExperience.css';
-import { ProfileContext } from '../../../../context/UpdateProfile/ProfileContext';
-import crossIcon from '../../../../public/SignUpConfirmPopup/crossIcon.svg';
-import { DashboardContext } from '../../../../context/Dashboard/DashboardContext';
-import { privateAxios } from '../../../../config/axiosInstance';
+import Image from 'next/image';
+import { ProfileContext } from '@/context/UpdateProfile/ProfileContext';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import { DashboardContext } from '@/context/Dashboard/DashboardContext';
+import { privateAxios } from '@/config/axiosInstance';
 
 function ProfileExperience({
   setHeader,
@@ -20,6 +21,7 @@ function ProfileExperience({
   setDisableSkip,
   isDataUpdated,
   subSectionIndex,
+  setHasUnsavedChanges,
 }) {
   // this context helps in storing the data, when the user is editing it
   const [state, dispatch] = useContext(ProfileContext);
@@ -148,14 +150,14 @@ function ProfileExperience({
   }
 
   // Function to update job title suggestions based on user input
-  async function updateJobTitleSuggestions(inputText) {
+  const updateJobTitleSuggestions = async (inputText) => {
     if (inputText.trim() === '') {
       setJobTitleSuggestions([]); // Clear job title suggestions when input is empty
       return;
     }
     const suggestions = await fetchJobTitleSuggestions(inputText);
     setJobTitleSuggestions(suggestions);
-  }
+  };
 
   const handleJobTitleSelection = (selectedJobTitle) => {
     const newFormInput = { ...formInput, jobTitle: selectedJobTitle };
@@ -200,8 +202,20 @@ function ProfileExperience({
     currSelectedEle.classList.add('dashboard_experience_active_opton');
   }
 
+  // function to save the current local state to context and local storage
+  const saveChanges = (data) => {
+    dispatch({
+      type: 'UPDATE_EXPERIENCE',
+      payload: {
+        experience: data,
+        index: expIndex,
+      },
+    });
+    setMessage(['Data saved successfully.', 'success']);
+  };
+
   // function to handle form input change
-  function handleFormInputChange(e, field) {
+  const handleFormInputChange = (e, field) => {
     const newFormInput = formInput;
     newFormInput[field] = e.target.value;
 
@@ -225,20 +239,8 @@ function ProfileExperience({
       updateJobTitleSuggestions(newFormInput[field]);
     }
     saveChanges(newFormInput);
-  }
-
-  // function to save the current local state to context and local storage
-  function saveChanges(data) {
-    dispatch({
-      type: 'UPDATE_EXPERIENCE',
-      payload: {
-        experience: data,
-        index: expIndex,
-      },
-    });
-
-    setMessage(['Data saved successfully.', 'success']);
-  }
+    setHasUnsavedChanges(true);
+  };
 
   // function to validate user input data
   function validateFormData() {
@@ -272,7 +274,7 @@ function ProfileExperience({
   }
 
   // function to add skill on 'enter' keypress on the input element
-  function addSkill(e) {
+  const addSkill = (e) => {
     if (e.keyCode === 13) {
       // get the input skill and add it to the formInput
       const newSkill = e.target.value.trim();
@@ -288,7 +290,7 @@ function ProfileExperience({
       const currSkills = [...formInput.skills, newSkill];
       handleFormInputChange({ target: { value: currSkills } }, 'skills');
     }
-  }
+  };
 
   useEffect(() => {
     // set the header and description of this window
@@ -639,7 +641,7 @@ function ProfileExperience({
             return (
               <span className="dashboard_experience_skill" key={index}>
                 {skill}
-                <img
+                <Image
                   src={crossIcon}
                   onClick={(e) => deleteSkill(e, index)}
                   alt="delete skill"

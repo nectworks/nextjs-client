@@ -10,14 +10,14 @@
 
 import { useContext, useState } from 'react';
 import './Feedback.css';
-import nectworksLogo from '../../../public/nectworks-ssar04a-mil-11@2x.webp';
-import timerLogo from '../../../public/Feedback/timer.svg';
+import nectworksLogo from '@/public/nectworks-ssar04a-mil-11@2x.webp';
+import timerLogo from '@/public/Feedback/timer.svg';
 import Link from 'next/link';
 import Image from 'next/image';
 import ClipLoader from 'react-spinners/ClipLoader';
-import showBottomMessage from '../../../Utils/showBottomMessage';
-import { UserContext } from '../../../context/User/UserContext';
-import { privateAxios } from '../../../config/axiosInstance';
+import showBottomMessage from '@/Utils/showBottomMessage';
+import { UserContext } from '@/context/User/UserContext';
+import { privateAxios } from '@/config/axiosInstance';
 
 const Feedback = () => {
   const { userState } = useContext(UserContext);

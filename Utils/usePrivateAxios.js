@@ -1,4 +1,5 @@
 'use client';
+
 /*
   File: usePrivateAxios.js
   Description: This contains a custom hook that mounts and unmounts the
@@ -45,7 +46,7 @@ const usePrivateAxios = () => {
     return () => {
       privateAxios.interceptors.response.eject(responseInterceptor);
     };
-  }, []);
+  }, [router, setUser]);
 
   return privateAxios;
 };

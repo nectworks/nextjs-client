@@ -1,4 +1,4 @@
-import SeekerPublicPage from '../../../jobseeker/seekerPublicPage';
+import SeekerPublicPage from '../../../(root)/jobseeker/seekerPublicPage';
 
 const ProfilePage = () => {
   return <SeekerPublicPage />;

@@ -41,6 +41,18 @@
   transition: all 0.4s linear;
 }
 
+.brand_logo {
+  display: inline-block;
+  width: 36px;
+  height: 45px;
+}
+
+.brand_name {
+  width: 100px;
+  height: 20px;
+  transition: all 0.4s linear;
+}
+
 .admin_dashboard_menu_container ul:first-of-type {
   display: flex;
   flex-direction: column;

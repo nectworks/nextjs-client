@@ -9,7 +9,7 @@
 import './ProgressBar.css';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Logo from '../../../public/nectworks-ssar04a-mil-11@2x.webp';
+import Logo from '@/public/nectworks-ssar04a-mil-11@2x.webp';
 const ProgressBar = () => {
   const [progress, setProgress] = useState(0);
 

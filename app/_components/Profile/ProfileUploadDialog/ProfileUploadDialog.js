@@ -5,18 +5,19 @@
   upload profile image with options 'change image', 'save' and 'delete'
 */
 
-import crossIcon from '../../../../public/SignUpConfirmPopup/crossIcon.svg';
-import deleteIcon from '../../../../public/Profile/deleteIcon.svg';
-import profileUploadIcon from '../../../../public/Profile/profileUploadIcon.svg';
+import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import deleteIcon from '@/public/Profile/deleteIcon.svg';
+import profileUploadIcon from '@/public/Profile/profileUploadIcon.svg';
 import './ProfileUploadDialog.css';
+import Image from 'next/image';
 import ProfileImage from '../ProfileImage/ProfileImage';
 import { useContext, useRef, useState } from 'react';
-import { UserContext } from '../../../../context/User/UserContext';
+import { UserContext } from '@/context/User/UserContext';
 import ClipLoader from 'react-spinners/ClipLoader';
 import 'cropperjs/dist/cropper.css';
 import Cropper from 'cropperjs';
-import showBottomMessage from '../../../../Utils/showBottomMessage';
-import usePrivateAxios from '../../../../Utils/usePrivateAxios';
+import showBottomMessage from '@/Utils/showBottomMessage';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
 
 function ProfileUploadDialog({ setOpenFileUploadDialog }) {
   const { userState } = useContext(UserContext);
@@ -273,7 +274,7 @@ function ProfileUploadDialog({ setOpenFileUploadDialog }) {
       <div className="dashboard_profile_dialog_window">
         <div className="dashboard_profile_dialog_header">
           <h3>Profile photo</h3>
-          <img
+          <Image
             src={crossIcon}
             onClick={() => setOpenFileUploadDialog((prevVal) => !prevVal)}
             alt="close profile upload dialog"
@@ -283,7 +284,7 @@ function ProfileUploadDialog({ setOpenFileUploadDialog }) {
         {/* show the preview of current profile image */}
         <div className="dashboard_profile_dialog_preview">
           {/* This shows the preview of the image uploaded by the user */}
-          <img
+          <Image
             ref={uploadPreview}
             className="profile_upload_preview"
             style={{ display: stage === 2 ? 'block' : 'none' }}
@@ -299,7 +300,7 @@ function ProfileUploadDialog({ setOpenFileUploadDialog }) {
             style={{ display: stage === 3 ? 'block' : 'none' }}
           >
             <div>
-              <img id="crop_input" src="" alt="crop image" />
+              <Image id="crop_input" src="" alt="crop image" />
             </div>
           </div>
 
@@ -338,7 +339,7 @@ function ProfileUploadDialog({ setOpenFileUploadDialog }) {
                 document.getElementById('profile_image_field').click();
               }}
             >
-              <img src={profileUploadIcon} alt="upload profile image" />
+              <Image src={profileUploadIcon} alt="upload profile image" />
               <span>Upload Image</span>
             </button>
           )}
@@ -352,7 +353,7 @@ function ProfileUploadDialog({ setOpenFileUploadDialog }) {
               className="dashboard_profile_dialog_delete_button"
               onClick={deleteProfileImage}
             >
-              <img
+              <Image
                 style={{ margin: 0 }}
                 src={deleteIcon}
                 alt="delete profile image"

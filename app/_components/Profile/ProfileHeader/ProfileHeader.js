@@ -7,21 +7,22 @@
 */
 
 import './ProfileHeader.css';
-import shareProfile from '../../../../public/Profile/shareProfile.svg';
-import copyProfile from '../../../../public/Profile/copyProfile.svg';
-import nectCoinImg from '../../../../public/Profile/nectCoin.svg';
+import shareProfile from '@/public/Profile/shareProfile.svg';
+import copyProfile from '@/public/Profile/copyProfile.svg';
+import nectCoinImg from '@/public/Profile/nectCoin.svg';
 import { useContext, useEffect, useState, useRef } from 'react';
 import ProfileImage from '../ProfileImage/ProfileImage';
-import { UserContext } from '../../../../context/User/UserContext';
-import showBottomMessage from '../../../../Utils/showBottomMessage';
-import usePrivateAxios from '../../../../Utils/usePrivateAxios';
-import notification from '../../../../public/Profile/notification.png';
-import close from '../../../../public/SignUpConfirmPopup/crossIcon.svg';
-import noNotifications from '../../../../public/Profile/noNotifications.png';
-import { publicAxios } from '../../../../config/axiosInstance';
+import { UserContext } from '@/context/User/UserContext';
+import showBottomMessage from '@/Utils/showBottomMessage';
+import usePrivateAxios from '@/Utils/usePrivateAxios';
+import notification from '@/public/Profile/notification.png';
+import close from '@/public/SignUpConfirmPopup/crossIcon.svg';
+import noNotifications from '@/public/Profile/noNotifications.png';
+import { publicAxios } from '@/config/axiosInstance';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Slide } from 'react-awesome-reveal';
+import formatNectCoins from '@/Utils/formatNectCoins';
 
 function ProfileHeader() {
   const { userState } = useContext(UserContext);
@@ -150,7 +151,7 @@ function ProfileHeader() {
       );
 
       // Redirect the user to the specified URL to request a referral
-      const url = `https://nectworks.com/request-referral/${username}`;
+      const url = `${process.env.NEXT_PUBLIC_CLIENT_URL}/request-referral/${username}`;
       window.open(url, '_blank');
     } catch (error) {
       // Log and handle errors if they occur during the API request
@@ -198,7 +199,7 @@ function ProfileHeader() {
   const [unlockProfile, setUnlockProfile] = useState(false);
   const profileOptionsRef = useRef(null);
 
-  const publicProfileURL = `https://nectworks.com/user/${user?.username}`;
+  const publicProfileURL = `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`;
 
   // function to get time of the day, i.e., Morning, Afternoon, Evening
   function getTimeOfDay() {
@@ -288,7 +289,7 @@ function ProfileHeader() {
                     <li key={referral._id}>
                       <span className="profileImage">
                         <a
-                          href={`https://nectworks.com/user/${referral.professionalUserId.username}`}
+                          href={`${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${referral.professionalUserId.username}`}
                         >
                           <ProfileImage
                             isLoggedInUser={false}
@@ -345,7 +346,7 @@ function ProfileHeader() {
 
       <Link href={'/nectcoins'} className="dashboard_profile_header_nectcoins">
         <Image src={nectCoinImg} alt="nect_coins" />
-        <span>{user?.totalCoins}</span>
+        <span>{formatNectCoins(user?.totalCoins)}</span>
       </Link>
 
       <div
