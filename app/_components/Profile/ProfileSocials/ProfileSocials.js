@@ -90,21 +90,23 @@ function ProfileSocials({
   // Update the links in local state and the context
   function updateLink(e, platform) {
     const trimmedValue = e.target.value.trim();
-  
+
     if (!platform.includes('other')) {
       const platformData = socialMedia.find(
         (social) => social.name === platform
       );
       const updatedLinks = {
         ...links,
-        [platform]: trimmedValue ? platformData.baseURL + trimmedValue : null, // Use null for deletion
+        [platform]: trimmedValue
+          ? platformData.baseURL + trimmedValue
+          : undefined, // Use null for deletion
       };
-  
+
       // Filter out null values before saving changes
       const filteredLinks = Object.fromEntries(
-        Object.entries(updatedLinks).filter(([_, value]) => value !== null)
+        Object.entries(updatedLinks).filter(([_, value]) => value !== undefined)
       );
-  
+
       setLinks(filteredLinks);
       saveChanges(filteredLinks);
       setHasUnsavedChanges(true);
@@ -112,22 +114,23 @@ function ProfileSocials({
       // It's an "other" link
       const updatedOtherLinks = {
         ...otherLinks,
-        [platform]: trimmedValue || null, // Use null for deletion
+        [platform]: trimmedValue || undefined, // Use null for deletion
       };
-  
+
       // Filter out null values before saving changes
       const filteredOtherLinks = Object.fromEntries(
-        Object.entries(updatedOtherLinks).filter(([_, value]) => value !== null)
+        Object.entries(updatedOtherLinks).filter(
+          ([_, value]) => value !== undefined
+        )
       );
-  
+
       const combinedLinks = { ...links, ...filteredOtherLinks };
-  
+
       setOtherLinks(filteredOtherLinks);
       saveChanges(combinedLinks);
       setHasUnsavedChanges(true);
     }
   }
-  
 
   // Function to save changes to context
   function saveChanges(data) {
@@ -225,7 +228,11 @@ function ProfileSocials({
       })
     );
 
-    if (linksArr.length < 1 || !isValidLinkedInURL(links.LinkedIn)) {
+    if (linksArr.length === 0) {
+      setDisableNext(false);
+      setDisableSkip(true);
+      setMessage(['All social links removed', 'info']);
+    } else if (!isValidLinkedInURL(links.LinkedIn)) {
       setDisableNext(true);
       setDisableSkip(false);
       setMessage(['Add a valid LinkedIn URL or skip for now', 'error']);
@@ -235,9 +242,6 @@ function ProfileSocials({
 
       // Check if other URLs are valid
       linksArr.slice(1).forEach((link) => {
-        const platformData = socialMedia.find(
-          (social) => social.name === link.platform
-        );
         if (link.url && !isValidURL(link.url)) {
           setMessage(['Invalid URL in other links', 'error']);
           setDisableNext(true);

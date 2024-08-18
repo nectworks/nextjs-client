@@ -6,16 +6,19 @@
   google signup
 */
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import '../../linkedin/auth-redirect/SignUpRedirect.css';
 import { privateAxios } from '@/config/axiosInstance';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { UserContext } from '@/context/User/UserContext';
 
 function SignUpRedirect() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { userState } = useContext(UserContext);
+  const [user, setUser] = userState;
 
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -28,10 +31,11 @@ function SignUpRedirect() {
       const url = `/google/auth/callback?code=${authCode}`;
       const res = await privateAxios.get(url);
       const { signUp } = res.data;
+      setUser(res.data.user);
 
       if (res.status === 200) {
         setMessage('Successfully authenticated.');
-        if (signUp) {
+        if (signUp === true) {
           router.push('/profile', {
             state: {
               from: '/sign-up',
@@ -43,6 +47,7 @@ function SignUpRedirect() {
         }
       }
     } catch (error) {
+      console.error('Authentication error:', error);
       setAuthenticationError(true);
       setMessage('Error while authenticating user.');
     } finally {
@@ -57,12 +62,14 @@ function SignUpRedirect() {
     } else {
       sendCode(codeParam);
     }
-  }, [searchParams]);
+  }, []);
 
   return (
     <div className="signup_redirection_container">
       {isLoading && <ClipLoader size={50} />}
-      {message && <div className="signup_redirection_message">{message}</div>}
+      {message.length > 0 && (
+        <div className="signup_redirection_message">{message}</div>
+      )}
       {authenticationError && (
         <div className="signup_redirection_links">
           <Link href="/">
