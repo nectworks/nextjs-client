@@ -2,12 +2,11 @@
   font-family: 'Inter';
   src: url('../public/font/Inter/Inter-VariableFont_slnt,wght.ttf')
     format('truetype');
-  font-weight: normal;
-  font-style: normal;
 }
 
 body,
 html {
+  background-color: #f3f3f3 !important;
   font-family: 'Inter', Arial, sans-serif;
 }
 

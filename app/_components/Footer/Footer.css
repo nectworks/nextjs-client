@@ -95,7 +95,8 @@
 }
 
 .social__media__icons {
-  height: 1.6rem;
+  padding: 0;
+  width: 10%;
 }
 
 .footer__copyright a {

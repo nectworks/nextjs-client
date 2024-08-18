@@ -17,7 +17,7 @@ export const AccordionItem = ({ title, content, isOpen, onClick }) => {
           <Image
             alt="arrow icon"
             src={accordianArrow}
-            className={`accordian-item-icon 
+            className={`accordian-item-icon
             ${isOpen ? 'accordian-item-active-icon' : ''}`}
           />
         </span>
