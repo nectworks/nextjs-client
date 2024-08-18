@@ -36,40 +36,40 @@ export default function AboutUs() {
           </h1>
         </div>
         <div className="aboutFirstSection">
-          <Image
+          <img
             alt="Image"
-            src={AboutFirstSectionBG}
+            src={AboutFirstSectionBG.src}
             className="AboutFirstSectionBGStyle"
           />
-          <Image alt="img" src={AboutBGPic1} className="AboutBgPic1Style" />
-          <Image alt="img" src={AboutBGPic2} className="AboutBgPic2Style" />
-          <Image alt="img" src={AboutBGPic3} className="AboutBgPic3Style" />
-          <Image alt="img" src={AboutBGPic4} className="AboutBgPic4Style" />
-          <Image alt="img" src={AboutBGPic5} className="AboutBgPic5Style" />
-          <Image alt="img" src={AboutBGPic6} className="AboutBgPic6Style" />
-          <Image
+          <img alt="img" src={AboutBGPic1.src} className="AboutBgPic1Style" />
+          <img alt="img" src={AboutBGPic2.src} className="AboutBgPic2Style" />
+          <img alt="img" src={AboutBGPic3.src} className="AboutBgPic3Style" />
+          <img alt="img" src={AboutBGPic4.src} className="AboutBgPic4Style" />
+          <img alt="img" src={AboutBGPic5.src} className="AboutBgPic5Style" />
+          <img alt="img" src={AboutBGPic6.src} className="AboutBgPic6Style" />
+          <img
             alt="img"
-            src={AboutBgVector1}
+            src={AboutBgVector1.src}
             className="AboutBgVector1Style"
           />
-          <Image
+          <img
             alt="img"
-            src={AboutBgVector2}
+            src={AboutBgVector2.src}
             className="AboutBgVector2Style"
           />
-          <Image
+          <img
             alt="img"
-            src={AboutBgVector3}
+            src={AboutBgVector3.src}
             className="AboutBgVector3Style"
           />
-          <Image
+          <img
             alt="img"
-            src={AboutBgVector4}
+            src={AboutBgVector4.src}
             className="AboutBgVector4Style"
           />
-          <Image
+          <img
             alt="img"
-            src={AboutBgVector5}
+            src={AboutBgVector5.src}
             className="AboutBgVector5Style"
           />
         </div>
@@ -85,7 +85,7 @@ export default function AboutUs() {
           </p>
         </div>
         <div className="aboutUsThirdSection">
-          <Image src={AboutImgThirdSection} alt="img" />
+          <img src={AboutImgThirdSection.src} alt="img" />
           <div className="aboutUsThirdSectionContent">
             <h1 className="AboutFontSizeHeading">Why we do this?</h1>
             <p className="aboutUsThirdSectionContentPara1 AboutFontSizePara">

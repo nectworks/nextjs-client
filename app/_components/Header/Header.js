@@ -10,7 +10,7 @@
 
 import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import './Header.css';
 import companyName from '../../../public/nectworks-ssar04a-mil-11@2x.webp';
@@ -21,15 +21,12 @@ const Header = () => {
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const router = useRouter();
+  const pathname = usePathname();
+  console.log(pathname);
   const RenderMenu = () => {
     // if the user is not logged in the button (in the header) will
     // be displayed on pages other than login and signup pages
-    if (
-      !isLoggedIn &&
-      router.pathname !== '/log-in' &&
-      router.pathname !== '/sign-up'
-    ) {
+    if (!isLoggedIn && pathname !== '/log-in' && pathname !== '/sign-up') {
       return (
         <li className="loginheader">
           <Link href="/log-in">Log In</Link>
@@ -49,11 +46,7 @@ const Header = () => {
         {/* <!-- Logo --> */}
         <div className="logo" onClick={scrollToTop}>
           <Link href="/">
-            <Image
-              className="image"
-              src={companyName}
-              alt="Nectworks home page"
-            />
+            <img src={companyName.src} alt="Nectworks home page" />
           </Link>
         </div>
         {/* <!-- Responsive Menu Icon --> */}

@@ -9,7 +9,6 @@
     children within the context providers after a simulated loading time.
 */
 
-
 import { useEffect, useState } from 'react';
 import ProgressBar from './_components/ProgressBar/ProgressBar';
 import UserContextProvider from '@/context/User/UserContext';
