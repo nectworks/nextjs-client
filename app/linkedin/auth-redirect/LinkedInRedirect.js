@@ -15,7 +15,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 function SignUpRedirect() {
   const router = useRouter();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -62,8 +62,6 @@ function SignUpRedirect() {
     } else {
       sendCode(codeParam);
     }
-
-    setSearchParams({});
   }, []);
 
   return (

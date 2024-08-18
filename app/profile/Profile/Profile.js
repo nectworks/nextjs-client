@@ -75,8 +75,8 @@ import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import downloadDocument from '@/Utils/downloadDocument';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 /*
   Note about using localStorage and sessionStorage:
@@ -641,7 +641,6 @@ const ProfilePage = () => {
             draggable: true,
             progress: undefined,
           });
-          console.log('Res: ', res);
           //It will refresh the page when resume is uploaded successfully
           setResumeFileUrl(res.url);
         } else {
@@ -702,15 +701,14 @@ const ProfilePage = () => {
   }, [user]);
 
   useEffect(() => {
-    // show the pop up only if redirected from signup page
-    if (location.state?.from === '/sign-up') {
+    
+    const from = sessionStorage.getItem('from');
+    // Check if the user came from the sign-up page
+    if (from === '/sign-up') {
       setSignUpPopup(true);
 
-      /* useLocation() data is stored in browser session
-       and can persist through render and refresh.
-       since, the popup is displayed based on this state,
-       clear the browser history after displaying the popup once */
-      window.history.replaceState({}, '');
+      // Clear the 'from' value from session storage after using it
+      sessionStorage.removeItem('from');
     }
 
     const sharePostParam = searchParams.get('post_shared');
@@ -970,14 +968,14 @@ const ProfilePage = () => {
                         </div>
                         {openDateForm && (
                           <div className="joining_toggle_message_dateForm">
-                            {/* <DatePicker
+                            <DatePicker
                               selected={selectedDate}
                               onChange={handleDateChange}
-                              minDate={new Date()} // Set minimum date to today
+                              minDate={new Date()}
                               maxDate={maxDate}
-                              dateFormat="yyyy-MM-dd" // Date format
-                              placeholderText="Select a date" // Placeholder text
-                            />*/}
+                              dateFormat="yyyy-MM-dd"
+                              placeholderText="Select a date"
+                            />
                           </div>
                         )}
                         <button

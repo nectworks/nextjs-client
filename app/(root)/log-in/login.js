@@ -116,8 +116,7 @@ export default function Login() {
           `You've been blocked from signing in till ${banDateString} ${banTimeString}`,
           10000
         );
-      } else {
-        console.log(`status code: ${status}, Error: ${data}`);
+      } else {  
         showBottomMessage('Unknown error occured');
       }
       setUserEmailNotExist(true);

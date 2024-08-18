@@ -49,9 +49,6 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
 
   useEffect(() => {
     const a = isLoggedInUser ? user : otherUser;
-    console.log(`This is userState :${JSON.stringify(userState)}`);
-    console.log(`This is user :${JSON.stringify(user)}`);
-    console.log(`this user is: ${JSON.stringify(a)}`);
     const firstInitial = a?.firstName?.[0] || '-';
     const secondInitial = a?.lastName?.[0] || '-';
     setInitials(firstInitial.toUpperCase() + secondInitial.toUpperCase());

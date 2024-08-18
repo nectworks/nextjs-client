@@ -18,12 +18,12 @@
   border-color: #808080 !important;
 }
 
-.replaceExistingResumeButton {
-  color: #0057b1;
+.replaceExistingResumeButton{
+  color: #0057B1;
   text-decoration: underline;
 }
 
-.replaceExistingResumeButton:hover {
+.replaceExistingResumeButton:hover{
   color: blue;
   cursor: pointer;
 }
@@ -32,7 +32,7 @@
   display: flex;
   flex-direction: column;
   padding: 10px 20px;
-  background-color: #fff;
+  background-color: #FFF;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -45,7 +45,7 @@
   line-height: 1.7rem;
   padding-right: 20px;
   border-radius: none;
-  background: #fff;
+  background: #FFF;
   padding-left: 10px;
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.25);
   margin-bottom: 2px;
@@ -59,7 +59,7 @@
 }
 
 .referralRequestHeaderDesc {
-  background-color: #fff;
+  background-color: #FFF;
   padding-left: 30px;
   padding-right: 30px;
   padding-top: 20px;
@@ -90,7 +90,7 @@
   margin-top: 20px;
   font-size: 1rem;
   padding: 2px 0px;
-  background-color: #fff;
+  background-color: #FFF;
 }
 
 .firstName {
@@ -126,7 +126,7 @@
 }
 
 .errorMessage {
-  color: #f00;
+  color: #F00;
   font-size: 12px;
   margin-top: 3px;
 }
@@ -141,14 +141,14 @@
 .emailDetailsAndUploadResumeInput input {
   width: 52vw;
   padding: 2px 0px;
-  background-color: #fff;
+  background-color: #FFF;
 }
 
 .emailDetailsAndUploadResume button {
   border: none;
   background: none;
   font-weight: bold;
-  color: #0057b1;
+  color: #0057B1;
   font-size: 1rem;
 }
 
@@ -180,12 +180,12 @@
 }
 
 .replaceResume {
-  background-color: #0057b1 !important;
+  background-color: #0057B1 !important;
 }
 
 .uploadResumeSection button {
-  color: #fff;
-  background: #6c6c6c;
+  color: #FFF;
+  background: #6C6C6C;
   border: none;
   border-radius: 20px;
   text-align: center;
@@ -193,8 +193,8 @@
 }
 
 .submitButtonForReferral {
-  background: #6c6c6c;
-  color: #fff;
+  background: #6C6C6C;
+  color: #FFF;
   border: none;
   border-radius: 20px;
   padding: 10px 14px;
@@ -206,7 +206,7 @@
   margin-top: 35px;
   margin-bottom: 10px;
   border-radius: 10px;
-  background: #d8ecff;
+  background: #D8ECFF;
   padding: 25px;
 }
 
@@ -229,7 +229,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: #FFF;
   line-height: 10px;
   box-shadow: 1px 1px 2px #808080;
 }
@@ -237,16 +237,16 @@
 .addIconJobDesc {
   width: 18px;
   height: 18px;
-  background: #fff;
+  background: #FFF;
   padding: 8px 0px 5px 10px;
   border-radius: 27px;
-  background: #fff;
+  background: #FFF;
 }
 
 .jobDescription input {
   border: none;
   border-bottom: 1px solid #000;
-  background: #d8ecff;
+  background: #D8ECFF;
   outline: none;
   margin-top: 20px;
   width: 20.5vw;
@@ -286,12 +286,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: .5rem;
   margin-top: 10px;
 }
 
 .makeButtonGreenColor {
-  color: #00b312 !important;
+  color: #00B312 !important;
   cursor: default;
 }
 
@@ -324,7 +324,7 @@
 }
 
 .makeOtpGray {
-  background-color: #6c6c6c !important;
+  background-color: #6C6C6C !important;
 }
 
 .makeBgBlur {
@@ -350,18 +350,18 @@
 .goToSignupButton {
   margin-top: 30px;
   border: none;
-  background: #0057b1;
-  color: #fff;
+  background: #0057B1;
+  color: #FFF;
   border-radius: 20px;
   padding: 8px 40px;
 }
 
 .makeBgBlue {
-  background-color: #0057b1 !important;
+  background-color: #0057B1 !important;
 }
 
 .notHavingProfessionalDetails {
-  background-color: #ffdbdb;
+  background-color: #FFDBDB;
   border-radius: 8px;
   margin-bottom: 20px;
 }
@@ -374,7 +374,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: .5rem;
   color: black;
 }
 
@@ -391,10 +391,11 @@
 }
 
 .backToPublicProfile .profile_image {
-  padding: 0.6rem;
+  padding: .6rem;
   border-radius: 50%;
   font-size: 1rem;
 }
+
 
 /* popup styles */
 
@@ -415,7 +416,7 @@
 
 .popUpWindow {
   width: min(400px, 80vw);
-  background-color: #fff;
+  background-color: #FFF;
   border-radius: 8px;
   position: fixed;
   top: 50%;
@@ -431,7 +432,7 @@
   color: red;
 }
 
-.loginPrompt p {
+.loginPrompt p{
   display: inline-block;
   margin: 1rem;
   margin-left: 0;
@@ -442,88 +443,88 @@
   outline: none;
   border-radius: 5px;
   color: white;
-  background-color: #0057b1;
+  background-color: #0057B1;
   padding: 0.5rem 1rem;
 }
 
 @media screen and (max-width: 768px) {
   .referralRequestModal {
-    width: 90vw;
+      width: 90vw;
   }
 
   .firstNameAndLastName input {
-    width: 33vw !important;
+      width: 33vw !important;
   }
 
   .emailDetailsAndUploadResumeInput input {
-    width: 80vw;
+      width: 80vw;
   }
 }
 
 @media screen and (max-width: 375px) {
   .referralRequestModal {
-    width: 95vw;
+      width: 95vw;
   }
 
   .uploadResume {
-    gap: 1rem;
+      gap: 1rem;
   }
 
   .emailDetailsAndUploadResumeInput {
-    gap: 0.2rem;
+      gap: .2rem;
   }
 }
 
 @media screen and (max-width: 480px) {
   .referralRequestHeaderDesc {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    margin-bottom: 10px;
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+      margin-bottom: 10px;
   }
 
   .referralRequestModal {
-    margin-top: 20px;
+      margin-top: 20px;
   }
 
   .referralRequestDetails {
-    padding: 0;
+      padding: 0;
   }
 
   .addJobForReferral {
-    width: 30px;
-    height: 30px;
+      width: 30px;
+      height: 30px;
   }
 
   .jobDescriptionForReferral {
-    padding: 20px;
+      padding: 20px;
   }
 
   .uploadResume {
-    padding: 0;
-    position: relative;
+      padding: 0;
+      position: relative;
   }
 
   .uploadResume .submitReferralLoader {
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
   }
 
   .secondComer {
-    display: none;
+      display: none;
   }
 }
 
 @media screen and (min-width: 769px) and (max-width: 1024px) {
   .referralRequestModal {
-    width: 80vw;
+      width: 80vw;
   }
 
   .firstNameAndLastName input {
-    width: 33vw !important;
+      width: 33vw !important;
   }
 
   .emailDetailsAndUploadResumeInput input {
-    width: 70vw;
+      width: 70vw;
   }
 }

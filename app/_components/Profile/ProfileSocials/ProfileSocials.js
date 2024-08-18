@@ -89,29 +89,45 @@ function ProfileSocials({
 
   // Update the links in local state and the context
   function updateLink(e, platform) {
+    const trimmedValue = e.target.value.trim();
+  
     if (!platform.includes('other')) {
       const platformData = socialMedia.find(
         (social) => social.name === platform
       );
-      const trimmedValue = e.target.value.trim();
       const updatedLinks = {
         ...links,
-        [platform]: trimmedValue ? platformData.baseURL + trimmedValue : '',
+        [platform]: trimmedValue ? platformData.baseURL + trimmedValue : null, // Use null for deletion
       };
-      setLinks(updatedLinks);
-      saveChanges(updatedLinks);
+  
+      // Filter out null values before saving changes
+      const filteredLinks = Object.fromEntries(
+        Object.entries(updatedLinks).filter(([_, value]) => value !== null)
+      );
+  
+      setLinks(filteredLinks);
+      saveChanges(filteredLinks);
       setHasUnsavedChanges(true);
     } else {
       // It's an "other" link
       const updatedOtherLinks = {
         ...otherLinks,
-        [platform]: e.target.value.trim(),
+        [platform]: trimmedValue || null, // Use null for deletion
       };
-      setOtherLinks(updatedOtherLinks);
-      saveChanges({ ...links, ...updatedOtherLinks });
+  
+      // Filter out null values before saving changes
+      const filteredOtherLinks = Object.fromEntries(
+        Object.entries(updatedOtherLinks).filter(([_, value]) => value !== null)
+      );
+  
+      const combinedLinks = { ...links, ...filteredOtherLinks };
+  
+      setOtherLinks(filteredOtherLinks);
+      saveChanges(combinedLinks);
       setHasUnsavedChanges(true);
     }
   }
+  
 
   // Function to save changes to context
   function saveChanges(data) {
