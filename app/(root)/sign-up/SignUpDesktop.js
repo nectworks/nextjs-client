@@ -605,12 +605,8 @@ const SignUpDesktop = () => {
         showSignupSpinner(false);
         setUser(res.data.user);
 
-        router.push(prevLocation || '/profile', {
-          state: {
-            from: '/sign-up',
-          },
-          replace: true,
-        });
+        sessionStorage.setItem('from', '/sign-up');
+        router.push(prevLocation || '/profile');
       }
     } catch (err) {
       showSignupSpinner(false);
@@ -662,7 +658,7 @@ const SignUpDesktop = () => {
 
   useEffect(() => {
     /* if the user is already registered, redirect them to where they came from
-           or to the profile page */
+               or to the profile page */
     if (user) {
       router.push(prevLocation || '/profile', { replace: true });
       return;
