@@ -40,7 +40,7 @@ const Professional = () => {
             </div>
 
             <div className="containers">
-                <div className="content_first">
+                <div className="content_first professionalHeading">
                     <h3 className="content_heading">
                         How a professional Nectworks account works?<br></br>
                         <br></br>
