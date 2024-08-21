@@ -8,7 +8,6 @@
     its children components, serving as a layout container for the blog post.
 */
 
-
 import { publicAxios } from '@/config/axiosInstance';
 
 export async function generateMetadata({ params }) {

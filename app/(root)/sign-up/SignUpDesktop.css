@@ -1201,6 +1201,7 @@ signIn-container .sign__in__alignmemt {
 .othersigninoptions {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 24px;
   fill: #6c6c6c;
   stroke-width: 2px;

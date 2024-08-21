@@ -8,7 +8,6 @@
 import './JobSeeker.css';
 import FirstImage from '@/public/JobSeeker/jobseekerHeroImg.webp';
 import Link from 'next/link';
-import Image from 'next/image';
 import scrollToTop from '@/Utils/scrollToTop';
 import Placeholder1 from '@/public/JobSeeker/placeholder_1.webp';
 
@@ -23,8 +22,8 @@ const JobSeeker = () => {
         A revolutionary stride keeping you in mind
       </p>
       <div className="placeholders_mobile_first">
-        <Image
-          src={Placeholder1}
+        <img
+          src={Placeholder1.src}
           alt="Image Not Found"
           className="placeholder_mobile_first"
           width={350}
@@ -32,10 +31,10 @@ const JobSeeker = () => {
         />
       </div>
       <div className="center-image">
-        <Image
-          src={FirstImage}
+        <img
+          src={FirstImage.src}
           alt="Image Not Found"
-          className="JobSeekerHeroImage"
+          className="JobSeekerHeroImg"
         />
       </div>
 
@@ -75,8 +74,8 @@ const JobSeeker = () => {
             referring you.
           </p>
           <div className="placeholders_mobile">
-            <Image
-              src={Placeholder1}
+            <img
+              src={Placeholder1.src}
               alt="Image Not Found"
               className="placehoder_mobile"
               width={350}
@@ -86,8 +85,8 @@ const JobSeeker = () => {
         </div>
 
         <div className="placeholders">
-          <Image
-            src={Placeholder1}
+          <img
+            src={Placeholder1.src}
             alt="Image Not Found"
             className="placehoder-Image"
           />
@@ -95,8 +94,8 @@ const JobSeeker = () => {
       </div>
       <div className="containers">
         <div className="placeholders">
-          <Image
-            src={Placeholder1}
+          <img
+            src={Placeholder1.src}
             alt="Image Not Found"
             className="placehoder-Image"
           />
@@ -120,7 +119,7 @@ const JobSeeker = () => {
             <br></br>
           </p>
           <div className="placeholders_mobile">
-            <Image
+            <img
               src={Placeholder1}
               alt="Image Not Found"
               className="placehoder_mobile"
@@ -148,8 +147,8 @@ const JobSeeker = () => {
             <br></br>
           </p>
           <div className="placeholders_mobile">
-            <Image
-              src={Placeholder1}
+            <img
+              src={Placeholder1.src}
               alt="Image Not Found"
               className="placehoder_mobile"
               width={350}
@@ -158,8 +157,8 @@ const JobSeeker = () => {
           </div>
         </div>
         <div className="placeholders">
-          <Image
-            src={Placeholder1}
+          <img
+            src={Placeholder1.src}
             alt="Image Not Found"
             className="placehoder-Image"
           />

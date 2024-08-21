@@ -391,12 +391,8 @@ const SignUpMobile = () => {
         showSignupSpinner(false);
         setUser(res.data.user);
 
-        router.push(prevLocation || '/profile', {
-          state: {
-            from: '/sign-up',
-          },
-          replace: true,
-        });
+        sessionStorage.setItem('from', '/sign-up');
+        router.push(prevLocation || '/profile');
       }
     } catch (err) {
       showSignupSpinner(false);
@@ -440,7 +436,7 @@ const SignUpMobile = () => {
 
   useEffect(() => {
     /* if the user is already registered, redirect them to where they came from
-       or to the profile page */
+               or to the profile page */
     if (user) {
       router.push(prevLocation || '/profile', { replace: true });
       return;
@@ -465,7 +461,7 @@ const SignUpMobile = () => {
                   First Name<span className="required__color">&nbsp;*</span>
                 </span>
               </label>
-              <Image src={infoIcon} alt="user first name label" />
+              <img src={infoIcon.src} alt="user first name label" />
               <div className="error-container-mobile">
                 <input
                   type="text"
@@ -496,13 +492,13 @@ const SignUpMobile = () => {
                   Last Name<span className="required__color">&nbsp;*</span>
                 </span>
               </label>
-              <Image src={infoIcon} alt="user last name label" />
+              <img src={infoIcon.src} alt="user last name label" />
               <div className="error-container-mobile">
                 <input
                   type="text"
                   value={lastName}
                   onChange={handleLastNameChange}
-                  className={`input__style_mob 
+                  className={`input__style_mob
                   ${isNameValid(lastName) ? 'valid' : 'invalid'}`}
                   disabled={showOtpScreenSignUp}
                 />
@@ -526,13 +522,13 @@ const SignUpMobile = () => {
                   Username<span className="required__color"></span>
                 </span>
               </label>
-              <Image src={userNameIcon} alt="username label" />
+              <img src={userNameIcon.src} alt="username label" />
               <div className="error-container-mobile">
                 <input
                   type="text"
                   value={username}
                   onChange={handleUsernameChange}
-                  className={`input__style_mob 
+                  className={`input__style_mob
                   ${isUsernameValid(username) ? 'valid' : 'invalid'}`}
                   disabled={showOtpScreenSignUp}
                 />
@@ -587,7 +583,11 @@ const SignUpMobile = () => {
                   Email address<span className="required__color">&nbsp;*</span>
                 </span>
               </label>
-              <Image className="emailIcon" src={emailIcon} alt="email label" />
+              <img
+                className="emailIcon"
+                src={emailIcon.src}
+                alt="email label"
+              />
               <div className="error-container-mobile">
                 <input
                   type="email"
@@ -599,7 +599,7 @@ const SignUpMobile = () => {
                       document.getElementById('send__otp__button').click();
                     }
                   }}
-                  className={`mobile__email__signup 
+                  className={`mobile__email__signup
                   input__style_mob ${
                     isEmailValid(email) ? 'valid' : 'invalid'
                   }`}
@@ -610,7 +610,7 @@ const SignUpMobile = () => {
                 )}
                 <button
                   disabled={verifyEmail}
-                  className={`send__otp__button 
+                  className={`send__otp__button
                   ${showSpinner ? 'increaseSendOTPWidth' : ''}
                   ${verifyEmail ? 'disablebutton' : null}`}
                   onClick={handleOtpButtonClickSignUp}
@@ -629,7 +629,7 @@ const SignUpMobile = () => {
             </div>
             {emailError && (
               <div
-                className={`error-message-mobile error-message-mobile-email 
+                className={`error-message-mobile error-message-mobile-email
             ${verifyEmail ? 'changeErrorColorGreen' : ''}`}
               >
                 {emailError}
@@ -667,11 +667,11 @@ const SignUpMobile = () => {
           </div>
           <div className="othersigninbuttons">
             <button onClick={signInWithGoogle}>
-              <Image src={GoogleIcon} alt="google icon" />
+              <img src={GoogleIcon.src} alt="google icon" />
               Continue with Google
             </button>
             <button onClick={signInWithLinkedin}>
-              <Image src={LinkedInIcon} alt="linkedin icon" />
+              <img src={LinkedInIcon.src} alt="linkedin icon" />
               Continue with LinkedIn
             </button>
           </div>

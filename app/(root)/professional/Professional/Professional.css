@@ -1,5 +1,6 @@
 .professional_whole_page {
   padding: 2rem 7rem;
+  background-color: #f3f3f3;
 }
 
 .Professional_heading_first {
@@ -39,12 +40,22 @@
   align-items: center;
   justify-content: space-between;
   padding: 60px;
+  padding: 1rem 3rem;
+  margin: 1.5rem 0;
+  gap: 1.5rem;
 }
 
 .content_first {
   margin-bottom: 20px;
   flex-direction: column;
-  width: 50%;
+  width: 100%;
+}
+
+.professionalHeading {
+  text-align: center;
+  padding: 1rem 3rem;
+  margin: 1.5rem 0;
+  gap: 1.5rem;
 }
 
 .placeholders {
@@ -215,7 +226,7 @@
   .content_first {
     margin-bottom: 20px;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
   }
   .second_content_heading_left {
     font-size: 26px;
@@ -264,6 +275,7 @@
 
   .text-left {
     width: 80%;
+    margin: 0 auto;
   }
   .text-left > h3 {
     margin-bottom: 20px;
@@ -285,7 +297,7 @@
     overflow: hidden;
     display: block;
 
-    background-image: url('/src/Assets/Professional/professionalHeroImg.webp');
+    background-image: url('/public/Professional/professionalHeroImg.webp');
     background-size: cover;
     background-position: 70px;
     background-repeat: no-repeat;
@@ -405,6 +417,7 @@
   }
   .text-left {
     width: 80%;
+    margin: 0 auto;
   }
   .text-left > h3 {
     width: 100%;
@@ -424,6 +437,13 @@
     flex-direction: row !important;
     align-items: center;
     column-gap: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 24px;
+    max-width: 100%;
+    margin: 2rem auto;
   }
   .content_paragraphs_left {
     margin-left: 15px;

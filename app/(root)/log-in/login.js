@@ -7,11 +7,9 @@
 
 import { useContext, useEffect, useState } from 'react';
 import '../sign-up/SignUpMobile.css';
-import '../sign-up/SignUpDesktop.css';
 import emailIcon from '@/public/SignIn/emailIcon.svg';
 import otpIcon from '@/public/SignIn/otpIcon.svg';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { privateAxios, publicAxios } from '@/config/axiosInstance.js';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -116,8 +114,7 @@ export default function Login() {
           `You've been blocked from signing in till ${banDateString} ${banTimeString}`,
           10000
         );
-      } else {
-        console.log(`status code: ${status}, Error: ${data}`);
+      } else {  
         showBottomMessage('Unknown error occured');
       }
       setUserEmailNotExist(true);
@@ -254,7 +251,7 @@ export default function Login() {
 
   useEffect(() => {
     /* if the user is already registered, redirect them to where they came from
-       or to the profile page */
+           or to the profile page */
     if (user) {
       router.replace(prevLocation || '/profile');
       return;
@@ -264,15 +261,15 @@ export default function Login() {
   return (
     <>
       <div
-        className={`mob__container container 
+        className={`mob__container container
               ${showOtpScreenSignUp ? 'blurBG' : ''}`}
       >
         <h2 className="mob__header">Welcome Back!</h2>
         <form>
           <label className="label__style">Email address</label>
-          <Image
+          <img
             className="loginImages loginImageIcon1"
-            src={emailIcon}
+            src={emailIcon.src}
             alt="username or email label"
           />
           <div className="loginMobileInput">
@@ -317,9 +314,9 @@ export default function Login() {
               )}
 
               <label className="label__style">OTP</label>
-              <Image
+              <img
                 className="loginImages loginImageIcon2"
-                src={otpIcon}
+                src={otpIcon.src}
                 alt="otp label"
               />
 
@@ -412,11 +409,11 @@ export default function Login() {
           </div>
           <div className="othersigninbuttons">
             <button onClick={signInWithGoogle}>
-              <Image src={GoogleIcon} alt="google icon" />
+              <img src={GoogleIcon.src} alt="google icon" />
               Continue with Google
             </button>
             <button onClick={signInWithLinkedin}>
-              <Image src={LinkedInIcon} alt="linkedin icon" />
+              <img src={LinkedInIcon.src} alt="linkedin icon" />
               Continue with LinkedIn
             </button>
           </div>

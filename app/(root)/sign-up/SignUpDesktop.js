@@ -605,12 +605,8 @@ const SignUpDesktop = () => {
         showSignupSpinner(false);
         setUser(res.data.user);
 
-        router.push(prevLocation || '/profile', {
-          state: {
-            from: '/sign-up',
-          },
-          replace: true,
-        });
+        sessionStorage.setItem('from', '/sign-up');
+        router.push(prevLocation || '/profile');
       }
     } catch (err) {
       showSignupSpinner(false);
@@ -662,7 +658,7 @@ const SignUpDesktop = () => {
 
   useEffect(() => {
     /* if the user is already registered, redirect them to where they came from
-       or to the profile page */
+               or to the profile page */
     if (user) {
       router.push(prevLocation || '/profile', { replace: true });
       return;
@@ -691,7 +687,7 @@ const SignUpDesktop = () => {
                         First Name
                         <span className="required__color">&nbsp;*</span>
                       </label>
-                      <Image src={infoIcon} alt="first name label" />
+                      <img src={infoIcon.src} alt="first name label" />
                       <div
                         className={`input-icon ${
                           isNameValid(firstName) ? 'valid' : 'invalid'
@@ -725,7 +721,7 @@ const SignUpDesktop = () => {
                         Last Name
                         <span className="required__color">&nbsp;*</span>
                       </label>
-                      <Image src={infoIcon} alt="last name label" />
+                      <img src={infoIcon.src} alt="last name label" />
                       <div
                         className={`input-icon ${
                           isNameValid(lastName) ? 'valid' : 'invalid'
@@ -756,7 +752,7 @@ const SignUpDesktop = () => {
                   <div className="first__name__container">
                     <div className="input-wrapper">
                       <label className="input__header">Username</label>
-                      <Image src={userNameIcon} alt="username label" />
+                      <img src={userNameIcon.src} alt="username label" />
                       <div
                         className={`input-icon ${
                           isUsernameValid(username) ? 'valid' : 'invalid'
@@ -822,7 +818,7 @@ const SignUpDesktop = () => {
                       Email address
                       <span className="required__color">&nbsp;*</span>
                     </label>
-                    <Image src={emailIcon} alt="user's email label" />
+                    <img src={emailIcon.src} alt="user's email label" />
                     <div
                       className={`input-icon ${
                         isEmailValid(email) ? 'valid' : 'invalid'
@@ -901,11 +897,11 @@ const SignUpDesktop = () => {
                 </div>
                 <div className="othersigninbuttons">
                   <button onClick={signInWithGoogle}>
-                    <Image src={GoogleIcon} alt="google icon" />
+                    <img src={GoogleIcon.src} alt="google icon" />
                     Continue with Google
                   </button>
                   <button onClick={signInWithLinkedin}>
-                    <Image src={LinkedInIcon} alt="linkedin icon" />
+                    <img src={LinkedInIcon.src} alt="linkedin icon" />
                     Continue with LinkedIn
                   </button>
                 </div>
@@ -970,7 +966,7 @@ const SignUpDesktop = () => {
                   >
                     Email address
                   </label>
-                  <Image src={emailIcon} alt="email label" />
+                  <img src={emailIcon.src} alt="email label" />
                   <div
                     className={`input-icon ${isEmailValid(email) ? 'valid' : 'invalid'}`}
                   >
@@ -1040,7 +1036,7 @@ const SignUpDesktop = () => {
                       </label>
 
                       <div className="otp__input-container">
-                        <Image src={otpIcon} alt="" />
+                        <img src={otpIcon.src} alt="" />
                         <input
                           type="text"
                           value={otpInput}
@@ -1120,11 +1116,11 @@ const SignUpDesktop = () => {
                 </div>
                 <div className="othersigninbuttons">
                   <button onClick={signInWithGoogle}>
-                    <Image src={GoogleIcon} alt="google icon" />
+                    <img src={GoogleIcon.src} alt="google icon" />
                     Continue with Google
                   </button>
                   <button onClick={signInWithLinkedin}>
-                    <Image src={LinkedInIcon} alt="linkedin icon" />
+                    <img src={LinkedInIcon.src} alt="linkedin icon" />
                     Continue with LinkedIn
                   </button>
                 </div>

@@ -6,16 +6,19 @@
   linkedin signup
 */
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import './SignUpRedirect.css';
 import { privateAxios } from '@/config/axiosInstance';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { UserContext } from '@/context/User/UserContext';
 
 function SignUpRedirect() {
   const router = useRouter();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const { userState } = useContext(UserContext);
+  const [user, setUser] = userState;
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -31,6 +34,7 @@ function SignUpRedirect() {
 
       // if user is successfully signed up redirect them to profile page
       const { signUp } = res.data;
+      setUser(res.data.user);
 
       if (res.status === 200) {
         setMessage('Successfully authenticated.');
@@ -62,8 +66,6 @@ function SignUpRedirect() {
     } else {
       sendCode(codeParam);
     }
-
-    setSearchParams({});
   }, []);
 
   return (

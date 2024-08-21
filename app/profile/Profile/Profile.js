@@ -75,8 +75,8 @@ import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import downloadDocument from '@/Utils/downloadDocument';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 /*
   Note about using localStorage and sessionStorage:
@@ -105,7 +105,7 @@ const ProfilePage = () => {
   const [subSection, setSubSection] = useState(1);
 
   /* decides the index of the sub section data we are updating.
-     -1 implies we are adding new data */
+       -1 implies we are adding new data */
   const [subSectionIndex, setSubSectionIndex] = useState(-1);
 
   // state to indicate that data is begin changed.
@@ -204,7 +204,7 @@ const ProfilePage = () => {
   ];
 
   /* calculate the time difference between the start and end of the experience,
-  format it into string and return */
+    format it into string and return */
   function getTimeDifference(data) {
     const { startMonth, startYear, endMonth, endYear } = data;
 
@@ -236,7 +236,7 @@ const ProfilePage = () => {
     for (let i = 0; i < userInfo?.experience?.length; i += 1) {
       const experience = userInfo.experience[i];
       /* if the user is currently working somewhere,
-      return their current role and company */
+            return their current role and company */
       if (experience.currentlyWorking === true) {
         return `${experience.jobTitle} at ${experience.companyName}`;
       }
@@ -278,8 +278,8 @@ const ProfilePage = () => {
   }
 
   /* A simple function to reduce the character length in a paragraph
-    and implement show more/show less feature.
-  */
+      and implement show more/show less feature.
+    */
   function toggleDescription(e) {
     // get the closest paragraph
     const revealBtn = e.target;
@@ -291,7 +291,7 @@ const ProfilePage = () => {
 
     if (oldStatus === 'hide') {
       /* if the section was previously hidden, it will be revealed
-         and hence change the text and the status */
+               and hence change the text and the status */
       revealBtn.innerText = 'Show less';
       revealBtn.dataset.status = 'reveal';
     } else {
@@ -641,7 +641,6 @@ const ProfilePage = () => {
             draggable: true,
             progress: undefined,
           });
-          console.log('Res: ', res);
           //It will refresh the page when resume is uploaded successfully
           setResumeFileUrl(res.url);
         } else {
@@ -702,22 +701,23 @@ const ProfilePage = () => {
   }, [user]);
 
   useEffect(() => {
-    // show the pop up only if redirected from signup page
-    if (location.state?.from === '/sign-up') {
+    const from = sessionStorage.getItem('from');
+    console.log(from);
+    // Check if the user came from the sign-up page
+    if (from === '/sign-up') {
       setSignUpPopup(true);
 
-      /* useLocation() data is stored in browser session
-       and can persist through render and refresh.
-       since, the popup is displayed based on this state,
-       clear the browser history after displaying the popup once */
-      window.history.replaceState({}, '');
+      // Clear the 'from' value from session storage after using it
+      sessionStorage.removeItem('from');
     }
 
     const sharePostParam = searchParams.get('post_shared');
     if (sharePostParam && sharePostParam === 'success') {
       showBottomMessage('Successfully shared the post');
+      const newUrl = router.pathname;
+      router.replace(newUrl, undefined, { shallow: true });
     }
-  }, [searchParams]);
+  }, [router, searchParams]);
 
   const [showSignUpForm, setShowSignUpForm] = useState(false);
   const handleEditClick = () => {
@@ -970,14 +970,14 @@ const ProfilePage = () => {
                         </div>
                         {openDateForm && (
                           <div className="joining_toggle_message_dateForm">
-                            {/* <DatePicker
+                            <DatePicker
                               selected={selectedDate}
                               onChange={handleDateChange}
-                              minDate={new Date()} // Set minimum date to today
+                              minDate={new Date()}
                               maxDate={maxDate}
-                              dateFormat="yyyy-MM-dd" // Date format
-                              placeholderText="Select a date" // Placeholder text
-                            />*/}
+                              dateFormat="yyyy-MM-dd"
+                              placeholderText="Select a date"
+                            />
                           </div>
                         )}
                         <button

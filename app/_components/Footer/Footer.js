@@ -25,8 +25,8 @@ export default function Footer() {
             {/* First Part */}
             <div className="first__part">
               <Link href="/">
-                <Image
-                  src={companyName}
+                <img
+                  src={companyName.src}
                   onClick={scrollToTop}
                   alt="Nectworks home page"
                 />
@@ -74,9 +74,9 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
             >
-              <Image
+              <img
                 className="social__media__icons"
-                src={linkedinImg}
+                src={linkedinImg.src}
                 alt="linkedin icon"
               />
             </a>
@@ -85,9 +85,9 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
             >
-              <Image
+              <img
                 className="social__media__icons"
-                src={twitterIcon}
+                src={twitterIcon.src}
                 alt="twitter icon"
               />
             </a>

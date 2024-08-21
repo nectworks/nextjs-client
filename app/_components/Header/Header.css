@@ -18,10 +18,9 @@
 }
 
 /* Styling for the logo image */
-.image {
-  aspect-ratio: 1;
+
+.logo img {
   width: 10rem;
-  height: 2.5rem;
 }
 
 /* Remove underline from anchor tags inside list items */
