@@ -45,6 +45,7 @@ import behanceLogo from '@/public/socialsLogo/behanceLogo.svg';
 import dribbleLogo from '@/public/socialsLogo/dribbleLogo.svg';
 import crunchbaseLogo from '@/public/socialsLogo/crunchbaseLogo.svg';
 import hashnodeLogo from '@/public/socialsLogo/hashnodeLogo.svg';
+import linkedinLogo from '@/public/socialsLogo/linkedinLogo.svg';
 
 const PublicProfile = () => {
   // get the loggedin user from the context
@@ -73,7 +74,7 @@ const PublicProfile = () => {
     let linkIcon = LinkBtn;
 
     if (hostname.includes('linkedin')) {
-      linkIcon = linkedInIcon;
+      linkIcon = linkedinLogo;
     } else if (hostname.includes('twitter')) {
       linkIcon = twitterLogo;
     } else if (hostname.includes('github')) {
