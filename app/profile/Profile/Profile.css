@@ -1007,3 +1007,75 @@ input:checked + .slider {
     width: 350px;
   }
 }
+
+/* Base switch styles */
+.ios-switch {
+  width: 42px;
+  height: 26px;
+  padding: 0;
+}
+
+/* Switch Base */
+.ios-switch .MuiSwitch-switchBase {
+  padding: 0;
+  margin: 2px;
+  transition-duration: 300ms;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-checked {
+  transform: translateX(16px);
+  color: #fff;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: #65C466;
+  opacity: 1;
+  border: 0;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-focusVisible .MuiSwitch-thumb {
+  color: #33cf4d;
+  border: 6px solid #fff;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-disabled .MuiSwitch-thumb {
+  color: #e0e0e0;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-disabled + .MuiSwitch-track {
+  opacity: 0.7;
+}
+
+/* Switch Thumb */
+.ios-switch .MuiSwitch-thumb {
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+}
+
+/* Switch Track */
+.ios-switch .MuiSwitch-track {
+  border-radius: 13px;
+  background-color: #E9E9EA;
+  opacity: 1;
+  transition: background-color 500ms;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .ios-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+    background-color: #2ECA45;
+  }
+
+  .ios-switch .MuiSwitch-switchBase.Mui-disabled .MuiSwitch-thumb {
+    color: #757575;
+  }
+
+  .ios-switch .MuiSwitch-track {
+    background-color: #39393D;
+  }
+
+  .ios-switch .MuiSwitch-switchBase.Mui-disabled + .MuiSwitch-track {
+    opacity: 0.3;
+  }
+}

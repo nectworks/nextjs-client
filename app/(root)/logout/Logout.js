@@ -35,7 +35,7 @@ const Logout = () => {
       router.push('/log-in');
     } catch (error) {
       // An error occurred during logout process
-      showBottomMessage(`Could not logout`);
+      // showBottomMessage(`Could not logout`);
     }
   };
 

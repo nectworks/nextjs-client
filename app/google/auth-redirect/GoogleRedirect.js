@@ -48,8 +48,8 @@ function SignUpRedirect() {
       }
     } catch (error) {
       console.error('Authentication error:', error);
-      setAuthenticationError(true);
-      setMessage('Error while authenticating user.');
+      // setAuthenticationError(true);
+      // setMessage('Error while authenticating user.');
     } finally {
       setIsLoading(false);
     }

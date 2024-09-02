@@ -54,6 +54,7 @@ import behanceLogo from '@/public/socialsLogo/behanceLogo.svg';
 import dribbleLogo from '@/public/socialsLogo/dribbleLogo.svg';
 import crunchbaseLogo from '@/public/socialsLogo/crunchbaseLogo.svg';
 import hashnodeLogo from '@/public/socialsLogo/hashnodeLogo.svg';
+import StyledIOSSwitch from '../../_components/Switch/switch';
 import {
   FaBriefcase,
   FaMedal,
@@ -270,6 +271,7 @@ const ProfilePage = () => {
         setShowDeleteConfirmation(false);
         showBottomMessage('Resume deleted successfully');
         //It will refresh the page when resume is deleted successfully
+        window.location.reload();
         setResumeFileUrl(null);
       }
     } catch (error) {
@@ -368,23 +370,63 @@ const ProfilePage = () => {
   }, [user]);
 
   const [shouldDisplayMessage, setShouldDisplayMessage] = useState(false);
-
-  const handleActivelySeekingToggleChange = async () => {
+  const switchRef = useRef(null);
+  const handleActivelySeekingToggleChange = async (event) => {
     try {
-      const value = !activelySeekingJob;
+      const newValue = event.target.checked;
+
+      // Optimistically update the UI
+      setActivelySeekingJob(newValue);
+
       // Make PUT request to update activelySeekingJob status
-      const response = await publicAxios.put(
-        '/signUpCards/updateActivelySeekingJob',
-        {
-          userId: user._id,
-          activelySeekingJob: value,
-        }
-      );
-      setActivelySeekingJob(response.data.activelySeekingJob);
+      const response = await publicAxios.put('/signUpCards/updateActivelySeekingJob', {
+        userId: user._id,
+        activelySeekingJob: newValue,
+      });
+
+      if (response.status !== 200) {
+        console.error('Failed to update job status');
+        // Optionally, revert the state if the update failed
+        setActivelySeekingJob(!newValue);
+      }
     } catch (error) {
       console.error('Error updating actively seeking job status:', error);
+      // Optionally, revert the state if an error occurred
+      setActivelySeekingJob(!newValue);
     }
   };
+
+  useEffect(() => {
+    // Manually change the switch state if needed
+    if (switchRef.current) {
+      switchRef.current.checked = activelySeekingJob;
+    }
+  }, [activelySeekingJob]);
+  // const handleActivelySeekingToggleChange = async () => {
+  //   try {
+  //     const value = !activelySeekingJob;
+  //     // Make PUT request to update activelySeekingJob status
+  //     const response = await publicAxios.put(
+  //       '/signUpCards/updateActivelySeekingJob',
+  //       {
+  //         userId: user._id,
+  //         activelySeekingJob: value,
+  //       }
+  //     );
+  //     if (response.status === 200) {
+  //       // Update the toggle manually if necessary
+  //       const switchElement = document.getElementsByClassName('MuiSwitch-input')[0];
+  //       if (switchElement) {
+  //         switchElement.checked = value;
+  //       }
+  //       setActivelySeekingJob(response.data.activelySeekingJob);
+  //     } else {
+  //       console.error('Failed to update job status');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating actively seeking job status:', error);
+  //   }
+  // };
   const handleImmediateJoinerToggleChange = async () => {
     if (!toggle) {
       setShouldDisplayMessage(true);
@@ -600,9 +642,8 @@ const ProfilePage = () => {
   };
 
   // CSS classes for styling
-  const uploadBoxClass = `dashboard_info_resume_upload_box ${
-    isDragging ? 'drag-over' : ''
-  }`;
+  const uploadBoxClass = `dashboard_info_resume_upload_box ${isDragging ? 'drag-over' : ''
+    }`;
   const [resumeUploadStatus, setResumeUploadStatus] = useState(false);
   const uploadFile = async (selectedFile) => {
     setResumeUploadStatus(true);
@@ -621,6 +662,7 @@ const ProfilePage = () => {
         await publicAxios.put('/signUpCards/saveFileKey', {
           fileName,
           userId: user._id,
+          fileUrl: signedUrl,
         });
         const res = await fetch(signedUrl, {
           method: 'PUT',
@@ -642,6 +684,7 @@ const ProfilePage = () => {
             progress: undefined,
           });
           //It will refresh the page when resume is uploaded successfully
+          window.location.reload();
           setResumeFileUrl(res.url);
         } else {
           console.error('Failed final upload file');
@@ -803,9 +846,8 @@ const ProfilePage = () => {
                       </p>
                     </div>
                     <button
-                      className={`dashboard_resume_view_button${
-                        !resumeFileUrl ? 'disabled' : ''
-                      }`}
+                      className={`dashboard_resume_view_button${!resumeFileUrl ? 'disabled' : ''
+                        }`}
                       onClick={handleOpenResume}
                       disabled={!resumeFileUrl}
                     >
@@ -859,13 +901,13 @@ const ProfilePage = () => {
                       {user?.isExperienced
                         ? 'Experienced'
                         : 'Fresher' || (
-                            <div
-                              className="popupFormNotFilled"
-                              onClick={handleEditClick}
-                            >
-                              Add Experience
-                            </div>
-                          )}
+                          <div
+                            className="popupFormNotFilled"
+                            onClick={handleEditClick}
+                          >
+                            Add Experience
+                          </div>
+                        )}
                     </p>
                     {showSignUpForm && (
                       <SignUpFormPopup
@@ -915,7 +957,7 @@ const ProfilePage = () => {
               <div className="dashboard_profile_buttons">
                 <div className="dashboard_profile_button">
                   <p>Are you actively looking for a job?</p>
-                  <label className="switch">
+                  {/* <label className="switch">
                     <input
                       type="checkbox"
                       className="job_toggle"
@@ -923,11 +965,17 @@ const ProfilePage = () => {
                       onChange={handleActivelySeekingToggleChange}
                     />
                     <span className="slider round"></span>
-                  </label>
+                  </label> */}
+                  <StyledIOSSwitch
+                    ref={switchRef}
+                    checked={activelySeekingJob}
+                    onChange={handleActivelySeekingToggleChange}
+                    inputProps={{ 'aria-label': 'Actively seeking job toggle' }}
+                  />
                 </div>
                 <div className="dashboard_profile_button">
                   <p>Are you available for immediate joining?</p>
-                  <label className="switch">
+                  {/* <label className="switch">
                     <input
                       type="checkbox"
                       className="joining_toggle"
@@ -935,7 +983,12 @@ const ProfilePage = () => {
                       onChange={handleImmediateJoinerToggleChange}
                     />
                     <span className="slider round"></span>
-                  </label>
+                  </label> */}
+                  <StyledIOSSwitch
+                    checked={toggle}
+                    onChange={handleImmediateJoinerToggleChange}
+                    inputProps={{ 'aria-label': 'Actively seeking job toggle' }}
+                  />
                   {shouldDisplayMessage && (
                     <div className="joining_toggle_message_bg">
                       <div className="joining_toggle_message">
@@ -948,21 +1001,19 @@ const ProfilePage = () => {
                         </div>
                         <div className="buttons_for_joining_toggle_message">
                           <button
-                            className={`joining_toggle_message_button${
-                              selectedButton === 'immediateJoiner'
+                            className={`joining_toggle_message_button${selectedButton === 'immediateJoiner'
                                 ? 'selected'
                                 : ''
-                            }`}
+                              }`}
                             onClick={() => handleButtonClick('immediateJoiner')}
                           >
                             Immediate Joiner
                           </button>
                           <button
-                            className={`joining_toggle_message_button${
-                              selectedButton === 'noticePeriod'
+                            className={`joining_toggle_message_button${selectedButton === 'noticePeriod'
                                 ? 'selected'
                                 : ''
-                            }`}
+                              }`}
                             onClick={() => handleButtonClick('noticePeriod')}
                           >
                             Currently Serving Notice Period
@@ -1074,9 +1125,8 @@ const ProfilePage = () => {
                     <div className="resumedisplay">
                       <h2>Resume</h2>
                       <button
-                        className={`dashboard_resume_view_buttonmobile${
-                          !resumeFileUrl ? 'disabled' : ''
-                        }`}
+                        className={`dashboard_resume_view_buttonmobile${!resumeFileUrl ? 'disabled' : ''
+                          }`}
                         onClick={handleOpenResume}
                         disabled={!resumeFileUrl}
                       >
@@ -1269,9 +1319,9 @@ const ProfilePage = () => {
                             {experience?.currentlyWorking === true
                               ? ' Present'
                               : ' ' +
-                                experience?.endMonth?.substr(0, 3) +
-                                ' ' +
-                                experience?.endYear}
+                              experience?.endMonth?.substr(0, 3) +
+                              ' ' +
+                              experience?.endYear}
                             {/* display the time difference if the user
                               is not working here presently */}
                             {!experience?.currentlyWorking && (
@@ -1330,7 +1380,7 @@ const ProfilePage = () => {
                                     </span>
 
                                     {skillIdx <
-                                    experience?.skills?.length - 1 ? (
+                                      experience?.skills?.length - 1 ? (
                                       <Image
                                         className="dashboard_info_seperator"
                                         src={seperatorIcon}
