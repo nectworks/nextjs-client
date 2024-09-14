@@ -14,6 +14,7 @@ import { DashboardContext } from '@/context/Dashboard/DashboardContext';
 import ClipLoader from 'react-spinners/ClipLoader';
 import usePrivateAxios from '@/Utils/usePrivateAxios';
 import Image from 'next/image';
+import documentLinkIcon from '@/public/Profile/otherLinkIcon.svg';
 
 function ProfileProjects({
   setHeader,
@@ -396,6 +397,7 @@ function ProfileProjects({
 
         <div className="dashboard_projects_form_control">
           <label>Add link</label>
+          <Image src={documentLinkIcon} alt="document link" style={{marginLeft: '10px', paddingTop: '5px'}}/>
           <input
             type="text"
             value={formInput?.link || ''}
