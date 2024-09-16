@@ -329,8 +329,8 @@ function SeekerPublicPage() {
                   );
                 })}
             </div>
-
-            {userData.resume !== null && (
+                
+            {userData.resume && (
               <div className="button_icon_content">
                 <button
                   className="button-with-icon"
