@@ -11,6 +11,7 @@ import {
   privateAxios,
   tokenResInterceptor,
 } from '../../config/axiosInstance.js';
+import { usePathname } from 'next/navigation';
 
 export const UserContext = createContext(null);
 
@@ -21,7 +22,7 @@ export default function UserContextProvider({ children }) {
   const [userMode, setUserMode] = useState('seeker');
   // is fetching the user
   const [isLoading, setIsLoading] = useState(true);
-
+  const pathname = usePathname();
   // Function to check if the user is logged in
   const checkCredentials = () => {
     setIsLoading(true);
@@ -54,6 +55,13 @@ export default function UserContextProvider({ children }) {
       privateAxios.interceptors.response.eject(customInterceptor);
     };
   }, []);
+
+  useEffect(() => {
+    // Call checkCredentials only if the route is '/profile'
+    if (pathname === '/profile') {
+      checkCredentials();
+    }
+  }, [pathname]);
 
   useEffect(() => {
     /* whenever user state changes, update the usermode TODO: userMode is not persisted throught refresh. */

@@ -6,7 +6,7 @@
   google signup
 */
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import '../../linkedin/auth-redirect/SignUpRedirect.css';
@@ -23,6 +23,9 @@ function SignUpRedirect() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [authenticationError, setAuthenticationError] = useState(false);
+
+  // Use a ref to prevent the call from being made twice
+  const hasRequested = useRef(false);
 
   async function sendCode(authCode) {
     setIsLoading(true);
@@ -48,8 +51,8 @@ function SignUpRedirect() {
       }
     } catch (error) {
       console.error('Authentication error:', error);
-      // setAuthenticationError(true);
-      // setMessage('Error while authenticating user.');
+      setAuthenticationError(true);
+      setMessage('Error while authenticating user.');
     } finally {
       setIsLoading(false);
     }
@@ -57,12 +60,15 @@ function SignUpRedirect() {
 
   useEffect(() => {
     const codeParam = searchParams.get('code');
-    if (!codeParam) {
-      router.push('/profile');
-    } else {
+
+    // Ensure the code exists and the request hasn't already been made
+    if (codeParam && !hasRequested.current) {
+      hasRequested.current = true; // Mark that the request has been made
       sendCode(codeParam);
+    } else if (!codeParam) {
+      router.push('/profile');
     }
-  }, []);
+  }, [searchParams, router]);
 
   return (
     <div className="signup_redirection_container">
