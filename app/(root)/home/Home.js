@@ -24,6 +24,8 @@ import Link from 'next/link';
 import arrowImg from '@/public/arrow_img.svg';
 import scrollToTop from '@/Utils/scrollToTop';
 import { UserContext } from '@/context/User/UserContext';
+import showBottomMessage from '@/Utils/showBottomMessage';
+import { privateAxios } from '@/config/axiosInstance.js';
 
 export default function Home() {
     const { userState } = useContext(UserContext);
@@ -55,6 +57,54 @@ export default function Home() {
             }
         });
     }, []);
+
+      const navigate = useRouter();
+
+  async function handleOneTapLogin(response) {
+    try {
+      const res = await privateAxios.post(`/google/one-tap/register`, {
+        data: response,
+      });
+
+      const { signUp, user } = res.data;
+      setUser(user);
+
+      if (res.status === 200) {
+        showBottomMessage('Successfully authenticated.');
+        if (signUp === true) {
+          navigate.push('/profile', {
+            state: {
+              from: '/sign-up',
+            },
+            replace: true,
+          });
+        } else {
+          navigate.push('/profile');
+        }
+      }
+    } catch (error) {
+        console.log(error);
+      showBottomMessage('Error while signing up:');
+    }
+  }
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.defer = true;
+    script.async = true;
+    script.onload = () => {
+      if (!user) {
+        window.google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
+          callback: handleOneTapLogin,
+        });
+
+        window.google.accounts.id.prompt();
+      }
+    };
+    document.body.appendChild(script);
+  }, [user]);
 
     return (
         <main className="body__component">

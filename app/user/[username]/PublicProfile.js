@@ -358,7 +358,7 @@ const PublicProfile = () => {
     script.onload = (data) => {
       if (!user) {
         window.google.accounts.id.initialize({
-          client_id: import.meta.env.VITE_GOOGLE_ONE_TAP_CLIENT,
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
           callback: handleOneTapLogin,
         });
 

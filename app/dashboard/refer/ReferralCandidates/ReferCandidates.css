@@ -632,6 +632,7 @@
 .profileAboutSection {
   margin-top: 20px;
   line-height: 1.2rem;
+  max-width: 500px;
 }
 
 .profileAboutSection pre {

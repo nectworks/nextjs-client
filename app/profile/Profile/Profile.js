@@ -745,7 +745,6 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const from = sessionStorage.getItem('from');
-    console.log(from);
     // Check if the user came from the sign-up page
     if (from === '/sign-up') {
       setSignUpPopup(true);
