@@ -1115,7 +1115,7 @@ const PublicProfile = () => {
             <br></br>
             <i>
               Don&apos;t forget, you can also{' '}
-              <button onClick={copyProfileUrl}>Copy your profile URL</button>{' '}
+              <a onClick={copyProfileUrl}>Copy your profile URL</a>{' '}
               and share it on LinkedIn or other platforms to attract more
               referrals.
             </i>

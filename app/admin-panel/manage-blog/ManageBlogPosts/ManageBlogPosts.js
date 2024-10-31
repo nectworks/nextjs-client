@@ -16,7 +16,20 @@ import { privateAxios } from '@/config/axiosInstance';
 import { useRouter } from 'next/navigation';
 import { AdminUserContext } from '@/context/AdminUserContext/AdminUserContext';
 import showBottomMessage from '@/Utils/showBottomMessage';
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+import {
+  AiOutlineArrowLeft,
+  AiOutlineArrowRight,
+  AiFillCloseCircle,
+} from 'react-icons/ai';
+
+function stripHtmlAndTruncate(html, maxLength = 100) {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  const textContent = tempDiv.textContent || tempDiv.innerText || '';
+  return textContent.length > maxLength
+    ? textContent.substring(0, maxLength) + '...'
+    : textContent;
+}
 
 function ManageBlogPosts() {
   const router = useRouter();
@@ -38,7 +51,7 @@ function ManageBlogPosts() {
         setDrafts(res.data.drafts);
       }
     } catch (error) {
-      showBottomMessage(`Couldn't fetch drafts`);
+      showBottomMessage("Couldn't fetch drafts");
     }
   }
 
@@ -51,7 +64,7 @@ function ManageBlogPosts() {
         setBlogsUnderReview(res.data.blogs);
       }
     } catch (error) {
-      showBottomMessage(`Couldn't fetch blogs under review`);
+      showBottomMessage("Couldn't fetch blogs under review");
     }
   }
 
@@ -64,7 +77,7 @@ function ManageBlogPosts() {
         setPublishedBlogs(res.data.blogs);
       }
     } catch (error) {
-      showBottomMessage(`Couldn't fetch blogs under review`);
+      showBottomMessage("Couldn't fetch blogs under review");
     }
   }
 
@@ -88,6 +101,38 @@ function ManageBlogPosts() {
         message = `Couldn't publish blog with id ${blogId}`;
       }
 
+      showBottomMessage(message);
+    }
+  }
+
+  async function handleDeleteDraft(blogId, event) {
+    event.stopPropagation();
+    try {
+      const res = await privateAxios.delete(`/blog/delete/${blogId}`);
+      showBottomMessage(res.data.message);
+      setDrafts(drafts.filter((draft) => draft._id !== blogId));
+    } catch (error) {
+      let { message } = error?.response?.data;
+      if (!message) {
+        message = `Couldn't delete draft with id ${blogId}`;
+      }
+      showBottomMessage(message);
+    }
+  }
+
+  async function handleDeleteReview(blogId, event) {
+    event.stopPropagation();
+    try {
+      const res = await privateAxios.delete(`/blog/delete/${blogId}`);
+      showBottomMessage(res.data.message);
+      setBlogsUnderReview(
+        blogsUnderReview.filter((blog) => blog._id !== blogId)
+      );
+    } catch (error) {
+      let { message } = error?.response?.data;
+      if (!message) {
+        message = `Couldn't delete blog under review with id ${blogId}`;
+      }
       showBottomMessage(message);
     }
   }
@@ -257,12 +302,18 @@ function ManageBlogPosts() {
           <Slider {...settings}>
             {drafts.map((blog, idx) => (
               <div className="blog_card" key={idx}>
+                <button
+                  onClick={(e) => handleDeleteDraft(blog._id, e)}
+                  className="delete-button"
+                >
+                  <AiFillCloseCircle />
+                </button>
                 <img src={blog.image.url} alt={blog.title} />
                 <div className="blog_content">
                   <h3>{blog.title}</h3>
-                  <p>{blog.content.substring(0, 100) + '...'}</p>
+                  <p>{stripHtmlAndTruncate(blog.content)}</p>
                   <div className="blog_metadata">
-                    <span className="author">{`By ${blog.author}`}</span>
+                    <span className="author">By {blog.author}</span>
                     <span className="date">
                       {new Date(blog.createdOn).toLocaleDateString()}
                     </span>
@@ -294,12 +345,18 @@ function ManageBlogPosts() {
             <Slider {...reviewSettings}>
               {blogsUnderReview.map((blog, idx) => (
                 <div className="blog_card" key={idx}>
+                  <button
+                    onClick={(e) => handleDeleteReview(blog._id, e)}
+                    className="delete-button"
+                  >
+                    <AiFillCloseCircle />
+                  </button>
                   <img src={blog.image.url} alt={blog.title} />
                   <div className="blog_content">
                     <h3>{blog.title}</h3>
-                    <p>{blog.content.substring(0, 100) + '...'}</p>
+                    <p>{stripHtmlAndTruncate(blog.content)}</p>
                     <div className="blog_metadata">
-                      <span className="author">{`By ${blog.author}`}</span>
+                      <span className="author">By {blog.author}</span>
                       <span className="date">
                         {new Date(blog.createdOn).toLocaleDateString()}
                       </span>
@@ -348,9 +405,9 @@ function ManageBlogPosts() {
                     <img src={blog.image.url} alt={blog.title} />
                     <div className="blog_content">
                       <h3>{blog.title}</h3>
-                      <p>{blog.content.substring(0, 100) + '...'}</p>
+                      <p>{stripHtmlAndTruncate(blog.content)}</p>
                       <div className="blog_metadata">
-                        <span className="author">{`By ${blog.author}`}</span>
+                        <span className="author">By {blog.author}</span>
                         <span className="date">
                           {new Date(blog.createdOn).toLocaleDateString()}
                         </span>
@@ -358,7 +415,17 @@ function ManageBlogPosts() {
                     </div>
                   </Link>
                   {isAdmin && (
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div className="cta_group">
+                      <button
+                        className="cta_btn"
+                        onClick={() =>
+                          router.push(
+                            `/admin-panel/create-blog-post?edit=true&blogId=${blog._id}`
+                          )
+                        }
+                      >
+                        Edit
+                      </button>
                       <button
                         className="cta_btn_delete"
                         onClick={() => hadleDeleteBlog(blog._id)}

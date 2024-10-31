@@ -68,9 +68,10 @@ const Blog = () => {
     }
   }, [blogs]);
 
+
   useEffect(() => {
     if (blogs.length > 0 && blogData) {
-      const index = blogs.findIndex((blog) => blog._id === blogId);
+      const index = blogs.findIndex((blog) => createSlug(blog.title) === blogId);
       setCurrentBlogIndex(index);
     }
   }, [blogs, blogData]);
@@ -86,14 +87,18 @@ const Blog = () => {
 
   const goToPreviousBlog = () => {
     if (currentBlogIndex > 0) {
-      router.push(`/blog/${blogs[currentBlogIndex - 1]._id}`);
+      router.push(`/blog/${createSlug(blogs[currentBlogIndex - 1].title)}`);
     }
   };
 
   const goToNextBlog = () => {
     if (currentBlogIndex < blogs.length - 1) {
-      router.push(`/blog/${blogs[currentBlogIndex + 1]._id}`);
+      router.push(`/blog/${createSlug(blogs[currentBlogIndex + 1].title)}`);
     }
+  };
+
+  const createSlug = (title) => {
+    return title.toLowerCase().replace(/\s+/g, '-');
   };
 
   if (!blogData) {
