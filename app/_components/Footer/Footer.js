@@ -47,6 +47,7 @@ export default function Footer() {
                 <a href="/about-us"> About Us </a>
                 <a href="/professional"> Professionals </a>
                 <a href="/jobseeker"> Job Seekers </a>
+                <a href='/blog'>Blogs</a>
               </div>
 
               {/* Fourth Part */}

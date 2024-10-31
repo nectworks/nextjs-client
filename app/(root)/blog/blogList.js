@@ -63,6 +63,10 @@ function BlogList() {
     return `Viewing ${start} - ${end} of ${blogs.length}`;
   };
 
+  const createSlug = (title) => {
+    return title.toLowerCase().replace(/\s+/g, '-');
+  };
+
   return (
     <div className="blogList">
       <h1 className="title">Nectworks Blog</h1>
@@ -80,7 +84,7 @@ function BlogList() {
             )}
             <div className="blogCard-header">
               <h2 className="blogTitle">
-                <Link href={`/blog/${blog._id}`}>{blog.title}</Link>
+                <Link href={`/blog/${createSlug(blog.title)}`}>{blog.title}</Link>
               </h2>
               <div className="blogExcerpt">
                 <div
@@ -88,7 +92,7 @@ function BlogList() {
                     __html: getSnippet(blog.content, 30),
                   }}
                 ></div>
-                <Link href={`/blog/${blog._id}`} className="readMore">
+                <Link href={`/blog/${createSlug(blog.title)}`} className="readMore">
                   Read more
                 </Link>
               </div>
