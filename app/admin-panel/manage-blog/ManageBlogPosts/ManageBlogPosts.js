@@ -51,7 +51,7 @@ function ManageBlogPosts() {
         setDrafts(res.data.drafts);
       }
     } catch (error) {
-      showBottomMessage("Couldn't fetch drafts");
+      console.log(error);
     }
   }
 
@@ -64,7 +64,7 @@ function ManageBlogPosts() {
         setBlogsUnderReview(res.data.blogs);
       }
     } catch (error) {
-      showBottomMessage("Couldn't fetch blogs under review");
+      console.log(error);
     }
   }
 
@@ -77,7 +77,7 @@ function ManageBlogPosts() {
         setPublishedBlogs(res.data.blogs);
       }
     } catch (error) {
-      showBottomMessage("Couldn't fetch blogs under review");
+      console.log(error);
     }
   }
 
