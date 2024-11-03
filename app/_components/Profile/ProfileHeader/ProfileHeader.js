@@ -345,7 +345,7 @@ function ProfileHeader() {
       </div>
 
       <Link href={'/nectcoins'} className="dashboard_profile_header_nectcoins">
-        <Image src={nectCoinImg} alt="nect_coins" />
+        <Image src={nectCoinImg} alt="nect_coins" width={30} height={30} />
         <span>{formatNectCoins(user?.totalCoins)}</span>
       </Link>
 
