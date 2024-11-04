@@ -42,7 +42,7 @@ export const metadata = {
   //     ],
   //   },
   icons: {
-    icon: '/icon.png',
+    icon: '/icon.ico',
   },
   description:
     'Nectworks offers a centralized platform for managing employee referrals, connecting job seekers with company insiders, and streamlining the recruitment process.',
