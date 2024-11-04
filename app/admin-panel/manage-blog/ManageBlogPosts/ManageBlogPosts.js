@@ -291,6 +291,10 @@ function ManageBlogPosts() {
     prevArrow: <SamplePrevArrow />,
   };
 
+  const createSlug = (title) => {
+    return title.toLowerCase().replace(/\s+/g, '-');
+  };
+
   return (
     <div className="manage_blog_outer_container">
       <AdminDashboardMenu />
@@ -401,7 +405,7 @@ function ManageBlogPosts() {
             <Slider {...publishedSettings}>
               {publishedBlogs.map((blog, idx) => (
                 <div className="blog_card" key={idx}>
-                  <Link href={`/blog/${blog._id}`} target="_blank">
+                  <Link href={`/blog/${createSlug(blog.title)}`} target="_blank">
                     <img src={blog.image.url} alt={blog.title} />
                     <div className="blog_content">
                       <h3>{blog.title}</h3>
