@@ -167,3 +167,13 @@
 .tag-divider {
   margin-left: 10px;
 }
+
+@media (max-width: 768px) {
+  .tags-container {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .tag-divider {
+    margin-left: 0;
+  }
+}

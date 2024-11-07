@@ -189,7 +189,7 @@ const Blog = () => {
           <span key={index} className="tag">
             {tag}
             {index < blogData.tags.length - 1 && (
-              <span className="tag-divider">|</span>
+              <span className="tag-divider">&nbsp;|</span>
             )}
           </span>
         ))}

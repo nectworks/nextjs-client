@@ -470,7 +470,7 @@ function CreateBlogPost() {
                 fullWidth
                 type="file"
                 disabled={loading}
-                helperText={isEditing ? 'Update Image' : 'Upload Image'}
+                helperText={isEditing ? 'Update Image (Size: 300px(height) X 395px(width))' : 'Upload Image (Size: 300px(height) X 395px(width))'}
                 onChange={handleImageUpload}
                 variant="outlined"
                 InputProps={{
