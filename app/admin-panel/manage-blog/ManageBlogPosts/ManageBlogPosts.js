@@ -86,14 +86,23 @@ function ManageBlogPosts() {
     try {
       const res = await privateAxios.post(`/blog/publish/${blogId}`);
 
-      showBottomMessage(res.data.message);
+      if (res.status === 200) {
+        const publishedBlog = blogsUnderReview.find(
+          (blog) => blog._id === blogId
+        );
 
-      // remove the blog from the array of blogs under review
-      const updatedBlogsUnderReview = blogsUnderReview.filter((blog) => {
-        return blog._id !== blogId;
-      });
+        if (publishedBlog) {
+          setBlogsUnderReview((prevBlogs) =>
+            prevBlogs.filter((blog) => blog._id !== blogId)
+          );
+          setPublishedBlogs((prevPublished) => [
+            ...prevPublished,
+            publishedBlog,
+          ]);
+        }
 
-      setBlogsUnderReview(updatedBlogsUnderReview);
+        showBottomMessage(res.data.message);
+      }
     } catch (error) {
       let { message } = error?.response?.data;
 
@@ -405,7 +414,10 @@ function ManageBlogPosts() {
             <Slider {...publishedSettings}>
               {publishedBlogs.map((blog, idx) => (
                 <div className="blog_card" key={idx}>
-                  <Link href={`/blog/${createSlug(blog.title)}`} target="_blank">
+                  <Link
+                    href={`/blog/${createSlug(blog.title)}`}
+                    target="_blank"
+                  >
                     <img src={blog.image.url} alt={blog.title} />
                     <div className="blog_content">
                       <h3>{blog.title}</h3>

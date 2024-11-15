@@ -42,6 +42,17 @@ function CreateBlogPost() {
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState([]);
 
+  // Add new state to track if changes have been saved
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [lastSavedContent, setLastSavedContent] = useState({
+    title: '',
+    author: '',
+    content: '',
+    timeTakenToRead: 0,
+    imageUrl: '',
+    tags: [],
+  });
+
   // all options from https://xdsoft.net/jodit/docs/,
   const config = useMemo(
     () => ({
@@ -68,18 +79,44 @@ function CreateBlogPost() {
       const res = await privateAxios.get(`/blog/edit/${blogId}`);
       const { blog } = res.data;
 
-      setTitle(blog.title);
-      setTimeTakenToRead(blog.timeTakenToRead || 0);
-      setAuthor(blog.author);
-      setContent(blog.content);
-      setImageUrl(blog.image.url || ''); // Set image URL if available
-      setTags(blog.tags || []);
+      const currentContent = {
+        title: blog.title,
+        author: blog.author,
+        content: blog.content,
+        timeTakenToRead: blog.timeTakenToRead || 0,
+        imageUrl: blog.image.url || '',
+        tags: blog.tags || [],
+      };
+
+      setTitle(currentContent.title);
+      setAuthor(currentContent.author);
+      setContent(currentContent.content);
+      setTimeTakenToRead(currentContent.timeTakenToRead);
+      setImageUrl(currentContent.imageUrl);
+      setTags(currentContent.tags);
+      setLastSavedContent(currentContent);
+      setHasUnsavedChanges(false);
       setLoading(false);
     } catch (error) {
       setLoading(false);
       showBottomMessage(`Couldn't fetch draft to edit`);
     }
   }
+
+  const checkForChanges = () => {
+    const currentContent = {
+      title,
+      author,
+      content,
+      timeTakenToRead,
+      imageUrl,
+      tags,
+    };
+    const hasChanges =
+      JSON.stringify(currentContent) !== JSON.stringify(lastSavedContent);
+    setHasUnsavedChanges(hasChanges);
+    return hasChanges;
+  };
 
   // function to save the current blog as draft in database
   async function saveBlogAsDraft(updateBlog = false) {
@@ -133,12 +170,25 @@ function CreateBlogPost() {
         imageUrl, // Include image URL
         tags,
       });
-      showBottomMessage(`Successfully submitted blog as draft`);
+      setHasUnsavedChanges(false);
+      setLastSavedContent({
+        title: '',
+        author: '',
+        content: '',
+        timeTakenToRead: 0,
+        imageUrl: '',
+        tags: [],
+      });
+
+      showBottomMessage(
+        `Successfully ${updateBlog ? 'updated' : 'submitted'} blog as draft`
+      );
       setTitle('');
       setAuthor('');
       setContent('');
       setTimeTakenToRead(0);
-      setImageUrl(''); // Clear image URL
+      setImageUrl('');
+      setTags([]);
       const fileInput = document.getElementById('blog_image_field');
       if (fileInput) {
         fileInput.value = ''; // Reset the file input
@@ -150,6 +200,12 @@ function CreateBlogPost() {
 
   // function to submit the blog for review before publishing
   async function submitBlogToReview() {
+    if (hasUnsavedChanges) {
+      showBottomMessage(
+        'Please save your changes before submitting for review'
+      );
+      return;
+    }
     if (!title) {
       showBottomMessage('Title of blog post can not be empty');
       return;
@@ -202,12 +258,22 @@ function CreateBlogPost() {
       }
 
       const res = await privateAxios.post(url, data);
+      setHasUnsavedChanges(false);
+      setLastSavedContent({
+        title: '',
+        author: '',
+        content: '',
+        timeTakenToRead: 0,
+        imageUrl: '',
+        tags: [],
+      });
       showBottomMessage(`Successfully submitted blog for review`);
       setTitle('');
       setContent('');
       setAuthor('');
       setTimeTakenToRead(0);
       setImageUrl(''); // Clear image URL
+      setTags([]);
     } catch (error) {
       showBottomMessage(`Couldn't submit blog for review`);
     }
@@ -293,6 +359,12 @@ function CreateBlogPost() {
       setImageUrl(''); // Clear image URL
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if (isEditing) {
+      checkForChanges();
+    }
+  }, [title, author, content, timeTakenToRead, imageUrl, tags]);
 
   const [inputValue, setInputValue] = useState('');
 
@@ -470,7 +542,11 @@ function CreateBlogPost() {
                 fullWidth
                 type="file"
                 disabled={loading}
-                helperText={isEditing ? 'Update Image (Size: 300px(height) X 395px(width))' : 'Upload Image (Size: 300px(height) X 395px(width))'}
+                helperText={
+                  isEditing
+                    ? 'Update Image (Size: 300px(height) X 395px(width))'
+                    : 'Upload Image (Size: 300px(height) X 395px(width))'
+                }
                 onChange={handleImageUpload}
                 variant="outlined"
                 InputProps={{
@@ -615,14 +691,26 @@ function CreateBlogPost() {
                 className="save_btn"
               >
                 {isEditing ? 'Update Draft' : 'Save as Draft'}
+                {hasUnsavedChanges && ' *'}
               </button>
               {isEditing && (
-                <button className="review_btn" onClick={submitBlogToReview}>
+                <button
+                  className="review_btn"
+                  onClick={submitBlogToReview}
+                  disabled={hasUnsavedChanges}
+                  style={{ opacity: hasUnsavedChanges ? 0.6 : 1 }}
+                >
                   Submit for Review
                 </button>
               )}
             </Grid>
           </Grid>
+          {hasUnsavedChanges && (
+            <Typography variant="caption" color="error">
+              * You have unsaved changes. Please save before submitting for
+              review.
+            </Typography>
+          )}
         </CardContent>
       </Card>
     </div>
