@@ -21,7 +21,7 @@ export default function robots() {
         '/log-in',
         '/logout',
         '/privacy-policy',
-        'professional',
+        '/professional',
         '/sign-up',
         '/terms-and-conditions',
       ],
