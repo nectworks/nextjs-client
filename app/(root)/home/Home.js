@@ -1,64 +1,40 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
-/*
-  FileName - Home.js
-  Desc - This file defines the main content of a web page using React
-  components. It includes introductory text, an input field for a username,
-  and various images to create an appealing layout. It also renders the BodyMain
-  component for additional content and an Accordion component for displaying
-  collapsible questions and answers.
-*/
-import illustration from '@/public/Illustration.webp';
-import cloudImage1 from '@/public/heroSectionCloud1.png';
-import cloudImage2 from '@/public/heroSectionCloud2.png';
-import boyImage from '@/public/heroSectionHeroImg.webp';
-import studyImage from '@/public/Frame.webp';
-import isolationImage from '@/public/Isolation_Mode.webp';
-import './Home.css';
-import HomeMain from './HomeMain';
+
+import React, { useState, useContext, useEffect } from 'react';
 import Image from 'next/image';
-import { useContext, useEffect, useState } from 'react';
-import Accordion from '../../_components/Accordian/Accordion';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import arrowImg from '@/public/arrow_img.svg';
-import scrollToTop from '@/Utils/scrollToTop';
+import { useRouter } from 'next/navigation';
+
+// Context
 import { UserContext } from '@/context/User/UserContext';
+
+// Utils
+import scrollToTop from '@/Utils/scrollToTop';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { privateAxios } from '@/config/axiosInstance.js';
 
+// Components
+import FeatureSection from './components/FeatureSection';
+import Accordion from '../../_components/Accordian/Accordion'; // Using existing Accordion
+
+// Styles
+import './Home.css';
+
 export default function Home() {
-    const { userState } = useContext(UserContext);
-    const [user, setUser] = userState;
-    const [username, setUsername] = useState('');
-    const router = useRouter();
+  const { userState } = useContext(UserContext);
+  const [user, setUser] = userState;
+  const [username, setUsername] = useState('');
+  const [activeTab, setActiveTab] = useState('referrer'); // Default to 'referrer'
+  const router = useRouter();
 
-    const handleUsernameChange = (event) => {
-        setUsername(event.target.value);
-        stopBlinking();
-    };
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+    if (document.querySelector('.blinking-cursor')) {
+      document.querySelector('.blinking-cursor').style.animation = 'none';
+    }
+  };
 
-    localStorage.setItem('singupval', username);
-    // The blinkingCursor to stop on click functionality
-    const stopBlinking = () => {
-        const blinkingCursor = document.querySelector('.blinking-cursor');
-        blinkingCursor.style.animation = 'none'; // Stop the blinking animation
-    };
-
-    useEffect(() => {
-        const inputName = document.querySelector('.input__name');
-        // set 'enter' key listener for the input element
-        inputName.addEventListener('keyup', (e) => {
-            /* if the user types a name and presses 'enter',
-                        redirect them to signup page */
-            if (e.keyCode === 13) {
-                router.push('/sign-up');
-                return;
-            }
-        });
-    }, []);
-
-      const navigate = useRouter();
+  const navigate = useRouter();
 
   async function handleOneTapLogin(response) {
     try {
@@ -83,212 +59,234 @@ export default function Home() {
         }
       }
     } catch (error) {
-        console.log(error);
-      showBottomMessage('Error while signing up:');
+      console.log(error);
+      showBottomMessage('Error while signing up.');
     }
   }
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.defer = true;
-    script.async = true;
-    script.onload = () => {
-      if (!user) {
+    localStorage.setItem('singupval', username);
+
+    const inputName = document.querySelector('.input__name');
+    if (inputName) {
+      inputName.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+          router.push('/sign-up');
+        }
+      });
+    }
+
+    // Google One Tap login
+    if (!user) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.defer = true;
+      script.async = true;
+      script.onload = () => {
         window.google.accounts.id.initialize({
           client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
           callback: handleOneTapLogin,
         });
 
         window.google.accounts.id.prompt();
-      }
-    };
-    document.body.appendChild(script);
-  }, [user]);
+      };
+      document.body.appendChild(script);
+    }
+  }, [user, username]);
 
-    return (
-        <main className="body__component">
-            {/* splitting the top component into two divisions  */}
-            <div className="outer__layer__body__header">
-                <div className="body__header body__container">
-                    {/* keeping the image and text as one unit */}
-                    <img
-                        className="cloudImage1"
-                        src={cloudImage1.src}
-                        alt="cloud image"
-                        loading="lazy"
-                    />
-                    <img
-                        className="cloudImage2"
-                        src={cloudImage2.src}
-                        alt="cloud image"
-                        loading="lazy"
-                    />
-                    <div className="body__header__inner body__components">
-                        <div className="header__paragraph">
-                            {/* keeping the text as one unit */}
-                            <p className="company_moto main__paragraph">
-                                The Future of Hiring and Job Referrals is
-                                <span className="color_change"> Here</span>
-                            </p>
-                            <p className="body_secondary_para color-black">
-                                Find your <span className="color_change">dream job</span>, or
-                                become a top referrer. Connect with ease, ditch the cold
-                                messages. Join our hiring revolution!
-                            </p>
-
-                            {/* Sign In Link */}
-                            <div
-                                className="signIn__link"
-                                style={{
-                                    display: user !== null ? 'none' : '',
-                                }}
-                            >
-                                <span className="input__form">
-                                    <span>
-                                        nectworks<span className="blinking-cursor">/</span>
-                                    </span>
-                                    <input
-                                        type="text"
-                                        className="input__name"
-                                        id="inputField"
-                                        placeholder="username"
-                                        value={username}
-                                        onChange={handleUsernameChange}
-                                    />
-                                </span>
-
-                                {/* Button for user signIn */}
-                                <Link href="/sign-up">
-                                    <button
-                                        className={`landingSignupButton ${!username ? 'nocursor' : ''
-                                            }`}
-                                        disabled={!username}
-                                    >
-                                        Sign Up
-                                    </button>
-                                </Link>
-                            </div>
-                        </div>
-                        {/* <Image
-                            src={boyImage}
-                            // width={471}
-                            // height={344}
-                            // className='boy__img'
-                            style={{
-                                zIndex: 2,
-                                height: "auto",
-                                width: "73.5%",
-                                marginTop: "1.3rem",
-                            }}
-                            loading="lazy"
-                            alt="not found"
-                        /> */}
-                        <img
-                            src={boyImage.src}
-                            className="boy__img"
-                            loading="lazy"
-                            alt="not found"
-                        />
-                    </div>
+  return (
+    <main className="home">
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="hero__container">
+          <div className="hero__content">
+            <h1 className="hero__title">
+              The Future of <span className="highlight">Job Referrals</span> Has Arrived
+            </h1>
+            <p className="hero__subtitle">
+              Find your dream job, or become a top referrer. Connect with ease, 
+              ditch the cold messages. Join our hiring revolution today!
+            </p>
+            
+            {!user && (
+              <div className="hero__signup">
+                <div className="username-input">
+                  <span>nectworks<span className="blinking-cursor">/</span></span>
+                  <input 
+                    type="text" 
+                    placeholder="username" 
+                    value={username}
+                    onChange={handleUsernameChange}
+                    className="input__name"
+                  />
                 </div>
+                <Link href="/sign-up">
+                  <button 
+                    className={`signup-button ${!username ? 'disabled' : ''}`}
+                    disabled={!username}
+                  >
+                    Get Started
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
+          <div className="hero__image">
+            <div className="image-container">
+              <img 
+                src="/heroSectionHeroImg.webp" 
+                alt="Nectworks platform preview"
+                className="main-image"
+              />
+              <div className="floating-element one"></div>
+              <div className="floating-element two"></div>
             </div>
-            <HomeMain />
-            <div className="outer__layer__bdy__com">
-                <div className="body__container">
-                    <div className="info__img">
-                        <img
-                            src={illustration.src}
-                            className="bodyImg illustrationimg"
-                            loading="lazy"
-                            alt="man working on his laptop"
-                        />
-                        <div className="paragraph__title">
-                            <div>
-                                <h2 className="main__paragraph">
-                                    Empowering Job Seekers with{' '}
-                                    <span className="color_change"> AI Driven Referrers </span>
-                                </h2>
-                                <p className="body_secondary_para color-black">
-                                    By leveraging AI-driven insights and algorithms, you can
-                                    uncover hidden opportunities and match them with the right
-                                    candidates.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+          </div>
+        </div>
+      </section>
 
-                    <div className="study__boy info__img">
-                        <div className="paragraph__title">
-                            <h2 className=" main__paragraph">
-                                Refer <span className="color_change">2x faster</span>
-                            </h2>
-                            <p className="body_secondary_para">
-                                Save time reviewing and referring candidates that aren’t
-                                qualified or interested. Reduce your time to refer by hours, not
-                                days.{' '}
-                            </p>
-                        </div>
-                        <img
-                            src={studyImage.src}
-                            loading="lazy"
-                            className="bodyImg studyImage"
-                            alt="Man studying in his laptop productively"
-                        />
-                    </div>
-
-                    <div className="info__img">
-                        <img
-                            src={isolationImage.src}
-                            className="bodyImg"
-                            loading="lazy"
-                            alt="People connected through a platform"
-                        />
-                        <div className="paragraph__title third__para">
-                            <h2 className="main__paragraph">
-                                Exceptional talent and opportunities,
-                                <span className="color_change"> all in one umbrella </span>
-                            </h2>
-
-                            <p className="body_secondary_para">
-                                Discover exceptional talent and connect with top-notch
-                                professionals who go beyond job boards, finding them where they
-                                naturally thrive.{' '}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="body__awareness__msg">
-                        <div className="body__awareness__msg__content">
-                            <div className="awareness__msg__block">
-                                <h2 className="awareness__header">
-                                    Fraudulent recruitment practices
-                                </h2>
-                                <p className="awareness__message">
-                                    When it comes to job search, your email can get spammed with
-                                    multiple job alerts. Here’s what you can do to stay safe from
-                                    fraudulent practices.
-                                </p>
-                            </div>
-                            <Link href="/fraudulent-activity">
-                                <img
-                                    src={arrowImg.src}
-                                    className="arrowImg"
-                                    onClick={scrollToTop}
-                                    alt="report fradulent activity"
-                                />
-                            </Link>
-                        </div>
-                    </div>
+      {/* Audience Tabs Section */}
+      <section className="audience-tabs">
+        <div className="tabs-container">
+          <div className="tabs-header">
+            <button
+              className={`tab-button ${activeTab === 'referrer' ? 'active' : ''}`}
+              onClick={() => setActiveTab('referrer')}
+            >
+              For Referrers
+            </button>
+            <button
+              className={`tab-button ${activeTab === 'jobseeker' ? 'active' : ''}`}
+              onClick={() => setActiveTab('jobseeker')}
+            >
+              For Job Seekers
+            </button>
+          </div>
+          
+          <div className="tabs-content">
+            {activeTab === 'referrer' ? (
+              <div className="tab-panel">
+                <h2>Become a Meta-referrer</h2>
+                <p>
+                  Streamline your referral process, manage candidates efficiently,
+                  and maximize your referral bonuses - all in one platform.
+                </p>
+                <div className="steps">
+                  <div className="step">
+                    <div className="step-number">1</div>
+                    <p>Create your Nectworks account</p>
+                  </div>
+                  <div className="step">
+                    <div className="step-number">2</div>
+                    <p>Share your personalized page on social media to attract candidates</p>
+                  </div>
+                  <div className="step">
+                    <div className="step-number">3</div>
+                    <p>Review candidates on your dashboard and earn referral bonuses</p>
+                  </div>
                 </div>
-                <div className="qna__header">
-                    <h4>
-                        <span className="color_change">Quick answers</span> to common
-                        questions
-                    </h4>
+              </div>
+            ) : (
+              <div className="tab-panel">
+                <h2>Find Your Dream Job</h2>
+                <p>
+                  Connect with referrers at your target companies without awkward cold messages.
+                  Send your profile to multiple potential referrers in just a few clicks.
+                </p>
+                <div className="steps">
+                  <div className="step">
+                    <div className="step-number">1</div>
+                    <p>Create your Nectworks account</p>
+                  </div>
+                  <div className="step">
+                    <div className="step-number">2</div>
+                    <p>Complete your profile with your experience and target roles</p>
+                  </div>
+                  <div className="step">
+                    <div className="step-number">3</div>
+                    <p>Send referral requests to multiple referrers with one click</p>
+                  </div>
                 </div>
-            </div>
-            <Accordion />
-        </main>
-    );
+              </div>
+            )}
+            
+            <Link href="/sign-up" onClick={scrollToTop}>
+              <button className="primary-button">Start Your Journey</button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Showcase Sections */}
+      <FeatureSection 
+        image="/Illustration.webp"
+        imageAlt="AI-driven referral matching"
+        title="AI-Driven Talent Matching"
+        highlight="Smart Matching"
+        description="Our powerful AI algorithms connect the right candidates with the right referrers, increasing successful placements and reducing time-to-hire."
+        reversed={false}
+      />
+      
+      <FeatureSection 
+        image="/Frame.webp"
+        imageAlt="Referral dashboard"
+        title="Refer Candidates 2x Faster"
+        highlight="Save Time"
+        description="No more wading through unqualified applications. Our streamlined dashboard helps you review and refer candidates in minutes, not hours."
+        reversed={true}
+      />
+      
+      <FeatureSection 
+        image="/Isolation_Mode.webp"
+        imageAlt="Centralized candidate management"
+        title="All Your Candidates in One Place"
+        highlight="Stay Organized"
+        description="Keep track of all your referral requests and candidates in a single, easy-to-use dashboard. No more hunting through emails or messages."
+        reversed={false}
+      />
+
+      {/* Safety Alert Section */}
+      <section className="alert-section">
+        <div className="alert-container">
+          <div className="alert-content">
+            <h2>Stay Safe from Fraudulent Practices</h2>
+            <p>
+              In today`&apos;`s job market, your email can get flooded with suspicious job alerts.
+              Learn how to identify and avoid fraudulent recruitment practices.
+            </p>
+          </div>
+          <Link href="/fraudulent-activity">
+            <button className="alert-button">
+              Learn More
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      {/* FAQ Section - Using unmodified structure from original Home.js */}
+      <div className="outer__layer__bdy__com">
+        <div className="qna__header">
+          <h4>
+            <span className="color_change">Quick answers</span> to common
+            questions
+          </h4>
+        </div>
+      </div>
+      <Accordion />
+
+      {/* Final CTA Section - Fixed button contrast issue */}
+      <section className="final-cta">
+        <div className="cta-container">
+          <h2>Ready to Transform Your Hiring Process?</h2>
+          <p>Join thousands of professionals already using Nectworks to streamline referrals.</p>
+          <Link href="/sign-up">
+            <button className="cta-button">Create Your Account</button>
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
 }

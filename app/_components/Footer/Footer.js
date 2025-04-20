@@ -63,13 +63,13 @@ export default function Footer() {
         <div className="footer__copyright">
           <div className="company__copyright">
             <p>&#169;Nectworks Technology. 2024 All rights reserved</p>
-            <div className="link__tags link__tagss" onClick={scrollToTop}>
-              <a href="/terms-and-conditions">Terms and conditions</a>
-              <a href="/privacy-policy">Privacy Policy</a>
-            </div>
+          </div>
+          <div className="link__tags link__tagss" onClick={scrollToTop}>
+            <a href="/terms-and-conditions">Terms and conditions</a>
+            <a href="/privacy-policy">Privacy Policy</a>
           </div>
           <div className="footer__links">
-            <p className="social__media__text ">Find us on</p>
+            <p className="social__media__text">Find us on</p>
             <a
               href="https://www.linkedin.com/company/nectworks/"
               target="_blank"

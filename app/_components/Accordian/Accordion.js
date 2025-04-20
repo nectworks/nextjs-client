@@ -5,7 +5,7 @@
 */
 import { useState } from 'react';
 import Image from 'next/image';
-import './Accordion.css'; // Import your custom CSS file for styling
+import './Accordion.css';
 import accordianArrow from '../../../public/accordianArrow.svg';
 
 export const AccordionItem = ({ title, content, isOpen, onClick }) => {
