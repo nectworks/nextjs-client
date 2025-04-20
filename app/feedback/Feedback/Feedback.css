@@ -1,0 +1,196 @@
+.feedbackContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.nectworksLogo {
+  width: 200px;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+.feedbackContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 2rem;
+}
+
+.feedbackSpan {
+  font-size: 1.2rem;
+  background: linear-gradient(
+    to left,
+    violet,
+    indigo,
+    blue,
+    green,
+    orange,
+    red
+  );
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.timeTaken {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.startButton {
+  margin: 10px 0px;
+  padding: 8px 32px;
+  border-radius: 8px;
+  border: none;
+  background-color: #0057b1;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.dimPara {
+  color: #808080;
+  font-size: 1rem;
+}
+
+.feedbackPara {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Feedback description css*/
+
+.feedbackDetails {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feedbackDetailsDesc {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  height: 65vh;
+  margin: 3rem 0rem;
+}
+
+.performancePara {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+.currentPrevButtons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.poorRating {
+  background: linear-gradient(100deg, #d23d5d -27.06%, #0390cf 126.45%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+.excellentRating {
+  background: linear-gradient(92deg, #f00 7.96%, #dc7a23 100.4%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+.includingHeadingAlso {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.previousButton {
+  margin: 10px 0px;
+  padding: 8px 32px;
+  border-radius: 8px;
+  border: none;
+  background: none;
+  color: #0057b1;
+  border: 1px solid #0057b1;
+}
+
+.nextButton {
+  margin: 10px 0px;
+  padding: 8px 32px;
+  border-radius: 8px;
+  border: none;
+  background-color: #0057b1;
+  color: #fff;
+}
+
+.feedbackDetailsContainer {
+  position: relative;
+  line-height: 2rem;
+}
+
+.feedbackDetailsContainer form {
+  margin-top: 0.6rem;
+}
+
+.feedbackDetailsContainer textarea {
+  padding: 10px;
+  border-radius: 8px;
+  outline: none;
+  border: 2px solid #808080;
+}
+
+.ratingInputContainer {
+  display: flex;
+  gap: 1.47rem;
+}
+
+.ratingInputContainer span {
+  position: absolute;
+}
+
+.ratingInputContainer input {
+  outline: none;
+  border: 2px solid #808080;
+  width: 20px;
+  text-align: center;
+  padding: 5px;
+  border-radius: 3px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.ratingInputContainer input:hover {
+  background-color: #0057b1;
+  color: #fff;
+}
+
+.makeBgBlue {
+  background-color: #0057b1;
+  color: #fff;
+}
+
+.marginTop {
+  margin-top: 1.5rem;
+}
+
+@media screen and (max-width: 600px) {
+  .feedbackPara {
+    text-align: center;
+    margin: 0 1rem;
+  }
+
+  .dimPara {
+    text-align: center;
+    margin: 0 1rem;
+  }
+}

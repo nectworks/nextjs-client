@@ -1,0 +1,1416 @@
+/* Styles for the icon */
+.info-icon {
+  height: 15px;
+  width: 15px;
+  filter: brightness(0.1);
+}
+
+.first_p {
+  margin-bottom: -4%;
+}
+
+.second_p {
+  margin: 0%;
+}
+
+/* Styles for the popover container */
+.popover {
+  color: #fff;
+  z-index: 0;
+  background-color: #262626;
+  border-radius: 11px;
+  width: 300px;
+  margin-bottom: 210px;
+  padding: 7px 10px;
+  font-size: 12px;
+  display: none;
+  position: absolute;
+  right: -153px;
+  top: -78px;
+  box-shadow: 0 0 5px #0006;
+  line-height: 1rem;
+}
+
+.popover-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Triangle arrow at the bottom of the popover */
+.popover::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: -7px;
+  bottom: -7px;
+  border-top: 7px solid #262626;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+}
+
+/* Show the popover when hovering over the icon container */
+.info-icon-container:hover .popover {
+  display: block;
+}
+
+/* Styles for the text in the popover */
+.popover-text {
+  margin-right: 5px;
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Styles for paragraphs within the popover content */
+.popover p {
+  font-size: 13px;
+  font-style: normal;
+}
+
+/* Styles for the container of the icon and text */
+.info-icon-container {
+  color: #6c6c6c;
+  flex-direction: row-reverse;
+  align-items: center;
+  font-size: 14px;
+  display: flex;
+  margin-left: 1.5rem;
+}
+
+.dashboard_outer_container {
+  display: flex;
+  background-color: #fafafa;
+}
+
+.accountSettingsContainer {
+  width: 100vw;
+  padding: 3rem 5rem;
+  background-color: #fafafa;
+}
+
+.accountSettingContent {
+  padding: 0 15px;
+}
+
+.accountSettingsInfo {
+  margin-top: 2rem;
+  line-height: 2rem;
+}
+
+.accountSettingsInfo span {
+  font-size: 25px;
+}
+
+.greetingsSection img {
+  width: 66px;
+  height: 68px;
+  border-radius: 50px;
+}
+
+.cardsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: 40px;
+  max-width: 100%;
+}
+
+.cardContent {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 50px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 1px 5px #808080;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.card:last-of-type {
+  position: relative;
+  padding-top: 1.5rem;
+}
+
+.accountSettingsProfileContainer {
+  position: relative;
+  opacity: 1;
+}
+
+.accountSettingsProfileContainer .profile_image {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  font-size: 2rem;
+}
+
+.manipulateSection .accountSettingsProfileContainer:hover .profile_image {
+  opacity: 0.8;
+  transform: scale(1.02);
+}
+
+.accountSettingsProfileContainer:hover .editProfileIcon {
+  display: block;
+}
+
+.editProfileIcon {
+  display: none;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 65%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.card .cardPersonDetail {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.card2 .cardPersonDetail {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.card img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+}
+
+.card button {
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #808080;
+  color: #fff;
+  margin: 1rem 0;
+}
+
+.card span {
+  margin-top: -10px;
+  padding: 5px 15px;
+  background-color: #ffaf38;
+  border-radius: 20px;
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+
+.card2 {
+  background-color: #0057b1;
+}
+
+.card .cardGreenTickIcon {
+  width: 22px;
+  height: 20.93px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.card2 button {
+  background-color: #fff;
+  color: #000;
+}
+
+/* verify company section */
+.sectionHeader {
+  font-weight: normal;
+  text-align: left;
+  margin: 2.5rem 0 1rem;
+  display: inline-block;
+}
+
+.verifyCompanyPromptMessage {
+  margin: 1rem 0;
+}
+
+.unverifiedWorkEmailMessage p {
+  display: inline-block;
+}
+
+.verifyCompanySection {
+  padding: 1.5rem 2rem;
+  border-radius: 0.7rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.verifyCompanySection .verifyCompanyContent {
+  padding: 0;
+}
+
+.unverifiedEmailPrompt {
+  max-width: 70%;
+}
+
+.showCompanyInputBtn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.verifiedEmailSection {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.verifiedEmailSection div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.verifiedEmailSection button {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-weight: bold;
+}
+
+.verifiedEmailSection .viewBtn {
+  width: fit-content;
+  padding: 0.3rem 0.5rem;
+  border: 0.4px solid;
+  border-radius: 8px;
+}
+
+.verifiedEmailSection .editBtn {
+  color: #0057b1;
+}
+
+.verifiedEmailSection .removeBtn {
+  color: red;
+  position: relative;
+}
+
+/* hover message when user hovers on `Remove` option
+to remove professional details. */
+.removeAccountInfo {
+  display: none !important;
+  position: absolute;
+  bottom: 25px;
+  left: -60px;
+  z-index: 5;
+  width: min(200px, 80vw);
+  background-color: #262626;
+  color: white;
+  text-align: center;
+  font-weight: normal;
+  line-height: 1.4;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.removeAccountInfo .downArrow {
+  display: block;
+  position: absolute;
+  bottom: -8px;
+  left: 65px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #262626;
+}
+
+.removeBtn:hover > .removeAccountInfo {
+  display: inline-block !important;
+}
+
+/* The popup message when remove button is clicker */
+.removeAccountBackground {
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: #00000081;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.removeAccountWindow {
+  font-size: 1.1rem;
+  width: min(400px, 80vw);
+  background-color: #fff;
+  border-radius: 8px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  gap: 20px;
+  text-align: center;
+}
+
+.removeAccountWindow h3 {
+  color: #0057b1;
+}
+
+.removeAccountBtnsContainer button {
+  background-color: transparent;
+  outline: none;
+  border-radius: 10px;
+  padding: 0.4rem 0.8rem;
+  margin: 0.5rem;
+  font-size: 1rem;
+}
+
+#removeAccount {
+  border: 1px solid red;
+  color: red;
+}
+
+#removeAccount:hover {
+  background-color: red;
+  color: white;
+}
+
+#cancelRemoveAccount {
+  border: none;
+  background-color: #0057b1;
+  color: white;
+}
+
+.verifyCompanyContainer {
+  background-color: #fff;
+  box-shadow: 1px 1px 5px #808080;
+  border-radius: 5px;
+}
+
+.verifyCompanyContent {
+  display: flex;
+  flex-direction: column;
+  padding: 35px;
+}
+
+.emailVerifyContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
+  line-height: 2rem;
+}
+
+.emailVerifyContainer .verifyButton {
+  background: none;
+  border: none;
+  color: #0057b1;
+  font-weight: bold;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.verifiedCheck {
+  display: flex;
+  align-items: center;
+}
+
+.verifiedCheck img {
+  margin-left: 10px;
+}
+
+.verifyButton {
+  font-size: 0.95rem;
+}
+
+.verifyButtonDisabled {
+  color: gray !important;
+  cursor: not-allowed;
+  content-visibility: hidden;
+}
+
+.makeErrorColorRed {
+  color: #ff0000 !important;
+  font-style: normal !important;
+}
+
+.inputFields {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputFields label {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.starStyle {
+  color: #ff0000;
+  position: relative;
+  top: 0.2rem;
+}
+
+.inputFields input {
+  padding: 5px 0px;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #000;
+  width: 25vw;
+  font-size: 16px;
+}
+
+.inputFieldsError {
+  color: #808080;
+  font-size: 14px;
+  margin-bottom: -15px;
+  font-style: italic;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fixingMarginInEmail {
+  margin-bottom: -15px;
+}
+
+.hideCompanyError {
+  visibility: hidden !important;
+}
+
+.hideElement {
+  display: none !important;
+}
+
+.makeVisibleInMobile {
+  display: none;
+}
+
+/* user information section */
+
+.accountSettingsSection {
+  background-color: #fff;
+  box-shadow: 1px 1px 5px #808080;
+  border-radius: 5px;
+}
+
+.userInformationSection {
+  align-items: center;
+  margin: 20px 0px;
+}
+
+.manipulateSection {
+  width: 75px;
+  margin: auto;
+  line-height: 2rem;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.userInfoSection {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 2rem;
+}
+
+.userInfoSectionInputs {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 50%;
+  margin-top: 18px;
+}
+
+.userInfoSectionInputs label {
+  width: fit-content;
+}
+
+.userInfoSectionInputs input {
+  border: none;
+  border-bottom: 1px solid #000;
+  outline: none;
+  padding: 5px 0px;
+  min-width: unset;
+  width: 100%;
+}
+
+.userInfoYourself {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  line-height: 1.8rem;
+}
+
+.userInfoContent {
+  padding: 3rem;
+}
+
+.saveButton {
+  background-color: #0057b1;
+  padding: 8px 30px;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  margin-top: 15px;
+  height: 36px;
+  font-size: 16px;
+}
+
+/* Preferences section styles */
+.proPreferencesInfo,
+.verifyEmailInfoHover {
+  display: inline-block;
+  position: relative;
+  width: 15px;
+  height: 15px;
+}
+
+.proPreferencesInfo .info-icon,
+.verifyEmailInfoHover .info-icon {
+  margin: 0;
+  cursor: pointer;
+}
+
+.proPreferncesInfoMessage,
+.verifyEmailInfoHoverMessage {
+  display: none;
+  position: absolute;
+  bottom: 25px;
+  z-index: 5;
+  width: min(200px, 80vw);
+  text-align: left;
+  background-color: #262626;
+  color: white;
+  border-radius: 8px;
+  padding: 8px;
+  line-height: 1.3;
+  font-size: 0.85rem;
+}
+
+.proPreferencesInfo:hover > .proPreferncesInfoMessage {
+  display: inline-block;
+}
+
+.verifyEmailInfoHover:hover > .verifyEmailInfoHoverMessage {
+  display: inline-block;
+}
+
+.proPreferncesInfoMessage .downArrow,
+.verifyEmailInfoHoverMessage .downArrow {
+  display: block;
+  position: absolute;
+  bottom: -8px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #262626;
+}
+
+.verifyEmailInfoHover {
+  margin: 0 0.5rem;
+}
+.proPreferncesInfoMessage {
+  left: -190px;
+}
+
+.proPreferncesInfoMessage .downArrow {
+  right: 10px;
+}
+
+.verifyEmailInfoHoverMessage {
+  width: min(250px, 80vw);
+  left: -240px;
+}
+
+.verifyEmailInfoHoverMessage .downArrow {
+  left: unset;
+  right: 10px;
+}
+
+.dashboard_info_preferences img {
+  top: 2rem;
+  right: 3rem;
+}
+
+.dashboard_info_preferences {
+  margin: 1.5rem 0;
+  padding: 1.8rem 3rem;
+  position: relative;
+}
+
+.dashboard_preference_row {
+  display: flex;
+  align-items: flex-start;
+  margin: 1rem 0;
+}
+
+.dashboard_preference_row img {
+  width: 5px;
+  height: 5px;
+  margin: 10px;
+}
+
+.dashboard_preference_row h3 {
+  display: inline-block;
+  width: min(200px, 50%);
+  flex-shrink: 0;
+}
+
+.dashboard_preference_values {
+  margin-left: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dashboard_preference_values span {
+  display: inline-block;
+  color: white;
+  background-color: #0057b1;
+  padding: 5px 10px;
+  border-radius: 0.8rem;
+  margin: 0.3rem;
+}
+
+.preferences_action_container {
+  position: absolute;
+  top: 0.5rem;
+  right: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.preferences_edit_container {
+  padding: 0.5rem;
+  margin-left: 1.5rem;
+  border-radius: 50%;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preferences_action_edit {
+  filter: invert(20%) sepia(74%) saturate(2848%) hue-rotate(198deg)
+    brightness(92%) contrast(102%);
+}
+
+/* toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 16px;
+  width: 16px;
+  top: 2px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #00b312;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #00b312;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(17px);
+  -ms-transform: translateX(17px);
+  transform: translateX(17px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* slider message on hover */
+.slider_message {
+  display: none;
+  width: 200px;
+  position: absolute;
+  bottom: 40px;
+  right: -50px;
+  background-color: #262626;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.slider_message_pointer {
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  bottom: -15px;
+  right: 70px;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 16px solid #262626;
+}
+
+.switch:hover .slider_message {
+  display: block;
+}
+
+/* Logout from all devices styles */
+.logoutAllDevices {
+  padding: 2rem 3rem;
+  box-shadow: gray 1px 1px 5px;
+}
+
+.logoutAllDevices h2 {
+  margin-top: 0;
+}
+
+.logoutAllDevices button {
+  background-color: #0057b1;
+  color: white;
+  margin: 1rem 0 0;
+  padding: 0 1rem;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  height: 36px;
+}
+
+/* Account deletion section starts here */
+.accountDeletionSection {
+  background-color: #fff;
+  box-shadow: 1px 1px 5px #808080;
+  border-radius: 5px;
+  margin: 20px 0px;
+}
+
+.accountDeletionContent {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.withWarningContainer {
+  padding: 1.5rem 3rem;
+}
+
+.deleteAccountButton {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 20px;
+  background: none;
+  border: none;
+  border: 1px solid black;
+  border-radius: 8px;
+  color: grey;
+  font-weight: bold;
+  outline: none;
+  height: 36px;
+  font-size: 16px;
+}
+
+.deleteAccountButton:hover {
+  background-color: #f85149;
+  color: #fff !important;
+  border: 1px solid #f85149;
+}
+
+.accountDeletionContent input {
+  width: 30px;
+  border-radius: 4px;
+  border: none;
+  border: 1px solid #000;
+  padding: 8px;
+  margin: 0px 6px;
+  outline: none;
+  text-align: center;
+}
+
+.deleteAccountInput {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.confirmCancelButtons {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem;
+}
+
+.confirmCancelButtons button {
+  background: none;
+  border: none;
+  color: #0057b1;
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.otpStyling {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  width: 200px;
+  margin: auto;
+  margin-bottom: -10px;
+}
+
+.otp__inputs {
+  border: 1px solid #000;
+  width: 2rem !important;
+  margin-left: 1rem;
+  position: relative;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem;
+  outline: none;
+  text-align: center !important;
+  background: none;
+  padding: 8px 0px;
+  border-radius: 50%;
+}
+
+.makeInputRedWhole {
+  border: 2px solid #ff0000 !important;
+}
+
+.makeInputGreenWhole {
+  border: 2px solid green !important;
+}
+
+.otp__expiry__desc {
+  margin-left: 15px;
+  color: #808080;
+}
+
+.otp__button__account {
+  width: 200px;
+  margin-left: 10px;
+  margin-top: -10px;
+  background: none;
+}
+
+.confirmProfessional {
+  background: none;
+}
+
+.showHrMobile {
+  display: none;
+}
+
+.errorMessageAccount {
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.cliploaderclassProfile {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-size: contain;
+}
+
+.green-circle-profile {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-image: url('../../public/SignIn/greenTickIcon.webp');
+  background-size: contain;
+  display: inline-block;
+}
+
+.red-circle-profile {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-image: url('../../public/SignIn/alert.webp');
+  background-size: contain;
+}
+
+.usernameInputValidTick {
+  display: flex;
+  width: 30vw;
+  border-bottom: 1px solid #000;
+}
+
+.removeBorder {
+  border-bottom: 1px solid gray;
+}
+
+.increaseDeletionButtonWidth {
+  width: 150px;
+}
+
+.increaseResendButtonWidth {
+  width: 100px;
+}
+
+.otpSentPopup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: -16px;
+}
+
+.otpSendText {
+  background-color: black;
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.otpResentPopup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -15px;
+}
+
+.otpResendText {
+  background-color: black;
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.makeColorGrayOfResendButton {
+  color: #808080 !important;
+  cursor: default;
+}
+
+.otpInput {
+  margin-left: 20px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+@media only screen and (max-width: 1100px) {
+  .accountSettingsContainer {
+    padding: 3rem !important;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .accountSettingsContainer {
+    padding: 3rem 2rem !important;
+  }
+
+  .verifiedEmailSection {
+    flex-direction: column;
+  }
+
+  .verifiedEmailSection div:last-of-type {
+    margin-top: 1rem;
+  }
+
+  .proPreferncesInfoMessage {
+    left: -10px;
+  }
+
+  .proPreferncesInfoMessage .downArrow {
+    left: 5px;
+    right: unset;
+  }
+
+  .verifyEmailInfoHoverMessage {
+    left: -15px;
+  }
+
+  .verifyEmailInfoHoverMessage .downArrow {
+    left: 10px;
+    right: unset;
+  }
+}
+
+@media only screen and (max-width: 1170px) {
+  .info-icon-container {
+    display: none;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1170px) {
+  .inputFields input {
+    width: 22vw !important;
+  }
+}
+
+@media only screen and (min-width: 800px) and (max-width: 1100px) {
+  .accountDeletionContent {
+    flex-direction: column;
+  }
+
+  .confirmCancelButtons {
+    margin-top: 20px;
+  }
+
+  .deleteAccountButton {
+    padding: 8px 10px;
+  }
+}
+
+@media only screen and (max-width: 593px) {
+  .deleteAccountInput {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .accountDeletionContent {
+    align-items: center;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  .withWarningContainer {
+    padding: 30px;
+  }
+
+  .card {
+    width: 180px;
+  }
+
+  .cardContent {
+    gap: 20px;
+  }
+
+  .verifyEmailInfoHover {
+    margin: 0.3rem 0;
+  }
+
+  .verifyEmailInfoHoverMessage {
+    right: unset;
+    left: -10px;
+  }
+
+  .verifyEmailInfoHoverMessage .downArrow {
+    left: 10;
+    right: unset;
+  }
+
+  .info-icon-container {
+    display: none;
+  }
+
+  .inputFields input {
+    width: 25vw;
+  }
+
+  .verifyCompanyContent {
+    padding: 30px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .accountSettingContent {
+    padding: 0;
+  }
+
+  .card {
+    width: min(180px, 50%);
+  }
+
+  .card .profile_image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .verifyEmailInfoHover {
+    margin: 0.3rem 0;
+  }
+
+  .verifyEmailInfoHoverMessage {
+    right: unset;
+    left: -10px;
+  }
+
+  .verifyEmailInfoHoverMessage .downArrow {
+    left: 10;
+    right: unset;
+  }
+
+  .dashboard_preference_row {
+    flex-direction: column;
+  }
+
+  .dashboard_preference_row img {
+    display: none;
+  }
+
+  .dashboard_preference_values {
+    margin: 0;
+  }
+
+  .dashboard_preference_values span {
+    margin-left: 0;
+  }
+
+  .otpInput {
+    margin-left: 0px;
+    margin-top: 1rem;
+  }
+
+  .withWarningContainer {
+    padding-left: 32px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    padding-top: 0px;
+  }
+
+  .accountDeletionSection {
+    margin: 0;
+  }
+
+  .accountDeletionContent {
+    padding: 0;
+  }
+
+  .warningMessage {
+    display: none;
+  }
+
+  .verifyCompanyContent {
+    padding: 0;
+  }
+
+  .userInfoContent {
+    padding: 0;
+  }
+
+  .info-icon-container {
+    display: none;
+  }
+
+  .makeColorGrayOfResendButton {
+    cursor: no-drop !important;
+  }
+
+  .otpResentPopup {
+    margin-top: -40px !important;
+    margin-left: 20px;
+  }
+
+  .increaseDeletionButtonWidth {
+    width: 280px;
+  }
+
+  .confirmCancelButtons {
+    width: 190px !important;
+  }
+
+  .makeBgNoneForMobile {
+    background: none;
+  }
+
+  .showHrMobile {
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 40px;
+  }
+
+  .makeVisibleInMobile {
+    display: block;
+    font-weight: bold;
+  }
+
+  .makeVisibleInWeb {
+    display: none !important;
+  }
+
+  .verifyCompanyContainer {
+    box-shadow: none;
+    background: none;
+  }
+
+  .userInformationSection {
+    background: none;
+    box-shadow: none;
+    margin-top: 0px;
+  }
+
+  .userInfoSectionInputs {
+    width: 100%;
+  }
+
+  .accountDeletionSection {
+    padding: 10px;
+    margin-top: 20px;
+  }
+
+  .verifyCompanyContainer .otpStyling .otp__input-container {
+    width: 0px;
+  }
+
+  .accountDeletionContent input {
+    background: none;
+  }
+
+  .accountSettingsContainer {
+    padding: 3rem 1.5rem !important;
+  }
+
+  .emailVerifyContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .userInfoSection {
+    flex-direction: column;
+  }
+
+  .accountDeletionContent {
+    flex-direction: column;
+  }
+
+  .deleteAccountInput {
+    flex-direction: column;
+  }
+
+  .colorBGBlue {
+    background-color: #0057b1 !important;
+    color: #fff !important;
+    border-radius: 20px;
+    padding: 5px 20px;
+  }
+
+  .colorBgRed {
+    background-color: #f85149 !important;
+    color: #fff !important;
+    border-radius: 20px;
+    padding: 5px 20px;
+  }
+
+  .cardContent {
+    gap: 25px;
+    flex-grow: 1;
+  }
+
+  .accountDeletionContent {
+    line-height: 5rem;
+  }
+
+  .emailVerifyContainer {
+    line-height: 2.5rem;
+  }
+
+  .inputFieldsError {
+    margin-top: -8px;
+  }
+
+  .inputFields {
+    height: 100px;
+  }
+
+  .emailVerifyContainer .verifyButton {
+    margin-top: 10px;
+    padding: 10px 30px;
+    border-radius: 20px;
+  }
+
+  .emailVerifiedContainer button {
+    margin-top: 10px;
+    padding: 10px 40px;
+    border-radius: 20px;
+    background-color: #0057b1;
+    color: #fff !important;
+  }
+
+  .userInfoSectionInputs input {
+    min-width: none !important;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  .inputFields input {
+    width: 80vw;
+    background: none;
+  }
+
+  .usernameInputSection {
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  .cardsContent {
+    width: 100%;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .card:last-of-type {
+    padding-top: 2rem;
+  }
+
+  .verifyCompanySection {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .verifyCompanySection div:first-of-type {
+    flex-direction: column;
+  }
+
+  .info-icon-container {
+    display: none;
+  }
+}

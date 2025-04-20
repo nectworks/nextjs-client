@@ -1,0 +1,766 @@
+/*
+  FileName - SignUpMobile.css
+  Desc - This CSS file provides styles for a mobile OTP (One-Time Password) popup and related elements. These styles collectively create a visually appealing and user-friendly experience for inputting and validating OTPs on mobile devices. The responsive design ensures that the popup and input elements are appropriately adjusted for various screen sizes.
+*/
+.otp-popup-mobile {
+  display: flex;
+  position: absolute;
+  top: 15.2rem;
+  left: 70%;
+  color: #fff;
+  background-color: black;
+  border-radius: 20px;
+  z-index: 9999;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.otp-popup-mobile-inLoginPage {
+  display: flex;
+  position: absolute;
+  top: 14.4rem;
+  left: 71%;
+  color: #fff;
+  background-color: black;
+  border-radius: 20px;
+  z-index: 9999;
+  padding: 10px;
+  font-size: 10px;
+}
+
+.makenodrop {
+  cursor: no-drop;
+}
+
+.valid .green-circle-mobile {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-image: url('../../../public/SignIn/greenTickIcon.webp');
+  background-size: contain;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.cliploaderclassmobile {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-size: contain;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.valid .red-circle-mobile {
+  width: 1rem;
+  position: static;
+  height: 1rem;
+  border-radius: 50%;
+  background-image: url('../../../public/SignIn/alert.webp');
+  background-size: contain;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.disablebutton {
+  cursor: default;
+}
+
+.loginMobileInput .error-message {
+  top: 150%;
+}
+
+.loginMobileInput .error__login__email__user {
+  top: 150%;
+}
+
+.cursorpointer:hover {
+  cursor: pointer !important;
+  background-color: #0057b1 !important;
+  color: #f3f3f3 !important;
+}
+
+.colorBg {
+  background-color: #ffffff !important;
+  color: #000 !important;
+  border: 1px solid gray !important;
+  outline: none !important;
+}
+
+.colorBgg {
+  background-color: #6c6c6c;
+  color: #ffffff !important;
+  outline: none !important;
+}
+
+.colorLoginButton {
+  background-color: #0057b1 !important;
+  color: #f3f3f3 !important;
+  cursor: pointer !important;
+}
+
+.mob__container {
+  max-width: 70%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px;
+  background-color: #f3f3f3;
+  align-items: center;
+}
+
+body {
+  background-color: #f3f3f3 !important;
+}
+
+.mob__container {
+  width: 95%;
+}
+
+.error__login__email {
+  top: 3px;
+  position: relative;
+  left: 0;
+  width: auto;
+  color: red;
+  font-size: 12px;
+  width: 182px;
+}
+
+.error__login__email__user {
+  top: 3px;
+  position: absolute;
+  left: 0;
+  width: auto;
+  color: red;
+  font-size: 12px;
+}
+
+/* Hide login-wrapper by default */
+.login-wrapper-forLoginPage {
+  content-visibility: hidden;
+}
+
+/* Show login-wrapper when it has the show class */
+.login-wrapper-forLoginPage.show {
+  display: flex;
+  gap: 20px;
+  content-visibility: visible;
+  width: 40.8vw;
+}
+
+.otp-container {
+  width: 50%;
+}
+
+.login-container button.colorBgg {
+  background: #6c6c6c;
+  margin-left: auto;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  display: flex;
+  padding: 8px 32px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  background: #6c6c6c;
+  font-size: 14px;
+  margin-top: 18px;
+}
+
+.link-button-container {
+  display: inline;
+}
+
+.link-button-container p,
+.link-button-container a {
+  display: inline;
+}
+
+.link-button-container a {
+  text-decoration: underline;
+  color: #0057b1;
+  font-weight: bold;
+}
+
+.login-container {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.colorInputBottom {
+  border-bottom: 2px solid red !important;
+}
+
+.colorInputGreen {
+  border-bottom: 2px solid green !important;
+}
+
+.loginMobileInput {
+  display: flex;
+  border-bottom: 1px solid black;
+  justify-content: space-between;
+  width: 40.8vw;
+  position: relative;
+}
+
+.loginMobileInput button {
+  color: #0057b1;
+  font-weight: bold;
+  background-color: #f3f3f3;
+  border: none;
+  width: 10vw;
+}
+
+.changeSendOtpColor1 {
+  color: #6c6c6c !important;
+}
+
+.input__resend__otp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 145px;
+}
+
+.input__resend__otp__cross {
+  width: 145px !important;
+}
+
+.crossRightMarginButton {
+  margin-right: 22px !important;
+}
+
+.crossButton {
+  margin-top: -10px;
+}
+
+.otp__input__fourr {
+  border: none;
+  border-bottom: 1px solid #000;
+  width: 1.5rem !important;
+  margin-left: 1rem;
+  position: relative;
+  margin-top: -0.5rem !important;
+  margin-bottom: 0.4rem;
+  outline: none;
+  background-color: #f0f0f0;
+  text-align: center;
+  font-size: 0.875rem;
+  padding-bottom: 5px;
+}
+
+.otp__input-container {
+  display: flex;
+  justify-content: space-between;
+  border: none;
+  width: 60px;
+}
+
+.otp__input-container-otpbox {
+  display: flex;
+  justify-content: space-between;
+  border: none;
+}
+
+.otp__input-container-login {
+  display: flex;
+  justify-content: space-between;
+  border: none;
+}
+
+.otp__input-container input {
+  padding-bottom: 5px;
+  border-bottom: 1px solid black;
+}
+
+.input__resend__otp button {
+  color: #0057b1;
+  font-weight: bold;
+  background-color: #f3f3f3;
+  border: none;
+  margin-top: 10px;
+}
+
+.mob__container .signUpbutton {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
+  margin-bottom: 2rem;
+}
+
+.mob__container .signUpbutton button {
+  flex: 1;
+  padding: 0.65rem 1.2rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.5rem;
+  background: #6c6c6c;
+  margin-top: 2rem;
+  border: none;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 1rem;
+}
+
+.otp-popup-again-mobile {
+  position: absolute;
+  top: 18rem;
+  left: 40%;
+  color: #fff;
+  background-color: black;
+  border-radius: 20px;
+  z-index: 9999;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.mob__header {
+  width: 102% !important;
+  font-size: 22px !important;
+  margin-bottom: 1.5rem;
+}
+
+.mob__container input {
+  outline: none;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  width: 150px;
+  border-bottom: 1pt solid black;
+  padding-bottom: 5px;
+  font-size: 1rem;
+}
+
+.mob__container .form label {
+  text-align: left;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.mob__container .form input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+  text-align: left;
+}
+
+.mob__container .othersigninbuttons {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
+  margin-bottom: 2rem;
+  width: auto;
+  gap: 25px;
+}
+
+.mob__container .othersigninbuttons button {
+  width: 56.2%;
+  padding: 0.65rem 1.2rem;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: #fff;
+  border: 1px solid #6c6c6c;
+  margin-top: 2rem;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.mob__container .othersigninbuttons button img {
+  width: 1.5rem;
+  position: static;
+  right: 3rem;
+  top: 0.9rem;
+}
+
+.mob__container .othersigninothersigninbuttons button span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.othersigninoptions {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  fill: #6c6c6c;
+  stroke-width: 2px;
+  stroke: #e1e1e1;
+  color: #6c6c6c;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}
+
+.gap-for-other-buttons {
+  margin-top: 30px;
+}
+
+.linkbutton {
+  width: 32.7vw;
+}
+
+.error-message {
+  position: absolute;
+  left: 0;
+  color: #ff0000;
+  font-size: 12px;
+}
+
+.mob__container .input__style_mob {
+  border-style: none;
+  display: block;
+  width: 100%;
+  font-size: 0.875rem;
+  border-bottom: 1px solid black;
+  padding-bottom: 5px;
+}
+
+.mob__container .terms {
+  text-align: left;
+  margin-top: 10px;
+  margin-left: 13px;
+  font-size: 12px;
+}
+
+.required__color {
+  color: rgb(248, 11, 11);
+}
+
+.mob__container .label__style {
+  color: #000;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  padding-top: 1.5rem;
+  display: flex;
+}
+
+.mob__container .label__style__signup {
+  color: #000;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  padding-top: 1.5rem;
+  display: flex;
+  margin-left: -3rem;
+}
+
+.error-container-mobile {
+  position: relative;
+  margin-left: -3rem;
+}
+
+.send__otp__button {
+  color: #0057b1;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  background-color: #f3f3f3;
+  position: absolute;
+  bottom: 0.32rem;
+  right: 1.5rem;
+}
+
+.error-message-mobile {
+  position: absolute;
+  top: 5.5rem;
+  left: -3rem;
+  color: red;
+  font-size: 12px;
+}
+
+.error-message-mobile-email {
+  top: 5.1rem !important;
+}
+
+.container img {
+  width: 1rem;
+  align-items: left;
+  display: flex;
+  position: relative;
+  right: 3rem;
+  top: 0.9rem;
+}
+
+.inviteinput {
+  margin-top: 5px !important;
+}
+
+.emailIcon {
+  top: 0.6rem !important;
+}
+
+.loginMobileInput input {
+  width: 60vw;
+  margin-top: 5px;
+  padding-bottom: 5px;
+  border: none;
+}
+
+.localStorageCheckMobile {
+  text-align: left !important;
+  margin-left: -3rem;
+}
+
+@media only screen and (min-width: 493px) and (max-width: 641px) {
+  .mob__container .othersigninbuttons {
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .mob__container .othersigninbuttons button {
+    width: 100% !important;
+    gap: 5px;
+    padding: 10px 10px;
+  }
+
+  .loginMobileInput button {
+    width: 13vw !important;
+  }
+
+  .othersigninoptions {
+    display: flex;
+  }
+
+  .tooltip {
+    left: 75px;
+  }
+}
+
+@media only screen and (min-width: 493px) and (max-width: 768px) {
+  .login-wrapper-forLoginPage.show {
+    width: 72vw;
+  }
+
+  .mob__container .othersigninbuttons {
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .mob__container .othersigninbuttons button {
+    width: 100% !important;
+    gap: 5px;
+    padding: 10px 10px;
+  }
+
+  .othersigninoptions {
+    display: flex;
+  }
+
+  .loginImageIcon1 {
+    left: -1.8rem !important;
+  }
+
+  .loginImageIcon2 {
+    left: -1.8rem !important;
+  }
+
+  .loginMobileInput {
+    width: 72vw;
+  }
+
+  .otp-popup-mobile-inLoginPage {
+    left: 87%;
+    top: 13rem;
+    font-size: 8px;
+  }
+
+  .tooltip {
+    left: 75px;
+  }
+}
+
+@media only screen and (max-width: 950px) {
+  .mob__container .othersigninbuttons {
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .tooltip {
+    left: 75px;
+  }
+}
+
+@media only screen and (max-width: 415px) {
+  .login-container button.colorBgg {
+    font-size: small;
+    padding: 6px 25px;
+  }
+
+  .tooltip {
+    left: 75px;
+  }
+}
+
+@media only screen and (max-width: 492px) {
+  .login-wrapper-forLoginPage.show {
+    width: 74vw;
+  }
+
+  .mob__container .othersigninbuttons {
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .mob__container .othersigninbuttons button {
+    width: 100% !important;
+    gap: 5px;
+    padding: 10px 10px;
+  }
+
+  .othersigninoptions {
+    display: flex;
+    margin-top: 24px;
+  }
+
+  .otp-popup-mobile-inLoginPage {
+    top: 11rem;
+    font-size: 8px;
+  }
+
+  .loginImageIcon1 {
+    left: -1.8rem !important;
+  }
+
+  .loginImageIcon2 {
+    left: -1.8rem !important;
+  }
+
+  .loginMobileInput {
+    width: 74vw !important;
+  }
+
+  .loginMobileInput button {
+    width: 24vw !important;
+  }
+
+  .tooltip {
+    left: 75px;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .login-wrapper-forLoginPage.show {
+    width: 62vw;
+  }
+
+  .loginMobileInput {
+    width: 61.8vw;
+  }
+
+  .otp-popup-mobile-inLoginPage {
+    left: 82%;
+  }
+
+  .loginImageIcon1 {
+    left: -2.5rem !important;
+  }
+
+  .loginImageIcon2 {
+    left: -2.5rem !important;
+  }
+
+  .mobile__email__signup {
+    margin-top: 4px;
+  }
+
+  .mob__container {
+    width: 60% !important;
+  }
+
+  .mob__header {
+    font-size: 30px !important;
+  }
+
+  .mob__container .label__style {
+    font-size: 1.1rem !important;
+  }
+
+  .linkbutton {
+    width: 28.5vw;
+  }
+
+  .container img {
+    width: 1.5rem !important;
+    right: 3.5rem !important;
+    top: 1.05rem !important;
+  }
+
+  .loginMobileInput input {
+    font-size: 1rem;
+    padding-bottom: 5px;
+  }
+
+  .otp__input__fourr {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1600px) {
+  .mob__container {
+    width: 40% !important;
+  }
+
+  .mob__header {
+    font-size: 30px !important;
+  }
+
+  .mob__container .label__style {
+    font-size: 1.2rem !important;
+  }
+
+  .input__resend__otp button {
+    font-size: 14px !important;
+  }
+
+  .loginMobileInput button {
+    font-size: 14px !important;
+  }
+
+  .linkbutton {
+    width: 18.5vw;
+  }
+
+  .container img {
+    width: 1.5rem !important;
+    right: 2.5rem !important;
+    top: 1.05rem !important;
+  }
+
+  .loginMobileInput input {
+    font-size: 1rem;
+  }
+
+  .otp__input__fourr {
+    font-size: 1rem;
+  }
+}

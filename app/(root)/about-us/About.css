@@ -1,0 +1,958 @@
+/*
+    FileName - About.css
+    Desc - The provided code defines a set of CSS rules for styling an about page section. This CSS code snippet is used to style an "about" page section with various visual elements, typography, and responsive design considerations. It adjusts the layout, font sizes, colors, and other styles based on different screen sizes to ensure a consistent and visually appealing user experience.
+*/
+.aboutContainer {
+  display: flex;
+  background-color: #f3f3f3;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.second_container {
+  margin-left: 180px;
+}
+
+.aboutFirstSection {
+  height: 640px;
+  width: min(1300px, 98vw);
+  overflow: hidden;
+  margin: 1rem auto;
+  position: relative;
+  top: -180px;
+}
+
+.AboutBgPic1Style {
+  position: absolute;
+  width: 165px;
+  height: 187px;
+  top: 366px;
+  left: 1136px;
+}
+
+.AboutBgPic2Style {
+  position: absolute;
+  top: 230px;
+  left: 153px;
+  width: 111px;
+  height: 129px;
+}
+
+.AboutBgPic3Style {
+  position: absolute;
+  width: 105px;
+  height: 119px;
+  top: 127px;
+  left: 1148px;
+}
+
+.AboutBgPic4Style {
+  position: absolute;
+  width: 146px;
+  height: 168px;
+  top: 462px;
+  left: 332px;
+}
+
+.AboutBgPic6Style {
+  position: absolute;
+  width: 113px;
+  height: 138px;
+  top: 405px;
+  left: 650px;
+}
+
+.AboutBgPic5Style {
+  position: absolute;
+  width: 100px;
+  height: 107px;
+  top: 484px;
+  left: 892px;
+}
+
+.AboutBgVector1Style {
+  position: absolute;
+  width: 99.971px;
+  height: 156.609px;
+  stroke-width: 1px;
+  stroke: #5f5f5f;
+  left: 200.97px;
+  top: 378px;
+}
+
+.AboutBgVector2Style {
+  position: absolute;
+  width: 129.5px;
+  height: 86.53px;
+  stroke-width: 1px;
+  stroke: #5f5f5f;
+  top: 513px;
+  left: 493.29px;
+}
+
+.AboutBgVector3Style {
+  position: absolute;
+  width: 203.5px;
+  height: 76.816px;
+  top: 556.5px;
+  left: 709.2px;
+}
+
+.AboutBgVector4Style {
+  position: absolute;
+  width: 92px;
+  height: 67.63px;
+  top: 443.5px;
+  left: 1015.58px;
+}
+
+.AboutBgVector5Style {
+  position: absolute;
+  width: 83.477px;
+  height: 107.134px;
+  top: 254.5px;
+  left: 1219px;
+}
+
+.aboutHeadingContent {
+  display: inline-flex;
+  flex-direction: column;
+  height: 17vh;
+  justify-content: flex-end;
+}
+
+.colorRevolutionizingLike {
+  display: inline-block;
+  color: #ff2b51;
+  font-size: 40px;
+  font-weight: 600;
+  margin-right: 7px;
+}
+
+.aboutUsSecondSection {
+  display: flex;
+  flex-direction: column;
+  width: 72vw;
+  padding: 10px;
+  text-align: center;
+}
+
+.aboutUsSecondSection_1 {
+  display: flex;
+  flex-direction: column;
+  width: 60vw;
+  padding: 10px;
+  text-align: center;
+}
+
+.aboutUsSecondSection h1 {
+  margin: 20px 0px;
+}
+
+.aboutUsThirdSection {
+  width: 68vw;
+  display: flex;
+  justify-content: space-between;
+  margin: 80px 0px;
+  flex-wrap: wrap;
+}
+
+.aboutUsFourthSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 72vw;
+  padding-left: 200px;
+  padding-right: 160px;
+  margin: 80px 0;
+}
+
+.aboutUsThirdSectionContent {
+  display: flex;
+  flex-direction: column;
+  width: 37vw;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.aboutUsFourthSectionContentContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.fourth_para {
+  margin: 20px;
+}
+
+.aboutUsThirdSection img {
+  width: 25vw;
+}
+
+.aboutUsThirdSectionContent h1 {
+  margin-bottom: 20px;
+}
+
+.aboutUsThirdSectionContentPara1 {
+  margin: 20px 0px;
+}
+
+.aboutUsThirdSectionContentPara2 {
+  margin: 20px 0px;
+}
+
+.aboutUsThirdSectionContentPara3 {
+  margin-left: 80px;
+}
+
+.textWithImage {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.textWithImage p {
+  display: inline;
+  vertical-align: middle;
+  gap: 2px;
+}
+
+.textWithImage svg {
+  width: 72px; /* Adjust the width of the SVG image */
+  height: 4px; /* Adjust the height of the SVG image */
+  stroke: #0057b1;
+  stroke-width: 3;
+  stroke-linecap: round;
+  margin-top: 10px; /* Adjust the margin-top to move the image down */
+}
+
+.AboutFontSizePara {
+  color: #4b4b4b;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.AboutFontSizePara_1 {
+  color: #4b4b4b;
+  font-size: 24px;
+  font-weight: 500;
+  margin-top: 25px;
+}
+
+.AboutFontSizeHeading {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.AboutFontSizeHeading_3 {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.AboutFontSizeHeading_2 {
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  font-weight: bold;
+}
+
+.aboutHorizontalLine {
+  margin-bottom: 30px;
+  width: 67vw;
+}
+
+.aboutUsThirdSectionContentPara_4 {
+  margin: 20px 0px;
+}
+
+.typing-demo {
+  width: 7.18ch;
+  animation:
+    typing 2.5s steps(22),
+    blink 0.5s step-end infinite alternate;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid;
+  color: #4b4b4b;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold !important;
+  margin-bottom: 0.6rem;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.container_about {
+  position: relative;
+  width: 182px;
+  height: 26px;
+  top: 10px;
+  margin-bottom: 20px;
+  left: 80px;
+}
+
+.text-about {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 90%;
+  text-align: center;
+  font-size: 16px;
+  line-height: 26px;
+  color: black;
+}
+
+.rectangle {
+  width: 100%;
+  height: 15px;
+  border-radius: 100px;
+  background-color: rgba(246, 221, 54, 0.5);
+  position: absolute;
+  top: 13px; /* Add 'px' unit here */
+  left: 0;
+  content: '';
+}
+
+/* Tab css */
+@media only screen and (max-width: 768px) {
+  .aboutUsFourthSectionContentContainer {
+    flex-direction: column;
+  }
+
+  .aboutUsThirdSectionContentPara3 {
+    margin: 0;
+  }
+
+  .AboutFontSizePara {
+    text-align: center;
+  }
+
+  .textWithImage {
+    display: flex;
+    justify-content: center;
+    font-size: large;
+    font-weight: 700;
+  }
+
+  .aboutUsFourthSection {
+    padding-right: 10%;
+    padding-left: 10%;
+  }
+
+  .AboutFontSizeHeading_2 {
+    color: rgb(0, 0, 0);
+    /* font-size: 28px; */
+    font-weight: 600;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .aboutUsSecondSection {
+    flex-direction: column;
+    width: 60vw;
+    padding: 1px;
+    text-align: center;
+  }
+
+  .textWithImage {
+    justify-content: center;
+    margin: 5%;
+    font-size: large;
+    font-weight: 500;
+  }
+
+  .aboutUsThirdSectionContentPara_4 {
+    margin: 20px 0px;
+  }
+
+  .AboutFontSizeHeading_3 {
+    font-size: 27px;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .aboutUsThirdSection img {
+    height: 45vh !important;
+    width: 50vw !important;
+  }
+
+  .aboutUsThirdSection {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .aboutUsThirdSectionContent {
+    width: 45vw;
+    margin-top: 30px;
+  }
+
+  .AboutFirstSectionBGStyle {
+    width: 95vw;
+  }
+
+  .AboutBgPic2Style {
+    width: 80px;
+    height: 90px;
+    top: 290px;
+    left: 50px;
+  }
+
+  .AboutBgVector1Style {
+    top: 390px;
+    left: 68px;
+    width: 100px;
+    height: 103px;
+  }
+
+  .AboutBgPic4Style {
+    width: 90px;
+    height: 100px;
+    position: absolute;
+    top: 402px;
+    left: 163px;
+  }
+
+  .AboutBgVector2Style {
+    width: 54.5px;
+    height: 86.53px;
+    top: 431px;
+    left: 271px;
+  }
+
+  .AboutBgPic6Style {
+    width: 81px;
+    height: 100px;
+    top: 380px;
+    left: 338px;
+  }
+
+  .AboutBgVector3Style {
+    width: 114.5px;
+    height: 76.816px;
+    position: absolute;
+    top: 476.5px;
+    left: 379.2px;
+  }
+
+  .AboutBgPic5Style {
+    width: 84px;
+    height: 86px;
+    position: absolute;
+    top: 423px;
+    left: 490px;
+  }
+
+  .AboutBgVector4Style {
+    width: 54px;
+    height: 66.63px;
+    position: absolute;
+    top: 392.5px;
+    left: 586.58px;
+  }
+
+  .AboutBgPic1Style {
+    width: 86px;
+    height: 95px;
+    position: absolute;
+    top: 366px;
+    left: 655px;
+  }
+
+  .AboutBgVector5Style {
+    width: 76.477px;
+    height: 72.134px;
+    position: absolute;
+    top: 288.5px;
+    left: 680px;
+  }
+
+  .AboutBgPic3Style {
+    width: 78px;
+    height: 82px;
+    top: 192px;
+    left: 638px;
+  }
+
+  .AboutFontSizeHeading {
+    color: #000;
+    font-size: 30px !important;
+    font-weight: 600;
+  }
+
+  .colorRevolutionizingLike {
+    color: #ff2b51;
+    font-size: 30px !important;
+    font-weight: 600;
+  }
+
+  .aboutHeadingContent {
+    display: inline-flex;
+    flex-direction: column;
+    height: 17vh;
+    justify-content: flex-end;
+  }
+
+  .aboutFirstSection {
+    height: 35vh;
+  }
+}
+
+@media only screen and (max-width: 1249px) {
+  .AboutFirstSectionBGStyle {
+    width: 95vw;
+  }
+
+  .aboutUsThirdSection {
+    width: 72vw;
+    flex-wrap: nowrap;
+  }
+
+  .AboutBgPic2Style {
+    left: 93px;
+  }
+
+  .AboutBgVector1Style {
+    left: 145.97px;
+  }
+
+  .AboutBgPic4Style {
+    left: 263px;
+  }
+
+  .AboutBgVector2Style {
+    left: 424px;
+  }
+
+  .AboutBgPic6Style {
+    left: 572px;
+  }
+
+  .AboutBgVector3Style {
+    left: 630px;
+  }
+
+  .AboutBgPic5Style {
+    left: 800px;
+  }
+
+  .AboutBgVector4Style {
+    left: 918px;
+  }
+
+  .AboutBgPic1Style {
+    left: 1030px;
+  }
+
+  .AboutBgVector5Style {
+    left: 1120px;
+  }
+
+  .AboutBgPic3Style {
+    left: 1053px;
+  }
+}
+
+@media only screen and (min-width: 1250px) and (max-width: 1880px) {
+  .aboutUsThirdSection {
+    width: 72vw;
+    flex-wrap: nowrap;
+  }
+
+  .AboutBgPic2Style {
+    left: 100px;
+  }
+
+  .AboutBgVector1Style {
+    left: 168px;
+  }
+
+  .AboutBgPic4Style {
+    left: 300px;
+  }
+
+  .AboutBgVector2Style {
+    left: 461px;
+  }
+
+  .AboutBgPic6Style {
+    left: 618px;
+  }
+
+  .AboutBgVector3Style {
+    left: 677px;
+  }
+
+  .AboutBgPic5Style {
+    left: 860px;
+  }
+
+  .AboutBgVector4Style {
+    left: 983px;
+  }
+
+  .AboutBgPic1Style {
+    left: 1104px;
+  }
+
+  .AboutBgVector5Style {
+    left: 1187px;
+  }
+
+  .AboutBgPic3Style {
+    left: 1116px;
+  }
+}
+.textWithImage {
+  display: flex;
+  margin: 2rem 0;
+  font-size: large;
+  font-weight: 500;
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1250px) {
+  .aboutUsFourthSection {
+    display: flex;
+    flex-direction: column;
+    margin: 1.5rem 0 3rem;
+    padding-right: 10%;
+    padding-left: 10%;
+  }
+
+  .aboutUsSecondSection {
+    display: flex;
+    flex-direction: column;
+    padding: 1px;
+    text-align: center;
+  }
+
+  .textWithImage {
+    display: flex;
+    justify-content: center;
+    margin: 5%;
+    font-size: large;
+    font-weight: 500;
+  }
+
+  .fourth_para {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0px;
+    text-align: left;
+  }
+
+  .aboutUsThirdSectionContentPara_4 {
+    margin: 20px 0px;
+  }
+
+  .AboutBgPic2Style {
+    display: none;
+  }
+
+  .AboutBgVector1Style {
+    display: none;
+  }
+
+  .AboutBgPic4Style {
+    display: none;
+  }
+
+  .AboutBgVector2Style {
+    display: none;
+  }
+
+  .AboutBgPic6Style {
+    display: none;
+  }
+
+  .AboutBgVector3Style {
+    display: none;
+  }
+
+  .AboutBgPic5Style {
+    display: none;
+  }
+
+  .AboutBgVector4Style {
+    display: none;
+  }
+
+  .AboutBgPic1Style {
+    display: none;
+  }
+
+  .AboutBgVector5Style {
+    display: none;
+  }
+
+  .AboutBgPic3Style {
+    display: none;
+  }
+
+  .aboutFirstSection {
+    display: none;
+  }
+
+  .aboutHorizontalLine {
+    margin: 1rem 0;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1000px) {
+  .aboutUsThirdSection {
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 0;
+  }
+
+  .aboutUsThirdSection img {
+    width: 500px;
+    height: 500px;
+    margin-bottom: 2rem;
+  }
+
+  .aboutUsThirdSectionContent {
+    margin: 30px 0px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+  }
+
+  .aboutUsThirdSectionContentPara1 {
+    margin: 10px 0px;
+  }
+
+  .aboutUsThirdSectionContentPara2 {
+    margin: 3px 0px;
+  }
+
+  .aboutHorizontalLine {
+    margin: 2rem 0;
+  }
+
+  .aboutUsFourthSectionContentContainer {
+    flex-direction: column;
+  }
+
+  .aboutUsThirdSectionContentPara3 {
+    margin: 0;
+  }
+
+  .container_about {
+    left: 0;
+    margin: 0 auto;
+  }
+
+  .aboutUsFourthSection,
+  .aboutUsSecondSection {
+    margin: 3rem 0;
+    text-align: center;
+  }
+
+  .fourth_para {
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .textWithImage {
+    display: flex;
+    margin: 1%;
+    font-size: large;
+    font-weight: 600;
+  }
+
+  .AboutBgPic2Style {
+    display: none;
+  }
+
+  .AboutBgVector1Style {
+    display: none;
+  }
+
+  .AboutBgPic4Style {
+    display: none;
+  }
+
+  .AboutBgVector2Style {
+    display: none;
+  }
+
+  .AboutBgPic6Style {
+    display: none;
+  }
+
+  .AboutBgVector3Style {
+    display: none;
+  }
+
+  .AboutBgPic5Style {
+    display: none;
+  }
+
+  .AboutBgVector4Style {
+    display: none;
+  }
+
+  .AboutBgPic1Style {
+    display: none;
+  }
+
+  .AboutBgVector5Style {
+    display: none;
+  }
+
+  .AboutBgPic3Style {
+    display: none;
+  }
+
+  .aboutUsSecondSection {
+    width: 96vw;
+  }
+
+  .aboutHeadingContent {
+    height: 10vh;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .AboutFontSizeHeading {
+    font-size: 6.3vw !important;
+  }
+
+  .colorRevolutionizingLike {
+    font-size: 6.3vw !important;
+  }
+
+  .aboutUsThirdSection {
+    flex-direction: column;
+    margin: 50px !important;
+  }
+
+  .aboutUsThirdSectionContent {
+    width: 80vw;
+  }
+
+  .aboutUsThirdSection img {
+    width: 70vw !important;
+    height: 40vh !important;
+  }
+
+  .aboutFirstSection {
+    height: 0vh;
+  }
+
+  .aboutUsThirdSectionContentPara1 {
+    margin: 10px 0px;
+  }
+
+  .aboutUsThirdSectionContentPara2 {
+    margin: 3px 0px;
+  }
+
+  .aboutUsThirdSectionContent h1 {
+    margin-bottom: 0px !important;
+  }
+
+  .aboutUsSecondSection h1 {
+    margin: 5px;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  .AboutBgPic2Style {
+    display: none;
+  }
+
+  .AboutBgVector1Style {
+    display: none;
+  }
+
+  .AboutBgPic4Style {
+    display: none;
+  }
+
+  .AboutBgVector2Style {
+    display: none;
+  }
+
+  .AboutBgPic6Style {
+    display: none;
+  }
+
+  .AboutBgVector3Style {
+    display: none;
+  }
+
+  .AboutBgPic5Style {
+    display: none;
+  }
+
+  .AboutBgVector4Style {
+    display: none;
+  }
+
+  .AboutBgPic1Style {
+    display: none;
+  }
+
+  .AboutBgVector5Style {
+    display: none;
+  }
+
+  .AboutBgPic3Style {
+    display: none;
+  }
+
+  .aboutFirstSection {
+    height: 0vh;
+  }
+
+  .aboutUsSecondSection {
+    width: 85vw;
+  }
+
+  .aboutUsThirdSection {
+    flex-direction: column;
+  }
+
+  .aboutUsThirdSectionContent {
+    width: 80vw;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .aboutUsThirdSectionContentPara1 {
+    margin: 5px 0px;
+    text-align: center;
+  }
+
+  .aboutUsThirdSectionContentPara2 {
+    margin: 5px 0px;
+    text-align: center;
+  }
+
+  .aboutUsThirdSectionContent h1 {
+    margin-bottom: 0px !important;
+  }
+
+  .container_about {
+    width: 200px;
+    left: 0;
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,869 @@
+.publicProfileContainer {
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+}
+
+.clipLoaderClass {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95vw;
+  height: 80vh;
+}
+
+.publicProfileContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.introductionSection {
+  display: flex;
+  flex-direction: column;
+  border-top-right-radius: 2000px;
+  border-bottom-right-radius: 2000px;
+  background: #25a3ff;
+  justify-content: center;
+  max-width: 1100px;
+}
+
+.introSection {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.introSection h1 {
+  color: #fff;
+  font-weight: lighter;
+}
+
+.introSectionDetails {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+}
+
+.introSectionDetailsButtons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.introSectionDetailsButtons button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  border: none;
+  padding: 5px 24px;
+  border-radius: 100px;
+  background: #fff;
+  box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  font-weight: bold;
+}
+
+.previousCompanies {
+  display: flex;
+  color: #fff;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.previousCompanies span {
+  background: #fff;
+  color: #000;
+  padding: 5px 10px;
+  margin-left: 15px;
+  border-radius: 15px;
+}
+
+.Dashboard_profile_share-publicprofile {
+  display: flex;
+  align-items: center;
+  color: #000;
+  padding: 8px 12px;
+  font-weight: bold;
+}
+
+.profile_share-wrapper {
+  width: 100px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  margin-bottom: 20px;
+  margin-left: 5px;
+  margin-top: 20px;
+  transition: width 300ms ease-in-out;
+  transition-delay: 150ms;
+}
+
+.profile_share-wrapperclicked {
+  width: 230px;
+  background-color: #fff;
+  box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  margin-bottom: 20px;
+  margin-left: 5px;
+  margin-top: 20px;
+  transition: width 300ms ease-in-out;
+  transition-delay: 150ms;
+}
+
+.profile-share-button1 {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1em;
+  height: 1em;
+  border-radius: 100vmax;
+  border: 0;
+  font-size: 1.2rem;
+  left: 10px;
+  /* margin-left: 4rem;; */
+  background-color: inherit;
+  color: #000;
+  cursor: pointer;
+  transition: width 300ms ease-in-out;
+  transition-delay: 50ms;
+  z-index: 1;
+}
+
+.profile-share-button1::before {
+  content: 'x';
+  position: absolute;
+  left: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Nunito', sans-serif;
+  width: 1.2em;
+  height: 1.2em;
+  background-color: transparent;
+  color: transparent;
+  border-radius: inherit;
+  z-index: -1;
+  transition: background-color 300ms ease-in-out;
+}
+
+.social-icons {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: calc(100% - 2em);
+  height: 100%;
+  right: 0;
+  border-radius: inherit;
+  color: #000 !important;
+  transform: scale(1);
+}
+
+.fa-facebook-f,
+.fa-x-twitter,
+.fa-linkedin {
+  transform: scale(0);
+}
+
+.share-icon {
+  transform: scale(1);
+  margin-top: 0.15rem;
+  transition: transform 300ms ease-in-out;
+  color: black;
+}
+
+.profile-share-button1.open {
+  width: 8em;
+}
+
+.profile-share-button1.open::before {
+  color: #fff;
+  background-color: #ff6f6f;
+}
+
+.fab {
+  color: #000 !important;
+}
+
+.profile-share-button1.open :is(.fa-facebook-f, .fa-x-twitter, .fa-linkedin) {
+  transform: scale(1);
+  color: #000;
+}
+
+.profile-share-button1.open .share-icon {
+  transform: scale(0);
+  color: #000;
+}
+
+.publicProfileCopyCode {
+  margin-top: 20px;
+  display: flex;
+  width: 500px;
+  align-items: center;
+  margin-left: 265px;
+}
+
+.publicProfileCopyCode button {
+  border: none;
+  background: none;
+}
+
+.publicProfileCopyCode p {
+  word-break: break-all;
+  white-space: normal;
+}
+
+.publicProfileCopyCode img {
+  margin-left: 8px;
+  width: 20px;
+  height: 20px;
+}
+
+.profileDetailsSection {
+  display: flex;
+  gap: 60px;
+  margin-top: 20px;
+  padding: 0 32px 0 75px;
+}
+
+.profileDetailsHeading {
+  display: flex;
+  width: 200px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.profileDetailsHeading button {
+  color: #bfbfbf;
+}
+
+.profileDetailsHeading button:hover {
+  color: #000;
+}
+
+.profileDetailsButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: sticky;
+  gap: 1rem;
+  top: 100px;
+  /* left: 55px;
+     */
+}
+
+.profileDetailDescription {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 10px;
+  /* width: 75%;
+     */
+}
+
+.scrollButton {
+  color: #000;
+  font-family: Inter;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  background: none;
+  border: none;
+}
+
+.aboutContent {
+  color: #000;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.aboutContent pre,
+.aboutAdditionalContent pre {
+  white-space: pre-wrap;
+}
+
+.aboutAdditionalContent {
+  margin: 1rem 0;
+}
+
+.aboutAdditionalContent h3 {
+  color: #0057b1;
+  margin-bottom: 0.5rem;
+}
+
+.experience {
+  display: flex;
+  flex-direction: column;
+}
+
+.experienceDetails {
+  display: flex;
+  flex-direction: column;
+  margin-top: 25px;
+}
+
+.experienceDesc {
+  display: flex;
+  height: 100px;
+}
+
+.experienceDescLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.experienceDescRight {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  line-height: 1.5rem;
+  margin-top: 6px;
+}
+
+.makeCircle {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #969696;
+  border-radius: 50%;
+  background-color: #f3f3f3;
+  flex-shrink: 0;
+}
+
+.hideExperienceDescCircle {
+  height: 0;
+  border: none;
+}
+
+.experienceHorizontalLine {
+  border-left: 1px solid #969696;
+  height: 100px;
+}
+
+.experienceHorizontalLineDecreaseWidth {
+  border-left: 1px solid #969696;
+  height: 70px;
+}
+
+.skills {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.skills p {
+  background: #0057b1;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-top: 5px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.social {
+  display: flex;
+  margin-bottom: 70px;
+  flex-wrap: wrap;
+}
+
+.generalIcon {
+  width: 25px;
+  height: 25px;
+  border-radius: 30px;
+  padding: 10px;
+  box-shadow: 1px 1px 3px 0px #808080;
+  background-color: #fff;
+  margin-right: 20px;
+  margin-top: 2px;
+}
+
+.linkedInIcon {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+}
+
+.horizontalLinePublicProfile {
+  width: 35vw;
+}
+
+.public_profile_section_heading {
+  color: #4b4b4b;
+  margin: 15px 0px;
+  font-weight: 400;
+  display: block;
+}
+
+.shareButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #2568ff;
+  border-radius: 20px;
+  padding: 8px 20px;
+  margin-top: 50px;
+}
+
+.shareButton p {
+  font-weight: bold;
+  color: #2568ff;
+}
+
+.mobilePublicProfileContainer {
+  display: none;
+}
+
+.introSection .profile_image {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  margin-bottom: 50px;
+}
+
+.invite-share-div {
+  display: flex;
+  flex-direction: row;
+}
+
+.invite-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #fff;
+  border-radius: 20px;
+  padding: 9px 13px;
+  margin-top: 21px;
+  margin-right: 10px;
+  background-color: #fff;
+  font-weight: bold;
+  color: #000;
+  box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.inviteMainDiv {
+  position: relative;
+}
+
+.inviteDiv {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: auto;
+  width: auto;
+  background-color: #fff;
+  z-index: 2;
+  padding: 1rem 2rem 2rem 2rem;
+  box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.invitePara {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.fromPara {
+  margin-top: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+  display: flex;
+  gap: 2.1rem;
+}
+
+.subjectPara {
+  font-weight: 500;
+  margin-bottom: 0.9rem;
+  display: flex;
+  gap: 0.8rem;
+}
+
+.textAreaBox {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.toPara {
+  margin-top: 1.5rem;
+  margin-right: 3.4rem;
+}
+
+.sendEmailsButton {
+  background-color: #0057b1;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.15385;
+  outline: none;
+  padding: 8px 0.8em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+  margin-top: 0.6rem;
+  position: absolute;
+  right: 0%;
+  top: 0%;
+}
+
+.sendButtonDiv {
+  position: relative;
+  height: 40px;
+}
+
+.sendEmailsButton:disabled {
+  background-color: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.textArea {
+  outline: none;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  max-height: 4.5rem;
+  max-width: 21.2rem;
+}
+
+.closeInvite {
+  width: 2rem;
+  cursor: pointer;
+  z-index: 70;
+  border-radius: 50%;
+  position: absolute;
+  top: 20.3%;
+  right: 0%;
+}
+
+.inviteShareDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.closeInvite:hover {
+  box-shadow: 1.5px 1.6px 7px 5.5px #dddddd;
+}
+
+.messageInfo {
+  margin-top: 0.5rem;
+}
+
+@media only screen and (min-width: 1441px) {
+  .publicProfileContainer {
+    width: 84vw;
+  }
+
+  .introSection {
+    justify-content: flex-end;
+    margin-left: 50px;
+    margin-right: 50px;
+    gap: 12.95rem;
+  }
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1440px) {
+  .publicProfileContainer {
+    width: 84vw;
+  }
+
+  .introSection {
+    justify-content: flex-end;
+    margin-left: 50px;
+    margin-right: 50px;
+    justify-content: space-between;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .introSection {
+    margin-left: 4vw;
+    justify-content: space-between;
+  }
+
+  .introSectionDetails {
+    margin-left: 2vw;
+  }
+
+  .introSectionDetailsButtons button {
+    padding: 5px 10px;
+  }
+
+  .introSection .profile_image {
+    margin-right: 30px;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 650px) {
+  .introSection {
+    justify-content: space-between;
+    margin-left: 0vw;
+  }
+
+  .introSectionDetailsButtons button img {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  .publicProfileCopyCode {
+    margin-left: 3.5rem;
+  }
+
+  .introSection .profile_image {
+    border-radius: 50%;
+    margin-bottom: 50px;
+    font-size: 3rem;
+    margin-right: 20px;
+  }
+
+  .publicProfileContainer {
+    width: 98vw;
+  }
+
+  .introSectionDetails h1 {
+    font-size: 1.8rem;
+  }
+
+  .introSectionDetailsButtons {
+    justify-content: flex-start !important;
+  }
+
+  .introSectionDetailsButtons img {
+    height: 25px;
+    width: 25px;
+  }
+
+  .introSectionDetailsButtons button {
+    padding: 10px 15px;
+  }
+
+  .publicProfileCopyCode {
+    width: 71.2vw;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .publicProfileContainer {
+    display: none;
+  }
+
+  .mobilePublicProfileContainer {
+    display: block;
+  }
+
+  .mobilePublicProfileContainer h1 {
+    font-size: 20px;
+  }
+
+  .mobilePublicProfileContent {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobilePublicProfileHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #25a3ff;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding-top: 30px;
+    padding-bottom: 15px;
+  }
+
+  .mobilePublicProfileHeader h1 {
+    font-size: 25px;
+    color: #fff;
+    font-weight: lighter;
+  }
+
+  .publicImgAndShareButton {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .publicImgAndShareButton .profile_image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+  }
+
+  .exCompanies {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .exCompanies p {
+    margin-right: 10px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.8rem;
+  }
+
+  .exCompanies span {
+    background: #fff;
+    color: #000;
+    margin-right: 10px;
+    border-radius: 15px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+  }
+
+  .shareIconImg {
+    position: absolute;
+    top: 120px;
+    right: 20px;
+    border: none;
+    background: #fff;
+    border-radius: 50px;
+    padding: 10px;
+  }
+
+  .publicProfileCopyCodeMobile {
+    display: flex;
+    margin: 20px 19px;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+  }
+
+  .publicProfileCopyCodeMobile button {
+    border: none;
+    background: none;
+    margin-left: 15px;
+  }
+
+  .publicProfileCopyCodeMobile img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .introSectionDetailsButtonsMobile {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0px 20px;
+    margin-top: 15px;
+  }
+
+  .introSectionDetailsButtonsMobile button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 100px;
+    background: #fff;
+    box-shadow: 1px 1px 2px #808080;
+    font-size: 0.9rem;
+  }
+
+  .aboutSectionMobile {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+
+  .aboutSectionMobile pre {
+    margin-top: 20px;
+    white-space: pre-wrap;
+  }
+
+  .experienceSectionMobile {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .skillsMobile {
+    margin: 0px 20px;
+  }
+
+  .socialMobile {
+    margin: 0px 20px;
+  }
+
+  .socialMobile img {
+    margin-top: 10px;
+  }
+
+  .experienceDescRight {
+    margin-top: 4px;
+  }
+
+  .experienceHorizontalLineDecreaseWidth {
+    height: 50px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .introSectionDetailsButtonsMobile button {
+    padding: 8px 12px;
+  }
+}
+
+.profile_preview_info_box {
+  width: 300px;
+  border-radius: 15px;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: #f3f3f3;
+  box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  transition: opacity 0.5s linear;
+}
+
+.profile_preview_info_box h3 {
+  padding: 15px;
+  background-color: #a19d9d28;
+}
+
+.profile_preview_info_box p {
+  padding: 15px;
+}
+
+.profile_preview_info_box img {
+  position: absolute;
+  right: 5px;
+  top: 15px;
+  cursor: pointer;
+}
+
+.profile_preview_info_box a,
+.profile_preview_info_box a:visited {
+  text-decoration: underline;
+  color: black;
+}

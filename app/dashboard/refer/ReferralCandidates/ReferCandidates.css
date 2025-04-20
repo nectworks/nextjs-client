@@ -1,0 +1,884 @@
+.dashboard_outer_container {
+  display: flex;
+}
+
+.referCandidatesContainer {
+  box-sizing: border-box;
+  min-width: 1200px;
+  background: #fafafa;
+  overflow: auto;
+  padding: 3rem 5rem;
+}
+
+.referCandidatesContent {
+  margin: 2rem 1rem;
+}
+
+.greetingSection {
+  margin-bottom: -12px;
+  margin-top: 28px;
+}
+
+.greetingSection h1 {
+  font-weight: lighter;
+  font-size: 20px;
+}
+
+.referralHeadingContent {
+  margin-top: 39px;
+  display: flex;
+  flex-direction: column;
+  line-height: 2.5rem;
+}
+
+.referredCandidateButtonAndInput {
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  width: max(50vw, 700px);
+}
+
+.jobPostingButtonAndInput {
+  width: 31.8vw;
+}
+
+.referredCandidateButtonAndInput button {
+  box-shadow: 1px 1px 3px #808080;
+  border: none;
+  border-radius: 10px;
+  padding: 0px 18px;
+  background: #fff;
+  outline: none;
+}
+
+.searchReferCandidatesInput {
+  display: flex;
+  border: 1px solid black;
+  justify-content: space-between;
+  align-items: center;
+  width: 220px;
+  padding: 10px 15px;
+  border-radius: 20px;
+  background: #fff;
+  position: relative;
+}
+
+.searchReferCandidatesInput img {
+  width: 15px;
+  height: 15px;
+  background-color: #0057b1;
+  position: absolute;
+  right: 2px;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.searchReferCandidatesInput input {
+  border: none;
+  outline: none;
+  width: 18.8vw;
+}
+
+.referralsRefreshButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.talentPoolAndJobPostingSection {
+  margin-top: 40px;
+  margin-bottom: 55px;
+  overflow: hidden;
+  height: 66.9vh;
+}
+
+.talentPoolSection {
+  display: flex;
+  width: 100%;
+  height: 66.9vh;
+  position: relative;
+  z-index: 2;
+  gap: 6rem;
+}
+
+.rightTransform {
+  animation-name: rightShift;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+  position: relative;
+  z-index: 3;
+}
+
+@keyframes rightShift {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.addPopupDelay {
+  animation-name: popupDelay;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes popupDelay {
+  0% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.jobPostingSection {
+  display: flex;
+  height: 66.9vh;
+  justify-content: space-between;
+  position: relative;
+  top: -66.9vh;
+  z-index: 1;
+}
+
+.leftTransform {
+  animation-name: leftShift;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+  position: relative;
+  z-index: 4;
+}
+
+@keyframes leftShift {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.switchTalentPoolJobButton {
+  border: none;
+  background: none;
+  position: absolute;
+  top: 14rem;
+  left: 7rem;
+}
+
+.switchTalentPoolJobButton2 {
+  border: none;
+  background: none;
+  position: absolute;
+  top: 14rem;
+  right: 7rem;
+}
+
+.jobPostingPara {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #0057b1;
+  color: #fff;
+  border: none;
+}
+
+.betaIcon {
+  background-color: #ffaf38;
+  color: #000;
+  border: none;
+  padding: 5px 4px !important;
+  border-radius: 10px;
+  position: relative;
+  top: 3.2rem;
+  left: 1rem;
+  z-index: 3;
+  width: 50px;
+  font-weight: bold;
+}
+
+.jobPostingPara p {
+  transform: rotate(-90deg);
+  font-size: 1rem;
+}
+
+.hideJobPosting {
+  visibility: hidden;
+}
+
+.preferencesTable {
+  width: 65vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #ebebeb;
+  border-radius: 8px;
+}
+
+.preferencesTable button {
+  padding: 6px 11px;
+  background-color: #0057b1;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  margin-top: 20px;
+}
+
+.candidateListForReferRequest {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #ebebeb;
+  border-radius: 8px;
+  position: relative;
+}
+
+.fetch_referral_loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.candidateListForReferContentFields {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.candidateListForReferContentFieldsValues {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #fff;
+  margin-bottom: 5px;
+}
+
+.nameWithCheckbox {
+  display: flex;
+  gap: 1.5rem;
+  width: 150px;
+}
+
+.nameWithCheckbox input {
+  width: 21px;
+  height: 21px;
+}
+
+.nameWithCheckboxAndReferralAskedTime {
+  display: flex;
+  width: 200px;
+}
+
+.jobListButton {
+  display: flex;
+  margin-right: 65px;
+}
+
+.jobListButton button {
+  border: none;
+}
+
+.jobListIconReferred {
+  margin-left: 24px;
+}
+
+.downloadResumeButton {
+  display: flex;
+}
+
+.downloadResumeButton button {
+  border: none;
+  background: none;
+}
+
+.downloadResumeIcon {
+  margin-right: 60px;
+}
+
+.referredButton button {
+  padding: 5px 20px;
+  border: none;
+  background: #0057b1;
+  color: #fff;
+  border-radius: 8px;
+  margin-right: 35px;
+}
+
+.nameWithCheckboxAndReferralAskedTime input {
+  width: 21px;
+  height: 21px;
+}
+
+.nameWithAskedReferralTime {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.nameWithAskedReferralTime span {
+  font-size: 12px;
+  color: #808080;
+}
+
+.nameWithAskedReferralTime p {
+  color: #0057b1;
+}
+
+.addJobButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addJobButton img {
+  margin-left: 5px;
+}
+
+.nameWithCheckboxAndReferralAskedTime button {
+  text-align: left;
+}
+
+.paginationSection {
+  margin-bottom: 60px;
+}
+
+.paginationSectionContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 140px;
+}
+
+.paginationSectionContent button {
+  border: none;
+  background: none;
+}
+
+.paginationSectionContent p {
+  margin: 0px 20px;
+}
+
+.jobDetailsTemplate {
+  background: #fff;
+  width: 700px;
+  margin: auto;
+  box-shadow: 1px 1px 3px #808080;
+  border-radius: 8px;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+
+.jobDetailsHorizontalLine {
+  background: #ededed;
+  width: 50vw;
+  height: 1px;
+  font-weight: bold;
+}
+
+.jobDetailsTemplateDesc {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 20px;
+}
+
+.jobDetailsTemplateDesc button {
+  border: none;
+  background: none;
+}
+
+.jobDetailsContent {
+  margin-left: 6rem;
+}
+
+.jobDetailsContent_first,
+.jobDetailsContent_third {
+  margin: 0 1.5rem;
+}
+
+.jobDetailsContent_second {
+  width: 120px;
+  overflow: hidden;
+}
+
+.jobDetailsContent_fourth {
+  width: 250px;
+  overflow: hidden;
+}
+
+.jobDetailsContent_fifth {
+  line-height: normal;
+  padding: 20px;
+  width: 45vw;
+  margin-bottom: 20px;
+  margin-left: 15px;
+}
+
+.jobDetailsContent_fifth span {
+  font-weight: bold;
+}
+
+.jobDetailsContent_fifth p {
+  margin-top: 10px;
+  color: #454545;
+}
+
+.jobDetailsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.jobDetailsContent {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  /* width: 40vw; */
+  color: #0057b1;
+  /* margin: auto; */
+}
+
+.jobDetailsContent p {
+  font-size: 15px;
+}
+
+.jobDetailsContent a {
+  color: #0057b1;
+  font-size: 16px;
+}
+
+.firstImage {
+  width: 16px;
+  height: 12px;
+  /* margin-left: -45px; */
+}
+
+.secondImage {
+  width: 19px;
+  height: 11px;
+}
+
+.jobDetailsHeading {
+  display: flex;
+  margin-left: 6rem;
+}
+
+.jobID {
+  width: 100px;
+  font-weight: bold;
+  margin-left: 36px;
+  text-align: center;
+}
+
+.jobUrl {
+  width: 100px;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 3.5rem;
+}
+
+.jobListButton button {
+  background: none;
+}
+
+.deleteIconForJobs {
+  position: absolute;
+  top: 1px;
+  background: #808080;
+  padding: 16px;
+  border-top-left-radius: 57px;
+  border-bottom-left-radius: 57px;
+  z-index: -1;
+}
+
+.hideJobs {
+  visibility: hidden;
+}
+
+.visibleJobs {
+  visibility: visible;
+}
+
+.deleteIconGoLeft {
+  animation-name: goLeftDeleteButton;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes goLeftDeleteButton {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+    padding-right: 28px;
+  }
+}
+
+.deleteIconGoRight {
+  animation-name: goRightDeleteButton;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes goRightDeleteButton {
+  100% {
+    transform: translateX(0%);
+  }
+
+  0% {
+    padding-right: 28px;
+    transform: translateX(-100%);
+  }
+}
+
+.deleteIconForJobs button {
+  background: none;
+  border: none;
+}
+
+.makeBgBlueOfButton {
+  background-color: #0057b1 !important;
+  color: #fff;
+}
+
+.referredButtonGreenTick {
+  margin-right: 35px;
+}
+
+.referredButtonGreenTick button {
+  border: none;
+  background: none;
+  margin-right: 35px;
+}
+
+.showProfileSection {
+  box-shadow: 1px 1px 4px #808080;
+  background: #fff;
+  margin-top: 10px;
+  margin-bottom: 35px;
+  border-radius: 8px;
+}
+
+.showProfileDetails {
+  padding: 20px 40px 40px 40px;
+  display: flex;
+  gap: 4rem;
+}
+
+.showProfileDetailsWhenNothingFilled {
+  padding: 20px 40px 40px 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftProfileContent {
+  /* width: 55vw; */
+  flex-grow: 1;
+}
+
+.nameCompany p {
+  line-height: 1.6;
+}
+
+.sendEmailAndShareProfileButtons {
+  display: flex;
+  width: 200px;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.sendEmailAndShareProfileButtonsWhenNothingFilled {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 15px;
+}
+
+.emailButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0057b1;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 95px;
+}
+
+.emailButton img {
+  margin-left: 10px;
+  padding: 6px 0px;
+}
+
+.shareProfileButton {
+  border: none;
+  background: none;
+}
+
+.profileAboutSection {
+  margin-top: 20px;
+  line-height: 1.2rem;
+  max-width: 500px;
+}
+
+.profileAboutSection pre {
+  white-space: pre-wrap;
+  margin-top: '20px';
+}
+
+.profileEducationSection {
+  margin-top: 20px;
+  line-height: 1.2rem;
+}
+
+.profileEducationDetails {
+  margin-top: 5px;
+}
+
+.profileEducationDetailsDuration {
+  color: #808080;
+  font-size: 14px;
+}
+
+.profileEducationDetailsCollegeName {
+  color: #000;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.profileExperienceSection {
+  margin-top: 20px;
+  line-height: 1.2rem;
+}
+
+.rightProfileContent {
+  width: max(25vw, 400px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rightProfileMergedSections {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profileSkillsSection {
+  box-shadow: 1px 1px 3px #808080;
+  border-radius: 8px;
+  padding: 10px 20px;
+  padding-bottom: 20px;
+}
+
+.profileSkillsDetails {
+  display: inline-flex;
+  margin-top: 10px;
+}
+
+.profileSkillsDetails p {
+  padding: 0px 16px;
+  border-radius: 74px;
+  background: #0057b1;
+  color: #fff;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.profileSocialLinks {
+  margin-top: 30px;
+  box-shadow: 1px 1px 3px #808080;
+  border-radius: 8px;
+  padding: 10px 20px;
+  padding-bottom: 20px;
+}
+
+.socialLinksDetails {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.socialLinksDetails a {
+  border-radius: 50%;
+  box-shadow: 1px 1px 3px #808080;
+  display: flex;
+}
+
+.socialLinksDetails img {
+  width: 20px;
+  height: 20px;
+  padding: 10px;
+}
+
+.viewAndDownloadResume {
+  display: flex;
+  margin-top: 30px;
+}
+
+.viewAndDownloadResumeWhenNothingFilled {
+  display: flex;
+}
+
+.viewResume {
+  width: 100%;
+  border: none;
+  /* border-radius: 8px; */
+  padding: 0.5rem 1rem;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: #f68a14;
+  color: #fff;
+}
+
+.downloadResume {
+  width: 35px;
+  background-color: #0057b1;
+  border: none;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 12px 0px;
+}
+
+.reportButton {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  color: #0057b1;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.closeProfileSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 25px;
+  margin-right: 40px;
+}
+
+.closeProfileSection p {
+  margin-right: 30px;
+}
+
+.closeProfileSection button {
+  border: none;
+  background: none;
+  width: 20px;
+  height: 20px;
+}
+
+.closeProfileSection button img {
+  width: 100%;
+  height: 100%;
+}
+
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip-text::before {
+  content: 'Download Resume';
+  position: absolute;
+  visibility: hidden;
+  width: 120px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  top: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text::before {
+  visibility: visible;
+  opacity: 1;
+}
+
+.notReferredMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 54vh;
+  padding: 0px 80px;
+  text-align: center;
+}
+
+/* under development popup message */
+.referCandidatesPopupContainer {
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  background-color: #000000bb;
+}
+
+.referCandidatesPopupWindow {
+  width: min(600px, 90vw);
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 8px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.referCandidatesPopupHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.referCandidatesPopupHeader h2 {
+  color: #0057b1;
+}
+
+.referCandidatesPopupHeader button {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid;
+  border-radius: 8px;
+  background-color: transparent;
+}
+
+.blurBackgroundContainer {
+  filter: blur(5px);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.referCandidatesPopupWindow p {
+  margin: 1.5rem 0;
+}
+
+.referCandidatesPopupWindow img {
+  max-width: 90%;
+}

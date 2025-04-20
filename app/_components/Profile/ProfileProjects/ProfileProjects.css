@@ -1,0 +1,142 @@
+.deleteProject span {
+  font-size: 14px;
+}
+.deleteProject {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.deleteProject div button {
+  background-color: transparent;
+  color: #0057b1;
+  border: 1px solid #0057b1 !important;
+  margin: 0 5px;
+  padding: 0.4rem 0.1rem;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  font-size: 0.8rem;
+  height: 36px;
+  font-size: 16px;
+}
+
+.deleteProject div button:hover {
+  background-color: #0056b124;
+}
+
+.dashboard_projects_form_control {
+  width: 100%;
+}
+
+.dashboard_projects_form_control label {
+  display: inline-block;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  margin: 2rem 0 0.5rem;
+}
+
+.dashboard_projects_form_control label span {
+  color: red;
+}
+.dashboard_projects_form_control input {
+  display: block;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid;
+  padding: 7px 0;
+  font-size: 16px;
+  min-width: 0;
+  width: 100%;
+}
+
+.dashboard_projects_form_control textarea {
+  resize: none;
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid;
+}
+
+.dashboard_document_delete_button {
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  font-size: 0.8rem;
+  height: 36px;
+  font-size: 16px;
+  background: #f0f0f0;
+  color: #000;
+  margin: 2rem 0;
+}
+.deleteProject {
+  display: flex;
+}
+
+.impAcievement {
+  color: white;
+  background-color: #0057b1;
+  padding: 0.5rem 0.7rem;
+  border-radius: 18px;
+  border: none;
+  outline: none;
+  margin: 1rem 0;
+}
+.dashboard_projects_upload_message {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 150%;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.dashboard_projects_skill {
+  display: inline-flex;
+  color: white;
+  background-color: #0057b1;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin: 5px 5px 0 0;
+  align-items: center;
+}
+
+.dashboard_projects_skill img {
+  filter: invert(100%) sepia(42%) saturate(2%) hue-rotate(342deg)
+    brightness(111%) contrast(101%);
+  width: 20px;
+  margin-left: 0.3rem;
+  cursor: pointer;
+}
+
+.dashboard_projects_form_control span {
+  font-size: 0.8rem;
+}
+
+.dashboard_projects_last_row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashboard_projects_last_row button:last-of-type {
+  min-width: 50px;
+  width: fit-content;
+}
+
+@media screen and (max-width: 850px) {
+  .dashboard_projects_last_row div:last-of-type {
+    flex-direction: column;
+  }
+
+  .dashboard_profile_projects_container button {
+    margin: 0.4rem 0 0;
+    font: 0.8rem;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .dashboard_projects_last_row {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,189 @@
+.dashboard_outer_container {
+  display: flex;
+  background-color: #fafafa;
+}
+
+.starting_heading {
+  padding: 3rem 5rem;
+}
+
+.starting_heading h3 {
+  font-size: 36px;
+  margin-bottom: 21px;
+  font-weight: 500;
+  margin-top: 2%;
+}
+
+.straight-line-input {
+  border: none;
+  background: none;
+  border-bottom: 1px solid #000;
+  outline: none;
+  width: 85%;
+  font-size: 18px;
+}
+
+.helpContainer {
+  margin: 1rem;
+}
+
+.heading_inputbox h3 {
+  font-size: 28px;
+  font-weight: 501;
+}
+
+.text_area {
+  border: 1px solid #000;
+  border-radius: 5px;
+  width: 83%;
+  padding: 10px;
+  font-size: 18px;
+  outline: none;
+}
+
+.error-mms {
+  color: red;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.btn-Help {
+  display: flex;
+  align-items: center;
+  column-gap: 24px;
+  flex-direction: row;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: black;
+  margin-right: 10px;
+  transition: background-color 0.3s;
+}
+
+.Help-btn:hover {
+  background-color: #0057b1;
+  color: white;
+}
+
+.Help-btn {
+  background: #fff;
+  border: 1px;
+  border-color: #000;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+  margin-left: 0px;
+  padding: 8px 29px;
+  margin-top: 30px;
+  display: flex;
+  box-shadow: 1px 1px 4px #00000040;
+}
+
+.heading_inputbox span {
+  color: #ff0000;
+}
+
+.upload-message {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.upload-message span {
+  color: #000;
+}
+
+.greenTick {
+  margin-left: 5px;
+}
+
+.underProcessingBlock {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.underProcessingBlock button {
+  padding: 10px;
+  border: none;
+  background-color: #0057b1;
+  color: #fff;
+  border-radius: 8px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1100px) {
+  .starting_heading {
+    padding: 3rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .helpContainer {
+    margin-top: 4.8rem;
+    margin-left: 2.6rem;
+    margin-right: 2rem;
+  }
+
+  .starting_heading {
+    padding: 3rem 2rem;
+  }
+
+  .starting_heading .dashboard_profile_float_profile {
+    margin-top: 3rem;
+    right: 35;
+  }
+
+  .text_area {
+    width: 96.5%;
+  }
+
+  .starting_heading h3 {
+    font-size: 32px;
+  }
+
+  .straight-line-input {
+    width: 99.5%;
+  }
+
+  .heading_inputbox h3 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .helpContainer {
+    margin-top: 4.8rem;
+    margin-left: 1rem;
+    margin-right: 2rem;
+  }
+
+  .straight-line-input {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .starting_heading .dashboard_profile_float_profile {
+    margin-top: 3rem;
+    right: 30;
+  }
+
+  .heading_inputbox h3 {
+    font-size: 20px;
+  }
+
+  .text_area {
+    width: 95%;
+    font-size: 16px;
+  }
+
+  .Help-btn {
+    padding: 8px 20px;
+  }
+
+  .upload-message span {
+    font-size: 12px;
+  }
+}

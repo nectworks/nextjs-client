@@ -1,0 +1,70 @@
+/*
+  FileName - Accordion.css
+  Desc - This CSS file contains styles for creating an accordion component. These styles collectively create an accordion component with a visually appealing design and smooth transition animations for opening and closing accordion items.
+*/
+/* Accordion styles */
+
+.accordion-container {
+  background-color: #f3f3f3;
+  border-radius: 10px; /* Add border-radius to the accordion container */
+  padding: 20px; /* Add padding to the accordion container for better spacing */
+}
+
+.accordion {
+  width: 80%;
+  margin: 0 auto 70px auto;
+  background-color: #f3f3f3;
+}
+
+.accordion-item {
+  background-color: #f3f3f3;
+  border-radius: 16px;
+  margin-bottom: 28px;
+  box-shadow: 2px 2px 4px #00000040;
+  overflow: hidden;
+}
+
+.accordion-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem;
+  cursor: pointer;
+  background-color: #fcfcfc;
+}
+
+.title-text {
+  font-weight: bold;
+  padding-right: 1.4rem;
+}
+
+.accordion-content {
+  background-color: #fff;
+  transition: transform 0.5s ease;
+}
+
+.accordian-item-icon {
+  width: 10px;
+  height: 10px;
+  transition: transform 0.5s ease;
+}
+
+.accordian-item-active-icon {
+  transform: rotate(90deg);
+  transition: transform 0.5s ease;
+}
+
+/* Show the accordion content when the item is open */
+.accordion-item .accordion-content {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  padding: 1.4rem;
+  padding-top: 0;
+}
+
+@media screen and (max-width: 500px) {
+  .accordion {
+    width: 90%;
+  }
+}
