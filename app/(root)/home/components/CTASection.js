@@ -1,3 +1,12 @@
+/*
+  FileName: CTASection.js
+  Desc: This component renders a call-to-action section that encourages users to 
+  sign up for the Nectworks platform. It features a compelling headline, supporting 
+  description text, prominent action buttons, and key statistics to build credibility. 
+  The section uses high-contrast colors and visual emphasis to drive conversions and 
+  is positioned strategically at the end of the landing page.
+*/
+
 import React from 'react';
 import Link from 'next/link';
 

@@ -1,3 +1,11 @@
+/*
+  FileName: FeatureSection.js
+  Desc: This component renders a feature section with an image and descriptive text.
+  It displays a heading with highlighted text, paragraph description, and an image
+  in a flexible layout that can be reversed. The component includes hover effects
+  for the image and responsive design for different screen sizes.
+*/
+
 import React from 'react';
 import Image from 'next/image';
 

@@ -1,3 +1,12 @@
+/*
+  FileName: Home.js
+  Desc: Main component for the Nectworks landing page. This file orchestrates the 
+  entire landing page experience by importing and arranging various section components.
+  It includes a hero section with username input, audience-specific tab navigation,
+  feature showcases, testimonials, safety alert section, FAQ accordion, and final call-to-action.
+  The component also handles Google One-Tap login integration and user state management.
+*/
+
 'use client';
 
 import React, { useState, useContext, useEffect } from 'react';
@@ -15,6 +24,7 @@ import { privateAxios } from '@/config/axiosInstance.js';
 
 // Components
 import FeatureSection from './components/FeatureSection';
+import TestimonialSection from './components/TestimonialSection';
 import Accordion from '../../_components/Accordian/Accordion'; // Using existing Accordion
 
 // Styles
@@ -244,6 +254,9 @@ export default function Home() {
         description="Keep track of all your referral requests and candidates in a single, easy-to-use dashboard. No more hunting through emails or messages."
         reversed={false}
       />
+
+      {/* Testimonial Section - Added to showcase user success stories */}
+      <TestimonialSection />
 
       {/* Safety Alert Section */}
       <section className="alert-section">

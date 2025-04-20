@@ -1,3 +1,11 @@
+/*
+  FileName: HowItWorksSection.js
+  Desc: This component displays a step-by-step process explaining how the Nectworks
+  platform works. It features a responsive grid of step cards, each with a numbered
+  indicator, title, description, and icon. The component is designed to guide users
+  through the platform's workflow in a visually appealing and easy-to-understand format.
+*/
+
 import React from 'react';
 
 const HowItWorksSection = () => {
