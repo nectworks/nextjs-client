@@ -264,7 +264,7 @@ export default function Home() {
           <div className="alert-content">
             <h2>Stay Safe from Fraudulent Practices</h2>
             <p>
-              In today`&apos;`s job market, your email can get flooded with suspicious job alerts.
+              In today&apos;s job market, your email can get flooded with suspicious job alerts.
               Learn how to identify and avoid fraudulent recruitment practices.
             </p>
           </div>

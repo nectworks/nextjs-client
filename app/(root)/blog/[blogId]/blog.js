@@ -23,7 +23,7 @@ import {
   AiOutlineArrowLeft,
   AiOutlineArrowRight,
 } from 'react-icons/ai';
-import frame from '@/public/frame.webp';
+import frame from '@/public/Frame.webp';
 import './blog.css';
 
 const Blog = () => {
