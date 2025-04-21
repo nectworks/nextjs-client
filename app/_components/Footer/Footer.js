@@ -62,7 +62,7 @@ export default function Footer() {
         <hr />
         <div className="footer__copyright">
           <div className="company__copyright">
-            <p>&#169;Nectworks Technology. 2024 All rights reserved</p>
+            <p>&copy;Nectworks Technology. 2025&nbsp;&nbsp;&nbsp;&nbsp;All rights reserved</p>
           </div>
           <div className="link__tags link__tagss" onClick={scrollToTop}>
             <a href="/terms-and-conditions">Terms and conditions</a>
