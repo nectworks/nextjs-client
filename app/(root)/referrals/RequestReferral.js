@@ -1,26 +1,31 @@
 'use client';
 /*
     File - RequestReferral.js
-    Desc - This file is likely related to job searching and referral requests.
+    Desc - This file handles the request referral functionality.
+    It includes a step-based UI for job seekers to request referrals from professionals.
     It handles user input validation, OTP verification, and the submission
-    of referral requests. Additionally, it displays modals and popups
-    to communicate with the user.
+    of referral requests.
 */
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
-import deleteIcon from '@/public/PublicProfile/deleteIcon.png';
-import dashedInsideCircle from '@/public//PublicProfile/dashedInsideCircle.png';
-import plusIcon from '@/public/PublicProfile/plusIcon.png';
-import greenTick from '@/public/AccountSettings/greenTick.webp';
-import crossIcon from '@/public/PublicProfile/crossIcon.svg';
-import secondComer from '@/public/PublicProfile/secondComer.webp';
-import './RequestReferral.css';
-import ClipLoader from 'react-spinners/ClipLoader';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter, usePathname } from 'next/navigation';
+import ClipLoader from 'react-spinners/ClipLoader';
+
+// Icons and images
+import plusIcon from '@/public/PublicProfile/plusIcon.png';
+import deleteIcon from '@/public/PublicProfile/deleteIcon.png';
+import greenTick from '@/public/AccountSettings/greenTick.webp';
+import defaultProfile from '@/public/Profile/defaultProfile.webp';
+import uploadIcon from '@/public/PublicProfile/uploadIcon.svg';
+import secondComer from '@/public/PublicProfile/secondComer.webp';
+
+// Styles
+import './RequestReferral.css';
+
+// Context, utils and hooks
 import { UserContext } from '@/context/User/UserContext';
 import showBottomMessage from '@/Utils/showBottomMessage';
-import defaultProfile from '@/public/Profile/defaultProfile.webp';
 import ProfileImage from '../../_components/Profile/ProfileImage/ProfileImage';
 import checkFileExtension from '@/Utils/checkFileExtension';
 import checkFileSize from '@/Utils/checkFileSize';
@@ -29,25 +34,24 @@ import usePrivateAxios from '@/Utils/usePrivateAxios';
 
 const RequestReferral = (props) => {
   const router = useRouter();
-
   const privateAxios = usePrivateAxios();
-
-  // get username from the url
   const { username } = useParams();
   const pathname = usePathname();
 
-  const [otpVerified, setOtpVerified] = useState(false);
-  const [invalidOtp, setInvalidOtp] = useState(false);
-  const [currId, setCurrId] = useState(0);
-
-  // used to display a loader, when there is a network request
-  const [isSubmittingReferral, setIsSubmittingReferral] = useState(false);
-
-  // get the loggedin user from context
+  // Step-based navigation state
+  const [currentStep, setCurrentStep] = useState(1);
+  
+  // Context and user states
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
 
-  // stores information of the seeker, if the seeker is loggedin, prefill the fields.
+  // Verification states
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [invalidOtp, setInvalidOtp] = useState(false);
+  const [currId, setCurrId] = useState(0);
+  const [isSubmittingReferral, setIsSubmittingReferral] = useState(false);
+
+  // User information states
   const [userInformation, setUserInformation] = useState({
     firstName: '',
     lastName: '',
@@ -55,22 +59,19 @@ const RequestReferral = (props) => {
     email: '',
   });
 
-  // object representing each job detail
+  // Job details states
   const jobDetails = {
     jobId: '',
     jobUrl: '',
   };
-
-  /* state to store all the jobs the seeker is asking referral for.
-  each object will have structure similar to 'jobDetails' above */
   const [totalJobs, setTotalJobs] = useState([jobDetails]);
 
-  // state to store and display errors in input fields
+  // Form validation error states
   const [emailError, setEmailError] = useState('');
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
 
-  // state required to send and verify otp to verify email address.
+  // OTP verification states
   const [otp, setOtp] = useState(['', '', '', '']);
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
   const [otpSent, setOtpSent] = useState(false);
@@ -79,87 +80,144 @@ const RequestReferral = (props) => {
   const [enableResendButton, setEnableResendButton] = useState(true);
   const [seconds, setSeconds] = useState(60);
   const [isActive, setIsActive] = useState(false);
-
   const [showSpinner, setShowSpinner] = useState(false);
   const [showSpinnerToVerify, setShowSpinnerToVerify] = useState(false);
 
-  /* decides the popup displayed when unRegisteredUser visits the
-    page for more than once */
+  // Popup and warning states
   const [showPopup, setShowPopup] = useState(false);
-
-  // indicates if the seeker and professional are the same
   const [sameUserWarning, setSameUserWarning] = useState(false);
-
-  // stores id if the user is unregistered.
   const [unRegisteredUserId, setUnRegisteredUserId] = useState(null);
 
-  // stores information of the professional
+  // Professional user data
   const [professionalUserData, setProfessionalUserData] = useState(null);
 
-  // state to handle resume upload
+  // Resume upload states
   const fileInputRef = useRef(null);
   const [resumeUploaded, setResumeUploaded] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
-  // Function to check if the email is valid
+  // Registered user states
+  const [isRegisteredUser, setIsRegisteredUser] = useState(false);
+  const [firstNameOfRegisteredUser, setFirstNameOfRegisteredUser] = useState('');
+  const [lastNameOfRegisteredUser, setLastNameOfRegisteredUser] = useState('');
+  const [emailOfRegisteredUser, setEmailOfRegisteredUser] = useState('');
+  const [registeredUserId, setRegisteredUserId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Validation functions
   const isEmailValid = (email) => {
     const emailPattern = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
     return emailPattern.test(email) && email.endsWith('.com');
   };
 
-  // Function to check if the firstName/ lastName length is valid
   const isNameValid = (name) => {
     return name.length > 0 && name.length <= 30;
   };
 
-  // Function to check if the job url is valid
   const isJobUrlValid = (jobUrl) => {
-    // Regular expression for a basic URL validation
     const jobUrlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
     return jobUrlPattern.test(jobUrl);
   };
 
   const isJobIdValid = (jobId) => {
-    // You can define your validation criteria here
     const jobIdPattern = /^[A-Za-z0-9_-]+$/;
     return jobIdPattern.test(jobId);
   };
 
-  // function to get error message for each input in job details.
+  // Step navigation functions
+  const goToNextStep = () => {
+    // Add validation for each step before proceeding
+    if (currentStep === 1) {
+      if (!validateStep1()) return;
+    } else if (currentStep === 2) {
+      if (!validateStep2()) return;
+    }
+    setCurrentStep(prev => Math.min(prev + 1, 3));
+  };
+
+  const goToPrevStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+  };
+
+  // Step validation functions
+  const validateStep1 = () => {
+    let isValid = true;
+    
+    if (!user && !otpVerified) {
+      if (!isNameValid(userInformation.firstName)) {
+        setFirstNameError('First name is required');
+        isValid = false;
+      }
+      
+      if (!isNameValid(userInformation.lastName)) {
+        setLastNameError('Last name is required');
+        isValid = false;
+      }
+      
+      if (!isEmailValid(userInformation.email)) {
+        setEmailError('Email is required and must be valid');
+        isValid = false;
+      }
+
+      if (!otpVerified) {
+        showBottomMessage('Please verify your email before proceeding');
+        isValid = false;
+      }
+    }
+    
+    return isValid;
+  };
+
+  const validateStep2 = () => {
+    let isValid = true;
+    
+    // Check if each job has a URL (required field)
+    for (let i = 0; i < totalJobs.length; i++) {
+      if (!totalJobs[i].jobUrl) {
+        showBottomMessage('Please provide a Job URL for all positions');
+        isValid = false;
+        break;
+      } else if (!isJobUrlValid(totalJobs[i].jobUrl)) {
+        showBottomMessage('Please provide a valid Job URL for all positions');
+        isValid = false;
+        break;
+      }
+    }
+    
+    return isValid;
+  };
+
+  // Error message helper function
   function getErrorMessage(inputEle) {
-    /* for each 'input' element, get the closest 'errorContainer'
-      to display error messages */
     const parentDiv = inputEle.closest('div');
     const errorContainer = parentDiv.querySelector('.errorMessage');
     const name = inputEle.name;
     const value = inputEle.value;
 
     if (name === 'jobId') {
-      if (value === '') {
-        errorContainer.textContent = 'Job id is required';
-      } else if (!isJobIdValid(value)) {
-        errorContainer.textContent = 'Job id is not valid';
+      if (value && !isJobIdValid(value)) {
+        errorContainer.textContent = 'Job ID is not valid';
       } else {
         errorContainer.textContent = '';
       }
     }
     if (name === 'jobUrl') {
       if (value === '') {
-        errorContainer.textContent = 'Job url is required';
+        errorContainer.textContent = 'Job URL is required';
       } else if (!isJobUrlValid(value)) {
-        errorContainer.textContent = 'Job url is not valid';
+        errorContainer.textContent = 'Job URL is not valid';
       } else {
         errorContainer.textContent = '';
       }
     }
   }
 
-  // function to update a job details in the existing jobs.
+  // Job input handlers
   const handleJobChangeInput = (event, id) => {
     const name = event.target.name;
     const value = event.target.value;
 
-    // at the right index, update the appropriate field
     const updatedJobs = totalJobs.map((job, index) => {
       if (index == id) {
         return { ...job, [name]: value };
@@ -171,7 +229,6 @@ const RequestReferral = (props) => {
     getErrorMessage(event.target);
   };
 
-  // function to add new job details to existing jobs.
   const addJobs = (e) => {
     e.preventDefault();
     if (totalJobs.length < 3) {
@@ -182,20 +239,20 @@ const RequestReferral = (props) => {
     }
   };
 
-  // function to delete a job from 'totalJobs'
   const deleteJob = (id) => {
     const updatedJobs = totalJobs.filter((job, index) => index !== id);
     setTotalJobs(updatedJobs);
     setCurrId(totalJobs.length - 2);
   };
 
+  // User info input handler
   const handleUserInfoInput = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
     if (name === 'email') {
       if (value === '') {
-        setEmailError('Email id is required');
+        setEmailError('Email is required');
       } else if (!isEmailValid(value)) {
         setEmailError('Email is not valid');
       } else {
@@ -222,6 +279,7 @@ const RequestReferral = (props) => {
     setUserInformation({ ...userInformation, [name]: value });
   };
 
+  // OTP handlers
   const handleInputChange = (index, event) => {
     const value = event.target.value;
 
@@ -252,7 +310,7 @@ const RequestReferral = (props) => {
     setInvalidOtp(false);
   };
 
-  // function to verify email entered by the user
+  // Email verification function
   const verifyEmail = async (event) => {
     if (!isEmailValid(userInformation.email)) {
       return;
@@ -295,7 +353,7 @@ const RequestReferral = (props) => {
     }
   };
 
-  // function to verify the otp entered by the user if they are unregistered
+  // OTP verification function
   const verifyOTP = async () => {
     setShowSpinnerToVerify(true);
     try {
@@ -328,8 +386,7 @@ const RequestReferral = (props) => {
     }
   };
 
-  /* function to redirect user to sign-up page, if they are not registered
-    and requesting referral for the second time */
+  // Go to signup function
   const goToSignup = () => {
     document.body.style.overflow = 'auto';
     router.push('/sign-up', {
@@ -340,14 +397,7 @@ const RequestReferral = (props) => {
     });
   };
 
-  const [isRegisteredUser, setIsRegisteredUser] = useState(false);
-  const [firstNameOfRegisteredUser, setFirstNameOfRegisteredUser] =
-    useState('');
-  const [lastNameOfRegisteredUser, setLastNameOfRegisteredUser] = useState('');
-  const [emailOfRegisteredUser, setEmailOfRegisteredUser] = useState('');
-  const [registeredUserId, setRegisteredUserId] = useState(null);
-
-  // function to check if the user is registered or not.
+  // Check for registered user function
   const checkForRegisteredUser = async () => {
     if (user) {
       return;
@@ -361,22 +411,16 @@ const RequestReferral = (props) => {
       if (res.status === 200) {
         setIsRegisteredUser(true);
         document.body.style.overflow = 'auto';
-
-        // setFirstNameOfRegisteredUser(res.data.firstName);
-        // setLastNameOfRegisteredUser(res.data.lastName);
         setEmailOfRegisteredUser(res.data.email);
         setRegisteredUserId(res.data._id);
       }
     } catch (err) {
       getUnregisteredUserData();
-
-      // if the user is not registered, check if he has already visited once
       setIsRegisteredUser(false);
     }
   };
 
-  /* check if the user with the entered email already used their free
-    referral without registration, if yes display the popup */
+  // Check unregistered user data function
   const getUnregisteredUserData = async () => {
     if (user) {
       return;
@@ -391,10 +435,9 @@ const RequestReferral = (props) => {
         setShowPopup(true);
         document.body.style.overflow = 'hidden';
         window.scroll({
-          top: 0, // Scroll to the top (y-coordinate = 0).
-          left: 0, // Scroll to the left edge (x-coordinate = 0).
+          top: 0,
+          left: 0,
           behavior: 'smooth',
-          // Use smooth scrolling animation for a nicer user experience.
         });
       }
     } catch (err) {
@@ -402,7 +445,7 @@ const RequestReferral = (props) => {
     }
   };
 
-  // this function is an event handler for file input
+  // File input handler
   const handleFileInputChange = async (event) => {
     const uploadedFile = event.target.files[0];
 
@@ -411,7 +454,7 @@ const RequestReferral = (props) => {
 
     // if the extension is not valid, display the message and discard the file
     if (isValidExtension === false) {
-      showBottomMessage('Invalid file type. Only pdf accepted');
+      showBottomMessage('Invalid file type. Only PDF files are accepted');
 
       // clear the file input
       event.target.value = '';
@@ -423,7 +466,7 @@ const RequestReferral = (props) => {
 
     // if the file size is more than the limit, display the message and discard the file
     if (isValidSize === false) {
-      showBottomMessage('File exceeds limit of 5MB');
+      showBottomMessage('File exceeds the limit of 5MB');
 
       // clear the file input
       event.target.value = '';
@@ -434,7 +477,7 @@ const RequestReferral = (props) => {
     setResumeUploaded(true);
   };
 
-  // function to upload resume
+  // Resume upload function
   async function uploadResume(data) {
     const resume = document.getElementById('resumeUpload').files[0];
 
@@ -453,7 +496,6 @@ const RequestReferral = (props) => {
     const { signedUrl, fileName } = res.data;
 
     // save the resume in the context
-
     if (user) {
       setUser({
         ...user,
@@ -489,7 +531,7 @@ const RequestReferral = (props) => {
     );
   }
 
-  // function to submit the referrals request
+  // Submit referral request function
   const submitReferralRequest = async () => {
     if (!resumeUploaded && !user?.resume) {
       showBottomMessage('Please upload your resume!');
@@ -518,18 +560,11 @@ const RequestReferral = (props) => {
       unRegisteredUserId: unRegisteredUserId,
     };
 
-    /*
-      3 types of user can access this page:
-      (1). unregistered users
-      (2). registered users (and logged in)
-      (3). registered users (but not logged in)
-    */
-
     // network request starts
     setIsSubmittingReferral(true);
 
     try {
-      // upload the resume to s3 and save infor in server
+      // upload the resume to s3 and save info in server
       if (resumeUploaded) {
         await uploadResume(data);
       }
@@ -555,6 +590,11 @@ const RequestReferral = (props) => {
 
       // network request ends
       setIsSubmittingReferral(false);
+      
+      // Show success state for a moment before resetting the form
+      setTimeout(() => {
+        resetForm();
+      }, 2000);
     } catch (error) {
       const { data, status } = error.response;
 
@@ -566,8 +606,11 @@ const RequestReferral = (props) => {
 
       setIsSubmittingReferral(false);
     }
-
-    // clear the fields and reset other state.
+  };
+  
+  // Reset form after submission
+  const resetForm = () => {
+    // Clear the fields and reset other state
     if (user) {
       setUserInformation({
         ...userInformation,
@@ -592,13 +635,13 @@ const RequestReferral = (props) => {
 
     setUploadedFileName('');
     setResumeUploaded(false);
+    setCurrentStep(1);
 
-    // discard the uploaded file.
+    // discard the uploaded file
     document.getElementById('resumeUpload').value = '';
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-  // function to fetch user information based on the 'username'
+  // Get user via username function
   const getUserViaUsername = async () => {
     try {
       const res = await publicAxios.get(`/getUser/${username}`);
@@ -613,19 +656,17 @@ const RequestReferral = (props) => {
     }
   };
 
-  // get professional's basic information based on the 'username' in the URL
+  // Effect hooks
   useEffect(() => {
     getUserViaUsername();
   }, []);
 
-  // check if the user is registered or not after they enter a valid email
   useEffect(() => {
     if (isEmailValid(userInformation.email)) {
       checkForRegisteredUser();
     }
   }, [userInformation.email]);
 
-  // when user is entering otp, verify as soon as they enter 4 characters.
   useEffect(() => {
     const enteredOTP = otp.join('');
     if (enteredOTP.length === 4) {
@@ -657,6 +698,9 @@ const RequestReferral = (props) => {
         message: '',
         email: user.email,
       });
+      
+      // Auto-verify if user is logged in
+      setOtpVerified(true);
     }
 
     /* if the logged in user and the profile of the professional is
@@ -668,563 +712,477 @@ const RequestReferral = (props) => {
     }
   }, [user, professionalUserData]);
 
+  // Check if user can proceed (either logged in or email verified)
+  const canProceed = user || otpVerified;
+
   return (
     <>
       {!isLoading ? (
-        <div
-          className={`referralRequestModal 
-      ${showPopup ? 'makeBgBlur' : ''}`}
-        >
-          <div className="referralRequestHeader">
-            <div className="backToPublicProfile">
-              <Link href={`/user/${username}`} className="linkToPublicProfile">
-                {/* <Image src={defaultProfile} alt="logo" /> */}
+        <div className={`referral-request-container ${showPopup ? 'blur-background' : ''}`}>
+          {/* Header */}
+          <div className="referral-header">
+            <Link href={`/user/${username}`} className="professional-info">
+              <div className="professional-avatar">
+                {/* Fall back to ProfileImage component which seems to work correctly */}
                 <ProfileImage
                   isLoggedInUser={false}
                   otherUser={professionalUserData}
                 />
-                <p>
-                  {professionalUserData.firstName}{' '}
-                  {professionalUserData.lastName}
-                </p>
-              </Link>
-            </div>
-          </div>
-          <div className="referralRequestHeaderDesc">
-            <h3 style={{ color: '#0057B1' }}>Have a Job ID?</h3>
-            <p>Share your basic details along with your job ID or job URL</p>
-          </div>
-          <div className="referralRequestDesc">
-            <div className="referralRequestDetails">
-              {isLoading ? (
-                <ClipLoader size={12} />
-              ) : (
-                !professionalUserData.isExperienced && (
-                  <div className="notHavingProfessionalDetails">
-                    <p>
-                      {professionalUserData.firstName} is not accepting referral
-                      requests at this moment.
-                    </p>
-                  </div>
-                )
-              )}
-              <div
-                className={`firstNameAndLastName 
-              ${
-                !isLoading && !professionalUserData.isExperienced
-                  ? 'makeTextFade'
-                  : ''
-              }`}
-              >
-                <div className="firstName">
-                  <label htmlFor="firstName">
-                    First Name&nbsp;
-                    <span style={{ color: '#F00' }}>*</span>
-                  </label>
-                  <input
-                    disabled={
-                      isRegisteredUser ||
-                      otpVerified ||
-                      user ||
-                      (!isLoading && !professionalUserData.isExperienced)
-                    }
-                    className={`${
-                      !isLoading && !professionalUserData.isExperienced
-                        ? 'makeInputFade'
-                        : ''
-                    } ${otpVerified ? 'makeBgNone' : ''} `}
-                    type="text"
-                    name="firstName"
-                    value={
-                      isRegisteredUser
-                        ? firstNameOfRegisteredUser
-                        : userInformation.firstName
-                    }
-                    onChange={handleUserInfoInput}
-                  />
-                  {firstNameError ? (
-                    <p className="errorMessage">{firstNameError}</p>
-                  ) : (
-                    <p>&nbsp;</p>
-                  )}
-                </div>
-
-                <div className="lastName">
-                  <label htmlFor="lastName">
-                    Last Name <span style={{ color: '#F00' }}>*</span>
-                  </label>
-                  <input
-                    disabled={
-                      isRegisteredUser ||
-                      otpVerified ||
-                      user ||
-                      (!isLoading && !professionalUserData.isExperienced)
-                    }
-                    className={`${
-                      !isLoading && !professionalUserData.isExperienced
-                        ? 'makeInputFade'
-                        : ''
-                    } ${otpVerified ? 'makeBgNone' : ''}`}
-                    type="text"
-                    name="lastName"
-                    value={
-                      isRegisteredUser
-                        ? lastNameOfRegisteredUser
-                        : userInformation.lastName
-                    }
-                    onChange={handleUserInfoInput}
-                  />
-                  {lastNameError ? (
-                    <p className="errorMessage">{lastNameError}</p>
-                  ) : (
-                    <p>&nbsp;</p>
-                  )}
-                </div>
               </div>
-
-              <div
-                className={`emailDetailsAndUploadResume 
-            ${
-              !isLoading && !professionalUserData.isExperienced
-                ? 'makeTextFade'
-                : ''
-            }`}
-              >
-                <label htmlFor="">
-                  Email <span style={{ color: '#F00' }}>*</span>
-                </label>
-                <div className="emailDetailsAndUploadResumeInput">
-                  <input
-                    className={`${
-                      !isLoading && !professionalUserData.isExperienced
-                        ? 'makeInputFade'
-                        : ''
-                    }`}
-                    onKeyPress={verifyEmail}
-                    disabled={
-                      isRegisteredUser ||
-                      otpVerified ||
-                      user ||
-                      (!isLoading && !professionalUserData.isExperienced)
-                    }
-                    name="email"
-                    value={
-                      isRegisteredUser
-                        ? emailOfRegisteredUser
-                        : userInformation.email
-                    }
-                    onChange={handleUserInfoInput}
-                    type="text"
-                  />
-
-                  {!isRegisteredUser &&
-                    !user &&
-                    !addResendButton &&
-                    !otpVerified && (
-                      <button
-                        className={`${
-                          !isEmailValid(userInformation.email)
-                            ? 'cursorDefaultOfVerifyButton'
-                            : ''
-                        }`}
-                        onClick={verifyEmail}
-                      >
-                        {showSpinner ? <ClipLoader size={12} /> : 'Verify'}
-                      </button>
-                    )}
-
-                  {(isRegisteredUser ||
-                    user ||
-                    (addResendButton && otpVerified)) && (
-                    <button
-                      disabled={otpVerified}
-                      className={`${
-                        isRegisteredUser || otpVerified || user
-                          ? 'makeButtonGreenColor'
-                          : ''
-                      }`}
-                    >
-                      Verified
-                    </button>
-                  )}
-
-                  {addResendButton && !otpVerified && (
-                    <button
-                      className={`${enableResendButton ? 'disableButton' : ''}`}
-                      disabled={enableResendButton}
-                      onClick={verifyEmail}
-                    >
-                      {showSpinner ? <ClipLoader size={12} /> : 'Resend'}
-                    </button>
-                  )}
-                </div>
-                {emailError ? (
-                  <p className="errorMessage">{emailError}</p>
-                ) : (
-                  <p className="errorMessage">&nbsp;</p>
+              <div className="professional-name">
+                <h2>{professionalUserData.firstName} {professionalUserData.lastName}</h2>
+                {professionalUserData.currentRole && (
+                  <p className="professional-role">{professionalUserData.currentRole}</p>
                 )}
               </div>
+            </Link>
+            <button className="close-button" onClick={() => router.push(`/user/${username}`)}>
+              <span>×</span>
+            </button>
+          </div>
 
-              {/* Login prompt */}
-              {!user && isRegisteredUser && (
-                <div className="loginPrompt">
-                  <p>
-                    Log in to your account to pre-fill your details and continue
-                    with the referral request
-                  </p>
-                  {/* Send the current location to 'login' page */}
-                  <Link href={'/log-in'} state={{ from: pathname }}>
-                    <button>Login</button>
-                  </Link>
-                </div>
-              )}
+          {/* Content */}
+          <div className="referral-content">
+            {/* Progress Steps */}
+            <div className="progress-steps">
+              <div className={`step ${currentStep >= 1 ? 'active' : ''}`}>
+                <div className="step-number">1</div>
+                <div className="step-label">Your Info</div>
+              </div>
+              <div className="step-line"></div>
+              <div className={`step ${currentStep >= 2 ? 'active' : ''}`}>
+                <div className="step-number">2</div>
+                <div className="step-label">Job Details</div>
+              </div>
+              <div className="step-line"></div>
+              <div className={`step ${currentStep >= 3 ? 'active' : ''}`}>
+                <div className="step-number">3</div>
+                <div className="step-label">Resume</div>
+              </div>
+            </div>
 
-              {/* display this message when the seeker and professional are the same users */}
-              {sameUserWarning && (
-                <p className="sameUserWarningMessage">
-                  You are not permitted to send referrals to your own account.
+            {/* Warning message if user is same as professional */}
+            {sameUserWarning && (
+              <div className="same-user-warning">
+                <p>You are not permitted to send referrals to your own account.</p>
+              </div>
+            )}
+            
+            {/* Warning message if professional is not accepting referrals */}
+            {!isLoading && !professionalUserData.isExperienced && (
+              <div className="not-accepting-referrals">
+                <p>
+                  {professionalUserData.firstName} is not accepting referral
+                  requests at this moment.
                 </p>
-              )}
+              </div>
+            )}
 
-              {otpSent && (
-                <div className="otpInputsInRequestReferral">
-                  <div className="otpInputs">
-                    {inputRefs.map((ref, index) => (
-                      <input
-                        className={`${invalidOtp ? 'makeBgRed' : ''}`}
-                        key={index}
-                        ref={ref}
-                        type="text"
-                        value={otp[index]}
-                        onChange={(e) => handleInputChange(index, e)}
-                        onKeyDown={(e) => handleKeyDown(index, e)}
-                        maxLength={1}
-                      />
-                    ))}
-                    {showSpinnerToVerify && (
-                      <div style={{ marginLeft: '5px' }}>
-                        <ClipLoader size={12} />
-                      </div>
-                    )}
-                  </div>
-                  {showOtpSentMessage && (
-                    <div className="otpSentInfo">
-                      <p>OTP sent to email</p>
-                      <Image src={greenTick} alt="otp sent successfully" />
+            {/* Step content container */}
+            <div className="step-content">
+              {/* Step 1: Personal Information */}
+              {currentStep === 1 && (
+                <div className="step-form">
+                  <h3 className="step-title">Your Information</h3>
+                  
+                  {/* Login prompt for registered non-logged-in users */}
+                  {!user && isRegisteredUser && (
+                    <div className="login-prompt">
+                      <p>
+                        Log in to your account to pre-fill your details and continue
+                        with the referral request
+                      </p>
+                      <Link href={'/log-in'} state={{ from: pathname }}>
+                        <button className="login-button">Login</button>
+                      </Link>
                     </div>
                   )}
-                  <p style={{ marginTop: '10px', fontSize: '14px' }}>
-                    Valid for {seconds} seconds
-                  </p>
+                  
+                  {/* Name fields */}
+                  <div className="name-fields">
+                    <div className="input-group">
+                      <label htmlFor="firstName">
+                        First Name <span className="required">*</span>
+                      </label>
+                      <input
+                        id="firstName"
+                        type="text"
+                        name="firstName"
+                        value={userInformation.firstName}
+                        onChange={handleUserInfoInput}
+                        disabled={isRegisteredUser || otpVerified || user || (!isLoading && !professionalUserData.isExperienced)}
+                        className={firstNameError ? 'error' : ''}
+                        placeholder="Enter your first name"
+                      />
+                      {firstNameError && <p className="error-message">{firstNameError}</p>}
+                    </div>
+                    
+                    <div className="input-group">
+                      <label htmlFor="lastName">
+                        Last Name <span className="required">*</span>
+                      </label>
+                      <input
+                        id="lastName"
+                        type="text"
+                        name="lastName"
+                        value={userInformation.lastName}
+                        onChange={handleUserInfoInput}
+                        disabled={isRegisteredUser || otpVerified || user || (!isLoading && !professionalUserData.isExperienced)}
+                        className={lastNameError ? 'error' : ''}
+                        placeholder="Enter your last name"
+                      />
+                      {lastNameError && <p className="error-message">{lastNameError}</p>}
+                    </div>
+                  </div>
+                  
+                  {/* Email with verification */}
+                  <div className="input-group full-width">
+                    <label htmlFor="email">
+                      Email <span className="required">*</span>
+                    </label>
+                    <div className="email-verification">
+                      <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        value={userInformation.email}
+                        onChange={handleUserInfoInput}
+                        onKeyPress={(e) => e.key === 'Enter' && verifyEmail(e)}
+                        disabled={isRegisteredUser || otpVerified || user || (!isLoading && !professionalUserData.isExperienced)}
+                        className={emailError ? 'error' : ''}
+                        placeholder="Enter your email address"
+                      />
+                      
+                      {!isRegisteredUser && !user && !addResendButton && !otpVerified && (
+                        <button
+                          onClick={verifyEmail}
+                          disabled={!isEmailValid(userInformation.email) || !isLoading && !professionalUserData.isExperienced}
+                          className="verify-button"
+                        >
+                          {showSpinner ? <ClipLoader size={12} color="#fff" /> : 'Verify'}
+                        </button>
+                      )}
+                      
+                      {(isRegisteredUser || user || (addResendButton && otpVerified)) && (
+                        <button className="verified-button">
+                          Verified
+                        </button>
+                      )}
+                      
+                      {addResendButton && !otpVerified && (
+                        <button
+                          className="resend-button"
+                          disabled={enableResendButton}
+                          onClick={verifyEmail}
+                        >
+                          {showSpinner ? <ClipLoader size={12} color="#fff" /> : `Resend ${seconds > 0 ? `(${seconds}s)` : ''}`}
+                        </button>
+                      )}
+                    </div>
+                    {emailError && <p className="error-message">{emailError}</p>}
+                  </div>
+                  
+                  {/* OTP input section */}
+                  {otpSent && (
+                    <div className="otp-container">
+                      <p className="otp-title">Enter the verification code sent to your email</p>
+                      <div className="otp-inputs">
+                        {inputRefs.map((ref, index) => (
+                          <input
+                            key={index}
+                            ref={ref}
+                            type="text"
+                            maxLength={1}
+                            value={otp[index]}
+                            onChange={(e) => handleInputChange(index, e)}
+                            onKeyDown={(e) => handleKeyDown(index, e)}
+                            className={invalidOtp ? 'error' : ''}
+                          />
+                        ))}
+                        {showSpinnerToVerify && (
+                          <div className="otp-loader">
+                            <ClipLoader size={12} color="#0057B1" />
+                          </div>
+                        )}
+                      </div>
+                      {showOtpSentMessage && (
+                        <div className="otp-sent-message">
+                          <p>OTP sent to email</p>
+                          <Image src={greenTick} alt="otp sent successfully" width={16} height={16} />
+                        </div>
+                      )}
+                      <p className="otp-timer">Valid for {seconds} seconds</p>
+                      {invalidOtp && <p className="error-message">Invalid OTP. Please try again.</p>}
+                    </div>
+                  )}
+                  
+                  {/* Step navigation */}
+                  <div className="step-navigation">
+                    <div></div> {/* Empty div for flex spacing */}
+                    <button 
+                      className="next-button"
+                      onClick={goToNextStep}
+                      disabled={!canProceed || sameUserWarning || (!isLoading && !professionalUserData.isExperienced)}
+                    >
+                      Continue
+                    </button>
+                  </div>
                 </div>
               )}
-
-              {sameUserWarning === false && (
-                <Fragment>
-                  {/* container to enter job details */}
-                  <div className="jobDescriptionForReferral">
-                    <p>
-                      Add a job ID and the respective job URL for the referrer
-                      to find the position at their company portal. Keep job ID
-                      empty if it is not available.
-                    </p>
-                    {totalJobs.map((ele, id) => {
-                      return (
-                        <div key={id} className="jobDescription">
-                          <div className="jobIdDesc">
-                            <label
-                              className={`${
-                                !isLoading &&
-                                !professionalUserData.isExperienced
-                                  ? 'makeTextFade'
-                                  : ''
-                              }`}
-                              htmlFor=""
-                            >
-                              Job ID
-                            </label>
+              
+              {/* Step 2: Job Details */}
+              {currentStep === 2 && (
+                <div className="step-form">
+                  <h3 className="step-title">Job Details</h3>
+                  <p className="step-description">
+                    Add job details for the position you&apos;d like a referral for
+                  </p>
+                  
+                  <div className="job-details-container">
+                    {totalJobs.map((job, id) => (
+                      <div key={id} className="job-detail">
+                        <div className="job-fields">
+                          <div className="input-group">
+                            <label htmlFor={`jobId-${id}`}>Job ID (Optional)</label>
                             <input
-                              className={`${
-                                !isLoading &&
-                                !professionalUserData.isExperienced
-                                  ? 'makeInputFade'
-                                  : ''
-                              }`}
-                              disabled={
-                                (!otpVerified && !user) ||
-                                !professionalUserData.isExperienced
-                              }
+                              id={`jobId-${id}`}
                               type="text"
                               name="jobId"
-                              value={ele.jobId}
-                              onChange={(event) =>
-                                handleJobChangeInput(event, id)
-                              }
+                              value={job.jobId}
+                              onChange={(e) => handleJobChangeInput(e, id)}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              placeholder="Enter job ID if available"
                             />
-                            <p className="errorMessage">&nbsp;</p>
+                            <p className="error-message">&nbsp;</p>
                           </div>
-
-                          <button className="copyJobIdButton">
-                            <Image
-                              style={{ width: '19px', height: '11.601px' }}
-                              src={dashedInsideCircle}
-                              alt="job details"
-                            />
-                          </button>
-
-                          <div className="jobUrlDesc">
-                            <label
-                              className={`${
-                                !isLoading &&
-                                !professionalUserData.isExperienced
-                                  ? 'makeTextFade'
-                                  : ''
-                              }`}
-                            >
-                              Job URL
+                          
+                          <div className="input-group">
+                            <label htmlFor={`jobUrl-${id}`}>
+                              Job URL <span className="required">*</span>
                             </label>
                             <input
-                              className={`${
-                                !isLoading &&
-                                !professionalUserData.isExperienced
-                                  ? 'makeInputFade'
-                                  : ''
-                              }`}
-                              disabled={
-                                (!otpVerified && !user) ||
-                                !professionalUserData.isExperienced
-                              }
+                              id={`jobUrl-${id}`}
                               type="text"
                               name="jobUrl"
-                              value={ele.jobUrl}
-                              onChange={(event) =>
-                                handleJobChangeInput(event, id)
-                              }
+                              value={job.jobUrl}
+                              onChange={(e) => handleJobChangeInput(e, id)}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              placeholder="Paste the job URL from company website"
+                              required
                             />
-                            <p className="errorMessage">&nbsp;</p>
+                            <p className="error-message">{!job.jobUrl ? 'Job URL is required' : ''}</p>
                           </div>
-
-                          {currId === id ? (
-                            id !== 2 ? (
-                              <button
-                                className={`addJobForReferral
-                            ${!otpVerified && !user ? 'cursorDefault' : ''}`}
-                                disabled={!otpVerified && !user}
-                                onClick={addJobs}
-                              >
-                                <Image
-                                  src={plusIcon}
-                                  alt="add another job details"
-                                />
-                              </button>
-                            ) : (
-                              <button
-                                className={`addJobForReferral 
-                            ${!otpVerified && !user ? 'cursorDefault' : ''}`}
-                                disabled={!otpVerified && !user}
-                                onClick={() => deleteJob(id)}
-                              >
-                                <Image
-                                  src={deleteIcon}
-                                  alt="delete job details"
-                                />
-                              </button>
-                            )
-                          ) : (
+                        </div>
+                        
+                        {/* Delete/Add job buttons */}
+                        <div className="job-actions">
+                          {totalJobs.length > 1 && (
                             <button
-                              className={`addJobForReferral 
-                            ${!otpVerified && !user ? 'cursorDefault' : ''}`}
-                              disabled={!otpVerified && !user}
+                              className="delete-job"
                               onClick={() => deleteJob(id)}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
                             >
                               <Image
                                 src={deleteIcon}
-                                alt="delete job details"
+                                alt="Remove job"
+                                width={16}
+                                height={16}
+                              />
+                            </button>
+                          )}
+                          
+                          {totalJobs.length < 3 && id === totalJobs.length - 1 && (
+                            <button
+                              className="add-job"
+                              onClick={addJobs}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                            >
+                              <Image
+                                src={plusIcon}
+                                alt="Add job"
+                                width={16}
+                                height={16}
                               />
                             </button>
                           )}
                         </div>
-                      );
-                    })}
-
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="job-hint">
                     <p>
-                      {' '}
-                      Please visit the career site of the company to discover
-                      the job you&apos;d like to be referred for. After finding
-                      the job of interest, kindly copy the URL and insert it in
-                      the designated area here.
+                      Please visit the career site of the company to discover the job you&apos;d like 
+                      to be referred for. After finding the job of interest, copy the URL and 
+                      insert it in the field above.
                     </p>
                   </div>
-
-                  {/* container enter the message to the professional */}
-                  <div className="messageDetails">
-                    <label
-                      className={`${
-                        !isLoading && !professionalUserData.isExperienced
-                          ? 'makeTextFade'
-                          : ''
-                      }`}
-                    >
-                      Add a message
-                    </label>
-
+                  
+                  {/* Message field */}
+                  <div className="input-group full-width">
+                    <label htmlFor="message">Add a message (Optional)</label>
                     <textarea
-                      className={`${
-                        !isLoading && !professionalUserData.isExperienced
-                          ? 'makeInputFade'
-                          : ''
-                      }`}
-                      disabled={
-                        (!otpVerified && !user) ||
-                        !professionalUserData.isExperienced
-                      }
-                      style={{ resize: 'none' }}
+                      id="message"
                       name="message"
                       value={userInformation.message}
                       onChange={handleUserInfoInput}
-                      maxLength={400}
-                      cols="30"
-                      rows="10"
-                      placeholder="Feel free to expand on your requirements by adding a message (Max. 300 characters)"
+                      disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                      placeholder="Feel free to expand on your requirements by adding a message"
+                      maxLength={300}
                     ></textarea>
+                    <p className="char-count">Max 300 characters</p>
                   </div>
-
-                  {/* Upload resume section */}
-                  <div className="uploadResume">
-                    <div className="uploadResumeSection">
-                      <div className="uploadResumeButton">
-                        <input
-                          id="resumeUpload"
-                          type="file"
-                          accept=".pdf" // Set accepted file types here
-                          style={{ display: 'none' }}
-                          onInput={handleFileInputChange}
-                          ref={fileInputRef}
-                        />
-
-                        <button
-                          className={`${
-                            (!isLoading &&
-                              !professionalUserData.isExperienced) ||
-                            (user && user.resume && !uploadedFileName)
-                              ? 'makeButtonFade'
-                              : ''
-                          } 
-                        ${
-                          (!otpVerified && !user) ||
-                          professionalUserData.isExperienced == false
-                            ? 'cursorDefault'
-                            : ''
-                        }
-                              `}
-                          /* if otp is not verified and there is no user, or
-                             the professional has not verified their email, disable the button */
-                          disabled={
-                            (!otpVerified && !user) ||
-                            professionalUserData.isExperienced == false ||
-                            (user && user.resume && !uploadedFileName)
-                          }
-                          onClick={() => fileInputRef.current.click()}
-                        >
-                          <span style={{ marginRight: '3px' }}>&#8593;</span>
-                          Upload Resume
-                        </button>
-
-                        <span style={{ color: '#F00', marginTop: '-3px' }}>
-                          *
-                        </span>
-                      </div>
-
-                      <p style={{ fontSize: '12px', marginTop: '5px' }}>
-                        {user && user.resume && !uploadedFileName ? (
-                          <p
-                            className="replaceExistingResumeButton"
-                            onClick={() => fileInputRef.current.click()}
-                          >
-                            Replace existing resume?
-                          </p>
-                        ) : (
-                          <>
-                            {resumeUploaded
-                              ? `${uploadedFileName}`
-                              : 'No file selected'}
-                          </>
-                        )}
-                      </p>
-
-                      <p style={{ fontSize: '12px', marginTop: '5px' }}>
-                        (upto 5MB)
-                      </p>
-                    </div>
-
-                    {/* Display this loader when the referral is being submitted. */}
-                    {isSubmittingReferral ? (
-                      <ClipLoader className="submitReferralLoader" size={20} />
-                    ) : null}
-
-                    <button
-                      disabled={
-                        (!otpVerified && !user) ||
-                        professionalUserData.isExperienced == false
-                      }
-                      onClick={submitReferralRequest}
-                      className={`submitButtonForReferral 
-                    ${
-                      (!otpVerified && !user) ||
-                      professionalUserData.isExperienced == false
-                        ? 'cursorDefault'
-                        : ''
-                    } 
-                    ${
-                      (otpVerified || user) &&
-                      professionalUserData.isExperienced
-                        ? 'makeBgBlue'
-                        : ''
-                    }`}
+                  
+                  {/* Step navigation */}
+                  <div className="step-navigation">
+                    <button 
+                      className="back-button"
+                      onClick={goToPrevStep}
                     >
-                      Submit Request
+                      Back
+                    </button>
+                    <button 
+                      className="next-button"
+                      onClick={goToNextStep}
+                      disabled={sameUserWarning || (!isLoading && !professionalUserData.isExperienced)}
+                    >
+                      Continue
                     </button>
                   </div>
-                </Fragment>
+                </div>
+              )}
+              
+              {/* Step 3: Resume Upload */}
+              {currentStep === 3 && (
+                <div className="step-form">
+                  <h3 className="step-title">Upload Your Resume</h3>
+                  <p className="step-description">
+                    Upload your current resume for the referrer to view
+                  </p>
+                  
+                  <div className="resume-upload-container">
+                    <input
+                      id="resumeUpload"
+                      type="file"
+                      accept=".pdf"
+                      style={{ display: 'none' }}
+                      onChange={handleFileInputChange}
+                      ref={fileInputRef}
+                    />
+                    
+                    <div 
+                      className={`resume-dropzone ${resumeUploaded || (user && user.resume) ? 'has-file' : ''}`}
+                      onClick={() => (!isSubmittingReferral && canProceed && professionalUserData.isExperienced) && fileInputRef.current.click()}
+                    >
+                      {!(resumeUploaded || (user && user.resume)) ? (
+                        <>
+                          <div className="upload-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M16 16L12 12M12 12L8 16M12 12V21M20 16.7428C21.2215 15.734 22 14.2079 22 12.5C22 9.46243 19.5376 7 16.5 7C16.2815 7 16.0771 6.886 15.9661 6.69774C14.6621 4.48484 12.2544 3 9.5 3C5.35786 3 2 6.35786 2 10.5C2 12.5661 2.83545 14.4371 4.18695 15.7935" stroke="#AAAAAA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </div>
+                          <p className="upload-text">
+                            {canProceed ? 'Drag & drop your resume here or click to browse' : 'Please complete previous steps first'}
+                          </p>
+                          <p className="upload-hint">PDF format, max 5MB</p>
+                        </>
+                      ) : (
+                        <>
+                          <div className="file-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M7 21C5.89543 21 5 20.1046 5 19V3C5 1.89543 5.89543 1 7 1H14L19 6V19C19 20.1046 18.1046 21 17 21H7Z" stroke="#0057B1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M19 6H14V1" stroke="#0057B1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M8 13H16" stroke="#0057B1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M8 17H16" stroke="#0057B1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M8 9H16" stroke="#0057B1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </div>
+                          <p className="file-name">
+                            {uploadedFileName || (user && user.resume ? 'Your resume is uploaded' : '')}
+                          </p>
+                          <button 
+                            className="replace-file"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              canProceed && professionalUserData.isExperienced && fileInputRef.current.click();
+                            }}
+                            disabled={isSubmittingReferral}
+                          >
+                            Replace
+                          </button>
+                        </>
+                      )}
+                    </div>
+                    
+                    <p className="resume-required">
+                      <span className="required">*</span> Required
+                    </p>
+                  </div>
+                  
+                  {/* Step navigation */}
+                  <div className="step-navigation">
+                    <button 
+                      className="back-button"
+                      onClick={goToPrevStep}
+                      disabled={isSubmittingReferral}
+                    >
+                      Back
+                    </button>
+                    <button 
+                      className="submit-button"
+                      onClick={submitReferralRequest}
+                      disabled={
+                        isSubmittingReferral || 
+                        sameUserWarning || 
+                        (!resumeUploaded && !user?.resume) || 
+                        (!isLoading && !professionalUserData.isExperienced)
+                      }
+                    >
+                      {isSubmittingReferral ? (
+                        <ClipLoader size={16} color="#fff" />
+                      ) : (
+                        'Submit Request'
+                      )}
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
           </div>
         </div>
       ) : (
-        <div className="clipLoaderClass">
+        <div className="loading-container">
           <ClipLoader size={30} />
         </div>
       )}
 
-      {/* Popup to redirect unregistered users to sign up page on
-        their second visit */}
+      {/* Second Comer Popup */}
       {showPopup && (
-        <div className="popUpContainer">
-          <div className="popUpWindow" id="secondComerPopup">
-            <Image
-              className="secondComer"
-              src={secondComer}
-              alt="signup to continue"
-            />
-
-            <div className="messagePopupContentDetails">
-              <div className="messagePopupClose">
-                <h1 style={{ color: '#0057B1' }}>Oops!</h1>
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <div className="popup-header">
+              <h2>Oops!</h2>
+              <button className="popup-close" onClick={() => setShowPopup(false)}>×</button>
+            </div>
+            
+            <div className="popup-body">
+              <div className="popup-image">
+                <Image src={secondComer} alt="signup to continue" />
               </div>
-
-              <p style={{ marginTop: '30px', marginBottom: '20px' }}>
+              
+              <p>
                 It looks like you&apos;re ready to take the next step in your
                 career journey by seeking more referrals.
               </p>
-              <p style={{ marginBottom: '20px' }}>
+              <p>
                 But, you have exceeded the number of times you can send a
                 referral request with the same email ID.
               </p>
-              <p style={{ fontWeight: 'bold' }}>
+              <p className="popup-highlight">
                 Sign Up on Nectworks to send more.
               </p>
-
-              <button className="goToSignupButton" onClick={goToSignup}>
+              
+              <button className="signup-button" onClick={goToSignup}>
                 Sign Up
               </button>
             </div>
