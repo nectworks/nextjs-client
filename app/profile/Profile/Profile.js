@@ -64,6 +64,9 @@ import {
   FaProjectDiagram,
   FaFacebookF,
   FaLinkedin,
+  FaFileAlt,
+  FaShareAlt,
+  FaChevronRight
 } from 'react-icons/fa';
 import deleteResume from '@/public/Profile/deleteResume.svg';
 import downloadResume from '@/public/Profile/downloadResume.svg';
@@ -71,6 +74,9 @@ import {
   FaRegMessage,
   FaXTwitter,
   FaArrowUpRightFromSquare,
+  FaUser,
+  FaPen,
+  FaPlus
 } from 'react-icons/fa6';
 import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import downloadDocument from '@/Utils/downloadDocument';
@@ -104,6 +110,9 @@ const ProfilePage = () => {
 
   // decides the subsection the user is making changes in.
   const [subSection, setSubSection] = useState(1);
+
+  // Track active section for tab navigation
+  const [activeSection, setActiveSection] = useState("about");
 
   /* decides the index of the sub section data we are updating.
        -1 implies we are adding new data */
@@ -402,31 +411,7 @@ const ProfilePage = () => {
       switchRef.current.checked = activelySeekingJob;
     }
   }, [activelySeekingJob]);
-  // const handleActivelySeekingToggleChange = async () => {
-  //   try {
-  //     const value = !activelySeekingJob;
-  //     // Make PUT request to update activelySeekingJob status
-  //     const response = await publicAxios.put(
-  //       '/signUpCards/updateActivelySeekingJob',
-  //       {
-  //         userId: user._id,
-  //         activelySeekingJob: value,
-  //       }
-  //     );
-  //     if (response.status === 200) {
-  //       // Update the toggle manually if necessary
-  //       const switchElement = document.getElementsByClassName('MuiSwitch-input')[0];
-  //       if (switchElement) {
-  //         switchElement.checked = value;
-  //       }
-  //       setActivelySeekingJob(response.data.activelySeekingJob);
-  //     } else {
-  //       console.error('Failed to update job status');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating actively seeking job status:', error);
-  //   }
-  // };
+
   const handleImmediateJoinerToggleChange = async () => {
     if (!toggle) {
       setShouldDisplayMessage(true);
@@ -642,8 +627,7 @@ const ProfilePage = () => {
   };
 
   // CSS classes for styling
-  const uploadBoxClass = `dashboard_info_resume_upload_box ${isDragging ? 'drag-over' : ''
-    }`;
+  const uploadBoxClass = `dashboard_info_resume_upload_box ${isDragging ? 'drag-over' : ''}`;
   const [resumeUploadStatus, setResumeUploadStatus] = useState(false);
   const uploadFile = async (selectedFile) => {
     setResumeUploadStatus(true);
@@ -813,7 +797,7 @@ const ProfilePage = () => {
             {/* Intro with profile and title */}
             <div className="dashboard_profile_intro">
               <div className="intro_section-dashboard">
-                <div onClick={() => setOpenFileUploadDialog(true)}>
+                <div onClick={() => setOpenFileUploadDialog(true)} className="profile-avatar-container">
                   <ProfileImage isLoggedInUser={true} />
                 </div>
                 <div className="dashboard_profile_description">
@@ -843,32 +827,20 @@ const ProfilePage = () => {
                           ? ` ${userData.timestamp.savedAt}`
                           : 'N/A'}
                       </p>
-                    </div>
+                      </div>
                     <button
                       className={`dashboard_resume_view_button${!resumeFileUrl ? 'disabled' : ''
                         }`}
                       onClick={handleOpenResume}
                       disabled={!resumeFileUrl}
                     >
+                      <FaFileAlt className="mr-2" />
                       Your Resume
                     </button>
                   </div>
 
                   <div className="popUpFormDetailsSeperator">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="717"
-                      height="2"
-                      viewBox="0 0 717 2"
-                      fill="none"
-                    >
-                      <path
-                        d="M0.994141 1.06104H715.994"
-                        stroke="#969696"
-                        strokeWidth="0.6"
-                        strokeLinecap="round"
-                      />
-                    </svg>
+                    <div className="profile-divider"></div>
                   </div>
                 </div>
               </div>
@@ -956,15 +928,6 @@ const ProfilePage = () => {
               <div className="dashboard_profile_buttons">
                 <div className="dashboard_profile_button">
                   <p>Are you actively looking for a job?</p>
-                  {/* <label className="switch">
-                    <input
-                      type="checkbox"
-                      className="job_toggle"
-                      checked={activelySeekingJob}
-                      onChange={handleActivelySeekingToggleChange}
-                    />
-                    <span className="slider round"></span>
-                  </label> */}
                   <StyledIOSSwitch
                     ref={switchRef}
                     checked={activelySeekingJob}
@@ -974,15 +937,6 @@ const ProfilePage = () => {
                 </div>
                 <div className="dashboard_profile_button">
                   <p>Are you available for immediate joining?</p>
-                  {/* <label className="switch">
-                    <input
-                      type="checkbox"
-                      className="joining_toggle"
-                      checked={toggle}
-                      onChange={handleImmediateJoinerToggleChange}
-                    />
-                    <span className="slider round"></span>
-                  </label> */}
                   <StyledIOSSwitch
                     checked={toggle}
                     onChange={handleImmediateJoinerToggleChange}
@@ -1042,79 +996,93 @@ const ProfilePage = () => {
                 </div>
               </div>
               <div className="SmoothScrollOptions">
-                <a href="#about">About</a>
-                <a href="#experience">Experience</a>
-                <a href="#education">Education</a>
-                <a href="#skills">Skills</a>
-                <a href="#social">Social</a>
-                <a href="#achievements">Achievements</a>
-                <a href="#projects">Projects</a>
+                {[
+                  { id: "about", label: "About", icon: <FaUser /> },
+                  { id: "experience", label: "Experience", icon: <FaBriefcase /> },
+                  { id: "education", label: "Education", icon: <FaGraduationCap /> },
+                  { id: "skills", label: "Skills", icon: <FaTools /> },
+                  { id: "social", label: "Social", icon: <FaUsers /> },
+                  { id: "achievements", label: "Achievements", icon: <FaMedal /> },
+                  { id: "projects", label: "Projects", icon: <FaProjectDiagram /> }
+                ].map(item => (
+                  <a 
+                    key={item.id} 
+                    href={`#${item.id}`}
+                    onClick={() => setActiveSection(item.id)}
+                    className={activeSection === item.id ? "active-tab" : ""}
+                  >
+                    {item.label}
+                  </a>
+                ))}
               </div>
               <div className="SmoothScrollOptions_mobile_view">
-                <a href="#about" style={{ color: 'black' }}>
-                  <FaRegMessage />
-                </a>
-                <a href="#experience" style={{ color: 'black' }}>
-                  <FaBriefcase />
-                </a>
-                <a href="#education" style={{ color: 'black' }}>
-                  <FaGraduationCap />
-                </a>
-                <a href="#skills" style={{ color: 'black' }}>
-                  <FaTools />
-                </a>
-                <a href="#social" style={{ color: 'black' }}>
-                  <FaUsers />
-                </a>
-                <a href="#achievements" style={{ color: 'black' }}>
-                  <FaMedal />
-                </a>
-                <a href="#projects" style={{ color: 'black' }}>
-                  <FaProjectDiagram />
-                </a>
+                {[
+                  { id: "about", icon: <FaRegMessage /> },
+                  { id: "experience", icon: <FaBriefcase /> },
+                  { id: "education", icon: <FaGraduationCap /> },
+                  { id: "skills", icon: <FaTools /> },
+                  { id: "social", icon: <FaUsers /> },
+                  { id: "achievements", icon: <FaMedal /> },
+                  { id: "projects", icon: <FaProjectDiagram /> }
+                ].map(item => (
+                  <a 
+                    key={item.id} 
+                    href={`#${item.id}`}
+                    onClick={() => setActiveSection(item.id)}
+                    className={activeSection === item.id ? "active-tab-mobile" : ""}
+                    style={{ color: 'black' }}
+                  >
+                    {item.icon}
+                  </a>
+                ))}
               </div>
             </div>
             <hr />
-            <div className="Dashboard_profile_share">
-              <span onClick={handleShareButtonClick}>Share</span>
-              <button
-                className="profile-share-button"
-                id="profile-share-button"
-                onClick={handleShareButtonClick}
-              >
-                <i className="fas fa-arrow-up-right-from-square share-icon">
-                  <FaArrowUpRightFromSquare />
-                </i>
-                <span className="social-icons">
-                  <i
-                    className="fab fa-facebook-f"
-                    onClick={handleClickFacebook}
-                  >
-                    <FaFacebookF />
-                  </i>
-                  <i className="fab fa-x-twitter" onClick={handleClick}>
-                    <FaXTwitter />
-                  </i>
-                  <i className="fab fa-linkedin" onClick={getLinkedinShareUrl}>
-                    <FaLinkedin />
-                  </i>
+            <div className="profile-actions-container">
+              <div className="Dashboard_profile_share">
+                <span className="share-label" onClick={handleShareButtonClick}>
+                  <FaShareAlt className="share-icon-prefix" />
+                  Share
                 </span>
-              </button>
-            </div>
+                <button
+                  className="profile-share-button"
+                  id="profile-share-button"
+                  onClick={handleShareButtonClick}
+                >
+                  <i className="share-icon">
+                    <FaArrowUpRightFromSquare />
+                  </i>
+                  <span className="social-icons">
+                    <i
+                      className="social-icon facebook"
+                      onClick={handleClickFacebook}
+                    >
+                      <FaFacebookF />
+                    </i>
+                    <i className="social-icon twitter" onClick={handleClick}>
+                      <FaXTwitter />
+                    </i>
+                    <i className="social-icon linkedin" onClick={getLinkedinShareUrl}>
+                      <FaLinkedin />
+                    </i>
+                  </span>
+                </button>
+              </div>
 
-            {/* open profile in new tab, link */}
-            <div className="dashboard_profile_info_message">
-              <span>
-                The information you add below will be visible to other users.
-              </span>
-              <a
-                className="dashboard_profile_new_tab"
-                href={`/profile/${user?.username}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Open profile in new tab
-              </a>
+              {/* open profile in new tab, link */}
+              <div className="dashboard_profile_info_message">
+                <span className="privacy-notice">
+                  The information you add below will be visible to other users.
+                </span>
+                <a
+                  className="dashboard_profile_new_tab"
+                  href={`/profile/${user?.username}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Open profile in new tab
+                </a>
+              </div>
             </div>
 
             <div className="dashboard_profile_mid_section">
@@ -1129,7 +1097,8 @@ const ProfilePage = () => {
                         onClick={handleOpenResume}
                         disabled={!resumeFileUrl}
                       >
-                        Your Resume
+                        <FaFileAlt className="mr-2" />
+                        View Resume
                       </button>
                     </div>
                     <p>
@@ -1179,7 +1148,8 @@ const ProfilePage = () => {
                           src={downloadResume}
                           className="downloadDeleteImage"
                           onClick={HandledownloadResume}
-                          alt=""
+                          alt="Download resume"
+                          title="Download Resume"
                         />
 
                         {revealDeleteMsg === false ? (
@@ -1189,7 +1159,8 @@ const ProfilePage = () => {
                               e.stopPropagation();
                               showDeleteConfirmationMessage(e);
                             }}
-                            alt=""
+                            alt="Delete resume"
+                            title="Delete Resume"
                             className="downloadDeleteImage"
                           />
                         ) : (
@@ -1482,14 +1453,16 @@ const ProfilePage = () => {
                       src={addIcon}
                       alt="add skills"
                     />
-                    {userInfo?.skills?.map((skill, index) => {
-                      return (
-                        <Fragment key={index}>
-                          <h4>{skill}</h4>
-                          <hr></hr>
-                        </Fragment>
-                      );
-                    })}
+                    <div className="skills-container">
+                      {userInfo?.skills?.map((skill, index) => {
+                        return (
+                          <Fragment key={index}>
+                            <h4>{skill}</h4>
+                            <hr></hr>
+                          </Fragment>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   <div
@@ -1752,17 +1725,20 @@ const ProfilePage = () => {
             and add data  */}
           {actionPopup === true && (
             <ProfileActions
-              setActionPopup={setActionPopup}
-              setUserInfo={setUserInfo}
-              subSection={subSection}
-              subSectionIndex={subSectionIndex}
-              isDataUpdated={isDataUpdated}
-            />
-          )}
-        </div>
+            setActionPopup={setActionPopup}
+            setUserInfo={setUserInfo}
+            subSection={subSection}
+            subSectionIndex={subSectionIndex}
+            isDataUpdated={isDataUpdated}
+          />
+        )}
+
+        {/* Toast container for notifications */}
+        <ToastContainer position="bottom-right" />
       </div>
-    </ProfileContextProvider>
-  );
+    </div>
+  </ProfileContextProvider>
+);
 };
 
 export default ProfilePage;

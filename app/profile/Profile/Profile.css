@@ -3,6 +3,7 @@
   flex-direction: row;
   min-height: 100vh;
   width: 100% !important;
+  background-color: #f8f9fa;
 }
 
 .Dashboard_profile_share {
@@ -14,6 +15,17 @@
   font-weight: bold;
 }
 
+.share-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.share-icon-prefix {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
 .joining_toggle_message {
   position: fixed;
   z-index: 100;
@@ -23,7 +35,8 @@
   transform: translate(-50%, -50%);
   background: #fff;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 .joining_toggle_message h4 {
@@ -31,6 +44,708 @@
   justify-content: center;
   margin: 10px;
   margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.dashboard_info_resume_upload_box img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  filter: invert(25%) sepia(90%) saturate(1834%) hue-rotate(197deg) brightness(96%) contrast(96%);
+}
+
+.dashboard_profile_buttons {
+  font-weight: 500;
+  display: flex;
+  margin: 1.5rem 0;
+  margin-bottom: 2rem;
+  gap: 3rem;
+  margin-left: 175px;
+  font-size: 14px;
+  border-radius: 8px;
+  background: rgba(224, 239, 255, 0.4);
+  padding: 1.25rem 1.5rem;
+  align-items: center;
+}
+
+.edit_popUp_formDetails img {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  margin-top: 13px;
+  transition: transform 0.2s ease;
+}
+
+.progressBar_wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin: 1.5rem 0;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  margin-left: 175px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #4dcb50;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.percentage {
+  color: #0057b1;
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.edit_popUp_formDetails img:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.dashboard_timestamp {
+  color: var(--Subtitle-Body, #475462);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.dashboard_resume_view_button {
+  border-radius: 6px;
+  border: none;
+  background: #0057b1;
+  display: inline-flex;
+  height: 38px;
+  padding: 10px 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard_resume_view_button:hover {
+  background-color: #004a98;
+}
+
+.dashboard_resume_view_buttondisabled {
+  border-radius: 6px;
+  border: none;
+  background: #6c6c6c;
+  display: inline-flex;
+  height: 38px;
+  padding: 10px 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.popupFormNotFilled {
+  color: #0057b1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.popupFormNotFilled:hover {
+  color: #004a98;
+  text-decoration: underline;
+}
+
+.dashboard_profile_name_resumeButton-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.downloadDelete {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.downloadDeleteImage {
+  width: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.downloadDeleteImage:hover {
+  transform: scale(1.1);
+}
+
+input:checked + .slider {
+  background-color: #34c759 !important;
+}
+
+.button_for_joining_toggle_message {
+  display: flex;
+  height: 20px;
+}
+
+.joining_toggle_message_bg {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+}
+
+.edit_popUp_formDetails {
+  margin-top: 8px;
+}
+
+.dashboard_info_achievement_header button,
+.dashboard_info_project_header button {
+  margin: 0 0.5rem 0 1.5rem;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  display: inline-flex;
+  justify-content: center;
+  border: none;
+  outline: none;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.dashboard_info_achievement_header button:hover,
+.dashboard_info_project_header button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard_info_achievement_header a,
+.dashboard_info_project_header a {
+  margin: 0 0.5rem;
+  padding: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  display: inline-flex;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.dashboard_info_achievement_header a:hover,
+.dashboard_info_project_header a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard_info_project_description,
+.dashboard_achievement_description {
+  padding-left: 3rem;
+}
+
+.dashboard_info_section_action_add {
+  position: absolute;
+  top: 2rem;
+  right: 3rem;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  background-color: #f0f7ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  transition: all 0.2s ease;
+}
+
+.dashboard_info_section_action_add:hover {
+  background-color: #e0f0ff;
+  transform: scale(1.1);
+}
+
+.dashboard_info_actions {
+  position: absolute;
+  top: 2rem;
+  right: 3rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dashboard_info_actions img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.dashboard_info_actions img:hover {
+  transform: scale(1.1);
+}
+
+.dashboard_info_truncate_btn {
+  outline: none;
+  border: 1px solid #0057b1;
+  background-color: transparent;
+  color: #0057b1;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dashboard_info_truncate_btn:hover {
+  background-color: #f0f7ff;
+}
+
+.dashboard_info_hide_text {
+  height: 60px;
+  overflow: hidden;
+  position: relative;
+}
+
+.dashboard_info_hide_text:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.2) 0%,
+    white 100%
+  );
+}
+
+.dashboard_info_section_action_edit {
+  filter: invert(20%) sepia(74%) saturate(2848%) hue-rotate(198deg)
+    brightness(92%) contrast(102%);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.dashboard_info_section_action_edit:hover {
+  transform: scale(1.1);
+}
+
+.downloadDelete span {
+  font-size: 14px;
+}
+
+.downloadDelete div button {
+  background-color: transparent;
+  color: #0057b1;
+  border: 1px solid #0057b1 !important;
+  margin: 0 5px;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  font-size: 0.8rem;
+  height: 36px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.downloadDelete div button:hover {
+  background-color: #f0f7ff;
+}
+
+.active-tab-mobile {
+  color: #0057b1 !important;
+  background-color: #f0f7ff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1100px) {
+  .dashboard_profile_container {
+    padding: 1.5rem;
+  }
+  
+  .popUpFormDetails {
+    margin-left: 120px;
+  }
+  
+  .progress-bar-container {
+    margin-left: 120px;
+  }
+  
+  .dashboard_profile_buttons {
+    margin-left: 120px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .dashboard_profile_container {
+    padding: 1rem;
+  }
+  
+  .popUpFormDetails {
+    margin-left: 90px;
+  }
+  
+  .progress-bar-container {
+    margin-left: 90px;
+  }
+  
+  .dashboard_profile_buttons {
+    margin-left: 90px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .dashboard_profile_intro .profile_image {
+    margin: 0 1.5rem 0 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .SmoothScrollOptions {
+    display: none;
+  }
+
+  .SmoothScrollOptions_mobile_view {
+    content-visibility: visible;
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    height: 60px;
+    border-radius: 8px;
+    padding: 0 20px;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+    overflow-x: auto;
+  }
+  
+  .SmoothScrollOptions_mobile_view a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+  
+  .popUpFormDetails {
+    margin-left: 0;
+  }
+  
+  .progress-bar-container {
+    margin-left: 0;
+  }
+  
+  .dashboard_profile_buttons {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .dashboard_info_achievement_header,
+  .dashboard_info_project_header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard_info_achievement_header button,
+  .dashboard_info_project_header button {
+    margin: 10px 10px 0 0 !important;
+  }
+  
+  .dashboard_profile_intro {
+    padding: 1.2rem 1.5rem;
+  }
+  
+  .dashboard_info {
+    padding: 1.2rem 1.5rem;
+  }
+  
+  .dashboard_profile_name_resumeButton-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .dashboard_resume_view_button {
+    margin-top: 1rem;
+  }
+  
+  .dashboard_profile_info_message {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .dashboard_info {
+    padding: 1rem;
+  }
+
+  .dashboard_info_experience_description,
+  .dashboard_info_project_description,
+  .dashboard_achievement_description {
+    padding-left: 0.3rem;
+  }
+
+  .dashboard_info_social:hover span {
+    display: none;
+  }
+
+  .dashboard_info_section_action_add {
+    right: 1rem;
+  }
+
+  .dashboard_info_about img {
+    right: 1rem !important;
+  }
+  
+  .intro_section-dashboard {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .dashboard_profile_intro .profile_image {
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .dashboard_profile_description {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 530px) {
+  .dashboard_profile_main_section {
+    margin: 0px;
+    font-size: 16px;
+  }
+  
+  .dashboard_profile_intro {
+    width: auto;
+    box-shadow: none;
+    border: none;
+    padding: 0px;
+    margin-top: 2rem;
+    background-color: transparent;
+  }
+  
+  .dashboard_profile_container {
+    background: #fff;
+    padding: 1rem;
+  }
+  
+  .dashboard_profile_buttons {
+    display: flex;
+    flex-direction: column;
+    left: 5px;
+    gap: 15px;
+    border-radius: 8px;
+    margin-left: 0px;
+    width: auto;
+    height: auto;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .dashboard_profile_buttons .dashboard_profile_button {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    min-width: 280px;
+  }
+  
+  .popUpFormDetailsSeperator {
+    display: none;
+  }
+  
+  .popUpFormDetail_2 {
+    margin-right: 0;
+  }
+  
+  .dashboard_resume_view_button {
+    content-visibility: hidden;
+    background: inherit;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+
+  .dashboard_resume_view_buttondisabled {
+    content-visibility: hidden;
+    background: inherit;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+
+  .edit_popUp_formDetails {
+    margin-top: 5px;
+  }
+
+  .dashboard_profile_name_edit {
+    display: flex;
+    gap: 10px;
+  }
+
+  .popUpFormDetails .popUpFormDetail-wrapper_for_mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  .popUpFormDetail, .popUpFormDetail_2 {
+    width: 100%;
+  }
+
+  .resumedisplay {
+    position: relative;
+    display: flex;
+    margin-bottom: 1.5rem;
+  }
+
+  .dashboard_resume_view_buttonmobile {
+    display: block;
+    border-radius: 6px;
+    border: none;
+    background: #0057b1;
+    display: inline-flex;
+    height: 38px;
+    padding: 10px 15px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    color: #fff;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .dashboard_resume_view_buttonmobiledisabled {
+    display: block;
+    border-radius: 6px;
+    border: none;
+    background: #6c6c6c;
+    display: inline-flex;
+    height: 38px;
+    padding: 10px 15px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    color: #fff;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  
+  .joining_toggle_message {
+    width: 90%;
+    max-width: 350px;
+  }
+}
+
+/* Base switch styles */
+.ios-switch {
+  width: 42px;
+  height: 26px;
+  padding: 0;
+}
+
+/* Switch Base */
+.ios-switch .MuiSwitch-switchBase {
+  padding: 0;
+  margin: 2px;
+  transition-duration: 300ms;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-checked {
+  transform: translateX(16px);
+  color: #fff;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: #65C466;
+  opacity: 1;
+  border: 0;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-focusVisible .MuiSwitch-thumb {
+  color: #33cf4d;
+  border: 6px solid #fff;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-disabled .MuiSwitch-thumb {
+  color: #e0e0e0;
+}
+
+.ios-switch .MuiSwitch-switchBase.Mui-disabled + .MuiSwitch-track {
+  opacity: 0.7;
+}
+
+/* Switch Thumb */
+.ios-switch .MuiSwitch-thumb {
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+}
+
+/* Switch Track */
+.ios-switch .MuiSwitch-track {
+  border-radius: 13px;
+  background-color: #E9E9EA;
+  opacity: 1;
+  transition: background-color 500ms;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .ios-switch .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+    background-color: #2ECA45;
+  }
+
+  .ios-switch .MuiSwitch-switchBase.Mui-disabled .MuiSwitch-thumb {
+    color: #757575;
+  }
+
+  .ios-switch .MuiSwitch-track {
+    background-color: #39393D;
+  }
+
+  .ios-switch .MuiSwitch-switchBase.Mui-disabled + .MuiSwitch-track {
+    opacity: 0.3;
+  }
 }
 
 .joining_toggle_message .buttons_for_joining_toggle_message {
@@ -45,9 +760,16 @@
   padding: 14px;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 0.6px solid var(--Stroke-Border, #8e99a4);
   background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.joining_toggle_message_button:hover {
+  background: #f0f7ff;
+  border-color: #0057b1;
 }
 
 .joining_toggle_message_buttonselected {
@@ -56,8 +778,8 @@
   padding: 14px;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
-  border: 0.6px solid var(--Stroke-Border, #8e99a4);
+  border-radius: 6px;
+  border: 0.6px solid #0057b1;
   background: #eaf4ff;
 }
 
@@ -90,6 +812,13 @@
   position: relative;
   left: 38%;
   margin-top: 25px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.joining_toggle_message_update_button:hover {
+  background: #004a98;
 }
 
 .closeFormOptionForPopup_joining_toggle {
@@ -113,6 +842,7 @@
   transition: width 300ms ease-in-out;
   transition-delay: 50ms;
   z-index: 1;
+  margin-left: 0.5rem;
 }
 
 .profile-share-button::before {
@@ -140,14 +870,24 @@
   height: 100%;
   right: 0;
   border-radius: inherit;
-  transform: scale(1.5);
 }
 
-.fa-facebook-f,
-.fa-x-twitter,
-.fa-linkedin {
+.social-icon {
   transform: scale(0);
   transition: transform 300ms ease-in-out;
+  cursor: pointer;
+}
+
+.social-icon.facebook:hover {
+  color: #1877f2;
+}
+
+.social-icon.twitter:hover {
+  color: #1da1f2;
+}
+
+.social-icon.linkedin:hover {
+  color: #0a66c2;
 }
 
 .share-icon {
@@ -164,7 +904,7 @@
   background-color: #ff6f6f;
 }
 
-.profile-share-button.open :is(.fa-facebook-f, .fa-x-twitter, .fa-linkedin) {
+.profile-share-button.open .social-icon {
   transform: scale(1);
   color: #0057b1;
 }
@@ -174,9 +914,9 @@
 }
 
 .dashboard_profile_container {
-  padding: 3rem 5rem;
+  padding: 2rem 3rem;
   flex: 1;
-  background: #fafafa;
+  background: #f8f9fa;
 }
 
 .dashboard_profile_main_section {
@@ -186,34 +926,64 @@
 .dashboard_profile_intro {
   margin: 1.5rem 0;
   padding: 1.8rem 3rem;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #fff;
-  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.profile-divider {
+  height: 1px;
+  width: 100%;
+  background-color: #e0e0e0;
+  margin: 1rem 0;
 }
 
 .SmoothScrollOptions {
   display: flex;
   justify-content: space-between;
   color: #000;
-  font-family: Inter;
-  font-size: 18px;
-  font-style: normal;
+  font-size: 16px;
   font-weight: 500;
-  line-height: normal;
   overflow-x: auto;
+  margin-top: 1.5rem;
+  padding: 0.5rem 0;
+  gap: 1.5rem;
 }
 
 .SmoothScrollOptions a {
   color: #000;
-}
-
-.SmoothScrollOptions_mobile_view {
-  content-visibility: hidden;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .SmoothScrollOptions a:hover {
   color: #0057b1;
-  text-decoration: underline;
+  background-color: #f0f7ff;
+}
+
+.SmoothScrollOptions a.active-tab {
+  color: #0057b1;
+  background-color: #f0f7ff;
+  font-weight: 600;
+}
+
+.SmoothScrollOptions_mobile_view {
+  content-visibility: hidden;
+  display: none;
+}
+
+.profile-actions-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.privacy-notice {
+  color: #6c6c6c;
+  font-size: 14px;
 }
 
 .popUpFormDetails .popUpFormDetail,
@@ -243,6 +1013,7 @@
 .dashboard_profile_name_edit {
   display: flex;
   gap: 20px;
+  align-items: center;
 }
 
 .dashboard_resume_view_buttonmobiledisabled {
@@ -268,6 +1039,24 @@
   margin-bottom: 20px;
 }
 
+.profile-avatar-container {
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-avatar-container:hover::after {
+  content: 'Edit';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
 .dashboard_profile_intro .profile_image {
   margin: 0 2.5rem 0 1rem;
   cursor: pointer;
@@ -275,6 +1064,11 @@
   height: 120px;
   border-radius: 50%;
   font-size: 4rem;
+  transition: transform 0.2s ease;
+}
+
+.dashboard_profile_intro .profile_image:hover {
+  transform: scale(1.03);
 }
 
 .dashboard_profile_name {
@@ -287,7 +1081,7 @@
 .dashboard_profile_main_section hr {
   width: 100%;
   height: 0.4px;
-  background: #6c6c6c;
+  background: #e0e0e0;
   margin: 1rem 0;
 }
 
@@ -295,7 +1089,14 @@
 .dashboard_profile_new_tab:visited {
   color: #0057b1;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard_profile_new_tab:hover {
+  text-decoration: underline;
 }
 
 .dashboard_profile_add {
@@ -357,21 +1158,23 @@
 .dashboard_info {
   margin: 1.5rem 0;
   padding: 1.8rem 3rem;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #fff;
-  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard_info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .dashboard_profile_info_message {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
-
-.dashboard_profile_info_message span {
-  color: #959697;
-  font-size: 14px;
+  align-items: center;
 }
 
 #description_sentences li {
@@ -384,7 +1187,7 @@
   margin: 0.6rem 0;
   align-items: center;
   line-height: 1.5;
-  transition: height 5s linear;
+  transition: height 0.3s ease;
   font-size: 14px;
 }
 
@@ -400,17 +1203,32 @@
 .dashboard_info h2 {
   color: #0057b1;
   text-align: left;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard_info h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  background-color: #0057b1;
+  margin-right: 10px;
+  border-radius: 2px;
 }
 
 .dashboard_info h3 {
   max-width: 60%;
+  font-weight: 600;
 }
 
 .dashboard_info hr {
   border: none;
   height: 1px;
-  color: #d9d9d9;
-  background-color: #d9d9d9;
+  color: #e0e0e0;
+  background-color: #e0e0e0;
   margin: 1rem 0;
 }
 
@@ -427,6 +1245,7 @@
 .dashboard_info_project {
   position: relative;
   margin: 1.5rem 0;
+  padding-bottom: 1rem;
 }
 
 .dashboard_info_experience h3 {
@@ -469,10 +1288,16 @@
   padding: 10px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   margin: 0.7rem 1rem;
   margin-left: 0;
   position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard_info_social:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .dashboard_info_social img {
@@ -490,6 +1315,7 @@
   color: white;
   border-radius: 13px;
   padding: 3px 10px;
+  font-size: 12px;
 }
 
 .dashboard_info_social:hover span {
@@ -499,6 +1325,7 @@
 .dashboard_info_all_socials {
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
 /* achievement and project section */
@@ -521,8 +1348,10 @@
   align-items: center;
   height: 159px;
   border-radius: 8px;
-  border: 1px dashed #000;
+  border: 2px dashed #c0c0c0;
   cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 2rem;
 }
 
 .dashboard_info_resume_upload_box:hover,
@@ -533,23 +1362,29 @@
   align-items: center;
   height: 159px;
   border-radius: 8px;
-  border: 1px dashed #0057b1;
+  border: 2px dashed #0057b1;
   color: #0057b1;
-  background-color: #fafafa;
+  background-color: rgba(0, 87, 177, 0.05);
+}
+
+.dashboard_info_resume_upload_box img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  filter: invert(25%) sepia(90%) saturate(1834%) hue-rotate(197deg) brightness(96%) contrast(96%);
 }
 
 .dashboard_profile_buttons {
   font-weight: 500;
   display: flex;
-  margin: 1rem 0;
-  margin-bottom: 2.5rem;
+  margin: 1.5rem 0;
+  margin-bottom: 2rem;
   gap: 3rem;
   margin-left: 175px;
   font-size: 14px;
-  border-radius: 3px;
+  border-radius: 8px;
   background: rgba(224, 239, 255, 0.4);
-  height: 30px;
-  padding: 10px 20px;
+  padding: 1.25rem 1.5rem;
   align-items: center;
 }
 
@@ -558,6 +1393,7 @@
   height: 15px;
   cursor: pointer;
   margin-top: 13px;
+  transition: transform 0.2s ease;
 }
 
 .progressBar_wrapper {
@@ -565,22 +1401,23 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  margin: 1.5rem 0;
 }
 
 .progress-bar-container {
   width: 100%;
-  height: 4px;
+  height: 8px;
   margin-left: 175px;
   background-color: #f0f0f0;
   border-radius: 10px;
-  display: flex;
+  overflow: hidden;
 }
 
 .progress-bar {
   height: 100%;
   background-color: #4dcb50;
   border-radius: 10px;
-  transition: width 0.3s ease;
+  transition: width 0.5s ease;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -588,17 +1425,14 @@
 
 .percentage {
   color: #0057b1;
-  font-size: 12px;
-  font-style: normal;
+  font-size: 14px;
   font-weight: 600;
-  line-height: normal;
+  margin-left: 0.5rem;
 }
 
 .edit_popUp_formDetails img:hover {
-  width: 15px;
-  height: 15px;
+  transform: scale(1.2);
   cursor: pointer;
-  transform: scale(1.1);
 }
 
 .dashboard_timestamp {
@@ -609,7 +1443,7 @@
 }
 
 .dashboard_resume_view_button {
-  border-radius: 3px;
+  border-radius: 6px;
   border: none;
   background: #0057b1;
   display: inline-flex;
@@ -620,10 +1454,16 @@
   gap: 8px;
   flex-shrink: 0;
   color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard_resume_view_button:hover {
+  background-color: #004a98;
 }
 
 .dashboard_resume_view_buttondisabled {
-  border-radius: 3px;
+  border-radius: 6px;
   border: none;
   background: #6c6c6c;
   display: inline-flex;
@@ -634,27 +1474,31 @@
   gap: 8px;
   flex-shrink: 0;
   color: #fff;
+  cursor: not-allowed;
 }
 
 .popupFormNotFilled {
   color: #0057b1;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .popupFormNotFilled:hover {
-  color: #0057b1;
+  color: #004a98;
   text-decoration: underline;
-  cursor: pointer;
 }
 
 .dashboard_profile_name_resumeButton-wrapper {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .dashboard_profile_button {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .downloadDelete {
@@ -663,8 +1507,14 @@
   gap: 1rem;
   cursor: pointer;
 }
+
 .downloadDeleteImage {
   width: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.downloadDeleteImage:hover {
+  transform: scale(1.1);
 }
 
 input:checked + .slider {
@@ -677,7 +1527,7 @@ input:checked + .slider {
 }
 
 .joining_toggle_message_bg {
-  background: #fafafa;
+  background: rgba(0, 0, 0, 0.5);
   position: fixed;
   z-index: 100;
   width: 100%;
@@ -695,7 +1545,7 @@ input:checked + .slider {
   margin: 0 0.5rem 0 1.5rem;
   padding: 10px;
   border-radius: 50%;
-  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   width: 35px;
   height: 35px;
@@ -703,7 +1553,14 @@ input:checked + .slider {
   justify-content: center;
   border: none;
   outline: none;
-  background-color: transparent;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.dashboard_info_achievement_header button:hover,
+.dashboard_info_project_header button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .dashboard_info_achievement_header a,
@@ -711,12 +1568,19 @@ input:checked + .slider {
   margin: 0 0.5rem;
   padding: 10px;
   border-radius: 50%;
-  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   width: 35px;
   height: 35px;
   display: inline-flex;
   justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.dashboard_info_achievement_header a:hover,
+.dashboard_info_project_header a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .dashboard_info_project_description,
@@ -729,20 +1593,39 @@ input:checked + .slider {
   top: 2rem;
   right: 3rem;
   cursor: pointer;
-  width: 23px;
-  height: 23px;
+  width: 28px;
+  height: 28px;
+  background-color: #f0f7ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  transition: all 0.2s ease;
+}
+
+.dashboard_info_section_action_add:hover {
+  background-color: #e0f0ff;
+  transform: scale(1.1);
 }
 
 .dashboard_info_actions {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2rem;
+  right: 3rem;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .dashboard_info_actions img {
   width: 20px;
   height: 20px;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.dashboard_info_actions img:hover {
+  transform: scale(1.1);
 }
 
 .dashboard_info_truncate_btn {
@@ -750,10 +1633,16 @@ input:checked + .slider {
   border: 1px solid #0057b1;
   background-color: transparent;
   color: #0057b1;
-  padding: 0.2rem 0.5rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 6px;
   margin-top: 1rem;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dashboard_info_truncate_btn:hover {
+  background-color: #f0f7ff;
 }
 
 .dashboard_info_hide_text {
@@ -779,6 +1668,12 @@ input:checked + .slider {
 .dashboard_info_section_action_edit {
   filter: invert(20%) sepia(74%) saturate(2848%) hue-rotate(198deg)
     brightness(92%) contrast(102%);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.dashboard_info_section_action_edit:hover {
+  transform: scale(1.1);
 }
 
 .downloadDelete span {
@@ -797,21 +1692,135 @@ input:checked + .slider {
   font-size: 0.8rem;
   height: 36px;
   font-size: 16px;
+  transition: all 0.2s ease;
 }
 
 .downloadDelete div button:hover {
-  background-color: #0056b124;
+  background-color: #f0f7ff;
+}
+
+.active-tab-mobile {
+  color: #0057b1 !important;
+  background-color: #f0f7ff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Skills container styling */
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.skills-container h4 {
+  background-color: #f0f7ff;
+  color: #0057b1;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  transition: all 0.2s ease;
+}
+
+.skills-container h4:hover {
+  background-color: #e0f0ff;
+  transform: translateY(-2px);
+}
+
+.skills-container hr {
+  display: none;
 }
 
 @media screen and (max-width: 1100px) {
   .dashboard_profile_container {
-    padding: 3rem;
+    padding: 1.5rem;
+  }
+  
+  .popUpFormDetails {
+    margin-left: 120px;
+  }
+  
+  .progress-bar-container {
+    margin-left: 120px;
+  }
+  
+  .dashboard_profile_buttons {
+    margin-left: 120px;
   }
 }
 
 @media screen and (max-width: 900px) {
   .dashboard_profile_container {
-    padding: 3rem 2rem;
+    padding: 1rem;
+  }
+  
+  .popUpFormDetails {
+    margin-left: 90px;
+  }
+  
+  .progress-bar-container {
+    margin-left: 90px;
+  }
+  
+  .dashboard_profile_buttons {
+    margin-left: 90px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .dashboard_profile_intro .profile_image {
+    margin: 0 1.5rem 0 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .SmoothScrollOptions {
+    display: none;
+  }
+
+  .SmoothScrollOptions_mobile_view {
+    content-visibility: visible;
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    height: 60px;
+    border-radius: 8px;
+    padding: 0 20px;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+    overflow-x: auto;
+  }
+  
+  .SmoothScrollOptions_mobile_view a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+  
+  .popUpFormDetails {
+    margin-left: 0;
+  }
+  
+  .progress-bar-container {
+    margin-left: 0;
+  }
+  
+  .dashboard_profile_buttons {
+    margin-left: 0;
   }
 }
 
@@ -826,11 +1835,34 @@ input:checked + .slider {
   .dashboard_info_project_header button {
     margin: 10px 10px 0 0 !important;
   }
+  
+  .dashboard_profile_intro {
+    padding: 1.2rem 1.5rem;
+  }
+  
+  .dashboard_info {
+    padding: 1.2rem 1.5rem;
+  }
+  
+  .dashboard_profile_name_resumeButton-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .dashboard_resume_view_button {
+    margin-top: 1rem;
+  }
+  
+  .dashboard_profile_info_message {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
 
 @media screen and (max-width: 400px) {
   .dashboard_info {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 
   .dashboard_info_experience_description,
@@ -850,90 +1882,75 @@ input:checked + .slider {
   .dashboard_info_about img {
     right: 1rem !important;
   }
+  
+  .intro_section-dashboard {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .dashboard_profile_intro .profile_image {
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .dashboard_profile_description {
+    text-align: center;
+  }
 }
 
 @media screen and (max-width: 530px) {
   .dashboard_profile_main_section {
     margin: 0px;
-    font-size: 18px;
+    font-size: 16px;
   }
+  
   .dashboard_profile_intro {
     width: auto;
     box-shadow: none;
     border: none;
     padding: 0px;
-    margin-top: 3rem;
+    margin-top: 2rem;
+    background-color: transparent;
   }
+  
   .dashboard_profile_container {
     background: #fff;
+    padding: 1rem;
   }
+  
   .dashboard_profile_buttons {
     display: flex;
     flex-direction: column;
     left: 5px;
-    gap: 20px;
+    gap: 15px;
     border-radius: 8px;
     margin-left: 0px;
     width: auto;
     height: auto;
     padding: 20px;
-    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
+  
   .dashboard_profile_buttons .dashboard_profile_button {
     display: flex;
     justify-content: space-between;
-    width: -webkit-fill-available;
-    min-width: 320px;
+    width: 100%;
+    min-width: 280px;
   }
-  .SmoothScrollOptions {
-    display: none;
-  }
-
-  .SmoothScrollOptions_mobile_view {
-    content-visibility: visible;
-    color: black !important;
-    display: flex;
-    justify-content: space-between;
-    font-size: 22px;
-    height: 40px;
-    border-radius: 8px;
-    padding: 20px;
-    align-items: center;
-    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
-  }
-
-  .dashboard_profile_container {
-    padding: 30px;
-  }
-
-  .progress-bar-container {
-    margin-left: 0px;
-  }
-
-  .popUpFormDetails {
-    display: flex;
-    gap: 30px;
-    margin-left: 0px;
-    justify-content: space-between;
-    font-size: 12px;
-  }
-
-  .dashboard_profile_name_resumeButton-wrapper {
-    display: flex;
-    justify-content: start;
-    flex-direction: column;
-  }
+  
   .popUpFormDetailsSeperator {
     display: none;
   }
+  
   .popUpFormDetail_2 {
-    margin-right: 45px;
+    margin-right: 0;
   }
+  
   .dashboard_resume_view_button {
     content-visibility: hidden;
     background: inherit;
     width: 0;
     height: 0;
+    position: absolute;
   }
 
   .dashboard_resume_view_buttondisabled {
@@ -941,6 +1958,7 @@ input:checked + .slider {
     background: inherit;
     width: 0;
     height: 0;
+    position: absolute;
   }
 
   .edit_popUp_formDetails {
@@ -956,8 +1974,13 @@ input:checked + .slider {
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: space-between;
-    gap: 30px;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  .popUpFormDetail, .popUpFormDetail_2 {
+    width: 100%;
   }
 
   .resumedisplay {
@@ -968,7 +1991,7 @@ input:checked + .slider {
 
   .dashboard_resume_view_buttonmobile {
     display: block;
-    border-radius: 3px;
+    border-radius: 6px;
     border: none;
     background: #0057b1;
     display: inline-flex;
@@ -980,14 +2003,13 @@ input:checked + .slider {
     flex-shrink: 0;
     color: #fff;
     position: absolute;
-    right: -4.6%;
-    top: -50%;
-    margin: 1rem;
+    right: 0;
+    top: 0;
   }
 
   .dashboard_resume_view_buttonmobiledisabled {
     display: block;
-    border-radius: 3px;
+    border-radius: 6px;
     border: none;
     background: #6c6c6c;
     display: inline-flex;
@@ -999,12 +2021,13 @@ input:checked + .slider {
     flex-shrink: 0;
     color: #fff;
     position: absolute;
-    right: -0.6%;
-    top: -20%;
-    margin-bottom: 0.8rem;
+    right: 0;
+    top: 0;
   }
+  
   .joining_toggle_message {
-    width: 350px;
+    width: 90%;
+    max-width: 350px;
   }
 }
 
