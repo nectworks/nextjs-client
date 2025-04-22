@@ -1,530 +1,720 @@
-.referralRequestModal {
-  width: 60vw;
-  border-radius: 10px;
-  margin: 40px auto;
+/* Core layout styles */
+.referral-request-container {
+  width: min(800px, 95%);
+  margin: 2rem auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+  overflow: hidden;
 }
 
-.makeTextFade {
-  color: #808080;
-  border-color: #808080;
-  border-color: #808080;
-}
-
-.makeButtonFade {
-  background-color: #6c6c6c !important;
-}
-
-.makeInputFade {
-  border-color: #808080 !important;
-}
-
-.replaceExistingResumeButton{
-  color: #0057B1;
-  text-decoration: underline;
-}
-
-.replaceExistingResumeButton:hover{
-  color: blue;
-  cursor: pointer;
-}
-
-.referralRequestDesc {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 20px;
-  background-color: #FFF;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-.referralRequestHeader {
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-  line-height: 1.7rem;
-  padding-right: 20px;
-  border-radius: none;
-  background: #FFF;
-  padding-left: 10px;
-  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.25);
-  margin-bottom: 2px;
-  padding-top: 10px;
-}
-
-.referralRequestHeader button {
-  border: none;
-  background: none;
-  font-weight: bold;
-}
-
-.referralRequestHeaderDesc {
-  background-color: #FFF;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 20px;
-  margin-bottom: -10px;
-}
-
-.referralRequestDetails {
-  display: flex;
-  flex-direction: column;
-  padding: 20px 10px;
-}
-
-.referralRequestDetails label {
-  font-weight: bold;
-}
-
-.firstNameAndLastName {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.firstNameAndLastName input {
-  width: 26vw !important;
-  border: none;
-  border-bottom: 1px solid #000;
-  outline: none;
-  margin-top: 20px;
-  font-size: 1rem;
-  padding: 2px 0px;
-  background-color: #FFF;
-}
-
-.firstName {
-  display: flex;
-  flex-direction: column;
-}
-
-.lastName {
-  display: flex;
-  flex-direction: column;
-}
-
-.messageDetails {
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0px;
-}
-
-.messageDetails textarea {
-  outline: none;
-  border: 1px solid #000;
-  padding: 10px;
-  border-radius: 10px;
-  margin-top: 20px;
-  font-size: 1rem;
-}
-
-.emailDetailsAndUploadResume {
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.errorMessage {
-  color: #F00;
-  font-size: 12px;
-  margin-top: 3px;
-}
-
-.emailDetailsAndUploadResumeInput {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: flex-end;
-}
-
-.emailDetailsAndUploadResumeInput input {
-  width: 52vw;
-  padding: 2px 0px;
-  background-color: #FFF;
-}
-
-.emailDetailsAndUploadResume button {
-  border: none;
-  background: none;
-  font-weight: bold;
-  color: #0057B1;
-  font-size: 1rem;
-}
-
-.emailDetailsAndUploadResume input {
-  border: none;
-  border-bottom: 1px solid #000;
-  outline: none;
-  margin-top: 10px;
-  font-size: 1rem;
-}
-
-.uploadResume {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0px 10px;
-  margin-bottom: 30px;
-}
-
-.uploadResumeSection {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.uploadResumeButton {
-  display: flex;
-}
-
-.replaceResume {
-  background-color: #0057B1 !important;
-}
-
-.uploadResumeSection button {
-  color: #FFF;
-  background: #6C6C6C;
-  border: none;
-  border-radius: 20px;
-  text-align: center;
-  padding: 10px 14px;
-}
-
-.submitButtonForReferral {
-  background: #6C6C6C;
-  color: #FFF;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 14px;
-}
-
-.jobDescriptionForReferral {
-  display: flex;
-  flex-direction: column;
-  margin-top: 35px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  background: #D8ECFF;
-  padding: 25px;
-}
-
-.jobDescription {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 20px;
-}
-
-.copyJobIdButton {
-  background: none;
-  border: none;
-  cursor: default;
-  margin-top: 20px;
-}
-
-.addJobForReferral {
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #FFF;
-  line-height: 10px;
-  box-shadow: 1px 1px 2px #808080;
-}
-
-.addIconJobDesc {
-  width: 18px;
-  height: 18px;
-  background: #FFF;
-  padding: 8px 0px 5px 10px;
-  border-radius: 27px;
-  background: #FFF;
-}
-
-.jobDescription input {
-  border: none;
-  border-bottom: 1px solid #000;
-  background: #D8ECFF;
-  outline: none;
-  margin-top: 20px;
-  width: 20.5vw;
-  font-size: 1rem;
-}
-
-.jobIdDesc {
-  display: flex;
-  flex-direction: column;
-}
-
-.jobUrlDesc {
-  display: flex;
-  flex-direction: column;
-}
-
-.otpInputsInRequestReferral {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-direction: column;
-}
-
-.otpInputsInRequestReferral input {
-  width: 33px;
-  height: 33px;
-  margin: 0px 10px;
-  border-radius: 8px;
-  border: none;
-  border: 1px solid #000;
-  outline: none;
-  text-align: center;
-}
-
-.otpSentInfo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: .5rem;
-  margin-top: 10px;
-}
-
-.makeButtonGreenColor {
-  color: #00B312 !important;
-  cursor: default;
-}
-
-.makeBgRed {
-  border: 2px solid red !important;
-}
-
-.disableButton {
-  color: #808080 !important;
-  cursor: default;
-}
-
-.otpInputs {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cursorDefault {
-  cursor: default;
-}
-
-.cursorDefaultOfVerifyButton {
-  cursor: default;
-  color: #808080 !important;
-}
-
-.makeBgNone {
-  background: none;
-}
-
-.makeOtpGray {
-  background-color: #6C6C6C !important;
-}
-
-.makeBgBlur {
+.blur-background {
   filter: blur(5px);
 }
 
-.messagePopupClose {
+/* Header styles */
+.referral-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.professional-info {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.professional-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 1rem;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-image {
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+
+.professional-name h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.professional-role {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.close-button:hover {
+  background-color: #f5f5f5;
+}
+
+/* Content container */
+.referral-content {
+  padding: 1.5rem;
+}
+
+/* Progress steps */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.step.active .step-number {
+  background-color: #0057B1;
+  color: white;
+}
+
+.step-label {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.step.active .step-label {
+  color: #0057B1;
+  font-weight: 500;
+}
+
+.step-line {
+  flex-grow: 1;
+  height: 2px;
+  background-color: #e0e0e0;
+  margin: 0 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Step form content */
+.step-form {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.step-description {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* Form elements */
+.input-group {
+  margin-bottom: 1.25rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Specific styles for name fields to ensure equal width */
+.name-fields {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+.name-fields .input-group {
+  width: calc(50% - 12px);
+  max-width: calc(50% - 12px);
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border 0.2s ease;
+  box-sizing: border-box;
+}
+
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.required {
+  color: #e53935;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border 0.2s ease;
+}
+
+input:focus, textarea:focus {
+  border-color: #0057B1;
+  outline: none;
+}
+
+input.error, textarea.error {
+  border-color: #e53935;
+}
+
+input:disabled, textarea:disabled, button:disabled {
+  background-color: #f5f5f5;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border 0.2s ease;
+  min-height: 120px;
+  max-width: 100%; /* Prevent horizontal stretching */
+  resize: vertical; /* Allow only vertical resizing */
+}
+
+.char-count {
+  font-size: 0.75rem;
+  color: #777;
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+.error-message {
+  color: #e53935;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+/* Email verification section */
+.email-verification {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.email-verification input {
+  flex-grow: 1;
+  width: calc(100% - 100px);
+}
+
+.verify-button, .resend-button, .verified-button {
+  flex-shrink: 0;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  min-width: 80px;
+  cursor: pointer;
+}
+
+.verify-button {
+  background-color: #0057B1;
+  color: white;
+}
+
+.verify-button:hover:not(:disabled) {
+  background-color: #004598;
+}
+
+.resend-button {
+  background-color: #666;
+  color: white;
+}
+
+.resend-button:hover:not(:disabled) {
+  background-color: #555;
+}
+
+.verified-button {
+  background-color: #4caf50;
+  color: white;
+  cursor: default;
+}
+
+/* OTP container */
+.otp-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.otp-title {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.otp-inputs input {
+  width: 40px;
+  height: 48px;
+  text-align: center;
+  font-size: 1.2rem;
+  border-radius: 6px;
+}
+
+.otp-sent-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #4caf50;
+  font-size: 0.85rem;
+}
+
+.otp-timer {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.otp-loader {
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+/* Job details container */
+.job-details-container {
+  margin-bottom: 1.5rem;
+}
+
+.job-detail {
+  background-color: #f5f9ff;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.job-fields {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+.job-fields .input-group {
+  width: calc(50% - 12px);
+  max-width: calc(50% - 12px);
+  margin-bottom: 0;
+}
+
+.job-actions {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.delete-job, .add-job {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.delete-job {
+  background-color: #ffebee;
+}
+
+.delete-job:hover:not(:disabled) {
+  background-color: #ffcdd2;
+}
+
+.add-job {
+  background-color: #e3f2fd;
+}
+
+.add-job:hover:not(:disabled) {
+  background-color: #bbdefb;
+}
+
+.job-hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Resume upload section */
+.resume-upload-container {
+  margin: 1.5rem 0;
+}
+
+.resume-dropzone {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resume-dropzone:hover:not(.has-file) {
+  border-color: #0057B1;
+  background-color: #f5f9ff;
+}
+
+.resume-dropzone.has-file {
+  border-color: #4caf50;
+  background-color: #f1f8e9;
+}
+
+.upload-icon, .file-icon {
+  margin-bottom: 1rem;
+}
+
+.upload-text {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.upload-hint {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.file-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.replace-file {
+  background: none;
+  border: none;
+  color: #0057B1;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.resume-required {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+/* Step navigation */
+.step-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.back-button, .next-button, .submit-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-button {
+  background-color: white;
+  border: 1px solid #ddd;
+  color: #555;
+}
+
+.back-button:hover:not(:disabled) {
+  background-color: #f5f5f5;
+}
+
+.next-button, .submit-button {
+  background-color: #0057B1;
+  border: none;
+  color: white;
+}
+
+.next-button:hover:not(:disabled), .submit-button:hover:not(:disabled) {
+  background-color: #004598;
+}
+
+.submit-button {
+  min-width: 130px;
+}
+
+/* Login prompt */
+.login-prompt {
+  background-color: #e3f2fd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.login-prompt p {
+  margin: 0;
+}
+
+.login-button {
+  background-color: #0057B1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #004598;
+}
+
+/* Warning messages */
+.same-user-warning, .not-accepting-referrals {
+  background-color: #ffebee;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  color: #c62828;
+}
+
+/* Loading container */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+/* Popup styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.popup-content {
+  width: min(600px, 95%);
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.popup-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #eaeaea;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.messagePopupClose button {
-  border: none;
+.popup-header h2 {
+  margin: 0;
+  color: #0057B1;
+}
+
+.popup-close {
   background: none;
-}
-
-.messagePopupClose img {
-  width: 40px;
-  height: 40px;
-}
-
-.goToSignupButton {
-  margin-top: 30px;
   border: none;
-  background: #0057B1;
-  color: #FFF;
-  border-radius: 20px;
-  padding: 8px 40px;
-}
-
-.makeBgBlue {
-  background-color: #0057B1 !important;
-}
-
-.notHavingProfessionalDetails {
-  background-color: #FFDBDB;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.notHavingProfessionalDetails p {
-  padding: 40px;
-}
-
-.linkToPublicProfile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
-  color: black;
-}
-
-.backToPublicProfile {
-  padding-left: 17px;
-  padding-right: 20px;
-  padding-bottom: 9px;
+  font-size: 1.5rem;
   cursor: pointer;
+  color: #666;
 }
 
-.backToPublicProfile img {
-  height: 50px;
-  width: 50px;
-}
-
-.backToPublicProfile .profile_image {
-  padding: .6rem;
-  border-radius: 50%;
-  font-size: 1rem;
-}
-
-
-/* popup styles */
-
-#secondComerPopup {
-  flex-direction: row;
-  width: min(600px, 80vw);
-  padding-left: 0;
-}
-
-.popUpContainer {
-  width: 100vw;
-  height: 100vh;
-  background-color: #00000081;
-  position: fixed;
-  z-index: 100;
-  top: 0;
-}
-
-.popUpWindow {
-  width: min(400px, 80vw);
-  background-color: #FFF;
-  border-radius: 8px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.popup-body {
   padding: 2rem;
+  text-align: center;
 }
 
-.sameUserWarningMessage {
-  color: red;
+.popup-image {
+  max-width: 200px;
+  margin: 0 auto 1.5rem;
 }
 
-.loginPrompt p{
-  display: inline-block;
-  margin: 1rem;
-  margin-left: 0;
+.popup-body p {
+  margin-bottom: 1rem;
 }
 
-.loginPrompt button {
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  color: white;
+.popup-highlight {
+  font-weight: 600;
+  margin: 1.5rem 0;
+}
+
+.signup-button {
   background-color: #0057B1;
-  padding: 0.5rem 1rem;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.75rem 2rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 1rem;
 }
 
+.signup-button:hover {
+  background-color: #004598;
+}
+
+/* Responsive styles */
 @media screen and (max-width: 768px) {
-  .referralRequestModal {
-      width: 90vw;
+  .name-fields, .job-fields {
+    flex-direction: column;
+    gap: 0;
   }
-
-  .firstNameAndLastName input {
-      width: 33vw !important;
+  
+  .job-actions {
+    top: auto;
+    right: auto;
+    position: relative;
+    margin-top: 1rem;
+    justify-content: flex-end;
   }
-
-  .emailDetailsAndUploadResumeInput input {
-      width: 80vw;
+  
+  .resume-dropzone {
+    padding: 1.5rem 1rem;
   }
-}
-
-@media screen and (max-width: 375px) {
-  .referralRequestModal {
-      width: 95vw;
+  
+  .login-prompt {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
   }
-
-  .uploadResume {
-      gap: 1rem;
+  
+  .step-navigation {
+    flex-direction: column;
+    gap: 1rem;
   }
-
-  .emailDetailsAndUploadResumeInput {
-      gap: .2rem;
+  
+  .back-button, .next-button, .submit-button {
+    width: 100%;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .referralRequestHeaderDesc {
-      padding-left: 20px !important;
-      padding-right: 20px !important;
-      margin-bottom: 10px;
+  .referral-request-container {
+    margin: 0;
+    border-radius: 0;
+    width: 100%;
   }
-
-  .referralRequestModal {
-      margin-top: 20px;
+  
+  .progress-steps {
+    overflow-x: auto;
+    padding-bottom: 1rem;
   }
-
-  .referralRequestDetails {
-      padding: 0;
+  
+  .step-number {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
   }
-
-  .addJobForReferral {
-      width: 30px;
-      height: 30px;
-  }
-
-  .jobDescriptionForReferral {
-      padding: 20px;
-  }
-
-  .uploadResume {
-      padding: 0;
-      position: relative;
-  }
-
-  .uploadResume .submitReferralLoader {
-      position: absolute;
-      bottom: -30px;
-      left: 50%;
-  }
-
-  .secondComer {
-      display: none;
-  }
-}
-
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-  .referralRequestModal {
-      width: 80vw;
-  }
-
-  .firstNameAndLastName input {
-      width: 33vw !important;
-  }
-
-  .emailDetailsAndUploadResumeInput input {
-      width: 70vw;
+  
+  .step-label {
+    font-size: 0.75rem;
   }
 }
