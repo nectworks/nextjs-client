@@ -794,7 +794,7 @@ const ProfilePage = () => {
               {/* Profile image and info */}
               <div className="profile-header">
                 <div className="profile-image-container" onClick={() => setOpenFileUploadDialog(true)}>
-                  <ProfileImage isLoggedInUser={true} />
+                  <ProfileImage isLoggedInUser={true} quality="original" objectFit="contain" />
                 </div>
                 <h1 className="profile-name">{user?.firstName} {user?.lastName}</h1>
                 <p className="profile-title">{userInfo && getLatestExperience()}</p>
