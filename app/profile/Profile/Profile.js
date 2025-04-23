@@ -55,45 +55,14 @@ import dribbleLogo from '@/public/socialsLogo/dribbleLogo.svg';
 import crunchbaseLogo from '@/public/socialsLogo/crunchbaseLogo.svg';
 import hashnodeLogo from '@/public/socialsLogo/hashnodeLogo.svg';
 import StyledIOSSwitch from '../../_components/Switch/switch';
-import {
-  FaBriefcase,
-  FaMedal,
-  FaUsers,
-  FaTools,
-  FaGraduationCap,
-  FaProjectDiagram,
-  FaFacebookF,
-  FaLinkedin,
-  FaFileAlt,
-  FaShareAlt,
-  FaChevronRight
-} from 'react-icons/fa';
 import deleteResume from '@/public/Profile/deleteResume.svg';
 import downloadResume from '@/public/Profile/downloadResume.svg';
-import {
-  FaRegMessage,
-  FaXTwitter,
-  FaArrowUpRightFromSquare,
-  FaUser,
-  FaPen,
-  FaPlus
-} from 'react-icons/fa6';
 import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import downloadDocument from '@/Utils/downloadDocument';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-/*
-  Note about using localStorage and sessionStorage:
-  (1). localStorage: The initial user input process in Profile page (when they
-      login for the first time) should be persisted even if the user leaves the website in between and comes back later. Hence, this input data will be
-      saved in the localStorage.
-  (2). sessionStorage: The information related to user's profile and preferences,
-      are stored in sessionStorage and is persisted until the user closes their
-      browser.
-*/
 
 const ProfilePage = () => {
   // state for opening profile image upload dialog box.
@@ -111,9 +80,6 @@ const ProfilePage = () => {
   // decides the subsection the user is making changes in.
   const [subSection, setSubSection] = useState(1);
 
-  // Track active section for tab navigation
-  const [activeSection, setActiveSection] = useState("about");
-
   /* decides the index of the sub section data we are updating.
        -1 implies we are adding new data */
   const [subSectionIndex, setSubSectionIndex] = useState(-1);
@@ -130,6 +96,9 @@ const ProfilePage = () => {
   const { pathname, query } = router;
   const searchParams = new URLSearchParams(query);
   const privateAxios = usePrivateAxios();
+  
+  // State for active section (for scrolling and highlighting in mobile nav)
+  const [activeSection, setActiveSection] = useState('about');
 
   // function to get appropriate icon based on the link
   function getLinkIcon(url) {
@@ -186,10 +155,10 @@ const ProfilePage = () => {
   // function to open window to edit data
   function openSectionToEdit(e) {
     // get the subSection we are making changes in
-    const subSectionNumber = parseInt(e.target.dataset.subsection);
+    const subSectionNumber = parseInt(e.currentTarget.dataset.subsection);
 
     // get the index of the data we are updating
-    const subSectionDataIndex = parseInt(e.target.dataset.dataindex);
+    const subSectionDataIndex = parseInt(e.currentTarget.dataset.dataindex);
 
     // open the correct subsection on click
     setSubSection(subSectionNumber);
@@ -339,6 +308,7 @@ const ProfilePage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
   const [toggle, setToggle] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => {
     // Fetch initial value of activelySeekingJob from the database
@@ -432,7 +402,6 @@ const ProfilePage = () => {
       // Update the toggle state
       if (toggle == true) {
         setToggle(false);
-        setImmediatejoiner(false);
       } else {
         setToggle(true);
       }
@@ -479,7 +448,6 @@ const ProfilePage = () => {
         });
       }
       setShouldDisplayMessage(false);
-      setImmediatejoiner(true);
     } catch (error) {
       console.error('Error updating immediate joiner status:', error);
     }
@@ -498,12 +466,11 @@ const ProfilePage = () => {
     };
   }, []);
 
-  const handleShareButtonClick = () => {
-    const shareBtn = document.getElementById('profile-share-button');
-    shareBtn.classList.toggle('open');
+  const toggleShareOptions = () => {
+    setShareOpen(!shareOpen);
   };
 
-  const handleClick = () => {
+  const handleShareTwitter = () => {
     const url = encodeURIComponent(
       `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
     ); // URL of your website
@@ -515,7 +482,7 @@ const ProfilePage = () => {
   };
 
   // function to share on Facebook as a post
-  const handleClickFacebook = () => {
+  const handleShareFacebook = () => {
     const userProfileUrl = encodeURIComponent(
       `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
     );
@@ -627,7 +594,7 @@ const ProfilePage = () => {
   };
 
   // CSS classes for styling
-  const uploadBoxClass = `dashboard_info_resume_upload_box ${isDragging ? 'drag-over' : ''}`;
+  const resumeUploadBoxClass = `resume-upload-box ${isDragging ? 'drag-over' : ''}`;
   const [resumeUploadStatus, setResumeUploadStatus] = useState(false);
   const uploadFile = async (selectedFile) => {
     setResumeUploadStatus(true);
@@ -727,6 +694,38 @@ const ProfilePage = () => {
     fetchUserInfo();
   }, [user]);
 
+  // Handle scroll to section
+  const handleScrollToSection = (sectionId) => {
+    setActiveSection(sectionId);
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Update active section based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['about', 'experience', 'education', 'skills', 'social', 'achievements', 'projects'];
+      
+      for (const sectionId of sections) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   useEffect(() => {
     const from = sessionStorage.getItem('from');
     // Check if the user came from the sign-up page
@@ -773,450 +772,283 @@ const ProfilePage = () => {
   return (
     <ProfileContextProvider initialState={initialState} reducer={reducer}>
       <div className="dashboard_outer_container">
-        {/* add dashboard menu */}
+        {/* Add dashboard menu */}
         <DashboardMenu />
 
-        {/* sign up confirmation on successful registration */}
-        {signUpPopup && (
-          <SignUpFormPopup
-            user={user}
-            closePopUp={() => setSignUpPopup(false)}
-          />
-        )}
+        {/* Main container */}
         <div className="dashboard_profile_container">
+          {/* Header */}
           <ProfileHeader />
 
-          {/* upload profile dialog box */}
+          {/* Profile upload dialog */}
           {openProfileUploadDialog && (
             <ProfileUploadDialog
               setOpenFileUploadDialog={setOpenFileUploadDialog}
             />
           )}
 
-          <section className="dashboard_profile_main_section">
-            {/* Intro with profile and title */}
-            <div className="dashboard_profile_intro">
-              <div className="intro_section-dashboard">
-                <div onClick={() => setOpenFileUploadDialog(true)} className="profile-avatar-container">
+          {/* Profile content */}
+          <div className="profile-content">
+            {/* Left sidebar */}
+            <div className="profile-sidebar">
+              {/* Profile image and info */}
+              <div className="profile-header">
+                <div className="profile-image-container" onClick={() => setOpenFileUploadDialog(true)}>
                   <ProfileImage isLoggedInUser={true} />
                 </div>
-                <div className="dashboard_profile_description">
-                  <div className="dashboard_profile_name_resumeButton-wrapper">
-                    <div className="dashboard_profile_name_edit-wrapper">
-                      <div className="dashboard_profile_name_edit">
-                        <p className="dashboard_profile_name">
-                          {user?.firstName + ' ' + user?.lastName}
-                        </p>
-                        <div
-                          className="edit_popUp_formDetails"
-                          onClick={handleEditClick}
-                        >
-                          <Image src={editProfileIcon} alt="" />
-                        </div>
-                        {showSignUpForm && (
-                          <SignUpFormPopup
-                            user={user}
-                            closePopUp={() => setShowSignUpForm(false)}
-                          />
-                        )}
-                      </div>
-                      <p>{userInfo && getLatestExperience()}</p>
-                      <p className="dashboard_timestamp">
-                        Profile Last Update -{' '}
-                        {userData && userData.timestamp
-                          ? ` ${userData.timestamp.savedAt}`
-                          : 'N/A'}
-                      </p>
-                      </div>
-                    <button
-                      className={`dashboard_resume_view_button${!resumeFileUrl ? 'disabled' : ''
-                        }`}
-                      onClick={handleOpenResume}
-                      disabled={!resumeFileUrl}
-                    >
-                      <FaFileAlt className="mr-2" />
-                      Your Resume
-                    </button>
-                  </div>
-
-                  <div className="popUpFormDetailsSeperator">
-                    <div className="profile-divider"></div>
-                  </div>
-                </div>
-              </div>
-              <div className="popUpFormDetails">
-                <div className="popUpFormDetail-wrapper_for_mobile">
-                  <div className="popUpFormDetail">
-                    <Image src={locationIcon} alt="" />
-                    <p>
-                      {userData?.location || (
-                        <div
-                          className="popupFormNotFilled"
-                          onClick={handleEditClick}
-                        >
-                          Add Location
-                        </div>
-                      )}
-                    </p>
-                    {showSignUpForm && (
-                      <SignUpFormPopup
-                        user={user}
-                        userData={userData}
-                        closePopUp={() => setShowSignUpForm(false)}
-                      />
-                    )}
-                  </div>
-                  <div className="popUpFormDetail_2">
-                    <Image src={workIcon} alt="" />
-                    <p>
-                      {user?.isExperienced
-                        ? 'Experienced'
-                        : 'Fresher' || (
-                          <div
-                            className="popupFormNotFilled"
-                            onClick={handleEditClick}
-                          >
-                            Add Experience
-                          </div>
-                        )}
-                    </p>
-                    {showSignUpForm && (
-                      <SignUpFormPopup
-                        user={user}
-                        closePopUp={() => setShowSignUpForm(false)}
-                      />
-                    )}
-                  </div>
-                </div>
-                <div className="popUpFormDetail-wrapper_for_mobile">
-                  <div className="popUpFormDetail">
-                    <Image src={emailIcon} alt="" />
-                    <p>{user?.email}</p>
-                  </div>
-                  <div className="popUpFormDetail">
-                    <Image src={phoneIcon} alt="" />
-                    <p>
-                      {userData?.mobileNumber ? (
-                        `+${userData.mobileNumber}`
-                      ) : (
-                        <div
-                          className="popupFormNotFilled"
-                          onClick={handleEditClick}
-                        >
-                          Add Mobile Number
-                        </div>
-                      )}
-                    </p>
-                    {showSignUpForm && (
-                      <SignUpFormPopup
-                        user={user}
-                        closePopUp={() => setShowSignUpForm(false)}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="progressBar_wrapper">
+                <h1 className="profile-name">{user?.firstName} {user?.lastName}</h1>
+                <p className="profile-title">{userInfo && getLatestExperience()}</p>
+                
+                {/* Progress bar */}
                 <div className="progress-bar-container">
-                  <div
-                    className="progress-bar"
-                    style={{ width: `${completion}%` }}
-                  ></div>
+                  <div className="progress-bar" style={{ width: `${completion}%` }}></div>
                 </div>
-                <span className="percentage">{completion}%</span>
+                <div className="progress-percentage">Profile Completion: {completion}%</div>
               </div>
-              <div className="dashboard_profile_buttons">
-                <div className="dashboard_profile_button">
-                  <p>Are you actively looking for a job?</p>
-                  <StyledIOSSwitch
-                    ref={switchRef}
-                    checked={activelySeekingJob}
-                    onChange={handleActivelySeekingToggleChange}
-                    inputProps={{ 'aria-label': 'Actively seeking job toggle' }}
-                  />
+              
+              {/* Toggle switches */}
+              <div className="toggle-container">
+                <div className="toggle-item">
+                  <span className="toggle-label">Are you actively looking for a job?</span>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={activelySeekingJob}
+                      onChange={handleActivelySeekingToggleChange}
+                      ref={switchRef}
+                    />
+                    <span className="slider"></span>
+                  </label>
                 </div>
-                <div className="dashboard_profile_button">
-                  <p>Are you available for immediate joining?</p>
-                  <StyledIOSSwitch
-                    checked={toggle}
-                    onChange={handleImmediateJoinerToggleChange}
-                    inputProps={{ 'aria-label': 'Actively seeking job toggle' }}
-                  />
-                  {shouldDisplayMessage && (
-                    <div className="joining_toggle_message_bg">
-                      <div className="joining_toggle_message">
-                        <h4>Please confirm your notice period</h4>
-                        <div
-                          className="closeFormOptionForPopup_joining_toggle"
-                          onClick={handlePopupClose}
-                        >
-                          <Image src={crossIcon} alt="close" />
-                        </div>
-                        <div className="buttons_for_joining_toggle_message">
-                          <button
-                            className={`joining_toggle_message_button${selectedButton === 'immediateJoiner'
-                                ? 'selected'
-                                : ''
-                              }`}
-                            onClick={() => handleButtonClick('immediateJoiner')}
-                          >
-                            Immediate Joiner
-                          </button>
-                          <button
-                            className={`joining_toggle_message_button${selectedButton === 'noticePeriod'
-                                ? 'selected'
-                                : ''
-                              }`}
-                            onClick={() => handleButtonClick('noticePeriod')}
-                          >
-                            Currently Serving Notice Period
-                          </button>
-                        </div>
-                        {openDateForm && (
-                          <div className="joining_toggle_message_dateForm">
-                            <DatePicker
-                              selected={selectedDate}
-                              onChange={handleDateChange}
-                              minDate={new Date()}
-                              maxDate={maxDate}
-                              dateFormat="yyyy-MM-dd"
-                              placeholderText="Select a date"
-                            />
-                          </div>
-                        )}
-                        <button
-                          className="joining_toggle_message_update_button"
-                          onClick={handleUpdateButtonClick}
-                        >
-                          Update
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                <div className="toggle-item">
+                  <span className="toggle-label">Available for immediate joining?</span>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={toggle}
+                      onChange={handleImmediateJoinerToggleChange}
+                    />
+                    <span className="slider"></span>
+                  </label>
                 </div>
               </div>
-              <div className="SmoothScrollOptions">
-                {[
-                  { id: "about", label: "About", icon: <FaUser /> },
-                  { id: "experience", label: "Experience", icon: <FaBriefcase /> },
-                  { id: "education", label: "Education", icon: <FaGraduationCap /> },
-                  { id: "skills", label: "Skills", icon: <FaTools /> },
-                  { id: "social", label: "Social", icon: <FaUsers /> },
-                  { id: "achievements", label: "Achievements", icon: <FaMedal /> },
-                  { id: "projects", label: "Projects", icon: <FaProjectDiagram /> }
-                ].map(item => (
-                  <a 
-                    key={item.id} 
-                    href={`#${item.id}`}
-                    onClick={() => setActiveSection(item.id)}
-                    className={activeSection === item.id ? "active-tab" : ""}
-                  >
-                    {item.label}
-                  </a>
-                ))}
-              </div>
-              <div className="SmoothScrollOptions_mobile_view">
-                {[
-                  { id: "about", icon: <FaRegMessage /> },
-                  { id: "experience", icon: <FaBriefcase /> },
-                  { id: "education", icon: <FaGraduationCap /> },
-                  { id: "skills", icon: <FaTools /> },
-                  { id: "social", icon: <FaUsers /> },
-                  { id: "achievements", icon: <FaMedal /> },
-                  { id: "projects", icon: <FaProjectDiagram /> }
-                ].map(item => (
-                  <a 
-                    key={item.id} 
-                    href={`#${item.id}`}
-                    onClick={() => setActiveSection(item.id)}
-                    className={activeSection === item.id ? "active-tab-mobile" : ""}
-                    style={{ color: 'black' }}
-                  >
-                    {item.icon}
-                  </a>
-                ))}
-              </div>
-            </div>
-            <hr />
-            <div className="profile-actions-container">
-              <div className="Dashboard_profile_share">
-                <span className="share-label" onClick={handleShareButtonClick}>
-                  <FaShareAlt className="share-icon-prefix" />
-                  Share
-                </span>
-                <button
-                  className="profile-share-button"
-                  id="profile-share-button"
-                  onClick={handleShareButtonClick}
-                >
-                  <i className="share-icon">
-                    <FaArrowUpRightFromSquare />
-                  </i>
-                  <span className="social-icons">
-                    <i
-                      className="social-icon facebook"
-                      onClick={handleClickFacebook}
-                    >
-                      <FaFacebookF />
-                    </i>
-                    <i className="social-icon twitter" onClick={handleClick}>
-                      <FaXTwitter />
-                    </i>
-                    <i className="social-icon linkedin" onClick={getLinkedinShareUrl}>
-                      <FaLinkedin />
-                    </i>
+              
+              {/* Contact information */}
+              <div className="contact-info">
+                <div className="contact-item">
+                  <span className="contact-icon">
+                    <Image src={locationIcon} alt="Location" width={18} height={18} />
                   </span>
-                </button>
+                  <span>
+                    {userData?.location || (
+                      <span className="popupFormNotFilled" onClick={handleEditClick}>
+                        Add Location
+                      </span>
+                    )}
+                  </span>
+                </div>
+                <div className="contact-item">
+                  <span className="contact-icon">
+                    <Image src={emailIcon} alt="Email" width={18} height={18} />
+                  </span>
+                  <span>{user?.email}</span>
+                </div>
+                <div className="contact-item">
+                  <span className="contact-icon">
+                    <Image src={phoneIcon} alt="Phone" width={18} height={18} />
+                  </span>
+                  <span>
+                    {userData?.mobileNumber ? (
+                      `+${userData.mobileNumber}`
+                    ) : (
+                      <span className="popupFormNotFilled" onClick={handleEditClick}>
+                        Add Mobile Number
+                      </span>
+                    )}
+                  </span>
+                </div>
               </div>
-
-              {/* open profile in new tab, link */}
-              <div className="dashboard_profile_info_message">
-                <span className="privacy-notice">
-                  The information you add below will be visible to other users.
-                </span>
-                <a
-                  className="dashboard_profile_new_tab"
-                  href={`/profile/${user?.username}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Open profile in new tab
-                </a>
-              </div>
-            </div>
-
-            <div className="dashboard_profile_mid_section">
-              {
-                <div className="dashboard_info_main_container">
-                  <div className="dashboard_info dashboard_info_resume_upload">
-                    <div className="resumedisplay">
-                      <h2>Resume</h2>
-                      <button
-                        className={`dashboard_resume_view_buttonmobile${!resumeFileUrl ? 'disabled' : ''
-                          }`}
-                        onClick={handleOpenResume}
-                        disabled={!resumeFileUrl}
-                      >
-                        <FaFileAlt className="mr-2" />
-                        View Resume
+              
+              {/* Resume section */}
+              <div className="resume-section">
+                <h3>Resume</h3>
+                
+                {resumeFileUrl ? (
+                  <div>
+                    <div className="resume-actions">
+                      <button className="resume-button download-button" onClick={HandledownloadResume}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="button-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                          <polyline points="7 10 12 15 17 10"></polyline>
+                          <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download
+                      </button>
+                      
+                      <button className="resume-button delete-button" onClick={() => setShowDeleteConfirmation(true)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="button-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          <line x1="10" y1="11" x2="10" y2="17"></line>
+                          <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                        Delete
                       </button>
                     </div>
-                    <p>
-                      Upload an updated resume to increase your chances of being
-                      discovered by recruiters by 70%.
-                    </p>
-
-                    <div
-                      onClick={handleHeaderClick}
-                      onDrop={handleFileDrop}
-                      onDragOver={handleDragOver}
-                      className={uploadBoxClass}
-                      onDragLeave={() => setIsDragging(false)}
-                    >
-                      <input
-                        type="file"
-                        id="fileInput"
-                        onChange={handleFileSelect}
-                        ref={fileInputRef}
-                        style={{ display: 'none' }}
-                      />
-                      <Image src={resumeUploadIcon} alt="" />
-                      {resumeFileUrl ? (
-                        <h4>
-                          {resumeUploadStatus ? (
-                            <h4>Uploading...</h4>
-                          ) : (
-                            <h4>Upload New Resume?</h4>
-                          )}
-                        </h4>
-                      ) : (
-                        <h4>
-                          {resumeUploadStatus ? (
-                            <h4>Uploading...</h4>
-                          ) : (
-                            <h4>Upload Your Resume Here</h4>
-                          )}
-                        </h4>
-                      )}
-                      <p style={{ color: '#475462' }}>
-                        Supported Format: PDF, max 5MB
-                      </p>
-                    </div>
-                    {resumeFileUrl && (
-                      <div className="downloadDelete">
-                        <Image
-                          src={downloadResume}
-                          className="downloadDeleteImage"
-                          onClick={HandledownloadResume}
-                          alt="Download resume"
-                          title="Download Resume"
-                        />
-
-                        {revealDeleteMsg === false ? (
-                          <Image
-                            src={deleteResume}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              showDeleteConfirmationMessage(e);
-                            }}
-                            alt="Delete resume"
-                            title="Delete Resume"
-                            className="downloadDeleteImage"
-                          />
-                        ) : (
-                          <div>
-                            <span>Are you sure?</span>
-                            <button onClick={handleDeleteresume}>Yes</button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                notShowDeleteConfirmationMessage(e);
-                              }}
-                            >
-                              No
-                            </button>
-                          </div>
-                        )}
+                    
+                    {showDeleteConfirmation && (
+                      <div className="delete-confirmation">
+                        <p>Are you sure you want to delete your resume?</p>
+                        <div className="delete-confirmation-buttons">
+                          <button className="delete-confirm-button" onClick={handleDeleteresume}>Yes</button>
+                          <button className="delete-cancel-button" onClick={() => setShowDeleteConfirmation(false)}>No</button>
+                        </div>
                       </div>
                     )}
                   </div>
-                  <div
-                    id="about"
-                    className="dashboard_info dashboard_info_about"
+                ) : (
+                  <div 
+                    className={resumeUploadBoxClass}
+                    onClick={handleHeaderClick}
+                    onDrop={handleFileDrop}
+                    onDragOver={handleDragOver}
+                    onDragLeave={() => setIsDragging(false)}
                   >
-                    <h2>About</h2>
-                    {userInfo?.about?.bio?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Tell people a bit about yourself! Sprinkle ✨ in some
-                        relevant keywords from your field. This can help people
-                        find you when searching for specific skills or
-                        expertise.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={1}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_edit"
-                      src={editIcon}
-                      style={{
-                        position: 'absolute',
-                        top: '2rem',
-                        right: '3rem',
-                        cursor: 'pointer',
-                      }}
-                      alt="update entered information"
+                    <input
+                      type="file"
+                      id="fileInput"
+                      onChange={handleFileSelect}
+                      ref={fileInputRef}
+                      style={{ display: 'none' }}
+                      accept=".pdf"
                     />
+                    <div className="resume-upload-icon">
+                      <Image src={resumeUploadIcon} alt="Upload" width={30} height={30} />
+                    </div>
+                    <p className="resume-upload-text">
+                      {resumeUploadStatus ? 'Uploading...' : 'Upload Your Resume Here'}
+                    </p>
+                    <p className="resume-upload-text" style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                      Supported Format: PDF, max 5MB
+                    </p>
+                  </div>
+                )}
+              </div>
+              
+              {/* Share profile button */}
+              <div className="share-profile">
+                <button className="share-button" onClick={toggleShareOptions}>
+                  <span>Share Profile</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </button>
+                
+                {shareOpen && (
+                  <div className="share-options">
+                    <div className="share-option" onClick={getLinkedinShareUrl}>
+                      <Image src={linkedInIcon} alt="LinkedIn" width={20} height={20} />
+                    </div>
+                    <div className="share-option" onClick={handleShareTwitter}>
+                      <Image src={twitterLogo} alt="Twitter" width={20} height={20} />
+                    </div>
+                    <div className="share-option" onClick={handleShareFacebook}>
+                      <Image src={facebookLogo} alt="Facebook" width={20} height={20} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Main content area */}
+            <div className="profile-main-content">
+              {/* Mobile section navigation */}
+              <div className="section-nav">
+                <div className="section-nav-inner">
+                  <a 
+                    className={`section-nav-item ${activeSection === 'about' ? 'active' : ''}`}
+                    onClick={() => handleScrollToSection('about')}
+                  >
+                    About
+                  </a>
+                  <a 
+                    className={`section-nav-item ${activeSection === 'experience' ? 'active' : ''}`}
+                    onClick={() => handleScrollToSection('experience')}
+                  >
+                    Experience
+                  </a>
+                  <a 
+                    className={`section-nav-item ${activeSection === 'education' ? 'active' : ''}`}
+                    onClick={() => handleScrollToSection('education')}
+                  >
+                    Education
+                  </a>
+                  <a 
+                    className={`section-nav-item ${activeSection === 'skills' ? 'active' : ''}`}
+                    onClick={() => handleScrollToSection('skills')}
+                  >
+                    Skills
+                  </a>
+                  <a 
+                    className={`section-nav-item ${activeSection === 'social' ? 'active' : ''}`}
+                    onClick={() => handleScrollToSection('social')}
+                  >
+                    Social
+                  </a>
+                  <a 
+                    className={`section-nav-item ${activeSection === 'achievements' ? 'active' : ''}`}
+                    onClick={() => handleScrollToSection('achievements')}
+                  >
+                    Achievements
+                  </a>
+                  <a 
+                    className={`section-nav-item ${activeSection === 'projects' ? 'active' : ''}`}
+                    onClick={() => handleScrollToSection('projects')}
+                  >
+                    Projects
+                  </a>
+                </div>
+              </div>
+              
+              {/* About section */}
+              <section id="about" className="content-section">
+                <div className="section-header">
+                  <div className="section-title">
+                    <div className="section-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <span>About</span>
+                  </div>
+                  <button 
+                    className="edit-button"
+                    data-subsection={1}
+                    data-dataindex={-1}
+                    onClick={openSectionToEdit}
+                  >
+                    <Image src={editIcon} alt="Edit" width={18} height={18} />
+                  </button>
+                </div>
+                
+                {userInfo?.about?.bio?.length === 0 ? (
+                  <p style={{ opacity: 0.7 }}>
+                    Tell people a bit about yourself! Sprinkle ✨ in some
+                    relevant keywords from your field. This can help people
+                    find you when searching for specific skills or expertise.
+                  </p>
+                ) : (
+                  <>
                     {userInfo?.about?.bio?.length > 150 ? (
-                      <pre className="dashboard_info_hide_text">
+                      <p className="dashboard_info_hide_text">
                         {userInfo?.about?.bio || ''}
-                      </pre>
+                      </p>
                     ) : (
-                      <pre>{userInfo?.about?.bio || ''}</pre>
+                      <p>{userInfo?.about?.bio || ''}</p>
                     )}
-
-                    {/* display this button only if the description contains
-                        more than 200 characters */}
+                    
                     {userInfo?.about?.bio?.length > 150 && (
                       <button
                         className="dashboard_info_truncate_btn"
@@ -1226,360 +1058,298 @@ const ProfilePage = () => {
                         Show more
                       </button>
                     )}
+                  </>
+                )}
+              </section>
+              
+              {/* Experience section */}
+              <section id="experience" className="content-section">
+                <div className="section-header">
+                  <div className="section-title">
+                    <div className="section-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <span>Experience</span>
                   </div>
-
-                  <div
-                    id="experience"
-                    className="dashboard_info dashboard_info_experiences"
+                  <button 
+                    className="add-button"
+                    data-subsection={2}
+                    data-dataindex={-1}
+                    onClick={openSectionToEdit}
                   >
-                    <h2>Experience</h2>
-                    {userInfo?.experience?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Mention your employment history, including the present
-                        and prior companies you have worked for.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={2}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add another experience information"
-                    />
-                    {userInfo?.experience?.map((experience, index) => {
-                      return (
-                        <div className="dashboard_info_experience" key={index}>
-                          <h3>{experience?.jobTitle}</h3>
-                          <div className="dashboard_info_actions">
-                            <Image
-                              data-subsection={2}
-                              data-dataindex={index}
-                              onClick={(e) => openSectionToEdit(e)}
-                              className="dashboard_info_section_action_edit"
-                              src={editIcon}
-                              alt="update experience"
-                            />
-                          </div>
-
-                          <p>
+                    <Image src={addIcon} alt="Add" width={20} height={20} />
+                  </button>
+                </div>
+                
+                {userInfo?.experience?.length === 0 ? (
+                  <p style={{ opacity: 0.7 }}>
+                    Mention your employment history, including the present
+                    and prior companies you have worked for.
+                  </p>
+                ) : (
+                  <div className="timeline">
+                    {userInfo?.experience?.map((experience, index) => (
+                      <div className="timeline-item" key={index}>
+                        <div className="timeline-dot"></div>
+                        <div className="timeline-content">
+                          <h3 className="timeline-title">{experience?.jobTitle}</h3>
+                          <p className="timeline-subtitle">
                             {experience?.companyName}
-
-                            {/* display this part only if experience
-                                includes the employmentType */}
-                            {experience?.employmentType ? (
-                              <>
-                                <Image
-                                  className="dashboard_info_seperator"
-                                  src={seperatorIcon}
-                                  alt=""
-                                />
-                                {experience.employmentType}
-                              </>
-                            ) : null}
-                          </p>
-
-                          <p className="subsection_time_stamp">
-                            {/* format start date and end date
-                              of the experience */}
-                            {experience?.startMonth?.substr(0, 3) +
-                              ' ' +
-                              experience?.startYear}{' '}
-                            -
-                            {experience?.currentlyWorking === true
-                              ? ' Present'
-                              : ' ' +
-                              experience?.endMonth?.substr(0, 3) +
-                              ' ' +
-                              experience?.endYear}
-                            {/* display the time difference if the user
-                              is not working here presently */}
-                            {!experience?.currentlyWorking && (
-                              <>
-                                <Image
-                                  className="dashboard_info_seperator"
-                                  src={seperatorIcon}
-                                  alt=""
-                                />
-                                {getTimeDifference(experience)}
-                              </>
+                            {experience?.employmentType && (
+                              <> • {experience?.employmentType}</>
                             )}
                           </p>
-
-                          <div className="dashboard_info_experience_description">
-                            {experience?.description?.length > 0 ? (
-                              <ul
-                                id="description_sentences"
-                                className={
-                                  experience?.description?.length > 150
-                                    ? 'dashboard_info_hide_text'
-                                    : ''
-                                }
-                              >
+                          <p className="timeline-date">
+                            {experience?.startMonth?.substr(0, 3) + ' ' + experience?.startYear} - 
+                            {experience?.currentlyWorking ? ' Present' : ' ' + experience?.endMonth?.substr(0, 3) + ' ' + experience?.endYear}
+                            {!experience?.currentlyWorking && (
+                              <> • {getTimeDifference(experience)}</>
+                            )}
+                          </p>
+                          
+                          {experience?.description?.length > 0 && (
+                            <div className="timeline-description">
+                              <ul className={experience?.description?.length > 150 ? 'dashboard_info_hide_text' : ''}>
                                 {experience?.description
                                   .split('\n')
-                                  .map((sentence, index) => {
-                                    return (
-                                      <li key={index}>
-                                        {sentence} <br></br>
-                                      </li>
-                                    );
-                                  })}
+                                  .map((sentence, idx) => (
+                                    <li key={idx}>{sentence}</li>
+                                  ))}
                               </ul>
-                            ) : null}
-
-                            {experience?.description.length > 150 && (
-                              <button
-                                className="dashboard_info_truncate_btn"
-                                data-status="hide"
-                                onClick={toggleDescription}
-                              >
-                                Show more
-                              </button>
-                            )}
-                          </div>
-
-                          {experience?.skills.length > 0 ? (
-                            <p>
-                              Skills: {'\t'}
-                              {experience?.skills.map((skill, skillIdx) => {
-                                return (
-                                  <Fragment key={skillIdx}>
-                                    <span style={{ fontWeight: '500' }}>
-                                      {skill}
-                                    </span>
-
-                                    {skillIdx <
-                                      experience?.skills?.length - 1 ? (
-                                      <Image
-                                        className="dashboard_info_seperator"
-                                        src={seperatorIcon}
-                                        alt="dashboard"
-                                      />
-                                    ) : null}
-                                  </Fragment>
-                                );
-                              })}
-                            </p>
-                          ) : null}
-
-                          {index < userInfo?.experience?.length - 1 ? (
-                            <hr></hr>
-                          ) : null}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div
-                    id="education"
-                    className="dashboard_info dashboard_info_all_education"
-                  >
-                    <h2>Education</h2>
-                    {userInfo?.education?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Fill in your education details (school, college, degree)
-                        to strengthen your profile.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={3}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add new education"
-                    />
-                    <div>
-                      {userInfo?.education?.map((education, index) => {
-                        return (
-                          <div className="dashboard_info_education" key={index}>
-                            <h3>{education?.school || ''}</h3>
-                            <div className="dashboard_info_actions">
-                              <Image
-                                data-subsection={3}
-                                data-dataindex={index}
-                                onClick={(e) => openSectionToEdit(e)}
-                                className="dashboard_info_section_action_edit"
-                                src={editIcon}
-                                alt="update education info"
-                              />
-                            </div>
-                            <p>
-                              {/* display this if education object
-                                includes degree */}
-                              {education?.degree ? (
-                                <>
-                                  {education?.degree}
-                                  {/* display this if education
-                                    includes fieldOfStudy */}
-                                  {education?.fieldOfStudy ? (
-                                    <>{', in ' + education?.fieldOfStudy}</>
-                                  ) : null}
-                                </>
-                              ) : null}
-                            </p>
-                            <p className="subsection_time_stamp">
-                              {education?.startYear} - {education?.endYear}
-                            </p>
-
-                            {index < userInfo?.education?.length - 1 ? (
-                              <hr></hr>
-                            ) : null}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div
-                    id="skills"
-                    className="dashboard_info dashboard_info_skills"
-                  >
-                    <h2>Skills</h2>
-                    {userInfo?.skills?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Specify details about programming languages (such as
-                        Java, Python, C/C++, node.js, SQL etc), softwares
-                        (Microsoft Word, Excel, Figma etc) or any other work
-                        related skills.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={5}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add skills"
-                    />
-                    <div className="skills-container">
-                      {userInfo?.skills?.map((skill, index) => {
-                        return (
-                          <Fragment key={index}>
-                            <h4>{skill}</h4>
-                            <hr></hr>
-                          </Fragment>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div
-                    id="social"
-                    className="dashboard_info dashboard_info_socials"
-                  >
-                    <h2>Social</h2>
-                    {userInfo?.socials?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Enter the usernames for your LinkedIn, Behance, GitHub,
-                        and other profiles.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={4}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add social links"
-                    />
-                    <div className="dashboard_info_all_socials">
-                      {userInfo?.socials?.map((social, index) => {
-                        return (
-                          <div key={index} className="dashboard_info_social">
-                            <Link href={social} target="_blank">
-                              {/* display the icon based on the given link */}
-                              <Image src={getLinkIcon(social)} alt="" />
-                            </Link>
-
-                            <span>{social.split('//')[1]}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div
-                    id="achievements"
-                    className="dashboard_info dashboard_info_achievements"
-                  >
-                    <h2>Achievements</h2>
-                    {userInfo?.achievements?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Share information about any honors or awards you&apos;ve
-                        received. 🏆
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={6}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add achievements"
-                    />
-                    {userInfo?.achievements?.map((achievement, index) => {
-                      return (
-                        <div key={index} className="dashboard_info_achievement">
-                          <div className="dashboard_info_actions">
-                            <Image
-                              data-subsection={6}
-                              data-dataindex={index}
-                              onClick={(e) => openSectionToEdit(e)}
-                              className="dashboard_info_section_action_edit"
-                              src={editIcon}
-                              alt="update achievement"
-                            />
-                          </div>
-                          <div className="dashboard_info_achievement_header">
-                            <h3>{achievement?.heading}</h3>
-
-                            <span>
-                              {achievement?.document?.key?.length > 0 ? (
+                              
+                              {experience?.description.length > 150 && (
                                 <button
-                                  onClick={() => {
-                                    viewDocumentInNewTab(
-                                      achievement.document.key
-                                    );
-                                  }}
+                                  className="dashboard_info_truncate_btn"
+                                  data-status="hide"
+                                  onClick={toggleDescription}
                                 >
-                                  <Image src={documentLinkIcon} alt="" />
+                                  Show more
                                 </button>
-                              ) : null}
-                              {achievement?.link?.length > 0 ? (
-                                <Link href={achievement?.link} target="_blank">
-                                  <Image
-                                    src={otherLinkIcon}
-                                    alt="achievement link"
-                                  />
-                                </Link>
-                              ) : null}
-                            </span>
-                          </div>
-                          <div className="dashboard_achievement_description">
-                            {achievement?.description?.length > 0 ? (
-                              <ul
-                                id="description_sentences"
-                                className={
-                                  achievement?.description?.length > 150
-                                    ? 'dashboard_info_hide_text'
-                                    : ''
-                                }
-                              >
+                              )}
+                            </div>
+                          )}
+                          
+                          {experience?.skills?.length > 0 && (
+                            <div className="skill-tags">
+                              {experience?.skills.map((skill, skillIdx) => (
+                                <span className="skill-tag" key={skillIdx}>
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          
+                          <button
+                            className="item-edit-button"
+                            data-subsection={2}
+                            data-dataindex={index}
+                            onClick={openSectionToEdit}
+                          >
+                            <Image src={editIcon} alt="Edit" width={18} height={18} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+              
+              {/* Education section */}
+              <section id="education" className="content-section">
+                <div className="section-header">
+                  <div className="section-title">
+                    <div className="section-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                      </svg>
+                    </div>
+                    <span>Education</span>
+                  </div>
+                  <button 
+                    className="add-button"
+                    data-subsection={3}
+                    data-dataindex={-1}
+                    onClick={openSectionToEdit}
+                  >
+                    <Image src={addIcon} alt="Add" width={20} height={20} />
+                  </button>
+                </div>
+                
+                {userInfo?.education?.length === 0 ? (
+                  <p style={{ opacity: 0.7 }}>
+                    Fill in your education details (school, college, degree)
+                    to strengthen your profile.
+                  </p>
+                ) : (
+                  <div className="timeline">
+                    {userInfo?.education?.map((education, index) => (
+                      <div className="timeline-item" key={index}>
+                        <div className="timeline-dot"></div>
+                        <div className="timeline-content">
+                          <h3 className="timeline-title">{education?.school || ''}</h3>
+                          {education?.degree && (
+                            <p className="timeline-subtitle">
+                              {education?.degree}
+                              {education?.fieldOfStudy && (
+                                <>, in {education?.fieldOfStudy}</>
+                              )}
+                            </p>
+                          )}
+                          <p className="timeline-date">
+                            {education?.startYear} - {education?.endYear}
+                          </p>
+                          
+                          <button
+                            className="item-edit-button"
+                            data-subsection={3}
+                            data-dataindex={index}
+                            onClick={openSectionToEdit}
+                          >
+                            <Image src={editIcon} alt="Edit" width={18} height={18} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+              
+              {/* Skills section */}
+              <section id="skills" className="content-section">
+                <div className="section-header">
+                  <div className="section-title">
+                    <div className="section-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <span>Skills</span>
+                  </div>
+                  <button 
+                    className="add-button"
+                    data-subsection={5}
+                    data-dataindex={-1}
+                    onClick={openSectionToEdit}
+                  >
+                    <Image src={addIcon} alt="Add" width={20} height={20} />
+                  </button>
+                </div>
+                
+                {userInfo?.skills?.length === 0 ? (
+                  <p style={{ opacity: 0.7 }}>
+                    Specify details about programming languages (such as
+                    Java, Python, C/C++, node.js, SQL etc), softwares
+                    (Microsoft Word, Excel, Figma etc) or any other work
+                    related skills.
+                  </p>
+                ) : (
+                  <div className="skills-grid">
+                    {userInfo?.skills?.map((skill, index) => (
+                      <div className="skill-card" key={index}>
+                        <h3 className="skill-name">{skill}</h3>
+                        <div className="skill-level">
+                          <div className="skill-progress" style={{ width: '85%' }}></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+              
+              {/* Social section */}
+              <section id="social" className="content-section">
+                <div className="section-header">
+                  <div className="section-title">
+                    <div className="section-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                    <span>Social</span>
+                  </div>
+                  <button 
+                    className="add-button"
+                    data-subsection={4}
+                    data-dataindex={-1}
+                    onClick={openSectionToEdit}
+                  >
+                    <Image src={addIcon} alt="Add" width={20} height={20} />
+                  </button>
+                </div>
+                
+                {userInfo?.socials?.length === 0 ? (
+                  <p style={{ opacity: 0.7 }}>
+                    Enter the usernames for your LinkedIn, Behance, GitHub,
+                    and other profiles.
+                  </p>
+                ) : (
+                  <div className="social-links">
+                    {userInfo?.socials?.map((social, index) => (
+                      <Link href={social} target="_blank" key={index} className="social-link">
+                        <Image 
+                          src={getLinkIcon(social)} 
+                          alt="" 
+                          width={24} 
+                          height={24} 
+                        />
+                        <span className="social-link-text">{new URL(social).hostname.replace('www.', '')}</span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </section>
+              
+              {/* Achievements section */}
+              <section id="achievements" className="content-section">
+                <div className="section-header">
+                  <div className="section-title">
+                    <div className="section-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                      </svg>
+                    </div>
+                    <span>Achievements</span>
+                  </div>
+                  <button 
+                    className="add-button"
+                    data-subsection={6}
+                    data-dataindex={-1}
+                    onClick={openSectionToEdit}
+                  >
+                    <Image src={addIcon} alt="Add" width={20} height={20} />
+                  </button>
+                </div>
+                
+                {userInfo?.achievements?.length === 0 ? (
+                  <p style={{ opacity: 0.7 }}>
+                    Share information about any honors or awards you&apos;ve
+                    received. 🏆
+                  </p>
+                ) : (
+                  <div className="timeline">
+                    {userInfo?.achievements?.map((achievement, index) => (
+                      <div className="timeline-item" key={index}>
+                        <div className="timeline-dot"></div>
+                        <div className="timeline-content">
+                          <h3 className="timeline-title">{achievement?.heading}</h3>
+                          
+                          <div className="timeline-description">
+                            {achievement?.description?.length > 0 && (
+                              <ul className={achievement?.description?.length > 150 ? 'dashboard_info_hide_text' : ''}>
                                 {achievement?.description
                                   .split('\n')
-                                  .map((sentence, index) => {
-                                    return (
-                                      <li key={index}>
-                                        {sentence} <br></br>
-                                      </li>
-                                    );
-                                  })}
+                                  .map((sentence, idx) => (
+                                    <li key={idx}>{sentence}</li>
+                                  ))}
                               </ul>
-                            ) : null}
-
-                            {achievement?.description.length > 150 && (
+                            )}
+                            
+                            {achievement?.description?.length > 150 && (
                               <button
                                 className="dashboard_info_truncate_btn"
                                 data-status="hide"
@@ -1589,92 +1359,97 @@ const ProfilePage = () => {
                               </button>
                             )}
                           </div>
-
-                          {index < userInfo?.achievements?.length - 1 ? (
-                            <hr></hr>
-                          ) : null}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div
-                    id="projects"
-                    className="dashboard_info dashboard_info_projects"
-                  >
-                    <h2>Projects</h2>
-                    {userInfo?.projects?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Add details about projects you have done in college,
-                        internship or at work.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={7}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="Add projects"
-                    />
-                    {userInfo?.projects?.map((project, index) => {
-                      return (
-                        <div key={index} className="dashboard_info_project">
-                          <div className="dashboard_info_actions">
-                            <Image
-                              data-subsection={7}
-                              data-dataindex={index}
-                              onClick={(e) => openSectionToEdit(e)}
-                              className="dashboard_info_section_action_edit"
-                              src={editIcon}
-                              alt="update project info"
-                            />
-                          </div>
-
-                          <div className="dashboard_info_project_header">
-                            <h3>{project?.heading}</h3>
-                            <span>
-                              {project?.document?.key?.length > 0 ? (
-                                <button
-                                  onClick={() => {
-                                    viewDocumentInNewTab(project.document.key);
-                                  }}
-                                  target="_blank"
-                                >
-                                  <Image src={documentLinkIcon} alt="" />
-                                </button>
-                              ) : null}
-                              {project?.link?.length > 0 ? (
-                                <Link href={project?.link} target="_blank">
-                                  <Image src={otherLinkIcon} alt="" />
-                                </Link>
-                              ) : null}
-                            </span>
-                          </div>
-
-                          <div className="dashboard_info_project_description">
-                            {project?.description?.length > 0 ? (
-                              <ul
-                                id="description_sentences"
-                                className={
-                                  project?.description?.length > 150
-                                    ? 'dashboard_info_hide_text'
-                                    : ''
-                                }
+                          
+                          <div className="skill-tags">
+                            {achievement?.document?.key?.length > 0 && (
+                              <span 
+                                className="skill-tag" 
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => viewDocumentInNewTab(achievement.document.key)}
                               >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                  <polyline points="14 2 14 8 20 8"></polyline>
+                                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                                  <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                View Document
+                              </span>
+                            )}
+                            
+                            {achievement?.link?.length > 0 && (
+                              <Link href={achievement?.link} target="_blank" className="skill-tag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                </svg>
+                                Link
+                              </Link>
+                            )}
+                          </div>
+                          
+                          <button
+                            className="item-edit-button"
+                            data-subsection={6}
+                            data-dataindex={index}
+                            onClick={openSectionToEdit}
+                          >
+                            <Image src={editIcon} alt="Edit" width={18} height={18} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+              
+              {/* Projects section */}
+              <section id="projects" className="content-section">
+                <div className="section-header">
+                  <div className="section-title">
+                    <div className="section-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                    </div>
+                    <span>Projects</span>
+                  </div>
+                  <button 
+                    className="add-button"
+                    data-subsection={7}
+                    data-dataindex={-1}
+                    onClick={openSectionToEdit}
+                  >
+                    <Image src={addIcon} alt="Add" width={20} height={20} />
+                  </button>
+                </div>
+                
+                {userInfo?.projects?.length === 0 ? (
+                  <p style={{ opacity: 0.7 }}>
+                    Add details about projects you have done in college,
+                    internship or at work.
+                  </p>
+                ) : (
+                  <div className="timeline">
+                    {userInfo?.projects?.map((project, index) => (
+                      <div className="timeline-item" key={index}>
+                        <div className="timeline-dot"></div>
+                        <div className="timeline-content">
+                          <h3 className="timeline-title">{project?.heading}</h3>
+                          
+                          <div className="timeline-description">
+                            {project?.description?.length > 0 && (
+                              <ul className={project?.description?.length > 150 ? 'dashboard_info_hide_text' : ''}>
                                 {project?.description
                                   .split('\n')
-                                  .map((sentence, index) => {
-                                    return (
-                                      <li key={index}>
-                                        {sentence} <br></br>
-                                      </li>
-                                    );
-                                  })}
+                                  .map((sentence, idx) => (
+                                    <li key={idx}>{sentence}</li>
+                                  ))}
                               </ul>
-                            ) : null}
-
-                            {project?.description.length > 150 && (
+                            )}
+                            
+                            {project?.description?.length > 150 && (
                               <button
                                 className="dashboard_info_truncate_btn"
                                 data-status="hide"
@@ -1684,47 +1459,63 @@ const ProfilePage = () => {
                               </button>
                             )}
                           </div>
-
-                          {project?.skills.length > 0 ? (
-                            <p>
-                              Skills: {'\t'}
-                              {project?.skills.map((skill, skillIdx) => {
-                                return (
-                                  <Fragment key={skillIdx}>
-                                    <span style={{ fontWeight: '500' }}>
-                                      {skill}
-                                    </span>
-
-                                    {skillIdx < project?.skills?.length - 1 ? (
-                                      <Image
-                                        className="dashboard_info_seperator"
-                                        src={seperatorIcon}
-                                        alt=""
-                                      />
-                                    ) : null}
-                                  </Fragment>
-                                );
-                              })}
-                            </p>
-                          ) : null}
-
-                          {index < userInfo?.projects?.length - 1 ? (
-                            <hr></hr>
-                          ) : null}
+                          
+                          <div className="skill-tags">
+                            {project?.document?.key?.length > 0 && (
+                              <span 
+                                className="skill-tag" 
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => viewDocumentInNewTab(project.document.key)}
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                  <polyline points="14 2 14 8 20 8"></polyline>
+                                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                                  <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                View Document
+                              </span>
+                            )}
+                            
+                            {project?.link?.length > 0 && (
+                              <Link href={project?.link} target="_blank" className="skill-tag">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                </svg>
+                                Link
+                              </Link>
+                            )}
+                            
+                            {project?.skills?.length > 0 && project?.skills.map((skill, skillIdx) => (
+                              <span className="skill-tag" key={skillIdx}>
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                          
+                          <button
+                            className="item-edit-button"
+                            data-subsection={7}
+                            data-dataindex={index}
+                            onClick={openSectionToEdit}
+                          >
+                            <Image src={editIcon} alt="Edit" width={18} height={18} />
+                          </button>
                         </div>
-                      );
-                    })}
+                      </div>
+                    ))}
                   </div>
-                </div>
-              }
+                )}
+              </section>
             </div>
-          </section>
-
-          {/* popup window for taking initial user input */}
-          {/* we will reuse the components in ProfileActions to edit
-            and add data  */}
-          {actionPopup === true && (
-            <ProfileActions
+          </div>
+        </div>
+        
+        {/* Action popup for editing content */}
+        {actionPopup && (
+          <ProfileActions
             setActionPopup={setActionPopup}
             setUserInfo={setUserInfo}
             subSection={subSection}
@@ -1732,13 +1523,86 @@ const ProfilePage = () => {
             isDataUpdated={isDataUpdated}
           />
         )}
-
-        {/* Toast container for notifications */}
-        <ToastContainer position="bottom-right" />
+        
+        {/* Notice period popup */}
+        {shouldDisplayMessage && (
+          <div className="joining_toggle_message_bg">
+            <div className="joining_toggle_message">
+              <h4>Please confirm your notice period</h4>
+              <div
+                className="closeFormOptionForPopup_joining_toggle"
+                onClick={handlePopupClose}
+              >
+                <Image src={crossIcon} alt="close" />
+              </div>
+              <div className="buttons_for_joining_toggle_message">
+                <button
+                  className={`joining_toggle_message_button ${selectedButton === 'immediateJoiner'
+                    ? 'joining_toggle_message_buttonselected'
+                    : ''}`}
+                  onClick={() => handleButtonClick('immediateJoiner')}
+                >
+                  Immediate Joiner
+                </button>
+                <button
+                  className={`joining_toggle_message_button ${selectedButton === 'noticePeriod'
+                    ? 'joining_toggle_message_buttonselected'
+                    : ''}`}
+                  onClick={() => handleButtonClick('noticePeriod')}
+                >
+                  Currently Serving Notice Period
+                </button>
+              </div>
+              {openDateForm && (
+                <div className="joining_toggle_message_dateForm">
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    minDate={new Date()}
+                    maxDate={maxDate}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Select a date"
+                  />
+                </div>
+              )}
+              <button
+                className="joining_toggle_message_update_button"
+                onClick={handleUpdateButtonClick}
+              >
+                Update
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {/* Signup confirmation popup */}
+        {signUpPopup && (
+          <SignUpFormPopup
+            user={user}
+            closePopUp={() => setSignUpPopup(false)}
+          />
+        )}
+        
+        {/* Signup form popup */}
+        {showSignUpForm && (
+          <SignUpFormPopup
+            user={user}
+            userData={userData}
+            closePopUp={() => setShowSignUpForm(false)}
+          />
+        )}
+        
+        {/* Upload profile dialog */}
+        {openProfileUploadDialog && (
+          <ProfileUploadDialog
+            setOpenFileUploadDialog={setOpenFileUploadDialog}
+          />
+        )}
+        
+        <ToastContainer />
       </div>
-    </div>
-  </ProfileContextProvider>
-);
+    </ProfileContextProvider>
+  );
 };
 
 export default ProfilePage;
