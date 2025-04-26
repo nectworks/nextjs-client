@@ -28,12 +28,11 @@ import hollowCircle from '@/public/Profile/speratorIcon.svg';
 import downloadResumeIconWhite from '@/public/ReferCandidates/downloadResumeIconWhite.svg';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { publicAxios } from '@/config/axiosInstance';
-import ProfileHeaderWrapper from '@/app/_components/ProfileHeaderWrapper/ProfileHeaderWrapper';
+import ProfileHeader from '../../../_components/Profile/ProfileHeader/ProfileHeader';
 import generalLinkIcon from '@/public/PublicProfile/generalLinkIcon.svg';
 import Link from 'next/link';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
-import devOngoingImg from '@/public/ReferCandidates/underDevImg.webp';
 import refreshIcon from '@/public/ReferCandidates/refreshIcon.svg';
 import viewDocumentInNewTab from '@/Utils/viewDocument';
 import usePrivateAxios from '@/Utils/usePrivateAxios';
@@ -47,61 +46,64 @@ let socket;
 const ReferCandidates = () => {
   const privateAxios = usePrivateAxios();
   const URL = process.env.NEXT_PUBLIC_SOCKET_URL;
+  
+  // Section visibility states
   const [showTalentPoolSection, setShowTalentPoolSection] = useState(true);
   const [showjobPostingSection, setShowjobPostingSection] = useState(false);
   const [goRight, setGoRight] = useState(false);
   const [goLeft, setGoLeft] = useState(false);
   const [talentPoolClicked, setTalentPoolClicked] = useState(false);
 
-  // state to switch between pending referrals and completed referrals.
+  // State to switch between pending referrals and completed referrals
   const [showReferredCandidates, setShowReferredCandidates] = useState(false);
   const [showPendingCandidates, setShowPendingCandidates] = useState(true);
 
-  // store all the referrals retreived so far, seperate them based on the status
+  // Store all the referrals retrieved so far, separate them based on the status
   const [pendingReferrals, setPendingReferrals] = useState([]);
   const [referredCandidates, setReferredCandidates] = useState([]);
 
-  // referrals to display in current page
+  // Referrals to display in current page
   const [currPageData, setCurrPageData] = useState([]);
 
   // Create a state variable for the search query
   const [searchQuery, setSearchQuery] = useState('');
 
-  // State to indicate a user is being searched.
+  // State to indicate a user is being searched
   const [searchValue, setSearchValue] = useState(false);
 
-  // use two seperate temperary states to avoid bugs while searching
+  // Use two separate temporary states to avoid bugs while searching
   const [tempRefsOne, setTempRefsOne] = useState([]); // store unreferred candidates
   const [tempRefsTwo, setTempRefsTwo] = useState([]); // store referred candidates
 
-  // number of documents present in each page.
-  const itemsPerPage = 5;
+  // Number of documents present in each page
+  const itemsPerPage = 4;
 
-  // keep track of the page number the user is currently viewing
+  // Keep track of the page number the user is currently viewing
   const [currentPage, setCurrentPage] = useState(
     parseInt(sessionStorage.getItem('currentPage')) || 1
   );
 
-  /*
-      These states indicate total number of pages available.
-      Initially it is -1, indicating we never retreived any details from db.
-      It could be initialised to 0, but we are using this property to check
-      if there are >= documents in db compared to client. If there are no
-      documents in db, the comparison doesn't work.
-    */
+  // States indicate total number of pages available
   const [pendingCount, setPendingCount] = useState(-1);
   const [referredCount, setReferredCount] = useState(-1);
 
-  // references to next page, maintained for 2 seperate sections
+  // References to next page, maintained for 2 separate sections
   const [pendingPageRef, setPendingPageRef] = useState(null);
   const [referredPageRef, setReferredPageRef] = useState(null);
 
-  // state do define the display property of the spinner
+  // State to define the display property of the spinner
   const [isLoading, setIsLoading] = useState(false);
 
-  // state to determine to open/close the report popup
+  // State to determine to open/close the report popup
   const [showReportPopup, setShowReportPopup] = useState(false);
 
+  // State for delete action visibility
+  const [showDeleteActions, setShowDeleteActions] = useState(false);
+  
+  // State for floating select all button on mobile
+  const [showFloatingSelectAll, setShowFloatingSelectAll] = useState(false);
+
+  // Toggle between talent pool and job section
   const toggleTalentPoolAndJobSection1 = () => {
     setShowTalentPoolSection(false);
     setShowjobPostingSection(true);
@@ -117,17 +119,17 @@ const ReferCandidates = () => {
     setGoRight(false);
   };
 
+  // Calculate pages count
   function getPagesCount(items) {
     return Math.ceil(items / itemsPerPage);
   }
 
-  // decrease the current page
+  // Pagination controls
   const prevPage = () => {
     if (currentPage <= 1) return;
     setCurrentPage((prevPage) => prevPage - 1);
   };
 
-  // increase the page number
   const nextPage = () => {
     const totalPages = getPagesCount(
       showPendingCandidates ? pendingCount : referredCount
@@ -136,6 +138,7 @@ const ReferCandidates = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
+  // Filter out duplicate referrals
   const filterUniqueReferrals = (referrals) => {
     const uniqueReferrals = [];
     const referralIds = new Set();
@@ -150,7 +153,7 @@ const ReferCandidates = () => {
     return uniqueReferrals;
   };
 
-  //function to get data about referrals received.
+  // Function to get data about referrals received
   const getReferralData = async () => {
     setIsLoading(true);
 
@@ -167,8 +170,7 @@ const ReferCandidates = () => {
       if (res.status === 200) {
         const { referralData, count, next } = res.data.data;
 
-        /* update the correct array of referrals,
-                segregate based on referral status */
+        // Update the correct array of referrals based on referral status
         if (showPendingCandidates) {
           setPendingReferrals((prevReferrals) => {
             const updatedReferrals = [...prevReferrals, ...referralData];
@@ -185,7 +187,7 @@ const ReferCandidates = () => {
           setReferredCount(count);
         }
 
-        // return the newly fetched referrals
+        // Return the newly fetched referrals
         return referralData;
       }
     } catch (err) {
@@ -195,65 +197,34 @@ const ReferCandidates = () => {
     }
   };
 
-  // this function is used to update data displayed
-  const updateCurrentPageItems = (retreivedReferrals, dbReferralCount) => {
+  // This function is used to update data displayed
+  const updateCurrentPageItems = (retrievedReferrals, dbReferralCount) => {
     const currPageStart = (currentPage - 1) * itemsPerPage;
     const currPageEnd = currPageStart + itemsPerPage;
 
-    /*
-          (1). currPageStart and currPageEnd are indices of the objects for
-            the current page. (ex., for page 1, currPageStart = 0, currPageEnd = 5).
-          (2). retreivedReferrals -> reflects the array of objects that's
-            already retreived from db and is stored in state.
-          (3). dbRefferalCount -> reflects total number of objects in database.
-
-          fetch the data if
-          (i). current page items is not fetched yet.
-          (ii). the no. of items retreived is less than required and
-              more items are available in db (i.e., in the current page,
-            no. of items < 5, but there are items in db)
-
-          logic:
-
-          ((retreivedReferrals.length - 1 < currPageEnd - 1) &&
-          (retreivedReferrals.length - 1 < dbReferralCount)) -> true when
-          (no. of objects retreived) < (no. of items required per page) and
-          (no. of objects retreived) < (no. of items in the db)
-
-          edge case:
-          (1). initial request won't occur because of the checks implemented above,
-          for initial request to occur, we have simple condition that surpasses the
-          above conditions. (dbReferralCount === -1) indicates that we never checked
-          the database and should do it at least once.
-          (2). (!searchValue): if we are searching, all the matching candidates
-          are already fetched and there's no need to fetch again.
-        */
-
+    // Fetch data if needed
     if (
       dbReferralCount === -1 ||
-      (retreivedReferrals.length - 1 < currPageEnd - 1 &&
-        retreivedReferrals.length < dbReferralCount &&
+      (retrievedReferrals.length - 1 < currPageEnd - 1 &&
+        retrievedReferrals.length < dbReferralCount &&
         !searchValue)
     ) {
       getReferralData();
     } else {
-      setCurrPageData(retreivedReferrals.slice(currPageStart, currPageEnd));
+      setCurrPageData(retrievedReferrals.slice(currPageStart, currPageEnd));
     }
   };
 
-  // function to refresh the section
+  // Function to refresh the section
   const [rotateAngle, setRotateAngle] = useState(0);
-  function refreshSection(e) {
-    // get the image and rotate it by 180 degree on click
-    const refreshIcon = document.querySelector('.referralsRefreshImage');
-    const newAngle = rotateAngle + 180;
-    refreshIcon.style.transform = `rotate(${newAngle}deg)`;
+  
+  function refreshSection() {
+    // Rotate refresh icon
+    const newAngle = rotateAngle + 360;
     setRotateAngle(newAngle);
 
-    /* By removing these states, the `useEffect` below this function is
-          triggered which in turn calls `updateCurrentPageItems` which refreshes
-          the section */
-    if (showPendingCandidates == true) {
+    // Reset states to trigger refresh
+    if (showPendingCandidates === true) {
       setPendingReferrals([]);
       setPendingCount(-1);
       setPendingPageRef(null);
@@ -267,9 +238,9 @@ const ReferCandidates = () => {
     setCurrPageData([]);
   }
 
-  // update the data on current page, when the following state changes
+  // Update data when states change
   useEffect(() => {
-    // set the currentPage value in session storage
+    // Set the currentPage value in session storage
     sessionStorage.setItem('currentPage', currentPage);
 
     if (showPendingCandidates) {
@@ -286,30 +257,32 @@ const ReferCandidates = () => {
     referredCandidates,
   ]);
 
+  // Socket connection for real-time updates
   useEffect(() => {
     socket = io(URL);
 
-    socket.on('new-referral', (data) => {
-      console.log(data);
+    socket.on('new-referral', () => {
+      // Reset states to fetch new data
       setPendingReferrals([]);
       setPendingCount(-1);
       setPendingPageRef(null);
       setCurrentPage(1);
       setCurrPageData([]);
     });
+    
     return () => {
       socket.disconnect();
     };
   }, []);
 
-  // function to get users based on the search input value
+  // Function to get users based on the search input value
   const searchUsers = async () => {
-    // if the search bar is empty, do not search users.
+    // If the search bar is empty, do not search users
     if (!searchQuery || searchQuery.length === 0) return;
 
     setIsLoading(true);
 
-    // send search seekers event
+    // Send search seekers event
     sendGAEvent('search_seekers');
 
     try {
@@ -321,15 +294,10 @@ const ReferCandidates = () => {
         const { searchedReferrals } = res.data;
 
         if (showPendingCandidates) {
-          // setTempRefs(pendingReferrals);
           setTempRefsOne(pendingReferrals);
-
-          /* update the pending referrals, and currPageData will be updated
-                    by useEffect */
           setPendingReferrals(searchedReferrals);
         } else {
           setTempRefsTwo(referredCandidates);
-          // setTempRefs(referredCandidates);
           setReferredCandidates(searchedReferrals);
         }
       }
@@ -340,13 +308,13 @@ const ReferCandidates = () => {
     }
   };
 
-  // when there are changes in search input, fetch the users based on it
+  // Handle search query changes
   useEffect(() => {
-    // if the search just contains empty characters, return
+    // If the search just contains empty characters, return
     if (searchQuery.trim().length === 0) {
       if (!searchValue) return;
 
-      // if the search query is empty, display the retreived referrals so far
+      // If the search query is empty, display the retrieved referrals so far
       setPendingReferrals(tempRefsOne);
       setTempRefsOne([]);
       setReferredCandidates(tempRefsTwo);
@@ -361,19 +329,10 @@ const ReferCandidates = () => {
 
   // Calculating Total Experience
   const allMonths = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
+  
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1;
@@ -410,38 +369,40 @@ const ReferCandidates = () => {
     return { countMonth, countYear };
   };
 
+  // State for user profile modal
   const [showUserProfileModal, setShowUserProfileModal] = useState(false);
   const [noUserId, setNoUserId] = useState(false);
 
-  // state to store selected seeker information
+  // State to store selected seeker information
   const [seekerInfo, setSeekerInfo] = useState({});
 
   const [isUserProfile, setIsUserProfile] = useState(false);
   const [userId, setUserId] = useState(null);
   const [publicProfileUsername, setPublicProfileUsername] = useState(null);
-  const [showCloseModalOfJobDetails, setShowCloseModalOfJobDetails] =
-    useState(false);
+  const [showCloseModalOfJobDetails, setShowCloseModalOfJobDetails] = useState(false);
 
-  // store the selected seeker's information
+  // Store the selected seeker's information
   const [selectedSeeker, setSelectedSeeker] = useState(null);
   const [selectedReferral, setSelectedReferral] = useState(null);
 
-  const showUserProfile = async (referral, idx) => {
-    // get the firstName, lastName and username of the seeker.
+  // Function to display user profile
+  const showUserProfile = async (referral) => {
+    // Get the firstName, lastName and username of the seeker
     const seeker = referral.userId ? referral.user : referral.unRegisteredUser;
     const { username } = seeker;
 
-    // update the selected seeker and referral information
+    // Update the selected seeker and referral information
     setSelectedSeeker(seeker);
     setSelectedReferral(referral);
 
     setShowCloseModalOfJobDetails(false);
     setShowUserProfileModal(true);
-    window.scroll({
-      top: 0, // Scroll to the top (y-coordinate = 0).
-      left: 0, // Scroll to the left edge (x-coordinate = 0).
+    
+    // Scroll to top
+    window.scrollTo({
+      top: 0,
+      left: 0,
       behavior: 'smooth',
-      // Use smooth scrolling animation for a nicer user experience.
     });
 
     if (!referral.userId) {
@@ -452,7 +413,7 @@ const ReferCandidates = () => {
     setNoUserId(false);
     setPublicProfileUsername(username);
 
-    // if the current user information is already fetched, return
+    // If the current user information is already fetched, return
     if (publicProfileUsername === username) return;
 
     try {
@@ -472,93 +433,101 @@ const ReferCandidates = () => {
 
   const publicProfileUrl = `/profile/${publicProfileUsername}`;
 
+  // Close profile modal
   const closeProfileModal = () => {
     setShowUserProfileModal(false);
   };
 
+  // Close job details modal
   const closeModalJobDetails = () => {
     setShowCloseModalOfJobDetails(false);
   };
 
+  // Handle job detail display
   const [jobsAskedForReferral, setJobsAskedForReferral] = useState(null);
+  
   const handlePersonSelect = (curr) => {
     setShowCloseModalOfJobDetails(true);
     setShowUserProfileModal(false);
     setJobsAskedForReferral(curr.jobsAskedForReferral);
-    window.scroll({
-      top: 0, // Scroll to the top (y-coordinate = 0).
-      left: 0, // Scroll to the left edge (x-coordinate = 0).
+    
+    // Scroll to top
+    window.scrollTo({
+      top: 0,
+      left: 0,
       behavior: 'smooth',
-      // Use smooth scrolling animation for a nicer user experience.
     });
   };
 
-  // Function to handle checkbox when one checkbox is clicked
+  // Selection states
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [showJobsSectionDeleteButton, setShowJobsSectionDeleteButton] =
-    useState(false);
-  const [selectedCheckItemsCheck, showSelectedCheckItemsCheck] =
-    useState(false);
+  const [showJobsSectionDeleteButton, setShowJobsSectionDeleteButton] = useState(false);
+  const [selectedCheckItemsCheck, showSelectedCheckItemsCheck] = useState(false);
 
-  // if the checkbox in header is clicked, handle it
+  // Handle main checkbox change
   const handleMainCheckboxChange = () => {
-    // show the delete button
+    // Show the delete button
     setShowJobsSectionDeleteButton(true);
+    setShowDeleteActions(true);
 
-    // select or unselect all the checkboxes
+    // Select or unselect all the checkboxes
     const toggleSelectAll = !selectAll;
     setSelectAll(toggleSelectAll);
+    
     if (!selectAll) {
       showSelectedCheckItemsCheck(false);
     }
 
-    // update selected items
+    // Update selected items
     setSelectedItems(
-      toggleSelectAll ? currPageData.map((curr, idx) => idx) : []
+      toggleSelectAll ? currPageData.map((_, idx) => idx) : []
     );
   };
 
-  // function to handle when checkbox is selected
+  // Handle individual checkbox change
   const handleCheckboxChange = (itemId) => {
-    // show the delete button
+    // Show the delete button
     setShowJobsSectionDeleteButton(true);
+    setShowDeleteActions(true);
+    setShowFloatingSelectAll(true);
 
-    /* update the selected items, if the item is already
-        present add the element, else remove it */
+    // Update selected items
     const updatedSelectedItems = selectedItems.includes(itemId)
       ? selectedItems.filter((id) => id !== itemId)
       : [...selectedItems, itemId];
 
     if (updatedSelectedItems.length === 0) {
       showSelectedCheckItemsCheck(false);
+      setShowDeleteActions(false);
+      setShowFloatingSelectAll(false);
     } else {
       showSelectedCheckItemsCheck(true);
     }
 
-    // if all the items are checked, then select the checkbox in header.
+    // If all items are checked, select the header checkbox
     setSelectAll(updatedSelectedItems.length === currPageData.length);
     setSelectedItems(updatedSelectedItems);
   };
 
-  // Function to remove referrals from frontend, without refreshing the page
+  // Function to remove referrals from frontend
   const removeReferralsInState = (itemsToDelete) => {
-    // update the correct array of referrals
+    // Update the correct array of referrals
     if (showPendingCandidates === true) {
       const updatedPendingReferrals = [...pendingReferrals];
 
-      // for each item to delete
+      // For each item to delete
       itemsToDelete.forEach((itemIdToDelete) => {
-        // find the id in fetched referrals and delete it if found
+        // Find the id in fetched referrals and delete it if found
         const findIdx = updatedPendingReferrals.findIndex(
           (referral) => referral._id === itemIdToDelete
         );
 
-        // if the element is found, delete the element from the array
+        // If the element is found, delete it from the array
         if (findIdx !== -1) updatedPendingReferrals.splice(findIdx, 1);
       });
 
-      // after filtering out the items, update state
+      // After filtering out the items, update state
       setPendingReferrals(updatedPendingReferrals);
       setPendingCount((prevVal) => prevVal - itemsToDelete.length);
     } else {
@@ -569,19 +538,19 @@ const ReferCandidates = () => {
           (referral) => referral._id === itemIdToDelete
         );
 
-        // if the element is found, delete the element from the array
+        // If the element is found, delete it from the array
         if (findIdx !== -1) updatedReferredCandidates.splice(findIdx, 1);
       });
 
-      // after filtering out the items, update state
+      // After filtering out the items, update state
       setReferredCandidates(updatedReferredCandidates);
       setReferredCount((prevVal) => prevVal - itemsToDelete.length);
     }
   };
 
-  // Function to delete the cards
+  // Function to delete selected referrals
   const handleDelete = async () => {
-    // in the current page data, get the id of selectedItems to delete
+    // Get the ids of selected items to delete
     const itemsToDelete = [];
     selectedItems.forEach((idx) => {
       itemsToDelete.push(currPageData[idx]?._id);
@@ -598,47 +567,60 @@ const ReferCandidates = () => {
       const res = await privateAxios.delete(`/refer/private?ids=${allIds}`);
 
       if (res.status === 200) {
-        // display a message to the user.
-        showBottomMessage('Sucessfully deleted referrals.');
+        // Display a message to the user
+        showBottomMessage('Successfully deleted referrals.');
 
-        // update the state
+        // Update the state
         removeReferralsInState(itemsToDelete);
       }
 
+      // Reset selection states
       setSelectAll(false);
       setSelectedItems([]);
       setShowJobsSectionDeleteButton(false);
+      setShowDeleteActions(false);
+      setShowFloatingSelectAll(false);
     } catch (error) {
-      showBottomMessage(`Couln't delete referrals.`);
+      showBottomMessage(`Couldn't delete referrals.`);
     }
   };
 
-  // function to make ui changes after a referral is reported
+  // Function to handle after a referral is reported
   const reportedReferral = () => {
-    // remove the reported referral from the state
+    // Remove the reported referral from the state
     removeReferralsInState([selectedReferral._id]);
 
-    // clear selected referral and selected user
+    // Clear selected referral and selected user
     setSelectedReferral(null);
     setSelectedSeeker(null);
     setShowCloseModalOfJobDetails(false);
     setShowUserProfileModal(false);
   };
 
-  // functions to switch between sections in talent pool
+  // Functions to switch between sections in talent pool
   const showReferredCandidatesPage = () => {
     setShowReferredCandidates(true);
     setShowPendingCandidates(false);
     setCurrentPage(1);
+    // Reset selection states
+    setSelectAll(false);
+    setSelectedItems([]);
+    setShowDeleteActions(false);
+    setShowFloatingSelectAll(false);
   };
 
   const showPendingCandidatesPage = () => {
     setShowReferredCandidates(false);
     setShowPendingCandidates(true);
     setCurrentPage(1);
+    // Reset selection states
+    setSelectAll(false);
+    setSelectedItems([]);
+    setShowDeleteActions(false);
+    setShowFloatingSelectAll(false);
   };
 
-  // function to update the status of the pending referral
+  // Function to update referral status
   const moveCardToPage = async (card) => {
     sendGAEvent('refer_candidate');
 
@@ -648,37 +630,36 @@ const ReferCandidates = () => {
     try {
       const res = await privateAxios.patch(`/refer/private/${card._id}`);
 
-      /* when the seeker was successfully referred, move the element */
+      // When the seeker was successfully referred, move the element
       if (res.status === 200) {
-        // update pending referrals and referred count
+        // Update pending referrals and referred count
         const updatedPendingRefCount = pendingCount - 1;
         setPendingCount(updatedPendingRefCount);
 
-        // the first referral from this user
+        // Update referred count
         if (referredCount === -1) {
           setReferredCount(1);
         } else {
           setReferredCount((prevCount) => prevCount + 1);
         }
 
-        // update pending referrals fetched so far
+        // Update pending referrals fetched so far
         const updatedPendingReferrals = pendingReferrals.filter((referral) => {
           return referral._id !== card._id;
         });
         setPendingReferrals(updatedPendingReferrals);
 
-        // add this referral to referred to candidate
+        // Add this referral to referred candidates
         setReferredCandidates([card, ...referredCandidates]);
       }
 
-      showBottomMessage(`Successfully referred, ${seekerName}`);
+      showBottomMessage(`Successfully referred ${seekerName}`);
     } catch (error) {
-      showBottomMessage(`Couldn't refer, ${seekerName}`);
+      showBottomMessage(`Couldn't refer ${seekerName}`);
     }
   };
 
-  /* function to calculate the number of days difference between dates
-    and return appropriate message */
+  // Calculate time difference in a human-readable format
   function calculateDaysDifference(inputDate) {
     // Parse the input date as a Date object
     const inputDateTime = new Date(inputDate);
@@ -697,10 +678,10 @@ const ReferCandidates = () => {
       inputDateTime.getDate()
     );
 
-    // calculate the time difference in milliseconds
+    // Calculate the time difference in milliseconds
     const timeDiff = utcDate1 - utcDate2;
 
-    // convert the difference from milliseconds to days
+    // Convert the difference from milliseconds to days
     const daysDifference = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
     let message = '';
@@ -730,36 +711,34 @@ const ReferCandidates = () => {
     return message;
   }
 
+  // Add event listener for enter key in search
   useEffect(() => {
-    // add event listener for enter key press while searching for users
-    const searchInputContainer = document.querySelector(
-      '.searchReferCandidatesInput'
-    );
-    const searchInput = searchInputContainer.querySelector('input');
-
-    // function to search users when enter key is pressed in input element.
-    function searchUsersOnEnter(e) {
+    const handleKeyPress = (e) => {
       if (e.key === 'Enter') {
         searchUsers();
       }
+    };
+
+    const searchInput = document.querySelector('.searchReferCandidatesInput input');
+    if (searchInput) {
+      searchInput.addEventListener('keydown', handleKeyPress);
     }
 
-    searchInput.addEventListener('keydown', searchUsersOnEnter);
-
     return () => {
-      searchInput.removeEventListener('keydown', searchUsersOnEnter);
+      if (searchInput) {
+        searchInput.removeEventListener('keydown', handleKeyPress);
+      }
     };
-  }, [searchUsers]);
+  }, [searchQuery]);
 
-  /* function to send 'view resume' event to google analytics
-      and view document in new tab */
+  // View resume function
   function sendViewResumeEvent(resume) {
-    // send event to Google analytics
+    // Send event to Google analytics
     sendGAEvent('view_resume');
     viewDocumentInNewTab(resume);
   }
 
-  // function to get key attribute of the resume in a selected referral
+  // Get resume key from selected referral
   function getResumeKey() {
     let resumeKey = null;
 
@@ -772,18 +751,18 @@ const ReferCandidates = () => {
     return resumeKey;
   }
 
-  // function to download seeker's resume.
+  // Download resume function
   async function downloadResume() {
     showBottomMessage(`Downloading resume...`, 10000);
 
-    // create file name according to the seeker's name
+    // Create file name according to the seeker's name
     const fileName =
       (selectedSeeker?.firstName || '') +
       '_' +
       (selectedSeeker?.lastName || '') +
       '_resume.pdf';
 
-    // get the key of the document.
+    // Get the key of the document
     const key = getResumeKey();
 
     try {
@@ -794,25 +773,14 @@ const ReferCandidates = () => {
     }
   }
 
-  // state to display information about ongoing development
-  const [showDevMessage, setShowDevMessage] = useState(false);
-
-  // when window is below certain width, display a popup message
-  function handleResize() {
-    if (window.innerWidth <= 1200) {
-      setShowDevMessage(true);
-    } else {
-      setShowDevMessage(false);
-    }
-  }
-
-  useEffect(() => {
-    handleResize();
-  }, []);
+  // Generate initials for avatar
+  const getInitials = (firstName, lastName) => {
+    return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase();
+  };
 
   return (
     <>
-      {/* This displays popup that allows users to submit report */}
+      {/* Report Popup */}
       {showReportPopup && (
         <ReportPopup
           setShowReportPopup={setShowReportPopup}
@@ -821,880 +789,532 @@ const ReferCandidates = () => {
         />
       )}
 
-      {showDevMessage && (
-        <div className="referCandidatesPopupContainer">
-          <div className="referCandidatesPopupWindow">
-            <div className="referCandidatesPopupHeader">
-              <h2>Hold on!</h2>
-              <button onClick={() => setShowDevMessage(false)}>Continue</button>
-            </div>
-
-            <p>
-              Your mobile dashboard is under construction. Watch this space for
-              the latest developments. Continue to our desktop site to
-              effortlessly refer candidates.
-            </p>
-
-            <Image src={devOngoingImg} alt="page under development" />
-          </div>
-        </div>
-      )}
-
-      <div
-        className={`dashboard_outer_container referCandidatesOuterContainer
-        ${showDevMessage ? 'blurBackgroundContainer' : ''}`}
-      >
-        {/* import dashboard menu */}
+      <div className="dashboard_outer_container">
+        {/* Dashboard Menu */}
         <DashboardMenu />
 
         <div className="referCandidatesContainer">
           <div className="profileHeaderReferCandidates">
-            <ProfileHeaderWrapper />
+            <ProfileHeader />
           </div>
 
           <div className="referCandidatesContent">
-            <div className="referralHeadingContent">
-              <h1>Your Dashboard</h1>
-              <p>
+            {/* Dashboard Header */}
+            <div className="dashboard-header">
+              <h1 className="dashboard-title">Your Dashboard</h1>
+              <p className="dashboard-subtitle">
                 Browse through candidates who have submitted requests for
                 referrals.
               </p>
 
-              {/* Title section of the page */}
-              {!showReferredCandidates && showTalentPoolSection && (
-                <p
-                  style={{
-                    marginBottom: '10px',
-                    marginTop: '-5px',
-                    color: '#6C6C6C',
-                  }}
-                >
-                  Dashboard/Pending Requests
-                </p>
-              )}
+              {/* Breadcrumb Navigation */}
+              <div className="breadcrumb-navigation">
+                {!showReferredCandidates && showTalentPoolSection && 'Dashboard/Pending Requests'}
+                {!showReferredCandidates && showjobPostingSection && 'Dashboard/Job Posting'}
+                {showReferredCandidates && 'Dashboard/Referred Candidates'}
+                <span className="beta-badge">BETA</span>
+              </div>
+            </div>
 
-              {!showReferredCandidates && showjobPostingSection && (
-                <p
-                  style={{
-                    marginBottom: '10px',
-                    marginTop: '-5px',
-                    color: '#6C6C6C',
-                  }}
-                >
-                  Dashboard/Job Posting
-                </p>
-              )}
+            {/* Job Details Modal */}
+            {showCloseModalOfJobDetails && (
+              <div className="job-details-modal">
+                <div className="job-details-header">
+                  <div className="job-details-title">Job Details</div>
+                  <button className="close-details-button" onClick={closeModalJobDetails}>
+                    <Image src={crossIcon} alt="Close job details" width={20} height={20} />
+                  </button>
+                </div>
 
-              {showReferredCandidates && (
-                <p
-                  style={{
-                    marginBottom: '10px',
-                    marginTop: '-5px',
-                    color: '#6C6C6C',
-                  }}
-                >
-                  Dashboard/Referred Candidates
-                </p>
-              )}
-
-              {showCloseModalOfJobDetails ? (
-                <div
-                  className={`jobDetailsTemplate ${
-                    showCloseModalOfJobDetails ? 'addPopupDelay' : ''
-                  }`}
-                >
-                  <div className="jobDetailsTemplateDesc">
-                    <p style={{ fontWeight: 'bold' }}>Job Details</p>
-                    <button onClick={closeModalJobDetails}>
-                      <Image src={crossIcon} alt="close job details" />
-                    </button>
+                <div className="job-details-content">
+                  <div className="job-details-grid">
+                    {jobsAskedForReferral.jobDetails.map((ele, idx) => (
+                      <div className="job-detail-item" key={idx}>
+                        <Image
+                          src={idx % 2 === 0 ? rightArrowDashed : addFilesIcon}
+                          alt={idx % 2 === 0 ? "Job ID" : "Job URL"}
+                          width={16}
+                          height={16}
+                        />
+                        <span className="job-detail-label">
+                          {idx % 2 === 0 ? "Job ID:" : "Job URL:"}
+                        </span>
+                        <span className="job-detail-value">
+                          {idx % 2 === 0 ? 
+                            (ele.jobId ? ele.jobId : '-') :
+                            (ele.jobUrl ? 
+                              <a href={ele.jobUrl} target="_blank" rel="noreferrer">
+                                {ele.jobUrl.length > 20 ? ele.jobUrl.slice(0, 20) + '...' : ele.jobUrl}
+                              </a> : '-')
+                          }
+                        </span>
+                      </div>
+                    ))}
                   </div>
 
-                  <div className="jobDetailsHorizontalLine">&nbsp;</div>
-
-                  {/* Display job details, which was asked for referrals */}
-                  <div className="jobDetailsDesc">
-                    <div className="jobDetailsHeading">
-                      <p className="jobID">Job ID</p>
-                      <p className="jobUrl">Job URL</p>
-                    </div>
-
-                    <div className="jobDetailsContainer">
-                      {jobsAskedForReferral.jobDetails.map((ele, idx) => {
-                        return (
-                          <div className="jobDetailsContent" key={idx}>
-                            <div className="jobDetailsContent_first">
-                              <Image
-                                className="firstImage"
-                                src={rightArrowDashed}
-                                alt="job id"
-                              />
-                            </div>
-                            <div className="jobDetailsContent_second">
-                              <p>
-                                {ele.jobId
-                                  ? ele.jobId.length > 10
-                                    ? ele.jobId.slice(0, 10) + '...'
-                                    : ele.jobId
-                                  : '-'}
-                              </p>
-                            </div>
-                            <div className="jobDetailsContent_third">
-                              <Image
-                                className="secondImage"
-                                src={addFilesIcon}
-                                alt="job url"
-                              />
-                            </div>
-                            <div className="jobDetailsContent_fourth">
-                              {ele.jobUrl ? (
-                                <a
-                                  href={ele.jobUrl}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  {ele.jobUrl.length > 20
-                                    ? ele.jobUrl.slice(0, 20) + '...'
-                                    : ele.jobUrl}
-                                </a>
-                              ) : (
-                                '-'
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                      <div className="jobDetailsContent_fifth">
-                        <span>Message</span>
-                        <p>{jobsAskedForReferral.message}</p>
-                      </div>
+                  <div className="job-message-section">
+                    <div className="job-message-label">Message</div>
+                    <div className="job-message-content">
+                      {jobsAskedForReferral.message}
                     </div>
                   </div>
                 </div>
-              ) : null}
+              </div>
+            )}
 
-              {showUserProfileModal && (
-                <div
-                  className={`showProfileSection ${
-                    showUserProfileModal ? 'addPopupDelay' : ''
-                  }`}
-                >
-                  <div className="closeProfileSection">
-                    {!noUserId && (
-                      <Link href={publicProfileUrl} target="_blank">
-                        <p
-                          style={{
-                            color: '#0057B1',
-                            fontWeight: 'bold',
-                            fontSize: '1rem',
+            {/* User Profile Modal */}
+            {showUserProfileModal && (
+              <div className="profile-modal">
+                <div className="profile-modal-content">
+                  <div className="profile-header">
+                    <div className="profile-header-title">
+                      Candidate Profile
+                    </div>
+                    <div className="profile-header-actions">
+                      {!noUserId && (
+                        <Link href={publicProfileUrl} target="_blank" className="open-profile-link">
+                          Open profile in new tab
+                        </Link>
+                      )}
+                      <button className="close-profile-button" onClick={closeProfileModal}>
+                        <Image src={crossIcon} alt="Close profile" width={20} height={20} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="profile-body">
+                    <div className="profile-main">
+                      <div className="profile-name">
+                        {selectedSeeker?.firstName || ''} {selectedSeeker?.lastName || ''}
+                      </div>
+
+                      {!noUserId && (
+                        <>
+                          <div className="profile-experience">
+                            Total work experience:&nbsp;
+                            {calcTotalExperience().countYear > 0 && 
+                              `${calcTotalExperience().countYear}y `}
+                            {calcTotalExperience().countMonth}mos
+                          </div>
+
+                          {isUserProfile && seekerInfo?.experience && (
+                            <div className="profile-company">
+                              {seekerInfo.experience[0]?.companyName}
+                            </div>
+                          )}
+
+                          {isUserProfile && seekerInfo?.education && (
+                            <div className="profile-school">
+                              {seekerInfo.education[0]?.school}
+                            </div>
+                          )}
+                        </>
+                      )}
+
+                      <div className="profile-action-buttons">
+                        <a href={`mailto:${selectedSeeker?.email}`}>
+                          <button className="email-button">
+                            Say Hi!
+                            <Image src={emailIcon} alt="Email" width={20} height={20} />
+                          </button>
+                        </a>
+                      </div>
+
+                      {!noUserId && (
+                        <>
+                          <div className="profile-section">
+                            <div className="profile-section-title">About</div>
+                            <div className="profile-about">
+                              {seekerInfo?.about?.bio}
+                            </div>
+                          </div>
+
+                          <div className="profile-section">
+                            <div className="profile-section-title">Education</div>
+                            {seekerInfo?.education?.slice(0, 2).map((edu, idx) => (
+                              <div className="education-item" key={idx}>
+                                <div className="item-title">{edu.school}</div>
+                                <div className="item-subtitle">{edu.fieldOfStudy}</div>
+                                <div className="item-date">
+                                  {edu.startYear} - {edu.endYear}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="profile-section">
+                            <div className="profile-section-title">Experience</div>
+                            {seekerInfo?.experience?.slice(0, 2).map((exp, idx) => (
+                              <div className="experience-item" key={idx}>
+                                <div className="item-title">{exp.jobTitle}</div>
+                                <div className="item-subtitle">
+                                  {exp.companyName}
+                                  <Image
+                                    src={hollowCircle}
+                                    alt="Separator"
+                                    width={12}
+                                    height={12}
+                                    style={{ margin: '0 4px', display: 'inline' }}
+                                  />
+                                  {exp.employmentType}
+                                </div>
+                                <div className="item-date">
+                                  {exp.startMonth} {exp.startYear} -&nbsp;
+                                  {!exp.endMonth ? 'Present' : `${exp.endMonth} ${exp.endYear || ''}`}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+
+                    <div className="profile-sidebar">
+                      {!noUserId && (
+                        <>
+                          <div className="sidebar-card">
+                            <div className="sidebar-card-title">Skills</div>
+                            <div className="skills-list">
+                              {seekerInfo?.skills?.map((skill, idx) => (
+                                <div className="skill-tag" key={idx}>
+                                  {skill}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="sidebar-card">
+                            <div className="sidebar-card-title">Social Links</div>
+                            <div className="social-links">
+                              {seekerInfo?.socials?.map((social, idx) => (
+                                <a href={social} key={idx} className="social-link" target="_blank" rel="noreferrer">
+                                  <Image
+                                    src={social.includes('linkedin.com') ? linkedInIcon : generalLinkIcon}
+                                    alt="Social link"
+                                    width={20}
+                                    height={20}
+                                  />
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        </>
+                      )}
+
+                      <div className="resume-actions">
+                        <button
+                          className="view-resume-button"
+                          onClick={() => {
+                            const resumeKey = getResumeKey();
+                            if (resumeKey) {
+                              sendViewResumeEvent(resumeKey);
+                            } else {
+                              showBottomMessage("Couldn't find resume of the seeker");
+                            }
                           }}
                         >
-                          Open profile in new tab
-                        </p>
-                      </Link>
-                    )}
-                    <button onClick={closeProfileModal}>
-                      <Image
-                        src={crossIcon}
-                        alt="close user information window"
-                      />
-                    </button>
-                  </div>
-
-                  {!noUserId && (
-                    <div className="showProfileDetails">
-                      <div className="leftProfileContent">
-                        <div className="nameCompany">
-                          <h1>
-                            {selectedSeeker?.firstName || ''}
-                            {' ' + selectedSeeker?.lastName || ''}
-                          </h1>
-                          <p style={{ color: '#898989' }}>
-                            Total work experience:&nbsp;
-                            {calcTotalExperience().countYear === 0
-                              ? null
-                              : calcTotalExperience().countYear + 'y '}
-                            {calcTotalExperience().countMonth}mos
-                          </p>
-
-                          <p>
-                            {isUserProfile &&
-                              seekerInfo?.experience &&
-                              seekerInfo?.experience[0]?.companyName}
-                          </p>
-
-                          <p>
-                            {isUserProfile &&
-                              seekerInfo?.education &&
-                              seekerInfo?.education[0]?.school}
-                          </p>
-
-                          <div className="sendEmailAndShareProfileButtons">
-                            <a href={`mailto:${selectedSeeker?.email}`}>
-                              <button className="emailButton">
-                                <p>Say Hi!</p>
-                                <Image src={emailIcon} alt="email icon" />
-                              </button>
-                            </a>
-                          </div>
-                        </div>
-
-                        {/* Display selected seeker's info */}
-                        <div className="profileAboutSection">
-                          <p style={{ color: '#0057B1', fontWeight: 'bold' }}>
-                            About
-                          </p>
-                          <pre>{seekerInfo?.about?.bio}</pre>
-                        </div>
-
-                        <div className="profileEducationSection">
-                          <p
-                            style={{
-                              color: '#0057B1',
-                              fontWeight: 'bold',
-                            }}
-                          >
-                            Education
-                          </p>
-                          {seekerInfo?.education &&
-                            seekerInfo?.education.map((ele, idx) => {
-                              if (idx < 2) {
-                                return (
-                                  <div
-                                    className="profileEducationDetails"
-                                    key={idx}
-                                  >
-                                    <p className="profileEducationDetailsCollegeName">
-                                      {ele.school}
-                                    </p>
-                                    <p>{ele.fieldOfStudy}</p>
-                                    <span className="profileEducationDetailsDuration">
-                                      {ele.startYear} - {ele.endYear}
-                                    </span>
-                                  </div>
-                                );
-                              }
-                              return null;
-                            })}
-                        </div>
-
-                        <div className="profileExperienceSection">
-                          <p
-                            style={{
-                              color: '#0057B1',
-                              fontWeight: 'bold',
-                            }}
-                          >
-                            Experience
-                          </p>
-                          {seekerInfo?.experience &&
-                            seekerInfo?.experience.map((ele, idx) => {
-                              if (idx < 2) {
-                                return (
-                                  <div
-                                    className="profileEducationDetails"
-                                    key={idx}
-                                  >
-                                    <p className="profileEducationDetailsCollegeName">
-                                      {ele.jobTitle}
-                                    </p>
-                                    <p>
-                                      {ele.companyName}
-                                      <Image
-                                        style={{ margin: '3px 4px' }}
-                                        src={hollowCircle}
-                                        alt="company name"
-                                      />
-                                      {ele.employmentType}
-                                    </p>
-                                    <span className="profileEducationDetailsDuration">
-                                      {ele.startMonth}&nbsp;
-                                      {ele.startYear} -&nbsp;
-                                      {!ele.endMonth ? 'Present' : ele.endMonth}
-                                      &nbsp;
-                                      {ele.endYear ? ele.endYear : null}
-                                    </span>
-                                  </div>
-                                );
-                              }
-                              return null;
-                            })}
-                        </div>
+                          View Resume
+                        </button>
+                        <button className="download-resume-button" onClick={downloadResume}>
+                          <Image src={downloadResumeIconWhite} alt="Download resume" width={20} height={20} />
+                        </button>
                       </div>
-                      <div className="rightProfileContent">
-                        <div className="rightProfileMergedSections">
-                          <div className="profileSkillsSection">
-                            <p style={{ fontWeight: 'bold' }}>Skills</p>
-                            {seekerInfo?.skills &&
-                              seekerInfo?.skills.map((ele, idx) => {
-                                return (
-                                  <div
-                                    className="profileSkillsDetails"
-                                    key={idx}
-                                  >
-                                    <p>{ele}</p>
-                                  </div>
-                                );
-                              })}
-                          </div>
-                          <div className="profileSocialLinks">
-                            <p style={{ fontWeight: 'bold' }}>Social Links</p>
-                            <div className="socialLinksDetails">
-                              {seekerInfo?.socials &&
-                                seekerInfo?.socials.map((ele, idx) => {
-                                  return ele.includes('linkedin.com') ? (
-                                    <a href={ele} key={idx}>
-                                      <Image
-                                        src={linkedInIcon}
-                                        alt="linked in link"
-                                      />
-                                    </a>
-                                  ) : (
-                                    <a href={ele} key={idx}>
-                                      <Image
-                                        src={generalLinkIcon}
-                                        alt="other social link"
-                                      />
-                                    </a>
-                                  );
-                                })}
-                            </div>
-                          </div>
-                          <div className="viewAndDownloadResume">
-                            <button
-                              className="viewResume"
-                              onClick={() => {
-                                const resumeKey = getResumeKey();
 
-                                if (resumeKey) {
-                                  sendViewResumeEvent(resumeKey);
-                                } else {
-                                  showBottomMessage(
-                                    "Couldn't find resume of the seeker"
-                                  );
-                                }
-                              }}
-                            >
-                              View Resume
-                            </button>
-                            <div className="tooltip-container ">
-                              <button
-                                onClick={downloadResume}
-                                className="downloadResume tooltip-text"
-                              >
-                                <Image
-                                  src={downloadResumeIconWhite}
-                                  alt="download resume"
-                                />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="reportButton">
-                          <p onClick={() => setShowReportPopup(true)}>Report</p>
+                      <div className="report-button">
+                        <div className="report-link" onClick={() => setShowReportPopup(true)}>
+                          Report
                         </div>
                       </div>
                     </div>
-                  )}
-
-                  {noUserId && (
-                    <div className="showProfileDetailsWhenNothingFilled">
-                      <div className="nameCompanyWhenNothingFilled">
-                        <h1>
-                          {(selectedSeeker?.firstName || '') +
-                            ' ' +
-                            (selectedSeeker?.lastName || '')}
-                        </h1>
-
-                        <div className="sendEmailAndShareProfileButtonsWhenNothingFilled">
-                          <a href={`mailto:${selectedSeeker?.email}`}>
-                            <button className="emailButton">
-                              <p>Say Hi!</p>
-                              <Image src={emailIcon} alt="email icon" />
-                            </button>
-                          </a>
-                          <div className="viewAndDownloadResumeWhenNothingFilled">
-                            <button
-                              className="viewResume"
-                              onClick={() => {
-                                const resumeKey = getResumeKey();
-
-                                if (resumeKey) {
-                                  sendViewResumeEvent(resumeKey);
-                                } else {
-                                  showBottomMessage(
-                                    "Couldn't find resume of the seeker"
-                                  );
-                                }
-                              }}
-                            >
-                              View Resume
-                            </button>
-                            <div className="tooltip-container ">
-                              <button
-                                onClick={downloadResume}
-                                className="downloadResume tooltip-text"
-                              >
-                                <Image
-                                  src={downloadResumeIconWhite}
-                                  alt="download resume"
-                                />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="reportButton">
-                        <p onClick={() => setShowReportPopup(true)}>Report</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Display the following options, if the user
-                is in talent pool section */}
-              {showTalentPoolSection && (
-                <div className="referredCandidateButtonAndInput">
-                  <button
-                    className={`${
-                      showPendingCandidates ? 'makeBgBlueOfButton' : ''
-                    }`}
-                    onClick={showPendingCandidatesPage}
-                  >
-                    Pending Requests
-                  </button>
-
-                  <button
-                    className={`${
-                      showReferredCandidates ? 'makeBgBlueOfButton' : ''
-                    }`}
-                    onClick={showReferredCandidatesPage}
-                  >
-                    Referred Candidates
-                  </button>
-
-                  <div className="searchReferCandidatesInput">
-                    <input
-                      type="text"
-                      placeholder="Search by name"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <Image
-                      src={searchIcon}
-                      alt="search candidates"
-                      onClick={searchUsers}
-                    />
-                  </div>
-
-                  <button
-                    className="referralsRefreshButton"
-                    onClick={refreshSection}
-                  >
-                    <Image
-                      className="referralsRefreshImage"
-                      style={{
-                        width: '20px',
-                        transition: 'transform 0.5s linear',
-                      }}
-                      src={refreshIcon}
-                      alt="refresh referrals"
-                    />
-                  </button>
-                </div>
-              )}
-
-              {/* Display these options when user is in job postings section */}
-              {showjobPostingSection && (
-                <div className="referredCandidateButtonAndInput jobPostingButtonAndInput">
-                  <button className="addJobButton">
-                    Add a job
-                    <Image src={plusIcon} alt="add a job" />
-                  </button>
-
-                  <div className="searchReferCandidatesInput">
-                    <Image src={searchIcon} alt="search for candidates" />
-                    <input type="text" placeholder="Search by job" />
-                  </div>
-                </div>
-              )}
-              <button className="betaIcon">BETA</button>
-            </div>
-
-            <div className={`talentPoolAndJobPostingSection`}>
-              <div
-                className={`talentPoolSection ${
-                  goRight && !goLeft ? 'rightTransform' : ''
-                }`}
-              >
-                <button className="jobPostingPara">
-                  <p>Job Postings</p>
-                </button>
-                <button className="switchTalentPoolJobButton">
-                  <Image
-                    src={switchJobPostreferralButton}
-                    alt="switch from talent pool"
-                  />
-                </button>
-                {/*
-                <div className='preferencesTable'>
-                    <p>
-                    Add preferences for specific roles to receive refer requests
-                    </p>
-                    <button>Add Preferences</button>
-                </div> */}
-                <div className="candidateListForReferRequest">
-                  <div className="candidateListForReferContent">
-                    <div className="candidateListForReferContentFields">
-                      <div className="nameWithCheckbox">
-                        <div
-                          className={`${
-                            showJobsSectionDeleteButton
-                              ? 'visibleJobs'
-                              : 'hideJobs'
-                          }
-                                                deleteIconForJobs ${
-                                                  selectAll ||
-                                                  selectedCheckItemsCheck
-                                                    ? 'deleteIconGoLeft'
-                                                    : 'deleteIconGoRight'
-                                                }`}
-                        >
-                          <button onClick={handleDelete}>
-                            <Image
-                              src={deleteIcon}
-                              alt="delete referral requests"
-                            />
-                          </button>
-                        </div>
-                        <input
-                          type="checkbox"
-                          checked={selectAll}
-                          onChange={handleMainCheckboxChange}
-                        />
-                        <p>Name</p>
-                      </div>
-                      <p>Job Details</p>
-                      <p>Resume</p>
-                      <p style={{ marginRight: '35px' }}>Tag Candidate</p>
-                    </div>
-
-                    {isLoading && (
-                      <ClipLoader className="fetch_referral_loader" size={50} />
-                    )}
-
-                    {/* Display referrals that are still pending */}
-                    {!showReferredCandidates &&
-                      !isLoading &&
-                      currPageData.map((referral, idx) => {
-                        return (
-                          <div
-                            className="candidateListForReferContentFieldsValues"
-                            key={referral._id}
-                          >
-                            <div className="nameWithCheckboxAndReferralAskedTime">
-                              <input
-                                type="checkbox"
-                                checked={selectedItems.includes(idx)}
-                                onChange={() => handleCheckboxChange(idx)}
-                              />
-                              <div className="nameWithAskedReferralTime">
-                                <button
-                                  onClick={() => showUserProfile(referral, idx)}
-                                  style={{
-                                    border: 'none',
-                                    background: 'none',
-                                    color: '#0057B1',
-                                    fontSize: '1rem',
-                                    textAlign: 'left',
-                                  }}
-                                >
-                                  {/* display the firstName and lastName of the seeker */}
-                                  {referral.userId
-                                    ? `${referral.user?.firstName} ${referral.user?.lastName}`
-                                    : `${referral.unRegisteredUser?.firstName} ${referral.unRegisteredUser?.lastName}`}
-                                </button>
-
-                                <span>
-                                  {calculateDaysDifference(
-                                    referral.referralAskedDate
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-
-                            <div className="jobListButton">
-                              <button
-                                onClick={() => handlePersonSelect(referral)}
-                              >
-                                <Image
-                                  className="jobListIcon"
-                                  src={jobListIcon}
-                                  alt="job list"
-                                />
-                              </button>
-                            </div>
-                            <div className="downloadResumeButton">
-                              <button
-                                onClick={() => {
-                                  let resumeKey = null;
-
-                                  if (referral.userId) {
-                                    resumeKey = referral.user.resume?.key;
-                                  } else {
-                                    resumeKey =
-                                      referral.unRegisteredUser.resume?.key;
-                                  }
-
-                                  if (resumeKey) {
-                                    sendViewResumeEvent(resumeKey);
-                                  } else {
-                                    showBottomMessage(
-                                      "Couldn't find resume of the seeker"
-                                    );
-                                  }
-                                }}
-                              >
-                                <Image
-                                  className="downloadResumeIcon"
-                                  src={downloadResumeIcon}
-                                  alt="download resume"
-                                />
-                              </button>
-                            </div>
-                            <div className="referredButton">
-                              <button onClick={() => moveCardToPage(referral)}>
-                                Referred
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
-
-                    {/* if there are no referrals found, display this message */}
-                    {!showReferredCandidates &&
-                      !searchValue &&
-                      !isLoading &&
-                      pendingReferrals.length == 0 && (
-                        <div className="notReferredMessage">
-                          <p>
-                            While there are no referrals as of now, continue
-                            sharing your profile within your network to gather
-                            all your potential referrals in one place here.
-                          </p>
-                        </div>
-                      )}
-
-                    {/* if the user searches and no user was found, display this message */}
-                    {searchValue && !isLoading && currPageData.length == 0 && (
-                      <div className="notReferredMessage">
-                        <p>No user found.</p>
-                      </div>
-                    )}
-
-                    {/* Display already referred candidates */}
-                    {showReferredCandidates &&
-                      !isLoading &&
-                      currPageData.map((referral, idx) => {
-                        return (
-                          <div
-                            key={idx}
-                            className="candidateListForReferContentFieldsValues"
-                          >
-                            <div className="nameWithCheckboxAndReferralAskedTime">
-                              <input
-                                type="checkbox"
-                                checked={selectedItems.includes(idx)}
-                                onChange={() => handleCheckboxChange(idx)}
-                              />
-                              <div className="nameWithAskedReferralTime">
-                                <button
-                                  onClick={() => showUserProfile(referral, idx)}
-                                  style={{
-                                    border: 'none',
-                                    background: 'none',
-                                    color: '#0057B1',
-                                    fontSize: '1rem',
-                                  }}
-                                >
-                                  {referral.userId
-                                    ? `${referral.user?.firstName} ${referral.user?.lastName}`
-                                    : `${referral.unRegisteredUser?.firstName} ${referral.unRegisteredUser?.lastName}`}
-                                </button>
-                                <span>
-                                  {calculateDaysDifference(
-                                    referral.referralAskedDate
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-
-                            <div className="jobListButton">
-                              <button
-                                onClick={() => handlePersonSelect(referral)}
-                              >
-                                <Image
-                                  className="jobListIconReferred"
-                                  src={jobListIcon}
-                                  alt="job list"
-                                />
-                              </button>
-                            </div>
-
-                            <div className="downloadResumeButton">
-                              <button
-                                style={{ background: 'none' }}
-                                onClick={() => {
-                                  let resumeKey = null;
-
-                                  if (referral.userId) {
-                                    resumeKey = referral.user.resume?.key;
-                                  } else {
-                                    resumeKey =
-                                      referral.unRegisteredUser.resume?.key;
-                                  }
-
-                                  if (resumeKey) {
-                                    sendViewResumeEvent(resumeKey);
-                                  } else {
-                                    showBottomMessage(
-                                      "Couldn't find resume of the seeker"
-                                    );
-                                  }
-                                }}
-                              >
-                                <Image
-                                  style={{ marginLeft: '2px' }}
-                                  src={downloadResumeIcon}
-                                  alt="download resume"
-                                />
-                              </button>
-                            </div>
-                            <div className="referredButtonGreenTick">
-                              <button>
-                                <Image
-                                  src={greenTickIcon}
-                                  alt="referred candidate"
-                                />
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
-
-                    {/* Display this message when there are no
-                      referred candidates yet */}
-                    {showReferredCandidates &&
-                      !isLoading &&
-                      referredCandidates.length == 0 &&
-                      !searchValue && (
-                        <div className="notReferredMessage">
-                          <p>
-                            Great start! You haven&apos;t referred anyone yet,
-                            but there are plenty of opportunities to share and
-                            invite your friends and colleagues. Every referral
-                            counts, and your support can make a big difference.
-                          </p>
-                        </div>
-                      )}
                   </div>
                 </div>
               </div>
+            )}
 
-              {/* Switch between job postings and talent pool */}
-              <div
-                className={` ${
-                  talentPoolClicked ? 'showJobPosting' : 'hideJobPosting'
-                } jobPostingSection ${
-                  goLeft && !goRight ? 'leftTransform' : ''
-                }`}
-              >
-                <div className="preferencesTable">
-                  <p>Post a job to receive referral requests</p>
-                  <button>Job Postings</button>
-                </div>
-
-                <button
-                  onClick={toggleTalentPoolAndJobSection2}
-                  className="switchTalentPoolJobButton2"
-                >
-                  <Image
-                    src={switchJobPostreferralButton}
-                    alt="switch to job section"
-                  />
-                </button>
-                <button
-                  onClick={toggleTalentPoolAndJobSection2}
-                  className="jobPostingPara"
-                >
-                  <p>Talent Pool</p>
-                </button>
-              </div>
-            </div>
-
-            {/* Display previous and next buttons */}
+            {/* Tab Navigation for Talent Pool */}
             {showTalentPoolSection && (
-              <div className="paginationSection">
-                <div className="paginationSectionContent">
-                  <button
-                    style={{
-                      opacity: currentPage > 1 ? 1 : 0,
-                    }}
-                    onClick={prevPage}
-                  >
-                    <Image src={leftArrow} alt="left arrow" />
-                  </button>
+              <div className="referral-tabs">
+                <button
+                  className={`tab-button ${showPendingCandidates ? 'active' : ''}`}
+                  onClick={showPendingCandidatesPage}
+                >
+                  Pending Requests
+                </button>
+                <button
+                  className={`tab-button ${showReferredCandidates ? 'active' : ''}`}
+                  onClick={showReferredCandidatesPage}
+                >
+                  Referred Candidates
+                </button>
+              </div>
+            )}
 
-                  {/* Display the page number when there are more
-                    than 0 pages */}
-                  {currentPage > 0 && (
-                    <p>
-                      {currentPage}/
-                      {getPagesCount(
-                        showPendingCandidates ? pendingCount : referredCount
-                      )}
-                    </p>
-                  )}
-
-                  {/* compare the current page to total pages available and hide
-                    this button based on that
-
-                    if (showPendingCandidates) {
-                      if (totalAvailablepages === currentPage) hide the button
-                      else display the button
-                    }
-                    if (showReferredCandidates) {
-                      if (totalAvailablepages === currentPage) hide the button
-                      else display the button
-                    }
-                  */}
-                  <button
-                    onClick={nextPage}
-                    style={{
-                      opacity:
-                        showPendingCandidates &&
-                        getPagesCount(pendingCount) !== currentPage
-                          ? 1
-                          : 0,
-                    }}
-                  >
-                    <Image src={rightArrow} alt="right arrow" />
-                  </button>
-                  <button
-                    onClick={nextPage}
-                    style={{
-                      opacity:
-                        showReferredCandidates &&
-                        getPagesCount(referredCount) !== currentPage
-                          ? 1
-                          : 0,
-                    }}
-                  >
-                    <Image src={rightArrow} alt="right arrow" />
-                  </button>
+            {/* Action Bar */}
+            <div className="action-bar">
+              <div className="search-and-refresh">
+                <div className="searchReferCandidatesInput">
+                  <input
+                    type="text"
+                    placeholder="Search by name"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <Image
+                    src={searchIcon}
+                    alt="Search"
+                    onClick={searchUsers}
+                  />
                 </div>
+                <button
+                  className="referralsRefreshButton"
+                  onClick={refreshSection}
+                  title="Refresh"
+                >
+                  <Image
+                    className="referralsRefreshImage"
+                    src={refreshIcon}
+                    alt="Refresh"
+                    style={{ transform: `rotate(${rotateAngle}deg)` }}
+                  />
+                </button>
+              </div>
+            </div>
+
+            {/* Delete Action Bar */}
+            <div className={`delete-action-bar ${showDeleteActions ? 'visible' : ''}`}>
+              <div className="selected-count">
+                {selectedItems.length} {selectedItems.length === 1 ? 'item' : 'items'} selected
+              </div>
+              <button className="delete-button" onClick={handleDelete}>
+                <Image src={deleteIcon} alt="Delete" width={16} height={16} />
+                Delete
+              </button>
+            </div>
+
+            {/* Floating Select All Button (Mobile) */}
+            <div className={`floating-select-all ${showFloatingSelectAll ? 'visible' : ''}`} onClick={handleMainCheckboxChange}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="floating-select-all-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                {selectAll ? (
+                  <>
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <path d="M9 12l2 2 4-4"></path>
+                  </>
+                ) : (
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                )}
+              </svg>
+            </div>
+
+            {/* Candidate Cards */}
+            <div className="cards-container">
+              {/* Loading Spinner */}
+              {isLoading && (
+                <div className="loader-container">
+                  <ClipLoader size={50} color="#0057b1" />
+                </div>
+              )}
+
+              {/* No Results Message - Pending */}
+              {!showReferredCandidates &&
+                !isLoading &&
+                !searchValue &&
+                pendingReferrals.length === 0 && (
+                  <div className="empty-state">
+                    <div className="empty-state-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                    </div>
+                    <h3 className="empty-state-title">No pending referral requests</h3>
+                    <p>
+                      While there are no referrals as of now, continue sharing your 
+                      profile within your network to gather all your potential referrals 
+                      in one place here.
+                    </p>
+                  </div>
+                )}
+
+              {/* No Results Message - Search */}
+              {searchValue && !isLoading && currPageData.length === 0 && (
+                <div className="empty-state">
+                  <div className="empty-state-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      <line x1="8" y1="11" x2="14" y2="11"></line>
+                    </svg>
+                  </div>
+                  <h3 className="empty-state-title">No results found</h3>
+                  <p>No user found matching your search criteria.</p>
+                </div>
+              )}
+
+              {/* No Results Message - Referred */}
+              {showReferredCandidates &&
+                !isLoading &&
+                referredCandidates.length === 0 &&
+                !searchValue && (
+                  <div className="empty-state">
+                    <div className="empty-state-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <polyline points="16 11 18 13 22 9"></polyline>
+                      </svg>
+                    </div>
+                    <h3 className="empty-state-title">No referred candidates yet</h3>
+                    <p>
+                      Great start! You haven&apos;t referred anyone yet, but there are 
+                      plenty of opportunities to share and invite your friends and colleagues. 
+                      Every referral counts, and your support can make a big difference.
+                    </p>
+                  </div>
+                )}
+
+              {/* Card Grid */}
+              {!isLoading && currPageData.length > 0 && (
+                <div className="candidate-cards-grid">
+                  {currPageData.map((referral, idx) => {
+                    // Get user data
+                    const user = referral.userId ? referral.user : referral.unRegisteredUser;
+                    const name = `${user?.firstName || ''} ${user?.lastName || ''}`;
+                    const company = referral.userId ? 
+                      (seekerInfo?.experience && seekerInfo?.experience[0]?.companyName) || 'Job Seeker' :
+                      'Guest User';
+                      
+                    // Get first 3 skills if available
+                    const skills = referral.userId && seekerInfo?.skills 
+                      ? seekerInfo.skills.slice(0, 3) 
+                      : ['Resume Attached'];
+                      
+                    return (
+                      <div className="candidate-card" key={referral._id}>
+                        <div className="card-checkbox-wrapper">
+                          <input
+                            type="checkbox"
+                            className="card-checkbox"
+                            checked={selectedItems.includes(idx)}
+                            onChange={() => handleCheckboxChange(idx)}
+                          />
+                        </div>
+                        
+                        <div className="card-header">
+                          <span className="card-time">
+                            {calculateDaysDifference(referral.referralAskedDate)}
+                          </span>
+                          <div className="card-avatar">
+                            {getInitials(user?.firstName, user?.lastName)}
+                          </div>
+                          <h3 className="card-name" onClick={() => showUserProfile(referral)}>
+                            {name}
+                          </h3>
+                          <div className="card-company">{company}</div>
+                        </div>
+                        
+                        <div className="card-body">
+                          <div className="card-skills">
+                            {skills.map((skill, skillIdx) => (
+                              <div className="card-skill" key={skillIdx}>
+                                {skill}
+                              </div>
+                            ))}
+                          </div>
+                          
+                          <div className="card-meta">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                            {referral.jobsAskedForReferral.jobDetails.length} job(s) requested
+                          </div>
+                        </div>
+                        
+                        <div className="card-footer">
+                          <div className="card-actions">
+                            <button 
+                              className="card-action-button" 
+                              onClick={() => handlePersonSelect(referral)}
+                              title="View job details"
+                            >
+                              <Image src={jobListIcon} alt="Job list" width={24} height={24} />
+                            </button>
+                            <button 
+                              className="card-action-button"
+                              onClick={() => {
+                                let resumeKey = null;
+                                if (referral.userId) {
+                                  resumeKey = referral.user.resume?.key;
+                                } else {
+                                  resumeKey = referral.unRegisteredUser.resume?.key;
+                                }
+
+                                if (resumeKey) {
+                                  sendViewResumeEvent(resumeKey);
+                                } else {
+                                  showBottomMessage("Couldn't find resume of the seeker");
+                                }
+                              }}
+                              title="View resume"
+                            >
+                              <Image src={downloadResumeIcon} alt="View resume" width={24} height={24} />
+                            </button>
+                          </div>
+                          
+                          {/* Show either refer button or referred badge */}
+                          {!showReferredCandidates ? (
+                            <button
+                              className="refer-button"
+                              onClick={() => moveCardToPage(referral)}
+                            >
+                              Refer
+                            </button>
+                          ) : (
+                            <div className="referred-badge">
+                              <Image src={greenTickIcon} alt="Referred" width={20} height={20} />
+                              Referred
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Pagination */}
+            {showTalentPoolSection && currentPage > 0 && currPageData.length > 0 && (
+              <div className="pagination">
+                <button 
+                  className="pagination-button" 
+                  onClick={prevPage}
+                  disabled={currentPage <= 1}
+                >
+                  <Image src={leftArrow} alt="Previous page" width={16} height={16} />
+                </button>
+                
+                <span className="pagination-info">
+                  {currentPage}/
+                  {getPagesCount(
+                    showPendingCandidates ? pendingCount : referredCount
+                  )}
+                </span>
+                
+                <button
+                  className="pagination-button"
+                  onClick={nextPage}
+                  disabled={
+                    currentPage >= getPagesCount(
+                      showPendingCandidates ? pendingCount : referredCount
+                    )
+                  }
+                >
+                  <Image src={rightArrow} alt="Next page" width={16} height={16} />
+                </button>
               </div>
             )}
           </div>
