@@ -838,19 +838,7 @@ return (
                 className="profile-image-container"
                 onClick={handleProfileImageClick}
               >
-                {user?.userDetails?.profileImage ? (
-                  <Image
-                    src={user.userDetails.profileImage}
-                    alt="user profile"
-                    width={100}
-                    height={100}
-                  />
-                ) : (
-                  <div className="profile-image-placeholder">
-                    {user?.firstName?.charAt(0) || ''}
-                    {user?.lastName?.charAt(0) || ''}
-                  </div>
-                )}
+                <ProfileImage isLoggedInUser={true} />
               </div>
               <h1 className="profile-name">{user?.firstName} {user?.lastName}</h1>
               <p className="profile-title">{getLatestExperience()}</p>
