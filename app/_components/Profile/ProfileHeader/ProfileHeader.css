@@ -5,6 +5,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 100;
 }
 
 .dashboard_profile_header p {
@@ -14,9 +15,11 @@
 /* Hamburger icon styles for the profile header in mobile view */
 .dashboard_profile_hamburger_icon {
   display: none;
-  width: 35px;
+  width: 30px; /* Reduced width for more compact appearance */
   cursor: pointer;
   z-index: 1000;
+  margin: 0; /* Reset margins */
+  padding: 0; /* Reset padding */
 }
 
 /* Profile image container */
@@ -27,10 +30,9 @@
   right: 20px;
   top: -3px;
   cursor: pointer;
-  z-index: 100; /* Base z-index for all profile-related elements */
+  z-index: 10; /* Keep this lower than profile_header_options when active */
 }
 
-/* Profile image styling */
 .dashboard_profile_float_profile .profile_image {
   width: 100%;
   height: 100%;
@@ -46,8 +48,16 @@
   position: absolute;
   right: 20px; /* Same as profile image */
   top: -3px; /* Same as profile image */
-  z-index: 99; /* Below profile image so clicks go to image */
-  pointer-events: none; /* Let clicks pass through to profile image */
+  z-index: 5; /* Lower than profile image by default */
+  pointer-events: none; /* Initially, let clicks pass through to profile image */
+  width: 40px;
+  height: 40px;
+}
+
+/* Change z-index and enable pointer events when dropdown is active */
+.display_profile_header_options {
+  z-index: 200; /* Higher than profile image when active */
+  pointer-events: auto; /* Enable clicks on options when active */
 }
 
 /* Individual dropdown option styling */
@@ -61,20 +71,22 @@
   height: 36px;
   background-color: #0057b1;
   border-radius: 50%;
+  cursor: pointer;
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease-in-out;
   pointer-events: auto; /* Enable clicks on the buttons */
-  z-index: 101; /* Higher than profile image */
 }
 
-/* Position the options */
+/* Position the options with proper alignment */
 .profile_header_option:nth-child(1) {
   top: 50px; /* Position below the profile image */
+  right: 0; /* Aligned with profile image */
 }
 
 .profile_header_option:nth-child(2) {
   top: 95px; /* Position below the first option */
+  right: 0; /* Aligned with profile image */
 }
 
 /* Show options when the active class is applied */
@@ -94,16 +106,18 @@
   font-size: 13px;
   white-space: nowrap;
   opacity: 0;
+  visibility: hidden;
   transition: opacity 0.2s ease-in-out;
-  z-index: 102;
+  z-index: 201;
 }
 
 /* Show tooltip on hover */
 .profile_header_option:hover span {
   opacity: 1;
+  visibility: visible;
 }
 
-/* Profile locked message styling */
+/* profile locked message */
 .profile_locked_message {
   display: none;
   width: min(300px, 80vw);
@@ -133,7 +147,6 @@
   display: block;
 }
 
-/* NectCoins styling */
 .dashboard_profile_header_nectcoins {
   width: auto;
   min-width: 80px;
@@ -155,7 +168,47 @@
   font-weight: 900;
 }
 
-/* Notification styles */
+.booleanButton {
+  background-color: #007bff;
+  color: #fff;
+  padding: 4px 12px;
+  border: none;
+  height: 2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  margin-right: 0.5rem;
+}
+
+.booleanButton:hover {
+  background-color: #0056b3;
+}
+
+.notificationImage {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.noNotifications {
+  margin-top: 7rem;
+  margin-left: 2rem;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.noNotificationsImage {
+  max-width: 20rem;
+}
+
+.noNotificationDiv {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
 .notification-container {
   position: absolute;
   right: 170px;
@@ -165,11 +218,6 @@
 .notification-icon {
   cursor: pointer;
   position: relative;
-}
-
-.notificationImage {
-  width: 2.5rem;
-  height: 2.5rem;
 }
 
 .notificationAlert {
@@ -253,11 +301,9 @@
   z-index: 70;
   border-radius: 50%;
 }
-
 .close:hover {
   box-shadow: 1.5px 1.6px 7px 5.5px #dddddd;
 }
-
 .NotificationBar {
   display: flex;
   flex-direction: row;
@@ -280,97 +326,70 @@
   font-size: 1.2rem;
 }
 
-.noNotifications {
-  margin-top: 7rem;
-  margin-left: 2rem;
-  text-align: center;
-  font-size: 1.2rem;
-}
-
-.noNotificationsImage {
-  max-width: 20rem;
-}
-
-.noNotificationDiv {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem;
-}
-
 .profileImage {
   width: 3rem;
   height: 3rem;
 }
 
-.booleanButton {
-  background-color: #007bff;
-  color: #fff;
-  padding: 4px 12px;
-  border: none;
-  height: 2rem;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 0.4rem;
-  margin-right: 0.5rem;
-}
-
-.booleanButton:hover {
-  background-color: #0056b3;
-}
-
-/* Media queries for responsive design */
 @media screen and (max-width: 800px) {
   .dashboard_profile_header {
-    margin: 1px;
-    height: 50px;
+    margin: 0;
+    height: auto;
+    min-height: 50px;
+    padding: 0.75rem 0; /* Remove horizontal padding */
     display: flex;
     align-items: center;
+    background-color: #fafafa;
+    position: relative;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-start; /* Start alignment to ensure proper spacing */
   }
 
   .dashboard_profile_header p {
     display: none;
   }
 
-  /* Display hamburger icon in mobile view */
+  /* Fix hamburger icon positioning - position at far left */
   .dashboard_profile_hamburger_icon {
     display: block;
-    position: relative;
-    left: 10px;
-    margin-right: auto; /* Push everything else to the right */
-    top: 0;
+    margin: 0 auto 0 0.5rem; /* Minimal left margin, auto right margin */
+    position: static;
+    flex-shrink: 0; /* Prevent icon from shrinking */
+    box-sizing: content-box; /* Ensure dimensions include only content */
   }
 
-  .dashboard_profile_float_profile {
-    top: 5px;
-    right: 10px;
-    width: 40px;
-    height: 40px;
+  /* Align other elements to the right with consistent spacing */
+  .notification-container {
+    position: static;
+    margin-left: auto; /* Push to right side */
+    margin-right: 0.75rem;
   }
 
   .dashboard_profile_header_nectcoins {
-    position: relative;
-    right: auto;
-    top: auto;
-    margin-right: 15px;
+    position: static;
+    margin-right: 0.75rem;
+    min-width: 70px;
+    height: 35px;
   }
 
-  .notification-container {
-    position: relative;
-    right: auto;
-    top: auto;
-    margin-right: 15px;
+  /* Fix profile image positioning */
+  .dashboard_profile_float_profile {
+    width: 40px;
+    height: 40px;
+    position: static;
+    margin-right: 0.75rem;
   }
 
-  /* Mobile dropdown positioning */
+  /* Fix dropdown alignment in mobile view */
   .profile_header_options {
-    right: 10px;
-    top: 5px;
+    position: absolute;
+    right: 0.75rem; /* Match profile image right margin */
+    top: 0.75rem;
   }
 
-  /* Position dropdown options for mobile */
+  /* Position dropdown options to avoid UI clutter in mobile */
   .profile_header_option:nth-child(1) {
     top: 50px;
     right: 0;
@@ -381,107 +400,87 @@
     right: 0;
   }
 
-  /* Adjust tooltip position for mobile */
+  /* Adjust tooltip position for mobile to prevent cutoff */
   .profile_header_option span {
     right: 45px;
   }
+  
+  /* Improve mobile notification panel */
+  .notification-list {
+    width: 80vw;
+  }
 }
 
+/* Specific adjustments for exactly 768px */
+@media screen and (width: 768px) {
+  .dashboard_profile_header {
+    padding: 0.75rem 0;
+    justify-content: flex-start;
+  }
+  
+  /* Ensure hamburger is positioned correctly at exactly 768px */
+  .dashboard_profile_hamburger_icon {
+    margin: 0 auto 0 0.5rem;
+  }
+  
+  /* Fix profile image positioning at exactly 768px */
+  .dashboard_profile_float_profile {
+    margin-right: 0.75rem;
+  }
+  
+  /* Fix dropdown alignment at exactly 768px */
+  .profile_header_options {
+    right: 0.75rem;
+    top: 0.75rem;
+  }
+  
+  /* Make sure dropdown options align with profile image */
+  .profile_header_option:nth-child(1) {
+    top: 50px;
+    right: 0;
+  }
+  
+  .profile_header_option:nth-child(2) {
+    top: 95px;
+    right: 0;
+  }
+}
+
+/* Enhanced mobile layout fixes for smaller screens */
 @media screen and (max-width: 480px) {
+  /* Maintain consistent layout on very small screens */
+  .dashboard_profile_hamburger_icon {
+    margin: 0 auto 0 0.5rem; /* Keep consistent minimal left margin */
+  }
+  
   .notification-container {
-    margin-right: 10px;
+    margin-right: 0.75rem; /* Consistent spacing for small screens */
   }
 
   .notification-list {
     width: 100vw;
-    align-items: center;
   }
-
-  .noNotificationDiv p {
-    display: block !important;
+  
+  .dashboard_profile_float_profile {
+    margin-right: 0.75rem; /* Consistent spacing for small screens */
   }
   
   .dashboard_profile_header_nectcoins {
-    margin-right: 10px;
-    min-width: 70px; /* Smaller for mobile */
+    margin-right: 0.75rem; /* Consistent spacing for small screens */
+    min-width: 65px;
+    font-size: 0.9rem;
+    height: 30px;
   }
-}
-
-@media screen and (min-width: 800px) and (max-width: 1280px) {
-  .notification-list {
-    width: 50vw;
+  
+  /* Make dropdown tooltips work on mobile */
+  .profile_header_option span {
+    font-size: 11px;
+    padding: 3px 6px;
+    right: 42px;
   }
-}
-
-@media screen and (min-width: 481px) and (max-width: 799px) {
-  .notification-list {
-    width: 80vw;
-  }
-
-  .noNotificationDiv p {
-    display: block !important;
-  }
-}
-
-@media screen and (min-width: 1281px) and (max-width: 1682px) {
-  .booleanDiv {
-    margin-left: 4rem;
-    line-height: 1.5rem;
-  }
-
-  .booleanButton {
-    margin-top: -10rem;
-    margin-right: 0.7rem;
-  }
-
-  .notification-list li {
-    margin: 15px;
-  }
-}
-
-@media screen and (min-width: 800px) and (max-width: 1009px) {
-  .booleanDiv {
-    margin-left: 4rem;
-    line-height: 1.5rem;
-  }
-
-  .booleanButton {
-    margin-top: -10rem;
-    margin-right: 0.7rem;
-  }
-
-  .notification-list li {
-    margin: 15px;
-  }
-}
-
-@media screen and (min-width: 365px) and (max-width: 630px) {
-  .booleanDiv {
-    margin-left: 4rem;
-    line-height: 1.5rem;
-  }
-
-  .booleanButton {
-    margin-top: -10rem;
-    margin-right: 0.7rem;
-  }
-
-  .notification-list li {
-    margin: 15px;
-  }
-}
-
-@media screen and (min-width: 320px) and (max-width: 364px) {
-  .booleanDiv {
-    margin-left: 3.3rem;
-  }
-
-  .profileImage {
-    width: 2.4rem;
-    height: 2.4rem;
-  }
-
-  .notification-list li {
-    font-size: 1rem;
+  
+  /* Fix dropdown positioning on very small screens */
+  .profile_header_options {
+    right: 0.75rem; /* Match profile image right margin */
   }
 }

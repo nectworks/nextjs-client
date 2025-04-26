@@ -24,7 +24,7 @@ import otherLinkIcon from '@/public/Profile/otherLinkIcon.svg';
 import documentLinkIcon from '@/public/Profile/documentLinkIcon.svg';
 import { UserContext } from '@/context/User/UserContext';
 import { DashboardContext } from '@/context/Dashboard/DashboardContext';
-import ProfileHeader from '../../_components/Profile/ProfileHeader/ProfileHeader';
+import ProfileHeaderWrapper from '@/app/_components/ProfileHeaderWrapper/ProfileHeaderWrapper';
 import ProfileImage from '../../_components/Profile/ProfileImage/ProfileImage';
 import ProfileUploadDialog from '../../_components/Profile/ProfileUploadDialog/ProfileUploadDialog';
 import viewDocumentInNewTab from '@/Utils/viewDocument';
@@ -826,7 +826,7 @@ return (
       {/* Main container */}
       <div className="dashboard_profile_container">
         {/* Header */}
-        <ProfileHeader />
+        <ProfileHeaderWrapper />
 
         {/* Profile content */}
         <div className="profile-content">

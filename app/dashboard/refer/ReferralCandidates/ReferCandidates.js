@@ -28,7 +28,7 @@ import hollowCircle from '@/public/Profile/speratorIcon.svg';
 import downloadResumeIconWhite from '@/public/ReferCandidates/downloadResumeIconWhite.svg';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { publicAxios } from '@/config/axiosInstance';
-import ProfileHeader from '../../../_components/Profile/ProfileHeader/ProfileHeader';
+import ProfileHeaderWrapper from '@/app/_components/ProfileHeaderWrapper/ProfileHeaderWrapper';
 import generalLinkIcon from '@/public/PublicProfile/generalLinkIcon.svg';
 import Link from 'next/link';
 import showBottomMessage from '@/Utils/showBottomMessage';
@@ -849,7 +849,7 @@ const ReferCandidates = () => {
 
         <div className="referCandidatesContainer">
           <div className="profileHeaderReferCandidates">
-            <ProfileHeader />
+            <ProfileHeaderWrapper />
           </div>
 
           <div className="referCandidatesContent">

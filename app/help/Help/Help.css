@@ -5,6 +5,7 @@
 
 .starting_heading {
   padding: 3rem 5rem;
+  width: 100%;
 }
 
 .starting_heading h3 {
@@ -122,18 +123,15 @@
 
 @media (max-width: 800px) {
   .helpContainer {
-    margin-top: 4.8rem;
-    margin-left: 2.6rem;
-    margin-right: 2rem;
+    margin-top: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    /* Reduced padding for less space between header and content */
+    padding-top: 1.5rem;
   }
 
   .starting_heading {
-    padding: 3rem 2rem;
-  }
-
-  .starting_heading .dashboard_profile_float_profile {
-    margin-top: 3rem;
-    right: 35;
+    padding: 0.75rem 1rem;
   }
 
   .text_area {
@@ -153,21 +151,35 @@
   }
 }
 
+/* Specific fix for 768px width */
+@media (width: 768px) {
+  .starting_heading {
+    padding: 0.75rem;
+  }
+  
+  .helpContainer {
+    margin-top: 0;
+    /* Reduced padding for 768px width */
+    padding-top: 1.75rem;
+  }
+
+  .text_area {
+    width: 97%;
+  }
+}
+
 @media (max-width: 480px) {
   .helpContainer {
-    margin-top: 4.8rem;
-    margin-left: 1rem;
-    margin-right: 2rem;
+    margin-top: 0;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    /* Further reduced padding for small screens */
+    padding-top: 1rem;
   }
 
   .straight-line-input {
     width: 100%;
     font-size: 16px;
-  }
-
-  .starting_heading .dashboard_profile_float_profile {
-    margin-top: 3rem;
-    right: 30;
   }
 
   .heading_inputbox h3 {

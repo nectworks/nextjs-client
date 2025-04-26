@@ -32,14 +32,16 @@ function ProfileHeader() {
   const privateAxios = usePrivateAxios();
   const notificationListRef = useRef(null);
   const [referredReferrals, setReferredReferrals] = useState([]);
+  const profileImageRef = useRef(null);
+  const dropdownOptionsRef = useRef(null);
 
-  // State to control dropdown visibility
+  // State to control dropdown visibility - Set initial state to false to prevent auto-opening
   const [showDropdown, setShowDropdown] = useState(false);
   
   // State to decide if profile options should be enabled
   const [unlockProfile, setUnlockProfile] = useState(false);
 
-  // Function to toggle the notification panel
+  // For handling the notification div toggle
   const handleNotificationToggle = () => {
     setHandleDiv(!handleDiv);
   };
@@ -47,29 +49,45 @@ function ProfileHeader() {
   // Function to toggle the dashboard menu in mobile view
   function toggleDashboardMenuMobile() {
     const menuContainer = document.querySelector('.dashboard_menu_container');
+
     const menuContainerLeft = parseFloat(
       window.getComputedStyle(menuContainer, null).getPropertyValue('left')
     );
 
-    // If menu has negative 'left' value, it is hidden
+    // if menu has negative 'left' value, it is hidden
     if (menuContainerLeft < 0) {
-      // Reveal the hidden menu
+      // reveal the hidden menu
       menuContainer.style.left = '0px';
     } else {
-      // If menu has positive 'left' value, it is visible - hide it
+      /* if menu has positive 'left' value, it is visible
+         hide the menu */
       menuContainer.style.left = '-250px';
     }
   }
+
+  // Function to adjust dropdown position based on profile image position
+  const adjustDropdownPosition = () => {
+    if (profileImageRef.current && dropdownOptionsRef.current) {
+      // For mobile view (≤768px)
+      if (window.innerWidth <= 800) {
+        // Use the same positioning as in CSS for consistency
+        dropdownOptionsRef.current.style.right = '1rem';
+        dropdownOptionsRef.current.style.top = '0.75rem';
+      } else {
+        // Desktop view - standard positioning
+        dropdownOptionsRef.current.style.right = '20px';
+        dropdownOptionsRef.current.style.top = '-3px';
+      }
+    }
+  };
 
   // Effect hook to establish a server-sent events (SSE) connection for receiving
   // referred referrals in real-time
   useEffect(() => {
     if (!user) return;
-    
     // Get the user ID from the user object
     const userId = user._id;
     let url;
-    
     // Construct the URL for the server-sent events (SSE) endpoint
     if (process.env.NODE_ENV !== 'production') {
       url = `http://localhost:5001/api/v1/refer/private/referred?userId=${userId}`;
@@ -146,11 +164,29 @@ function ProfileHeader() {
     };
   }, [referredReferrals, user]); // Dependency array containing variables used inside the effect
 
+  // Effect for dropdown positioning
+  useEffect(() => {
+    // Adjust dropdown position when visibility changes
+    if (showDropdown) {
+      adjustDropdownPosition();
+    }
+    
+    // Add resize listener to adjust position when window resizes
+    window.addEventListener('resize', adjustDropdownPosition);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener('resize', adjustDropdownPosition);
+    };
+  }, [showDropdown]);
+
   // Function to increment the total referred count for a specific referral
   const handleIncrement = async (referralId) => {
     try {
       // Send a POST request to the server to increment the total referred count
-      await privateAxios.post(`/increaseTotalReferred/${referralId}`);
+      const res = await privateAxios.post(
+        `/increaseTotalReferred/${referralId}`
+      );
 
       // Update the state to remove the referral that has been successfully incremented
       setReferredReferrals((prevData) =>
@@ -182,46 +218,52 @@ function ProfileHeader() {
     }
   };
 
-  // Click handler for profile image - toggles the dropdown
-  const handleProfileClick = () => {
-    if (unlockProfile) {
-      setShowDropdown(!showDropdown);
-    }
-  };
-
-  // Function to handle clicks outside notifications and dropdown
+  // Improved click outside handler for notifications and profile dropdown
   useEffect(() => {
-    function handleClickOutside(event) {
-      // Handle clicking outside notifications
+    // Function to handle clicks outside the notification list div and profile dropdown
+    const handleClickOutside = (event) => {
+      // Check if the notification list is open and if the clicked target is outside
+      // the notification list and header
       if (
         handleDiv &&
         notificationListRef.current &&
         !notificationListRef.current.contains(event.target) &&
         !event.target.closest('.notification-icon')
       ) {
+        // Close the notification list
         setHandleDiv(false);
       }
-
-      // Handle clicking outside dropdown
+      
+      // Handle outside clicks for profile dropdown
       if (
         showDropdown &&
-        !event.target.closest('.dashboard_profile_float_profile') &&
-        !event.target.closest('.profile_header_options')
+        profileImageRef.current &&
+        !profileImageRef.current.contains(event.target) &&
+        (!dropdownOptionsRef.current || !dropdownOptionsRef.current.contains(event.target))
       ) {
         setShowDropdown(false);
       }
-    }
+    };
 
+    // Add event listener to listen for mousedown events
     document.addEventListener('mousedown', handleClickOutside);
+
+    // Cleanup function to remove event listener when component unmounts
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [handleDiv, showDropdown]);
 
-  // Get the public profile URL for the user
+  // Toggle profile dropdown ONLY on explicit click
+  const handleProfileClick = () => {
+    if (unlockProfile) {
+      setShowDropdown(!showDropdown);
+    }
+  };
+
   const publicProfileURL = `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`;
 
-  // Function to get time of day (Morning, Afternoon, Evening)
+  // function to get time of the day, i.e., Morning, Afternoon, Evening
   function getTimeOfDay() {
     const date = new Date();
     const hours = date.getHours();
@@ -231,21 +273,25 @@ function ProfileHeader() {
     else return 'Evening';
   }
 
-  // Function to copy public profile URL
+  // copy the url of the public profile on click
   function copyProfileUrl(e) {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent event bubbling
     navigator.clipboard.writeText(publicProfileURL);
     showBottomMessage('Public URL copied!');
+    // Close the dropdown after action
+    setTimeout(() => setShowDropdown(false), 300);
   }
 
-  // Function to open public profile in new tab
+  // Function to open the public profile in a new tab
   function openPublicProfile(e) {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent event bubbling
     window.open(publicProfileURL, '_blank');
+    // Close the dropdown after action
+    setTimeout(() => setShowDropdown(false), 300);
   }
 
-  // Check if profile should be unlocked based on username and email
   useEffect(() => {
+    // the profile will be unlocked only if the user has a username
     setUnlockProfile(
       user?.username?.length > 0 && !!user?.userDetails?.emailID
     );
@@ -253,7 +299,7 @@ function ProfileHeader() {
 
   return (
     <div className="dashboard_profile_header">
-      {/* Hamburger icon for mobile view */}
+      {/* Hamburger icon for mobile view at the beginning of the header */}
       <Image
         onClick={toggleDashboardMenuMobile}
         className="dashboard_profile_hamburger_icon"
@@ -261,12 +307,10 @@ function ProfileHeader() {
         alt="menu icon"
       />
       
-      {/* Greeting message */}
       <p>
         Good {getTimeOfDay()}, {user?.firstName}
       </p>
 
-      {/* Notifications */}
       <div className="notification-container">
         <div className="notification-icon" onClick={handleNotificationToggle}>
           <Image
@@ -280,8 +324,6 @@ function ProfileHeader() {
             <p></p>
           )}
         </div>
-        
-        {/* Notification panel (shown/hidden based on state) */}
         {handleDiv && (
           <div
             className={`notification-list ${handleDiv ? 'slide-in' : ''}`}
@@ -291,7 +333,6 @@ function ProfileHeader() {
               Notifications
               <Image src={close} alt="close" className="close" />
             </div>
-            
             {referredReferrals.length > 0 ? (
               <ul>
                 {referredReferrals.map((referral) => (
@@ -354,20 +395,20 @@ function ProfileHeader() {
         )}
       </div>
 
-      {/* NectCoins display */}
       <Link href={'/nectcoins'} className="dashboard_profile_header_nectcoins">
         <Image src={nectCoinImg} alt="nect_coins" width={30} height={30} />
         <span>{formatNectCoins(user?.totalCoins)}</span>
       </Link>
 
-      {/* Profile Image with click handler */}
       <div
+        ref={profileImageRef}
         onClick={handleProfileClick}
         className="dashboard_profile_float_profile"
       >
         <ProfileImage isLoggedInUser={true} />
 
-        {/* Message shown when profile is locked */}
+        {/* display this only if the profile is locked
+          (i.e., username is not added)*/}
         {!unlockProfile && (
           <div className="profile_locked_message">
             <span></span>
@@ -377,9 +418,9 @@ function ProfileHeader() {
         )}
       </div>
       
-      {/* Dropdown menu - shown/hidden based on state */}
       {unlockProfile && (
         <div
+          ref={dropdownOptionsRef}
           className={`profile_header_options${
             showDropdown ? ' display_profile_header_options' : ''
           }`}
