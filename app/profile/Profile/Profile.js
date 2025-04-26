@@ -1,21 +1,4 @@
-// Add a specific effect for profile upload dialog
-useEffect(() => {
-  if (openProfileUploadDialog) {
-    console.log("Profile upload dialog state is true");
-    
-    // Add event listener to handle clicks on the dialog
-    const handleDialogClick = (e) => {
-      console.log("Dialog click detected");
-    };
-    
-    document.addEventListener('click', handleDialogClick);
-    
-    return () => {
-      document.removeEventListener('click', handleDialogClick);
-      console.log("Profile upload dialog being closed");
-    };
-  }
-}, [openProfileUploadDialog]);'use client';
+'use client';
 /*
 File: Profile.js
 Description: This file contains the profile component and is rendered
@@ -110,12 +93,27 @@ const [user, setUser] = userState;
 const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 const [openDateForm, setOpenDateForm] = useState(false);
 const router = useRouter();
-const { pathname, query } = router;
-const searchParams = new URLSearchParams(query);
+
 const privateAxios = usePrivateAxios();
 
 // State for active section (for scrolling and highlighting in mobile nav)
 const [activeSection, setActiveSection] = useState('about');
+
+// Function to fix and debug profile picture upload
+const handleProfileImageClick = () => {
+  try {
+    // Force close dialog first in case it's stuck in a bad state
+    setOpenFileUploadDialog(false);
+    
+    // Small delay to ensure state is updated properly before opening
+    setTimeout(() => {
+      setOpenFileUploadDialog(true);
+    }, 100);
+  } catch (error) {
+    console.error("Error in handleProfileImageClick:", error);
+    showBottomMessage("Error opening profile upload dialog. Please try again.");
+  }
+};
 
 // function to get appropriate icon based on the link
 function getLinkIcon(url) {
@@ -229,7 +227,9 @@ function getTimeDifference(data) {
 
 // iterate over user's experience and return the latest experience
 function getLatestExperience() {
-  for (let i = 0; i < userInfo?.experience?.length; i += 1) {
+  if (!userInfo || !userInfo.experience || userInfo.experience.length === 0) return null;
+  
+  for (let i = 0; i < userInfo.experience.length; i += 1) {
     const experience = userInfo.experience[i];
     /* if the user is currently working somewhere,
           return their current role and company */
@@ -238,7 +238,9 @@ function getLatestExperience() {
     }
   }
 
-  return null;
+  // If no current experience, return the most recent one
+  const mostRecent = userInfo.experience[0];
+  return `${mostRecent.jobTitle} at ${mostRecent.companyName}`;
 }
 
 //For downloading the resume
@@ -388,7 +390,7 @@ const handleActivelySeekingToggleChange = async (event) => {
   } catch (error) {
     console.error('Error updating actively seeking job status:', error);
     // Optionally, revert the state if an error occurred
-    setActivelySeekingJob(!newValue);
+    setActivelySeekingJob(!event.target.checked);
   }
 };
 
@@ -509,7 +511,9 @@ const handleShareFacebook = () => {
 
 const [resumeFileUrl, setResumeFileUrl] = useState(null);
 const fetchFileKey = async () => {
-  const userId = user._id;
+  const userId = user?._id;
+  if (!userId) return;
+  
   try {
     const response = await publicAxios.get(
       `/signUpCards/getFileKey/${userId}`
@@ -534,8 +538,10 @@ const fetchFileKey = async () => {
 
 useEffect(() => {
   // Fetch file key on page startup or refresh
-  fetchFileKey();
-}, []);
+  if (user && user._id) {
+    fetchFileKey();
+  }
+}, [user]);
 
 // Function to handle opening the resume URL
 const handleOpenResume = () => {
@@ -569,7 +575,9 @@ const handleFileSelect = (event) => {
 };
 
 const handleHeaderClick = () => {
-  fileInputRef.current.click();
+  if (fileInputRef.current) {
+    fileInputRef.current.click();
+  }
 };
 
 const [isDragging, setIsDragging] = useState(false);
@@ -618,6 +626,11 @@ const uploadFile = async (selectedFile) => {
   setResumeUploadStatus(true);
   try {
     const resume = document.getElementById('fileInput').files[0];
+    if (!resume) {
+      setResumeUploadStatus(false);
+      return;
+    }
+    
     const uploadUrlResponse = await privateAxios.get('/file/s3-url-put', {
       headers: {
         fileContentType: resume.type,
@@ -657,12 +670,24 @@ const uploadFile = async (selectedFile) => {
         setResumeFileUrl(res.url);
       } else {
         console.error('Failed final upload file');
+        setResumeUploadStatus(false);
       }
     } else {
       console.error('Failed to get signed URL for upload');
+      setResumeUploadStatus(false);
     }
   } catch (error) {
     console.error('Error uploading file:', error);
+    setResumeUploadStatus(false);
+    toast.error('Error uploading file. Please try again.', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   }
 };
 
@@ -690,7 +715,7 @@ useEffect(() => {
           filledFieldsCount++;
         }
 
-        if (user.userDetails.fileKey) {
+        if (user.userDetails && user.userDetails.fileKey) {
           filledFieldsCount++;
         }
 
@@ -744,6 +769,7 @@ useEffect(() => {
   };
 }, []);
 
+// Check if the user came from sign-up page
 useEffect(() => {
   const from = sessionStorage.getItem('from');
   // Check if the user came from the sign-up page
@@ -754,13 +780,17 @@ useEffect(() => {
     sessionStorage.removeItem('from');
   }
 
-  const sharePostParam = searchParams.get('post_shared');
+  // Check for shared post parameters
+  const params = new URLSearchParams(window.location.search);
+  const sharePostParam = params.get('post_shared');
   if (sharePostParam && sharePostParam === 'success') {
     showBottomMessage('Successfully shared the post');
-    const newUrl = router.pathname;
-    router.replace(newUrl, undefined, { shallow: true });
+    
+    // Clean up the URL
+    const newUrl = window.location.pathname;
+    window.history.replaceState({}, document.title, newUrl);
   }
-}, [router, searchParams]);
+}, []);
 
 const [showSignUpForm, setShowSignUpForm] = useState(false);
 const handleEditClick = () => {
@@ -798,41 +828,32 @@ return (
         {/* Header */}
         <ProfileHeader />
 
-        {/* Profile upload dialog - with renderProp to fix mounting issues */}
-        {openProfileUploadDialog && (
-          <div className="profile-upload-container">
-            <ProfileUploadDialog
-              setOpenFileUploadDialog={setOpenFileUploadDialog}
-              key={`upload-dialog-${Date.now()}`} // Force new instance
-            />
-          </div>
-        )}
-
         {/* Profile content */}
         <div className="profile-content">
           {/* Left sidebar */}
           <div className="profile-sidebar">
             {/* Profile image and info */}
             <div className="profile-header">
-// Function to fix and debug profile picture upload
-const handleProfileImageClick = () => {
-  try {
-    console.log("Attempting to open profile upload dialog");
-    // Force close dialog first in case it's stuck in a bad state
-    setOpenFileUploadDialog(false);
-    
-    // Small delay to ensure state is updated
-    setTimeout(() => {
-      setOpenFileUploadDialog(true);
-      console.log("Profile upload dialog opened");
-    }, 50);
-  } catch (error) {
-    console.error("Error in handleProfileImageClick:", error);
-    showBottomMessage("Error opening profile upload dialog. Please try again.");
-  }
-};
+              <div 
+                className="profile-image-container"
+                onClick={handleProfileImageClick}
+              >
+                {user?.userDetails?.profileImage ? (
+                  <Image
+                    src={user.userDetails.profileImage}
+                    alt="user profile"
+                    width={100}
+                    height={100}
+                  />
+                ) : (
+                  <div className="profile-image-placeholder">
+                    {user?.firstName?.charAt(0) || ''}
+                    {user?.lastName?.charAt(0) || ''}
+                  </div>
+                )}
+              </div>
               <h1 className="profile-name">{user?.firstName} {user?.lastName}</h1>
-              <p className="profile-title">{userInfo && getLatestExperience()}</p>
+              <p className="profile-title">{getLatestExperience()}</p>
               
               {/* Progress bar */}
               <div className="progress-bar-container">
@@ -1085,7 +1106,7 @@ const handleProfileImageClick = () => {
                 </button>
               </div>
               
-              {userInfo?.about?.bio?.length === 0 ? (
+              {!userInfo?.about?.bio || userInfo?.about?.bio?.length === 0 ? (
                 <p style={{ opacity: 0.7 }}>
                   Tell people a bit about yourself! Sprinkle ✨ in some
                   relevant keywords from your field. This can help people
@@ -1135,7 +1156,7 @@ const handleProfileImageClick = () => {
                 </button>
               </div>
               
-              {userInfo?.experience?.length === 0 ? (
+              {!userInfo?.experience || userInfo?.experience?.length === 0 ? (
                 <p style={{ opacity: 0.7 }}>
                   Mention your employment history, including the present
                   and prior companies you have worked for.
@@ -1231,7 +1252,7 @@ const handleProfileImageClick = () => {
                 </button>
               </div>
               
-              {userInfo?.education?.length === 0 ? (
+              {!userInfo?.education || userInfo?.education?.length === 0 ? (
                 <p style={{ opacity: 0.7 }}>
                   Fill in your education details (school, college, degree)
                   to strengthen your profile.
@@ -1292,7 +1313,7 @@ const handleProfileImageClick = () => {
                 </button>
               </div>
               
-              {userInfo?.skills?.length === 0 ? (
+              {!userInfo?.skills || userInfo?.skills?.length === 0 ? (
                 <p style={{ opacity: 0.7 }}>
                   Specify details about programming languages (such as
                   Java, Python, C/C++, node.js, SQL etc), softwares
@@ -1334,7 +1355,7 @@ const handleProfileImageClick = () => {
                 </button>
               </div>
               
-              {userInfo?.socials?.length === 0 ? (
+              {!userInfo?.socials || userInfo?.socials?.length === 0 ? (
                 <p style={{ opacity: 0.7 }}>
                   Enter the usernames for your LinkedIn, Behance, GitHub,
                   and other profiles.
@@ -1377,9 +1398,9 @@ const handleProfileImageClick = () => {
                 </button>
               </div>
               
-              {userInfo?.achievements?.length === 0 ? (
+              {!userInfo?.achievements || userInfo?.achievements?.length === 0 ? (
                 <p style={{ opacity: 0.7 }}>
-                  Share information about any honors or awards you've
+                  Share information about any honors or awards you&apos;ve
                   received. 🏆
                 </p>
               ) : (
@@ -1477,7 +1498,7 @@ const handleProfileImageClick = () => {
                 </button>
               </div>
               
-              {userInfo?.projects?.length === 0 ? (
+              {!userInfo?.projects || userInfo?.projects?.length === 0 ? (
                 <p style={{ opacity: 0.7 }}>
                   Add details about projects you have done in college,
                   internship or at work.
@@ -1644,11 +1665,13 @@ const handleProfileImageClick = () => {
         />
       )}
       
-      {/* Upload profile dialog */}
+      {/* Profile upload dialog - rendered conditionally with proper z-index */}
       {openProfileUploadDialog && (
-        <ProfileUploadDialog
-          setOpenFileUploadDialog={setOpenFileUploadDialog}
-        />
+        <div className="profile-upload-container">
+          <ProfileUploadDialog
+            setOpenFileUploadDialog={setOpenFileUploadDialog}
+          />
+        </div>
       )}
       
       <ToastContainer />
