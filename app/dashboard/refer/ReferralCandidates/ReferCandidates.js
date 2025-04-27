@@ -43,6 +43,333 @@ import io from 'socket.io-client';
 
 let socket;
 
+// Profile Modal Component
+const ProfileModal = ({ 
+  closeProfileModal, 
+  selectedSeeker, 
+  noUserId, 
+  seekerInfo, 
+  publicProfileUrl, 
+  calcTotalExperience,
+  getResumeKey,
+  sendViewResumeEvent,
+  downloadResume,
+  setShowReportPopup
+}) => {
+  const [activeTab, setActiveTab] = useState('about');
+  
+  // Handle report button click
+  const handleReportClick = () => {
+    // First close the profile modal
+    closeProfileModal();
+    
+    // Then open the report popup with a slight delay
+    setTimeout(() => {
+      setShowReportPopup(true);
+    }, 100);
+  };
+
+  return (
+    <div className="profile-modal">
+      <div className="profile-modal-content">
+        {/* Header with blue background */}
+        <div className="profile-header">
+          <div className="profile-header-title">
+            Candidate Profile
+          </div>
+          <div className="profile-header-actions">
+            {!noUserId && (
+              <Link href={publicProfileUrl} target="_blank" className="open-profile-link">
+                Open profile in new tab
+              </Link>
+            )}
+            <button className="close-profile-button" onClick={closeProfileModal}>
+              <Image src={crossIcon} alt="Close profile" width={18} height={18} />
+            </button>
+          </div>
+        </div>
+
+        {/* Main content */}
+        <div className="profile-body">
+          <div className="profile-main">
+            {/* Candidate name and basic info */}
+            <div className="profile-name-section">
+              <h2 className="profile-name">
+                {selectedSeeker?.firstName || ''} {selectedSeeker?.lastName || ''}
+              </h2>
+              
+              <div className="profile-info">
+                {!noUserId && (
+                  <>
+                    <div className="profile-info-item">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      Total work experience:&nbsp;
+                      {calcTotalExperience().countYear > 0 && 
+                        `${calcTotalExperience().countYear}y `}
+                      {calcTotalExperience().countMonth}mos
+                    </div>
+
+                    {seekerInfo?.experience && seekerInfo.experience[0] && (
+                      <div className="profile-info-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                        {seekerInfo.experience[0].companyName}
+                      </div>
+                    )}
+
+                    {seekerInfo?.education && seekerInfo.education[0] && (
+                      <div className="profile-info-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                          <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                        {seekerInfo.education[0].school}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Email action button */}
+            <div className="profile-action-buttons">
+              <a href={`mailto:${selectedSeeker?.email}`}>
+                <button className="email-button">
+                  Say Hi!
+                  <Image src={emailIcon} alt="Email" width={18} height={18} />
+                </button>
+              </a>
+            </div>
+
+            {/* Tabs for profile sections */}
+            {!noUserId && (
+              <>
+                <div className="profile-tabs">
+                  <button 
+                    className={`profile-tab ${activeTab === 'about' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('about')}
+                  >
+                    About
+                  </button>
+                  <button 
+                    className={`profile-tab ${activeTab === 'education' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('education')}
+                  >
+                    Education
+                  </button>
+                  <button 
+                    className={`profile-tab ${activeTab === 'experience' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('experience')}
+                  >
+                    Experience
+                  </button>
+                </div>
+
+                {/* About section */}
+                {activeTab === 'about' && (
+                  <div className="profile-content-section">
+                    <div className="profile-section-header">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                      <span className="profile-section-title">About</span>
+                    </div>
+                    <div className="profile-section-content">
+                      {seekerInfo?.about?.bio ? 
+                        seekerInfo.about.bio : 
+                        <span className="no-info-message">No information provided.</span>
+                      }
+                    </div>
+                  </div>
+                )}
+
+                {/* Education section */}
+                {activeTab === 'education' && (
+                  <div className="profile-content-section">
+                    <div className="profile-section-header">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                      </svg>
+                      <span className="profile-section-title">Education</span>
+                    </div>
+                    <div className="profile-section-content">
+                      {seekerInfo?.education?.length > 0 ? (
+                        seekerInfo.education.map((edu, idx) => (
+                          <div className="education-item" key={idx}>
+                            <div className="item-title">{edu.school}</div>
+                            <div className="item-subtitle">{edu.fieldOfStudy}</div>
+                            <div className="item-date">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                              </svg>
+                              {edu.startYear} - {edu.endYear}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <span className="no-info-message">No education history available.</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Experience section */}
+                {activeTab === 'experience' && (
+                  <div className="profile-content-section">
+                    <div className="profile-section-header">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                      </svg>
+                      <span className="profile-section-title">Experience</span>
+                    </div>
+                    <div className="profile-section-content">
+                      {seekerInfo?.experience?.length > 0 ? (
+                        seekerInfo.experience.map((exp, idx) => (
+                          <div className="experience-item" key={idx}>
+                            <div className="item-title">{exp.jobTitle}</div>
+                            <div className="item-subtitle">
+                              {exp.companyName}
+                              <Image
+                                src={hollowCircle}
+                                alt="Separator"
+                                width={12}
+                                height={12}
+                                style={{ margin: '0 4px', display: 'inline' }}
+                              />
+                              {exp.employmentType}
+                            </div>
+                            <div className="item-date">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                              </svg>
+                              {exp.startMonth} {exp.startYear} -&nbsp;
+                              {!exp.endMonth ? 'Present' : `${exp.endMonth} ${exp.endYear || ''}`}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <span className="no-info-message">No work experience available.</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Sidebar for skills, social links, and resume */}
+          <div className="profile-sidebar">
+            {/* Skills section */}
+            {!noUserId && seekerInfo?.skills && seekerInfo.skills.length > 0 && (
+              <div className="sidebar-card">
+                <div className="sidebar-card-header">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span className="sidebar-card-title">Skills</span>
+                </div>
+                <div className="skills-list">
+                  {seekerInfo.skills.map((skill, idx) => (
+                    <div className="skill-tag" key={idx}>
+                      {skill}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Social Links section */}
+            {!noUserId && seekerInfo?.socials && seekerInfo.socials.length > 0 && (
+              <div className="sidebar-card">
+                <div className="sidebar-card-header">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                  </svg>
+                  <span className="sidebar-card-title">Social Links</span>
+                </div>
+                <div className="social-links">
+                  {seekerInfo.socials.map((social, idx) => (
+                    <a href={social} key={idx} className="social-link" target="_blank" rel="noreferrer">
+                      <Image
+                        src={social.includes('linkedin.com') ? linkedInIcon : generalLinkIcon}
+                        alt="Social link"
+                        width={18}
+                        height={18}
+                      />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Resume view and download */}
+            <div className="resume-actions">
+              <button
+                className="view-resume-button"
+                onClick={() => {
+                  const resumeKey = getResumeKey();
+                  if (resumeKey) {
+                    sendViewResumeEvent(resumeKey);
+                  } else {
+                    showBottomMessage("Couldn't find resume of the seeker");
+                  }
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                View Resume
+              </button>
+              <button 
+                className="download-resume-button" 
+                onClick={downloadResume}
+                title="Download Resume"
+              >
+                <Image src={downloadResumeIconWhite} alt="Download resume" width={18} height={18} />
+              </button>
+            </div>
+
+            {/* Report button */}
+            <div className="report-button">
+              <div className="report-link" onClick={handleReportClick}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path>
+                  <path d="M18 9V4a2 2 0 0 0-2-2h-5l5 5zm-7.9 2H6"></path>
+                  <path d="M9 17H6"></path>
+                  <path d="M12 13H6"></path>
+                  <circle cx="17" cy="17" r="5"></circle>
+                  <line x1="17" y1="14" x2="17" y2="20"></line>
+                  <line x1="14" y1="17" x2="20" y2="17"></line>
+                </svg>
+                Report
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ReferCandidates = () => {
   const privateAxios = usePrivateAxios();
   const URL = process.env.NEXT_PUBLIC_SOCKET_URL;
@@ -862,173 +1189,20 @@ const ReferCandidates = () => {
               </div>
             )}
 
-            {/* User Profile Modal */}
+            {/* User Profile Modal - Improved version */}
             {showUserProfileModal && (
-              <div className="profile-modal">
-                <div className="profile-modal-content">
-                  <div className="profile-header">
-                    <div className="profile-header-title">
-                      Candidate Profile
-                    </div>
-                    <div className="profile-header-actions">
-                      {!noUserId && (
-                        <Link href={publicProfileUrl} target="_blank" className="open-profile-link">
-                          Open profile in new tab
-                        </Link>
-                      )}
-                      <button className="close-profile-button" onClick={closeProfileModal}>
-                        <Image src={crossIcon} alt="Close profile" width={20} height={20} />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="profile-body">
-                    <div className="profile-main">
-                      <div className="profile-name">
-                        {selectedSeeker?.firstName || ''} {selectedSeeker?.lastName || ''}
-                      </div>
-
-                      {!noUserId && (
-                        <>
-                          <div className="profile-experience">
-                            Total work experience:&nbsp;
-                            {calcTotalExperience().countYear > 0 && 
-                              `${calcTotalExperience().countYear}y `}
-                            {calcTotalExperience().countMonth}mos
-                          </div>
-
-                          {isUserProfile && seekerInfo?.experience && (
-                            <div className="profile-company">
-                              {seekerInfo.experience[0]?.companyName}
-                            </div>
-                          )}
-
-                          {isUserProfile && seekerInfo?.education && (
-                            <div className="profile-school">
-                              {seekerInfo.education[0]?.school}
-                            </div>
-                          )}
-                        </>
-                      )}
-
-                      <div className="profile-action-buttons">
-                        <a href={`mailto:${selectedSeeker?.email}`}>
-                          <button className="email-button">
-                            Say Hi!
-                            <Image src={emailIcon} alt="Email" width={20} height={20} />
-                          </button>
-                        </a>
-                      </div>
-
-                      {!noUserId && (
-                        <>
-                          <div className="profile-section">
-                            <div className="profile-section-title">About</div>
-                            <div className="profile-about">
-                              {seekerInfo?.about?.bio}
-                            </div>
-                          </div>
-
-                          <div className="profile-section">
-                            <div className="profile-section-title">Education</div>
-                            {seekerInfo?.education?.slice(0, 2).map((edu, idx) => (
-                              <div className="education-item" key={idx}>
-                                <div className="item-title">{edu.school}</div>
-                                <div className="item-subtitle">{edu.fieldOfStudy}</div>
-                                <div className="item-date">
-                                  {edu.startYear} - {edu.endYear}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="profile-section">
-                            <div className="profile-section-title">Experience</div>
-                            {seekerInfo?.experience?.slice(0, 2).map((exp, idx) => (
-                              <div className="experience-item" key={idx}>
-                                <div className="item-title">{exp.jobTitle}</div>
-                                <div className="item-subtitle">
-                                  {exp.companyName}
-                                  <Image
-                                    src={hollowCircle}
-                                    alt="Separator"
-                                    width={12}
-                                    height={12}
-                                    style={{ margin: '0 4px', display: 'inline' }}
-                                  />
-                                  {exp.employmentType}
-                                </div>
-                                <div className="item-date">
-                                  {exp.startMonth} {exp.startYear} -&nbsp;
-                                  {!exp.endMonth ? 'Present' : `${exp.endMonth} ${exp.endYear || ''}`}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </div>
-
-                    <div className="profile-sidebar">
-                      {!noUserId && (
-                        <>
-                          <div className="sidebar-card">
-                            <div className="sidebar-card-title">Skills</div>
-                            <div className="skills-list">
-                              {seekerInfo?.skills?.map((skill, idx) => (
-                                <div className="skill-tag" key={idx}>
-                                  {skill}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div className="sidebar-card">
-                            <div className="sidebar-card-title">Social Links</div>
-                            <div className="social-links">
-                              {seekerInfo?.socials?.map((social, idx) => (
-                                <a href={social} key={idx} className="social-link" target="_blank" rel="noreferrer">
-                                  <Image
-                                    src={social.includes('linkedin.com') ? linkedInIcon : generalLinkIcon}
-                                    alt="Social link"
-                                    width={20}
-                                    height={20}
-                                  />
-                                </a>
-                              ))}
-                            </div>
-                          </div>
-                        </>
-                      )}
-
-                      <div className="resume-actions">
-                        <button
-                          className="view-resume-button"
-                          onClick={() => {
-                            const resumeKey = getResumeKey();
-                            if (resumeKey) {
-                              sendViewResumeEvent(resumeKey);
-                            } else {
-                              showBottomMessage("Couldn't find resume of the seeker");
-                            }
-                          }}
-                        >
-                          View Resume
-                        </button>
-                        <button className="download-resume-button" onClick={downloadResume}>
-                          <Image src={downloadResumeIconWhite} alt="Download resume" width={20} height={20} />
-                        </button>
-                      </div>
-
-                      <div className="report-button">
-                        <div className="report-link" onClick={() => setShowReportPopup(true)}>
-                          Report
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ProfileModal
+                closeProfileModal={closeProfileModal}
+                selectedSeeker={selectedSeeker}
+                noUserId={noUserId}
+                seekerInfo={seekerInfo}
+                publicProfileUrl={publicProfileUrl}
+                calcTotalExperience={calcTotalExperience}
+                getResumeKey={getResumeKey}
+                sendViewResumeEvent={sendViewResumeEvent}
+                downloadResume={downloadResume}
+                setShowReportPopup={setShowReportPopup}
+              />
             )}
 
             {/* Tab Navigation for Talent Pool */}
@@ -1092,19 +1266,22 @@ const ReferCandidates = () => {
             </div>
 
             {/* Floating Select All Button (Mobile) */}
-            <div className={`floating-select-all ${showFloatingSelectAll ? 'visible' : ''}`} onClick={handleMainCheckboxChange}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="floating-select-all-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                {selectAll ? (
-                  <>
+            <div 
+                className={`floating-select-all ${showFloatingSelectAll ? 'visible' : ''}`} 
+                onClick={handleMainCheckboxChange}
+                style={{ bottom: showDeleteActions ? '4.5rem' : '1.5rem' }} // Adjust position based on delete bar visibility
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="floating-select-all-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  {selectAll ? (
+                    <>
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <path d="M9 12l2 2 4-4"></path>
+                    </>
+                  ) : (
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <path d="M9 12l2 2 4-4"></path>
-                  </>
-                ) : (
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                )}
-              </svg>
-            </div>
-
+                  )}
+                </svg>
+              </div>
             {/* Candidate Cards */}
             <div className="cards-container">
               {/* Loading Spinner */}
@@ -1201,14 +1378,18 @@ const ReferCandidates = () => {
                           />
                         </div>
                         
-                        <div className="card-header">
+                        <div 
+                          className="card-header" 
+                          onClick={() => showUserProfile(referral)}
+                          style={{ cursor: 'pointer' }}
+                        >
                           <span className="card-time">
                             {calculateDaysDifference(referral.referralAskedDate)}
                           </span>
                           <div className="card-avatar">
                             {getInitials(user?.firstName, user?.lastName)}
                           </div>
-                          <h3 className="card-name" onClick={() => showUserProfile(referral)}>
+                          <h3 className="card-name">
                             {name}
                           </h3>
                           <div className="card-company">{company}</div>
