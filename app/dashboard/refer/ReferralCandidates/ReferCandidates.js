@@ -38,6 +38,7 @@ import viewDocumentInNewTab from '@/Utils/viewDocument';
 import usePrivateAxios from '@/Utils/usePrivateAxios';
 import ReportPopup from '../../../_components/ReportPopup/ReportPopup';
 import sendGAEvent from '@/Utils/gaEvents';
+import ProfileImage from '../../../_components/Profile/ProfileImage/ProfileImage';
 import downloadDocument from '@/Utils/downloadDocument';
 import io from 'socket.io-client';
 
@@ -92,6 +93,12 @@ const ProfileModal = ({
         {/* Main content */}
         <div className="profile-body">
           <div className="profile-main">
+          <div className="profile-picture">
+            <ProfileImage
+              isLoggedInUser={false}
+              otherUser={selectedSeeker}
+            />
+          </div>
             {/* Candidate name and basic info */}
             <div className="profile-name-section">
               <h2 className="profile-name">
@@ -1100,11 +1107,6 @@ const ReferCandidates = () => {
     }
   }
 
-  // Generate initials for avatar
-  const getInitials = (firstName, lastName) => {
-    return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase();
-  };
-
   return (
     <>
       {/* Report Popup */}
@@ -1357,6 +1359,12 @@ const ReferCandidates = () => {
                   {currPageData.map((referral, idx) => {
                     // Get user data
                     const user = referral.userId ? referral.user : referral.unRegisteredUser;
+                    // Make sure the profile URL is correctly used if present
+                    if (user && user.profile && user.profile.url) {
+                      // If the backend provides the full profile object, use its URL
+                      // This ensures the ProfileImage component has what it needs
+                      user.profile = user.profile.url;
+                    }
                     const name = `${user?.firstName || ''} ${user?.lastName || ''}`;
                     const company = referral.userId ? 
                       (seekerInfo?.experience && seekerInfo?.experience[0]?.companyName) || 'Job Seeker' :
@@ -1387,7 +1395,10 @@ const ReferCandidates = () => {
                             {calculateDaysDifference(referral.referralAskedDate)}
                           </span>
                           <div className="card-avatar">
-                            {getInitials(user?.firstName, user?.lastName)}
+                            <ProfileImage
+                              isLoggedInUser={false}
+                              otherUser={user}
+                            />
                           </div>
                           <h3 className="card-name">
                             {name}
