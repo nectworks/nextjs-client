@@ -1,9 +1,9 @@
 'use client';
 /*
-  File: Profile.js
-  Description: This file contains the profile component and is rendered
-  at /profile. The profile page lets user's to add additional information
-  about themselves.
+File: Profile.js
+Description: This file contains the profile component and is rendered
+at /profile. The profile page lets user's to add additional information
+about themselves.
 */
 
 import './Profile.css';
@@ -24,7 +24,7 @@ import otherLinkIcon from '@/public/Profile/otherLinkIcon.svg';
 import documentLinkIcon from '@/public/Profile/documentLinkIcon.svg';
 import { UserContext } from '@/context/User/UserContext';
 import { DashboardContext } from '@/context/Dashboard/DashboardContext';
-import ProfileHeader from '../../_components/Profile/ProfileHeader/ProfileHeader';
+import ProfileHeaderWrapper from '@/app/_components/ProfileHeaderWrapper/ProfileHeaderWrapper';
 import ProfileImage from '../../_components/Profile/ProfileImage/ProfileImage';
 import ProfileUploadDialog from '../../_components/Profile/ProfileUploadDialog/ProfileUploadDialog';
 import viewDocumentInNewTab from '@/Utils/viewDocument';
@@ -55,23 +55,8 @@ import dribbleLogo from '@/public/socialsLogo/dribbleLogo.svg';
 import crunchbaseLogo from '@/public/socialsLogo/crunchbaseLogo.svg';
 import hashnodeLogo from '@/public/socialsLogo/hashnodeLogo.svg';
 import StyledIOSSwitch from '../../_components/Switch/switch';
-import {
-  FaBriefcase,
-  FaMedal,
-  FaUsers,
-  FaTools,
-  FaGraduationCap,
-  FaProjectDiagram,
-  FaFacebookF,
-  FaLinkedin,
-} from 'react-icons/fa';
 import deleteResume from '@/public/Profile/deleteResume.svg';
 import downloadResume from '@/public/Profile/downloadResume.svg';
-import {
-  FaRegMessage,
-  FaXTwitter,
-  FaArrowUpRightFromSquare,
-} from 'react-icons/fa6';
 import crossIcon from '@/public/SignUpConfirmPopup/crossIcon.svg';
 import downloadDocument from '@/Utils/downloadDocument';
 import { ToastContainer, toast } from 'react-toastify';
@@ -79,1284 +64,1122 @@ import 'react-toastify/dist/ReactToastify.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-/*
-  Note about using localStorage and sessionStorage:
-  (1). localStorage: The initial user input process in Profile page (when they
-      login for the first time) should be persisted even if the user leaves the website in between and comes back later. Hence, this input data will be
-      saved in the localStorage.
-  (2). sessionStorage: The information related to user's profile and preferences,
-      are stored in sessionStorage and is persisted until the user closes their
-      browser.
-*/
-
 const ProfilePage = () => {
-  // state for opening profile image upload dialog box.
-  const [openProfileUploadDialog, setOpenFileUploadDialog] = useState(false);
+// state for opening profile image upload dialog box.
+const [openProfileUploadDialog, setOpenFileUploadDialog] = useState(false);
 
-  // decides the state of subsection windows for user input.
-  const [actionPopup, setActionPopup] = useState(false);
+// decides the state of subsection windows for user input.
+const [actionPopup, setActionPopup] = useState(false);
 
-  // decide the state of the signup confirmation popup
-  const [signUpPopup, setSignUpPopup] = useState(false);
+// decide the state of the signup confirmation popup
+const [signUpPopup, setSignUpPopup] = useState(false);
 
-  // user information fetched from the API
-  const [userInfo, setUserInfo] = useContext(DashboardContext);
+// user information fetched from the API
+const [userInfo, setUserInfo] = useContext(DashboardContext);
 
-  // decides the subsection the user is making changes in.
-  const [subSection, setSubSection] = useState(1);
+// decides the subsection the user is making changes in.
+const [subSection, setSubSection] = useState(1);
 
-  /* decides the index of the sub section data we are updating.
-       -1 implies we are adding new data */
-  const [subSectionIndex, setSubSectionIndex] = useState(-1);
+/* decides the index of the sub section data we are updating.
+     -1 implies we are adding new data */
+const [subSectionIndex, setSubSectionIndex] = useState(-1);
 
-  // state to indicate that data is begin changed.
-  const [isDataUpdated, setIsDataUpdated] = useState(false);
+// state to indicate that data is begin changed.
+const [isDataUpdated, setIsDataUpdated] = useState(false);
 
-  // use the 'UserContext' to get information about current logged in user
-  const { userState } = useContext(UserContext);
-  const [user, setUser] = userState;
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [openDateForm, setOpenDateForm] = useState(false);
-  const router = useRouter();
-  const { pathname, query } = router;
-  const searchParams = new URLSearchParams(query);
-  const privateAxios = usePrivateAxios();
+// use the 'UserContext' to get information about current logged in user
+const { userState } = useContext(UserContext);
+const [user, setUser] = userState;
+const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+const [openDateForm, setOpenDateForm] = useState(false);
+const router = useRouter();
 
-  // function to get appropriate icon based on the link
-  function getLinkIcon(url) {
-    if (!url || url.length == 0) return null;
-    const { hostname } = new URL(url);
+const privateAxios = usePrivateAxios();
 
-    let linkIcon = otherLinkIcon;
+// State for active section (for scrolling and highlighting in mobile nav)
+const [activeSection, setActiveSection] = useState('about');
 
-    if (hostname.includes('linkedin')) {
-      linkIcon = linkedInIcon;
-    } else if (hostname.includes('twitter')) {
-      linkIcon = twitterLogo;
-    } else if (hostname.includes('github')) {
-      linkIcon = githubLogo;
-    } else if (hostname.includes('dev.to')) {
-      linkIcon = devLogo;
-    } else if (hostname.includes('instagram')) {
-      linkIcon = instagramLogo;
-    } else if (hostname.includes('facebook')) {
-      linkIcon = facebookLogo;
-    } else if (hostname.includes('medium')) {
-      linkIcon = mediumLogo;
-    } else if (hostname.includes('figma')) {
-      linkIcon = figmaLogo;
-    } else if (hostname.includes('substack')) {
-      linkIcon = substackLogo;
-    } else if (hostname.includes('tiktok')) {
-      linkIcon = tiktokLogo;
-    } else if (hostname.includes('twitch')) {
-      linkIcon = twitchLogo;
-    } else if (hostname.includes('youtube')) {
-      linkIcon = youtubeLogo;
-    } else if (hostname.includes('behance')) {
-      linkIcon = behanceLogo;
-    } else if (hostname.includes('dribbble')) {
-      linkIcon = dribbleLogo;
-    } else if (hostname.includes('crunchbase')) {
-      linkIcon = crunchbaseLogo;
-    } else if (hostname.includes('hashnode')) {
-      linkIcon = hashnodeLogo;
+// Function to fix and debug profile picture upload
+const handleProfileImageClick = () => {
+  try {
+    // Force close dialog first in case it's stuck in a bad state
+    setOpenFileUploadDialog(false);
+    
+    // Small delay to ensure state is updated properly before opening
+    setTimeout(() => {
+      setOpenFileUploadDialog(true);
+    }, 100);
+  } catch (error) {
+    console.error("Error in handleProfileImageClick:", error);
+    showBottomMessage("Error opening profile upload dialog. Please try again.");
+  }
+};
+
+// function to get appropriate icon based on the link
+function getLinkIcon(url) {
+  if (!url || url.length == 0) return null;
+  const { hostname } = new URL(url);
+
+  let linkIcon = otherLinkIcon;
+
+  if (hostname.includes('linkedin')) {
+    linkIcon = linkedInIcon;
+  } else if (hostname.includes('twitter')) {
+    linkIcon = twitterLogo;
+  } else if (hostname.includes('github')) {
+    linkIcon = githubLogo;
+  } else if (hostname.includes('dev.to')) {
+    linkIcon = devLogo;
+  } else if (hostname.includes('instagram')) {
+    linkIcon = instagramLogo;
+  } else if (hostname.includes('facebook')) {
+    linkIcon = facebookLogo;
+  } else if (hostname.includes('medium')) {
+    linkIcon = mediumLogo;
+  } else if (hostname.includes('figma')) {
+    linkIcon = figmaLogo;
+  } else if (hostname.includes('substack')) {
+    linkIcon = substackLogo;
+  } else if (hostname.includes('tiktok')) {
+    linkIcon = tiktokLogo;
+  } else if (hostname.includes('twitch')) {
+    linkIcon = twitchLogo;
+  } else if (hostname.includes('youtube')) {
+    linkIcon = youtubeLogo;
+  } else if (hostname.includes('behance')) {
+    linkIcon = behanceLogo;
+  } else if (hostname.includes('dribbble')) {
+    linkIcon = dribbleLogo;
+  } else if (hostname.includes('crunchbase')) {
+    linkIcon = crunchbaseLogo;
+  } else if (hostname.includes('hashnode')) {
+    linkIcon = hashnodeLogo;
+  }
+
+  return linkIcon;
+}
+
+const [revealDeleteMsg, setRevealDeleteMsg] = useState(false);
+function showDeleteConfirmationMessage(e) {
+  setRevealDeleteMsg(true);
+}
+function notShowDeleteConfirmationMessage(e) {
+  setRevealDeleteMsg(false);
+}
+
+// function to open window to edit data
+function openSectionToEdit(e) {
+  // get the subSection we are making changes in
+  const subSectionNumber = parseInt(e.currentTarget.dataset.subsection);
+
+  // get the index of the data we are updating
+  const subSectionDataIndex = parseInt(e.currentTarget.dataset.dataindex);
+
+  // open the correct subsection on click
+  setSubSection(subSectionNumber);
+  setSubSectionIndex(subSectionDataIndex);
+  setIsDataUpdated(true);
+  setActionPopup(true);
+}
+
+const allMonths = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+/* calculate the time difference between the start and end of the experience,
+  format it into string and return */
+function getTimeDifference(data) {
+  const { startMonth, startYear, endMonth, endYear } = data;
+
+  let startMonthIdx = 0;
+  let endMonthIdx = 0;
+
+  allMonths.forEach((month, index) => {
+    if (month == startMonth) startMonthIdx = index;
+    if (month == endMonth) endMonthIdx = index;
+  });
+
+  let monthsDiff = endMonthIdx - startMonthIdx + 1;
+  let yearDiff = endYear - startYear;
+
+  if (startYear < endYear && startMonthIdx > endMonthIdx) {
+    monthsDiff = 12 - startMonthIdx + endMonthIdx + 1;
+    yearDiff -= 1;
+  }
+
+  let timeDiff = '';
+  if (yearDiff > 0) timeDiff += `${yearDiff} yrs `;
+  if (monthsDiff > 0) timeDiff += `${monthsDiff} mo`;
+
+  return timeDiff;
+}
+
+// iterate over user's experience and return the latest experience
+function getLatestExperience() {
+  if (!userInfo || !userInfo.experience || userInfo.experience.length === 0) return null;
+  
+  for (let i = 0; i < userInfo.experience.length; i += 1) {
+    const experience = userInfo.experience[i];
+    /* if the user is currently working somewhere,
+          return their current role and company */
+    if (experience.currentlyWorking === true) {
+      return `${experience.jobTitle} at ${experience.companyName}`;
     }
-
-    return linkIcon;
   }
 
-  const [revealDeleteMsg, setRevealDeleteMsg] = useState(false);
-  function showDeleteConfirmationMessage(e) {
-    setRevealDeleteMsg(true);
+  // If no current experience, return the most recent one
+  const mostRecent = userInfo.experience[0];
+  return `${mostRecent.jobTitle} at ${mostRecent.companyName}`;
+}
+
+//For downloading the resume
+async function HandledownloadResume() {
+  showBottomMessage(`Downloading resume...`, 10000);
+
+  const fileName =
+    (user?.firstName || '') + '_' + (user?.lastName || '') + '_resume.pdf';
+  try {
+    await downloadDocument(user.userDetails.fileKey, fileName);
+    showBottomMessage(`Successfully downloaded resume`);
+  } catch (error) {
+    showBottomMessage(`Couldn't download resume`);
   }
-  function notShowDeleteConfirmationMessage(e) {
-    setRevealDeleteMsg(false);
+}
+
+// This function is used to handle delete resume
+async function handleDeleteresume() {
+  showBottomMessage(`Deleting resume...`, 10000);
+  try {
+    const response = await publicAxios.delete(
+      `/signUpCards/deleteResume/${user._id}`
+    );
+    if (response.status === 200) {
+      setShowDeleteConfirmation(false);
+      showBottomMessage('Resume deleted successfully');
+      //It will refresh the page when resume is deleted successfully
+      window.location.reload();
+      setResumeFileUrl(null);
+    }
+  } catch (error) {
+    showBottomMessage(`Couldn't delete resume`);
   }
+}
 
-  // function to open window to edit data
-  function openSectionToEdit(e) {
-    // get the subSection we are making changes in
-    const subSectionNumber = parseInt(e.target.dataset.subsection);
+/* A simple function to reduce the character length in a paragraph
+    and implement show more/show less feature.
+  */
+function toggleDescription(e) {
+  // get the closest paragraph
+  const revealBtn = e.target;
+  const closestParagraph = revealBtn.previousSibling;
+  closestParagraph.classList.toggle('dashboard_info_hide_text');
 
-    // get the index of the data we are updating
-    const subSectionDataIndex = parseInt(e.target.dataset.dataindex);
+  // change the text inside the button based on it's status
+  const oldStatus = revealBtn.dataset.status;
 
-    // open the correct subsection on click
-    setSubSection(subSectionNumber);
-    setSubSectionIndex(subSectionDataIndex);
-    setIsDataUpdated(true);
-    setActionPopup(true);
+  if (oldStatus === 'hide') {
+    /* if the section was previously hidden, it will be revealed
+             and hence change the text and the status */
+    revealBtn.innerText = 'Show less';
+    revealBtn.dataset.status = 'reveal';
+  } else {
+    revealBtn.innerText = 'Show more';
+    revealBtn.dataset.status = 'hide';
   }
+}
 
-  const allMonths = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+// function to fetch authorization url from linkedin
+async function getDirectLinkedInShareUrl(e) {
+  try {
+    const url = `/linkedin/auth?share_post=true`;
+    const res = await privateAxios.get(url);
 
-  /* calculate the time difference between the start and end of the experience,
-    format it into string and return */
-  function getTimeDifference(data) {
-    const { startMonth, startYear, endMonth, endYear } = data;
+    const { authUrl } = res.data;
+    window.open(authUrl, '_blank');
+  } catch (error) {
+    showBottomMessage(`Couldn't share post. Try again.`);
+  }
+}
 
-    let startMonthIdx = 0;
-    let endMonthIdx = 0;
+async function getLinkedinShareUrl(e) {
+  const userProfileUrl = encodeURIComponent(
+    `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
+  );
+  const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${userProfileUrl}`;
+  window.open(shareUrl, '_blank');
+}
+//funtion to set max date
+const maxDate = new Date();
+maxDate.setMonth(maxDate.getMonth() + 3);
 
-    allMonths.forEach((month, index) => {
-      if (month == startMonth) startMonthIdx = index;
-      if (month == endMonth) endMonthIdx = index;
+const [activelySeekingJob, setActivelySeekingJob] = useState(false);
+const [selectedDate, setSelectedDate] = useState(null);
+const [selectedButton, setSelectedButton] = useState(null);
+const [toggle, setToggle] = useState(false);
+const [shareOpen, setShareOpen] = useState(false);
+
+useEffect(() => {
+  // Fetch initial value of activelySeekingJob from the database
+  const fetchData = async () => {
+    if (user && user._id) {
+      // Check if user and user._id exist
+      try {
+        const response = await publicAxios.get(
+          '/signUpCards/getActivelySeekingJob',
+          {
+            params: {
+              userId: user._id,
+            },
+          }
+        );
+        setActivelySeekingJob(response.data.activelySeekingJob);
+      } catch (error) {
+        console.error('Error fetching actively seeking job status:', error);
+      }
+      try {
+        const response = await publicAxios.get(
+          '/signUpCards/getImmediatejoiner',
+          {
+            params: {
+              userId: user._id,
+            },
+          }
+        );
+        setToggle(response.data.isOpen);
+        setSelectedDate(response.data.date);
+      } catch (error) {
+        console.error('Error fetching actively seeking job status:', error);
+      }
+    }
+  };
+
+  fetchData();
+}, [user]);
+
+const [shouldDisplayMessage, setShouldDisplayMessage] = useState(false);
+const switchRef = useRef(null);
+const handleActivelySeekingToggleChange = async (event) => {
+  try {
+    const newValue = event.target.checked;
+
+    // Optimistically update the UI
+    setActivelySeekingJob(newValue);
+
+    // Make PUT request to update activelySeekingJob status
+    const response = await publicAxios.put('/signUpCards/updateActivelySeekingJob', {
+      userId: user._id,
+      activelySeekingJob: newValue,
     });
 
-    let monthsDiff = endMonthIdx - startMonthIdx + 1;
-    let yearDiff = endYear - startYear;
-
-    if (startYear < endYear && startMonthIdx > endMonthIdx) {
-      monthsDiff = 12 - startMonthIdx + endMonthIdx + 1;
-      yearDiff -= 1;
-    }
-
-    let timeDiff = '';
-    if (yearDiff > 0) timeDiff += `${yearDiff} yrs `;
-    if (monthsDiff > 0) timeDiff += `${monthsDiff} mo`;
-
-    return timeDiff;
-  }
-
-  // iterate over user's experience and return the latest experience
-  function getLatestExperience() {
-    for (let i = 0; i < userInfo?.experience?.length; i += 1) {
-      const experience = userInfo.experience[i];
-      /* if the user is currently working somewhere,
-            return their current role and company */
-      if (experience.currentlyWorking === true) {
-        return `${experience.jobTitle} at ${experience.companyName}`;
-      }
-    }
-
-    return null;
-  }
-
-  //For downloading the resume
-  async function HandledownloadResume() {
-    showBottomMessage(`Downloading resume...`, 10000);
-
-    const fileName =
-      (user?.firstName || '') + '_' + (user?.lastName || '') + '_resume.pdf';
-    try {
-      await downloadDocument(user.userDetails.fileKey, fileName);
-      showBottomMessage(`Successfully downloaded resume`);
-    } catch (error) {
-      showBottomMessage(`Couldn't download resume`);
-    }
-  }
-
-  // This function is used to handle delete resume
-  async function handleDeleteresume() {
-    showBottomMessage(`Deleting resume...`, 10000);
-    try {
-      const response = await publicAxios.delete(
-        `/signUpCards/deleteResume/${user._id}`
-      );
-      if (response.status === 200) {
-        setShowDeleteConfirmation(false);
-        showBottomMessage('Resume deleted successfully');
-        //It will refresh the page when resume is deleted successfully
-        window.location.reload();
-        setResumeFileUrl(null);
-      }
-    } catch (error) {
-      showBottomMessage(`Couldn't delete resume`);
-    }
-  }
-
-  /* A simple function to reduce the character length in a paragraph
-      and implement show more/show less feature.
-    */
-  function toggleDescription(e) {
-    // get the closest paragraph
-    const revealBtn = e.target;
-    const closestParagraph = revealBtn.previousSibling;
-    closestParagraph.classList.toggle('dashboard_info_hide_text');
-
-    // change the text inside the button based on it's status
-    const oldStatus = revealBtn.dataset.status;
-
-    if (oldStatus === 'hide') {
-      /* if the section was previously hidden, it will be revealed
-               and hence change the text and the status */
-      revealBtn.innerText = 'Show less';
-      revealBtn.dataset.status = 'reveal';
-    } else {
-      revealBtn.innerText = 'Show more';
-      revealBtn.dataset.status = 'hide';
-    }
-  }
-
-  // function to fetch authorization url from linkedin
-  async function getDirectLinkedInShareUrl(e) {
-    try {
-      const url = `/linkedin/auth?share_post=true`;
-      const res = await privateAxios.get(url);
-
-      const { authUrl } = res.data;
-      window.open(authUrl, '_blank');
-    } catch (error) {
-      showBottomMessage(`Couldn't share post. Try again.`);
-    }
-  }
-
-  async function getLinkedinShareUrl(e) {
-    const userProfileUrl = encodeURIComponent(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
-    );
-    const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${userProfileUrl}`;
-    window.open(shareUrl, '_blank');
-  }
-  //funtion to set max date
-  const maxDate = new Date();
-  maxDate.setMonth(maxDate.getMonth() + 3);
-
-  const [activelySeekingJob, setActivelySeekingJob] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedButton, setSelectedButton] = useState(null);
-  const [toggle, setToggle] = useState(false);
-
-  useEffect(() => {
-    // Fetch initial value of activelySeekingJob from the database
-    const fetchData = async () => {
-      if (user && user._id) {
-        // Check if user and user._id exist
-        try {
-          const response = await publicAxios.get(
-            '/signUpCards/getActivelySeekingJob',
-            {
-              params: {
-                userId: user._id,
-              },
-            }
-          );
-          setActivelySeekingJob(response.data.activelySeekingJob);
-        } catch (error) {
-          console.error('Error fetching actively seeking job status:', error);
-        }
-        try {
-          const response = await publicAxios.get(
-            '/signUpCards/getImmediatejoiner',
-            {
-              params: {
-                userId: user._id,
-              },
-            }
-          );
-          setToggle(response.data.isOpen);
-          setSelectedDate(response.data.date);
-        } catch (error) {
-          console.error('Error fetching actively seeking job status:', error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [user]);
-
-  const [shouldDisplayMessage, setShouldDisplayMessage] = useState(false);
-  const switchRef = useRef(null);
-  const handleActivelySeekingToggleChange = async (event) => {
-    try {
-      const newValue = event.target.checked;
-
-      // Optimistically update the UI
-      setActivelySeekingJob(newValue);
-
-      // Make PUT request to update activelySeekingJob status
-      const response = await publicAxios.put('/signUpCards/updateActivelySeekingJob', {
-        userId: user._id,
-        activelySeekingJob: newValue,
-      });
-
-      if (response.status !== 200) {
-        console.error('Failed to update job status');
-        // Optionally, revert the state if the update failed
-        setActivelySeekingJob(!newValue);
-      }
-    } catch (error) {
-      console.error('Error updating actively seeking job status:', error);
-      // Optionally, revert the state if an error occurred
+    if (response.status !== 200) {
+      console.error('Failed to update job status');
+      // Optionally, revert the state if the update failed
       setActivelySeekingJob(!newValue);
     }
-  };
+  } catch (error) {
+    console.error('Error updating actively seeking job status:', error);
+    // Optionally, revert the state if an error occurred
+    setActivelySeekingJob(!event.target.checked);
+  }
+};
 
-  useEffect(() => {
-    // Manually change the switch state if needed
-    if (switchRef.current) {
-      switchRef.current.checked = activelySeekingJob;
-    }
-  }, [activelySeekingJob]);
-  // const handleActivelySeekingToggleChange = async () => {
-  //   try {
-  //     const value = !activelySeekingJob;
-  //     // Make PUT request to update activelySeekingJob status
-  //     const response = await publicAxios.put(
-  //       '/signUpCards/updateActivelySeekingJob',
-  //       {
-  //         userId: user._id,
-  //         activelySeekingJob: value,
-  //       }
-  //     );
-  //     if (response.status === 200) {
-  //       // Update the toggle manually if necessary
-  //       const switchElement = document.getElementsByClassName('MuiSwitch-input')[0];
-  //       if (switchElement) {
-  //         switchElement.checked = value;
-  //       }
-  //       setActivelySeekingJob(response.data.activelySeekingJob);
-  //     } else {
-  //       console.error('Failed to update job status');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating actively seeking job status:', error);
-  //   }
-  // };
-  const handleImmediateJoinerToggleChange = async () => {
-    if (!toggle) {
-      setShouldDisplayMessage(true);
-    }
+useEffect(() => {
+  // Manually change the switch state if needed
+  if (switchRef.current) {
+    switchRef.current.checked = activelySeekingJob;
+  }
+}, [activelySeekingJob]);
 
-    try {
-      // Toggle isOpen value
-      const newIsOpenValue = !user.userDetails.isOpen;
-      // Make the PUT request to updateImmediateJoiner
-      const response = await publicAxios.put(
-        '/signUpCards/updateImmediateJoiner',
-        {
-          userId: user._id,
-          isOpen: newIsOpenValue,
-        }
-      );
+const handleImmediateJoinerToggleChange = async () => {
+  if (!toggle) {
+    setShouldDisplayMessage(true);
+  }
 
-      // Update the toggle state
-      if (toggle == true) {
-        setToggle(false);
-        setImmediatejoiner(false);
-      } else {
-        setToggle(true);
+  try {
+    // Toggle isOpen value
+    const newIsOpenValue = !user.userDetails.isOpen;
+    // Make the PUT request to updateImmediateJoiner
+    const response = await publicAxios.put(
+      '/signUpCards/updateImmediateJoiner',
+      {
+        userId: user._id,
+        isOpen: newIsOpenValue,
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handlePopupClose = () => {
-    setShouldDisplayMessage(false);
-    setToggle(false);
-    setSelectedButton(null);
-    setSelectedDate(new Date().toISOString().split('T')[0]);
-  };
-
-  const handleButtonClick = (buttonName) => {
-    setOpenDateForm(buttonName === 'noticePeriod');
-    setSelectedButton(buttonName);
-  };
-
-  const handleUpdateButtonClick = () => {
-    try {
-      let response;
-      if (openDateForm) {
-        response = publicAxios.put('/signUpCards/updateImmediateJoiner', {
-          userId: user._id,
-          immediateJoiner: false,
-          noticePeriod: selectedDate,
-          isOpen: true,
-        });
-      } else if (!openDateForm) {
-        response = publicAxios.put('/signUpCards/updateImmediateJoiner', {
-          userId: user._id,
-          immediateJoiner: true,
-          isOpen: true,
-        });
-      }
-
-      const currentDate = new Date().toISOString().split('T')[0];
-      if (selectedDate < currentDate) {
-        response = publicAxios.put('/signUpCards/updateImmediateJoiner', {
-          userId: user._id,
-          isOpen: false,
-        });
-      }
-      setShouldDisplayMessage(false);
-      setImmediatejoiner(true);
-    } catch (error) {
-      console.error('Error updating immediate joiner status:', error);
-    }
-  };
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  // function to share on twitter with the user's handle
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://platform.twitter.com/widgets.js';
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  const handleShareButtonClick = () => {
-    const shareBtn = document.getElementById('profile-share-button');
-    shareBtn.classList.toggle('open');
-  };
-
-  const handleClick = () => {
-    const url = encodeURIComponent(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
-    ); // URL of your website
-    const text = encodeURIComponent(''); // Text for the tweet to add a placeholder text
-    const via = encodeURIComponent('nectworks'); // Nectworks Twitter handle
-
-    const shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}&via=${via}`;
-    window.open(shareUrl, '_blank');
-  };
-
-  // function to share on Facebook as a post
-  const handleClickFacebook = () => {
-    const userProfileUrl = encodeURIComponent(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
     );
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${userProfileUrl}`;
-    window.open(shareUrl, '_blank');
-  };
 
-  const [resumeFileUrl, setResumeFileUrl] = useState(null);
-  const fetchFileKey = async () => {
-    const userId = user._id;
-    try {
-      const response = await publicAxios.get(
-        `/signUpCards/getFileKey/${userId}`
-      );
-      if (response.status === 200) {
-        const { fileKey } = response.data;
-        const fileUrl = await publicAxios.put('/signUpCards/getResume', {
-          fileKey: fileKey,
-        });
-        if (fileUrl.status == 200) {
-          setResumeFileUrl(fileUrl.data.signedUrl);
-        } else {
-          console.error('Failed to fetch the URL of the file');
-        }
+    // Update the toggle state
+    if (toggle == true) {
+      setToggle(false);
+    } else {
+      setToggle(true);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handlePopupClose = () => {
+  setShouldDisplayMessage(false);
+  setToggle(false);
+  setSelectedButton(null);
+  setSelectedDate(new Date().toISOString().split('T')[0]);
+};
+
+const handleButtonClick = (buttonName) => {
+  setOpenDateForm(buttonName === 'noticePeriod');
+  setSelectedButton(buttonName);
+};
+
+const handleUpdateButtonClick = () => {
+  try {
+    let response;
+    if (openDateForm) {
+      response = publicAxios.put('/signUpCards/updateImmediateJoiner', {
+        userId: user._id,
+        immediateJoiner: false,
+        noticePeriod: selectedDate,
+        isOpen: true,
+      });
+    } else if (!openDateForm) {
+      response = publicAxios.put('/signUpCards/updateImmediateJoiner', {
+        userId: user._id,
+        immediateJoiner: true,
+        isOpen: true,
+      });
+    }
+
+    const currentDate = new Date().toISOString().split('T')[0];
+    if (selectedDate < currentDate) {
+      response = publicAxios.put('/signUpCards/updateImmediateJoiner', {
+        userId: user._id,
+        isOpen: false,
+      });
+    }
+    setShouldDisplayMessage(false);
+  } catch (error) {
+    console.error('Error updating immediate joiner status:', error);
+  }
+};
+const handleDateChange = (date) => {
+  setSelectedDate(date);
+};
+
+// function to share on twitter with the user's handle
+useEffect(() => {
+  const script = document.createElement('script');
+  script.src = 'https://platform.twitter.com/widgets.js';
+  document.body.appendChild(script);
+  return () => {
+    document.body.removeChild(script);
+  };
+}, []);
+
+const toggleShareOptions = () => {
+  setShareOpen(!shareOpen);
+};
+
+const handleShareTwitter = () => {
+  const url = encodeURIComponent(
+    `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
+  ); // URL of your website
+  const text = encodeURIComponent(''); // Text for the tweet to add a placeholder text
+  const via = encodeURIComponent('nectworks'); // Nectworks Twitter handle
+
+  const shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}&via=${via}`;
+  window.open(shareUrl, '_blank');
+};
+
+// function to share on Facebook as a post
+const handleShareFacebook = () => {
+  const userProfileUrl = encodeURIComponent(
+    `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`
+  );
+  const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${userProfileUrl}`;
+  window.open(shareUrl, '_blank');
+};
+
+const [resumeFileUrl, setResumeFileUrl] = useState(null);
+const fetchFileKey = async () => {
+  const userId = user?._id;
+  if (!userId) return;
+  
+  try {
+    const response = await publicAxios.get(
+      `/signUpCards/getFileKey/${userId}`
+    );
+    if (response.status === 200) {
+      const { fileKey } = response.data;
+      const fileUrl = await publicAxios.put('/signUpCards/getResume', {
+        fileKey: fileKey,
+      });
+      if (fileUrl.status == 200) {
+        setResumeFileUrl(fileUrl.data.signedUrl);
       } else {
-        console.error('Failed to fetch file key');
+        console.error('Failed to fetch the URL of the file');
       }
-    } catch (error) {
-      console.error('Error fetching file key:', error);
+    } else {
+      console.error('Failed to fetch file key');
     }
-  };
+  } catch (error) {
+    console.error('Error fetching file key:', error);
+  }
+};
 
-  useEffect(() => {
-    // Fetch file key on page startup or refresh
+useEffect(() => {
+  // Fetch file key on page startup or refresh
+  if (user && user._id) {
     fetchFileKey();
-  }, []);
+  }
+}, [user]);
 
-  // Function to handle opening the resume URL
-  const handleOpenResume = () => {
-    if (resumeFileUrl) {
-      window.open(resumeFileUrl, '_blank');
-    } else {
-      console.error('Resume URL is not available');
-    }
-  };
+// Function to handle opening the resume URL
+const handleOpenResume = () => {
+  if (resumeFileUrl) {
+    window.open(resumeFileUrl, '_blank');
+    showBottomMessage('Opening resume...');
+  } else {
+    showBottomMessage('Resume URL is not available');
+  }
+};
 
-  const [resumeFile, setResumeFile] = useState(null);
-  const fileInputRef = useRef(null);
+const [resumeFile, setResumeFile] = useState(null);
+const fileInputRef = useRef(null);
 
-  const handleFileSelect = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile && selectedFile.size <= 5 * 1024 * 1024) {
-      setResumeFile(selectedFile);
-      uploadFile(selectedFile);
-    } else {
-      toast.warn('Please select a file less than 5MB.', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-  };
+const handleFileSelect = (event) => {
+  const selectedFile = event.target.files[0];
+  if (selectedFile && selectedFile.size <= 5 * 1024 * 1024) {
+    setResumeFile(selectedFile);
+    uploadFile(selectedFile);
+  } else {
+    toast.warn('Please select a file less than 5MB.', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+};
 
-  const handleHeaderClick = () => {
+const handleHeaderClick = () => {
+  if (fileInputRef.current) {
     fileInputRef.current.click();
-  };
+  }
+};
 
-  const [isDragging, setIsDragging] = useState(false);
+const [isDragging, setIsDragging] = useState(false);
 
-  // Function to handle file drop
-  const handleFileDrop = (event) => {
-    event.preventDefault();
-    const droppedFile = event.dataTransfer.files[0];
-    if (droppedFile && droppedFile.size <= 5 * 1024 * 1024) {
-      setResumeFile(droppedFile);
-      uploadFile(droppedFile);
-    } else {
-      toast.warn('Please select a file less than 5MB.', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+// Function to handle file drop
+const handleFileDrop = (event) => {
+  event.preventDefault();
+  const droppedFile = event.dataTransfer.files[0];
+  if (droppedFile && droppedFile.size <= 5 * 1024 * 1024) {
+    setResumeFile(droppedFile);
+    uploadFile(droppedFile);
+  } else {
+    toast.warn('Please select a file less than 5MB.', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+  setIsDragging(false);
+};
+
+// Function to handle drag over
+const handleDragOver = (event) => {
+  event.preventDefault();
+  setIsDragging(true);
+};
+
+const [showOptions, setShowOptions] = useState(false);
+
+const handleSwipeLeft = () => {
+  setShowOptions(true);
+};
+
+const handleSwipeRight = () => {
+  setShowOptions(false);
+};
+
+// CSS classes for styling
+const resumeUploadBoxClass = `resume-upload-box ${isDragging ? 'drag-over' : ''}`;
+const [resumeUploadStatus, setResumeUploadStatus] = useState(false);
+const uploadFile = async (selectedFile) => {
+  setResumeUploadStatus(true);
+  try {
+    const resume = document.getElementById('fileInput').files[0];
+    if (!resume) {
+      setResumeUploadStatus(false);
+      return;
     }
-    setIsDragging(false);
-  };
-
-  // Function to handle drag over
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    setIsDragging(true);
-  };
-
-  const [showOptions, setShowOptions] = useState(false);
-
-  const handleSwipeLeft = () => {
-    setShowOptions(true);
-  };
-
-  const handleSwipeRight = () => {
-    setShowOptions(false);
-  };
-
-  // CSS classes for styling
-  const uploadBoxClass = `dashboard_info_resume_upload_box ${isDragging ? 'drag-over' : ''
-    }`;
-  const [resumeUploadStatus, setResumeUploadStatus] = useState(false);
-  const uploadFile = async (selectedFile) => {
-    setResumeUploadStatus(true);
-    try {
-      const resume = document.getElementById('fileInput').files[0];
-      const uploadUrlResponse = await privateAxios.get('/file/s3-url-put', {
+    
+    const uploadUrlResponse = await privateAxios.get('/file/s3-url-put', {
+      headers: {
+        fileContentType: resume.type,
+        fileSubType: 'resume',
+        fileName: resume.name,
+        unRegisteredUserId: user._id,
+      },
+    });
+    if (uploadUrlResponse.status === 200) {
+      const { signedUrl, fileName } = uploadUrlResponse.data;
+      await publicAxios.put('/signUpCards/saveFileKey', {
+        fileName,
+        userId: user._id,
+        fileUrl: signedUrl,
+      });
+      const res = await fetch(signedUrl, {
+        method: 'PUT',
+        body: resume,
         headers: {
-          fileContentType: resume.type,
-          fileSubType: 'resume',
-          fileName: resume.name,
-          unRegisteredUserId: user._id,
+          'Content-Type': resume.type,
+          'Content-Disposition': 'inline',
         },
       });
-      if (uploadUrlResponse.status === 200) {
-        const { signedUrl, fileName } = uploadUrlResponse.data;
-        await publicAxios.put('/signUpCards/saveFileKey', {
-          fileName,
-          userId: user._id,
-          fileUrl: signedUrl,
+      if (res.status === 200) {
+        setResumeUploadStatus(false);
+        toast.success('Resume uploaded successfully.', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
-        const res = await fetch(signedUrl, {
-          method: 'PUT',
-          body: resume,
-          headers: {
-            'Content-Type': resume.type,
-            'Content-Disposition': 'inline',
-          },
-        });
-        if (res.status === 200) {
-          setResumeUploadStatus(false);
-          toast.success('Resume uploaded successfully.', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          //It will refresh the page when resume is uploaded successfully
-          window.location.reload();
-          setResumeFileUrl(res.url);
-        } else {
-          console.error('Failed final upload file');
-        }
+        //It will refresh the page when resume is uploaded successfully
+        window.location.reload();
+        setResumeFileUrl(res.url);
       } else {
-        console.error('Failed to get signed URL for upload');
+        console.error('Failed final upload file');
+        setResumeUploadStatus(false);
       }
-    } catch (error) {
-      console.error('Error uploading file:', error);
+    } else {
+      console.error('Failed to get signed URL for upload');
+      setResumeUploadStatus(false);
+    }
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    setResumeUploadStatus(false);
+    toast.error('Error uploading file. Please try again.', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+};
+
+const [completion, setCompletion] = useState(0);
+
+useEffect(() => {
+  const fetchUserInfo = async () => {
+    if (user && user._id) {
+      // Check if user and user._id exist
+      const userId = user._id;
+      try {
+        const response = await publicAxios.get(
+          `/signUpCards/getUserInfo/${userId}`
+        );
+        const userInfo = response.data.userInfo;
+        // Count the number of filled fields
+        let filledFieldsCount = 0;
+        for (const key in userInfo) {
+          if (Array.isArray(userInfo[key]) && userInfo[key].length > 0) {
+            filledFieldsCount++;
+          }
+        }
+
+        if (userInfo.about) {
+          filledFieldsCount++;
+        }
+
+        if (user.userDetails && user.userDetails.fileKey) {
+          filledFieldsCount++;
+        }
+
+        // Calculate completion percentage
+        let totalFieldsCount = Object.keys(userInfo).filter((key) =>
+          Array.isArray(userInfo[key])
+        ).length;
+        totalFieldsCount += 2;
+
+        const completionPercentage = Math.ceil(
+          (filledFieldsCount / totalFieldsCount) * 100
+        );
+        setCompletion(completionPercentage);
+      } catch (error) {
+        console.error('Error fetching user information:', error);
+      }
+    }
+  };
+  fetchUserInfo();
+}, [user]);
+
+// Handle scroll to section
+const handleScrollToSection = (sectionId) => {
+  setActiveSection(sectionId);
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+// Update active section based on scroll position
+useEffect(() => {
+  const handleScroll = () => {
+    const sections = ['about', 'experience', 'education', 'skills', 'social', 'achievements', 'projects'];
+    
+    for (const sectionId of sections) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          setActiveSection(sectionId);
+          break;
+        }
+      }
     }
   };
 
-  const [completion, setCompletion] = useState(0);
+  window.addEventListener('scroll', handleScroll);
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+}, []);
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (user && user._id) {
-        // Check if user and user._id exist
-        const userId = user._id;
-        try {
-          const response = await publicAxios.get(
-            `/signUpCards/getUserInfo/${userId}`
-          );
-          const userInfo = response.data.userInfo;
-          // Count the number of filled fields
-          let filledFieldsCount = 0;
-          for (const key in userInfo) {
-            if (Array.isArray(userInfo[key]) && userInfo[key].length > 0) {
-              filledFieldsCount++;
-            }
-          }
+// Check if the user came from sign-up page
+useEffect(() => {
+  const from = sessionStorage.getItem('from');
+  // Check if the user came from the sign-up page
+  if (from === '/sign-up') {
+    setSignUpPopup(true);
 
-          if (userInfo.about) {
-            filledFieldsCount++;
-          }
+    // Clear the 'from' value from session storage after using it
+    sessionStorage.removeItem('from');
+  }
 
-          if (user.userDetails.fileKey) {
-            filledFieldsCount++;
-          }
+  // Check for shared post parameters
+  const params = new URLSearchParams(window.location.search);
+  const sharePostParam = params.get('post_shared');
+  if (sharePostParam && sharePostParam === 'success') {
+    showBottomMessage('Successfully shared the post');
+    
+    // Clean up the URL
+    const newUrl = window.location.pathname;
+    window.history.replaceState({}, document.title, newUrl);
+  }
+}, []);
 
-          // Calculate completion percentage
-          let totalFieldsCount = Object.keys(userInfo).filter((key) =>
-            Array.isArray(userInfo[key])
-          ).length;
-          totalFieldsCount += 2;
+const [showSignUpForm, setShowSignUpForm] = useState(false);
+const handleEditClick = () => {
+  setShowSignUpForm(true);
+};
 
-          const completionPercentage = Math.ceil(
-            (filledFieldsCount / totalFieldsCount) * 100
-          );
-          setCompletion(completionPercentage);
-        } catch (error) {
-          console.error('Error fetching user information:', error);
-        }
+const [userData, setUserData] = useState(null);
+const [userPopUpInfo, setUserPopUpInfo] = useState(null);
+
+useEffect(() => {
+  if (user && user._id) {
+    const fetchData = async () => {
+      try {
+        // Make request to experienced/get/:userId
+        const experiencedResponse = await publicAxios.get(
+          `/signUpCards/get/${user._id}`
+        );
+        setUserData(experiencedResponse.data.userDetails);
+      } catch (error) {
+        console.error('Error fetching experienced user data:', error);
       }
     };
-    fetchUserInfo();
-  }, [user]);
+    fetchData();
+  }
+}, [user]);
 
-  useEffect(() => {
-    const from = sessionStorage.getItem('from');
-    // Check if the user came from the sign-up page
-    if (from === '/sign-up') {
-      setSignUpPopup(true);
+return (
+  <ProfileContextProvider initialState={initialState} reducer={reducer}>
+    <div className="dashboard_outer_container">
+      {/* Add dashboard menu */}
+      <DashboardMenu />
 
-      // Clear the 'from' value from session storage after using it
-      sessionStorage.removeItem('from');
-    }
+      {/* Main container */}
+      <div className="dashboard_profile_container">
+        {/* Header */}
+        <ProfileHeaderWrapper />
 
-    const sharePostParam = searchParams.get('post_shared');
-    if (sharePostParam && sharePostParam === 'success') {
-      showBottomMessage('Successfully shared the post');
-      const newUrl = router.pathname;
-      router.replace(newUrl, undefined, { shallow: true });
-    }
-  }, [router, searchParams]);
-
-  const [showSignUpForm, setShowSignUpForm] = useState(false);
-  const handleEditClick = () => {
-    setShowSignUpForm(true);
-  };
-
-  const [userData, setUserData] = useState(null);
-  const [userPopUpInfo, setUserPopUpInfo] = useState(null);
-
-  useEffect(() => {
-    if (user && user._id) {
-      const fetchData = async () => {
-        try {
-          // Make request to experienced/get/:userId
-          const experiencedResponse = await publicAxios.get(
-            `/signUpCards/get/${user._id}`
-          );
-          setUserData(experiencedResponse.data.userDetails);
-        } catch (error) {
-          console.error('Error fetching experienced user data:', error);
-        }
-      };
-      fetchData();
-    }
-  }, [user]);
-
-  return (
-    <ProfileContextProvider initialState={initialState} reducer={reducer}>
-      <div className="dashboard_outer_container">
-        {/* add dashboard menu */}
-        <DashboardMenu />
-
-        {/* sign up confirmation on successful registration */}
-        {signUpPopup && (
-          <SignUpFormPopup
-            user={user}
-            closePopUp={() => setSignUpPopup(false)}
-          />
-        )}
-        <div className="dashboard_profile_container">
-          <ProfileHeader />
-
-          {/* upload profile dialog box */}
-          {openProfileUploadDialog && (
-            <ProfileUploadDialog
-              setOpenFileUploadDialog={setOpenFileUploadDialog}
-            />
-          )}
-
-          <section className="dashboard_profile_main_section">
-            {/* Intro with profile and title */}
-            <div className="dashboard_profile_intro">
-              <div className="intro_section-dashboard">
-                <div onClick={() => setOpenFileUploadDialog(true)}>
-                  <ProfileImage isLoggedInUser={true} />
-                </div>
-                <div className="dashboard_profile_description">
-                  <div className="dashboard_profile_name_resumeButton-wrapper">
-                    <div className="dashboard_profile_name_edit-wrapper">
-                      <div className="dashboard_profile_name_edit">
-                        <p className="dashboard_profile_name">
-                          {user?.firstName + ' ' + user?.lastName}
-                        </p>
-                        <div
-                          className="edit_popUp_formDetails"
-                          onClick={handleEditClick}
-                        >
-                          <Image src={editProfileIcon} alt="" />
-                        </div>
-                        {showSignUpForm && (
-                          <SignUpFormPopup
-                            user={user}
-                            closePopUp={() => setShowSignUpForm(false)}
-                          />
-                        )}
-                      </div>
-                      <p>{userInfo && getLatestExperience()}</p>
-                      <p className="dashboard_timestamp">
-                        Profile Last Update -{' '}
-                        {userData && userData.timestamp
-                          ? ` ${userData.timestamp.savedAt}`
-                          : 'N/A'}
-                      </p>
-                    </div>
-                    <button
-                      className={`dashboard_resume_view_button${!resumeFileUrl ? 'disabled' : ''
-                        }`}
-                      onClick={handleOpenResume}
-                      disabled={!resumeFileUrl}
-                    >
-                      Your Resume
-                    </button>
-                  </div>
-
-                  <div className="popUpFormDetailsSeperator">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="717"
-                      height="2"
-                      viewBox="0 0 717 2"
-                      fill="none"
-                    >
-                      <path
-                        d="M0.994141 1.06104H715.994"
-                        stroke="#969696"
-                        strokeWidth="0.6"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
+        {/* Profile content */}
+        <div className="profile-content">
+          {/* Left sidebar */}
+          <div className="profile-sidebar">
+            {/* Profile image and info */}
+            <div className="profile-header">
+              <div 
+                className="profile-image-container"
+                onClick={handleProfileImageClick}
+              >
+                <ProfileImage isLoggedInUser={true} />
               </div>
-              <div className="popUpFormDetails">
-                <div className="popUpFormDetail-wrapper_for_mobile">
-                  <div className="popUpFormDetail">
-                    <Image src={locationIcon} alt="" />
-                    <p>
-                      {userData?.location || (
-                        <div
-                          className="popupFormNotFilled"
-                          onClick={handleEditClick}
-                        >
-                          Add Location
-                        </div>
-                      )}
-                    </p>
-                    {showSignUpForm && (
-                      <SignUpFormPopup
-                        user={user}
-                        userData={userData}
-                        closePopUp={() => setShowSignUpForm(false)}
-                      />
-                    )}
-                  </div>
-                  <div className="popUpFormDetail_2">
-                    <Image src={workIcon} alt="" />
-                    <p>
-                      {user?.isExperienced
-                        ? 'Experienced'
-                        : 'Fresher' || (
-                          <div
-                            className="popupFormNotFilled"
-                            onClick={handleEditClick}
-                          >
-                            Add Experience
-                          </div>
-                        )}
-                    </p>
-                    {showSignUpForm && (
-                      <SignUpFormPopup
-                        user={user}
-                        closePopUp={() => setShowSignUpForm(false)}
-                      />
-                    )}
-                  </div>
-                </div>
-                <div className="popUpFormDetail-wrapper_for_mobile">
-                  <div className="popUpFormDetail">
-                    <Image src={emailIcon} alt="" />
-                    <p>{user?.email}</p>
-                  </div>
-                  <div className="popUpFormDetail">
-                    <Image src={phoneIcon} alt="" />
-                    <p>
-                      {userData?.mobileNumber ? (
-                        `+${userData.mobileNumber}`
-                      ) : (
-                        <div
-                          className="popupFormNotFilled"
-                          onClick={handleEditClick}
-                        >
-                          Add Mobile Number
-                        </div>
-                      )}
-                    </p>
-                    {showSignUpForm && (
-                      <SignUpFormPopup
-                        user={user}
-                        closePopUp={() => setShowSignUpForm(false)}
-                      />
-                    )}
-                  </div>
-                </div>
+              <h1 className="profile-name">{user?.firstName} {user?.lastName}</h1>
+              <p className="profile-title">{getLatestExperience()}</p>
+              
+              {/* Progress bar */}
+              <div className="progress-bar-container">
+                <div className="progress-bar" style={{ width: `${completion}%` }}></div>
               </div>
-              <div className="progressBar_wrapper">
-                <div className="progress-bar-container">
-                  <div
-                    className="progress-bar"
-                    style={{ width: `${completion}%` }}
-                  ></div>
-                </div>
-                <span className="percentage">{completion}%</span>
-              </div>
-              <div className="dashboard_profile_buttons">
-                <div className="dashboard_profile_button">
-                  <p>Are you actively looking for a job?</p>
-                  {/* <label className="switch">
-                    <input
-                      type="checkbox"
-                      className="job_toggle"
-                      checked={activelySeekingJob}
-                      onChange={handleActivelySeekingToggleChange}
-                    />
-                    <span className="slider round"></span>
-                  </label> */}
-                  <StyledIOSSwitch
-                    ref={switchRef}
+              <div className="progress-percentage">Profile Completion: {completion}%</div>
+            </div>
+            
+            {/* Toggle switches */}
+            <div className="toggle-container">
+              <div className="toggle-item">
+                <span className="toggle-label">Are you actively looking for a job?</span>
+                <label className="switch">
+                  <input
+                    type="checkbox"
                     checked={activelySeekingJob}
                     onChange={handleActivelySeekingToggleChange}
-                    inputProps={{ 'aria-label': 'Actively seeking job toggle' }}
+                    ref={switchRef}
                   />
-                </div>
-                <div className="dashboard_profile_button">
-                  <p>Are you available for immediate joining?</p>
-                  {/* <label className="switch">
-                    <input
-                      type="checkbox"
-                      className="joining_toggle"
-                      checked={toggle}
-                      onChange={handleImmediateJoinerToggleChange}
-                    />
-                    <span className="slider round"></span>
-                  </label> */}
-                  <StyledIOSSwitch
+                  <span className="slider"></span>
+                </label>
+              </div>
+              <div className="toggle-item">
+                <span className="toggle-label">Available for immediate joining?</span>
+                <label className="switch">
+                  <input
+                    type="checkbox"
                     checked={toggle}
                     onChange={handleImmediateJoinerToggleChange}
-                    inputProps={{ 'aria-label': 'Actively seeking job toggle' }}
                   />
-                  {shouldDisplayMessage && (
-                    <div className="joining_toggle_message_bg">
-                      <div className="joining_toggle_message">
-                        <h4>Please confirm your notice period</h4>
-                        <div
-                          className="closeFormOptionForPopup_joining_toggle"
-                          onClick={handlePopupClose}
-                        >
-                          <Image src={crossIcon} alt="close" />
-                        </div>
-                        <div className="buttons_for_joining_toggle_message">
-                          <button
-                            className={`joining_toggle_message_button${selectedButton === 'immediateJoiner'
-                                ? 'selected'
-                                : ''
-                              }`}
-                            onClick={() => handleButtonClick('immediateJoiner')}
-                          >
-                            Immediate Joiner
-                          </button>
-                          <button
-                            className={`joining_toggle_message_button${selectedButton === 'noticePeriod'
-                                ? 'selected'
-                                : ''
-                              }`}
-                            onClick={() => handleButtonClick('noticePeriod')}
-                          >
-                            Currently Serving Notice Period
-                          </button>
-                        </div>
-                        {openDateForm && (
-                          <div className="joining_toggle_message_dateForm">
-                            <DatePicker
-                              selected={selectedDate}
-                              onChange={handleDateChange}
-                              minDate={new Date()}
-                              maxDate={maxDate}
-                              dateFormat="yyyy-MM-dd"
-                              placeholderText="Select a date"
-                            />
-                          </div>
-                        )}
-                        <button
-                          className="joining_toggle_message_update_button"
-                          onClick={handleUpdateButtonClick}
-                        >
-                          Update
-                        </button>
+                  <span className="slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            {/* Contact information */}
+            <div className="contact-info">
+              <div className="contact-item">
+                <span className="contact-icon">
+                  <Image src={locationIcon} alt="Location" width={18} height={18} />
+                </span>
+                <span>
+                  {userData?.location || (
+                    <span className="popupFormNotFilled" onClick={handleEditClick}>
+                      Add Location
+                    </span>
+                  )}
+                </span>
+              </div>
+              <div className="contact-item">
+                <span className="contact-icon">
+                  <Image src={emailIcon} alt="Email" width={18} height={18} />
+                </span>
+                <span>{user?.email}</span>
+              </div>
+              <div className="contact-item">
+                <span className="contact-icon">
+                  <Image src={phoneIcon} alt="Phone" width={18} height={18} />
+                </span>
+                <span>
+                  {userData?.mobileNumber ? (
+                    `+${userData.mobileNumber}`
+                  ) : (
+                    <span className="popupFormNotFilled" onClick={handleEditClick}>
+                      Add Mobile Number
+                    </span>
+                  )}
+                </span>
+              </div>
+            </div>
+            
+            {/* Resume section */}
+            <div className="resume-section">
+              <div className="resume-title-container">
+                <h3>Resume</h3>
+                {resumeFileUrl && (
+                  <button 
+                    className="resume-view-button" 
+                    onClick={handleOpenResume} 
+                    title="View Resume"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
+                )}
+              </div>
+              
+              {resumeFileUrl ? (
+                <div>
+                  <div className="resume-actions">
+                    <button className="resume-button download-button" onClick={HandledownloadResume} title="Download Resume">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="button-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                      </svg>
+                      <span>Download</span>
+                    </button>
+                    
+                    <button className="resume-button delete-button" onClick={() => setShowDeleteConfirmation(true)} title="Delete Resume">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="button-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  {showDeleteConfirmation && (
+                    <div className="delete-confirmation">
+                      <p>Are you sure you want to delete your resume?</p>
+                      <div className="delete-confirmation-buttons">
+                        <button className="delete-confirm-button" onClick={handleDeleteresume}>Yes</button>
+                        <button className="delete-cancel-button" onClick={() => setShowDeleteConfirmation(false)}>No</button>
                       </div>
                     </div>
                   )}
                 </div>
-              </div>
-              <div className="SmoothScrollOptions">
-                <a href="#about">About</a>
-                <a href="#experience">Experience</a>
-                <a href="#education">Education</a>
-                <a href="#skills">Skills</a>
-                <a href="#social">Social</a>
-                <a href="#achievements">Achievements</a>
-                <a href="#projects">Projects</a>
-              </div>
-              <div className="SmoothScrollOptions_mobile_view">
-                <a href="#about" style={{ color: 'black' }}>
-                  <FaRegMessage />
-                </a>
-                <a href="#experience" style={{ color: 'black' }}>
-                  <FaBriefcase />
-                </a>
-                <a href="#education" style={{ color: 'black' }}>
-                  <FaGraduationCap />
-                </a>
-                <a href="#skills" style={{ color: 'black' }}>
-                  <FaTools />
-                </a>
-                <a href="#social" style={{ color: 'black' }}>
-                  <FaUsers />
-                </a>
-                <a href="#achievements" style={{ color: 'black' }}>
-                  <FaMedal />
-                </a>
-                <a href="#projects" style={{ color: 'black' }}>
-                  <FaProjectDiagram />
-                </a>
-              </div>
+              ) : (
+                <div 
+                  className={resumeUploadBoxClass}
+                  onClick={handleHeaderClick}
+                  onDrop={handleFileDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={() => setIsDragging(false)}
+                >
+                  <input
+                    type="file"
+                    id="fileInput"
+                    onChange={handleFileSelect}
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    accept=".pdf"
+                  />
+                  <div className="resume-upload-icon">
+                    <Image src={resumeUploadIcon} alt="Upload" width={30} height={30} />
+                  </div>
+                  <p className="resume-upload-text">
+                    {resumeUploadStatus ? 'Uploading...' : 'Upload Your Resume Here'}
+                  </p>
+                  <p className="resume-upload-text" style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                    Supported Format: PDF, max 5MB
+                  </p>
+                </div>
+              )}
             </div>
-            <hr />
-            <div className="Dashboard_profile_share">
-              <span onClick={handleShareButtonClick}>Share</span>
-              <button
-                className="profile-share-button"
-                id="profile-share-button"
-                onClick={handleShareButtonClick}
-              >
-                <i className="fas fa-arrow-up-right-from-square share-icon">
-                  <FaArrowUpRightFromSquare />
-                </i>
-                <span className="social-icons">
-                  <i
-                    className="fab fa-facebook-f"
-                    onClick={handleClickFacebook}
-                  >
-                    <FaFacebookF />
-                  </i>
-                  <i className="fab fa-x-twitter" onClick={handleClick}>
-                    <FaXTwitter />
-                  </i>
-                  <i className="fab fa-linkedin" onClick={getLinkedinShareUrl}>
-                    <FaLinkedin />
-                  </i>
-                </span>
+            
+            {/* Share profile button */}
+            <div className="share-profile">
+              <button className="share-button" onClick={toggleShareOptions}>
+                <span>Share Profile</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
               </button>
+              
+              {shareOpen && (
+                <div className="share-options">
+                  <div className="share-option" onClick={getLinkedinShareUrl} title="Share on LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#0077B5">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                  </div>
+                  <div className="share-option" onClick={handleShareTwitter} title="Share on Twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#1DA1F2">
+                      <path d="M19.633 7.997c.013.175.013.349.013.523 0 5.325-4.053 11.461-11.46 11.461-2.282 0-4.402-.661-6.186-1.809.324.037.636.05.973.05 1.883 0 3.616-.636 5.001-1.721-1.771-.037-3.255-1.197-3.767-2.793.249.037.499.062.761.062.361 0 .724-.05 1.061-.137-1.847-.374-3.23-1.995-3.23-3.953v-.05c.537.299 1.16.486 1.82.511-1.086-.722-1.8-1.957-1.8-3.355 0-.748.199-1.434.548-2.032 1.983 2.443 4.964 4.04 8.306 4.215-.062-.3-.1-.599-.1-.898 0-2.168 1.757-3.929 3.93-3.929 1.133 0 2.158.474 2.877 1.234.898-.175 1.747-.499 2.507-.946-.294.932-.92 1.721-1.745 2.22.799-.087 1.571-.299 2.295-.574-.536.799-1.209 1.497-1.995 2.057z"/>
+                    </svg>
+                  </div>
+                  <div className="share-option" onClick={handleShareFacebook} title="Share on Facebook">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#3b5998">
+                      <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/>
+                    </svg>
+                  </div>
+                </div>
+              )}
             </div>
-
-            {/* open profile in new tab, link */}
-            <div className="dashboard_profile_info_message">
-              <span>
-                The information you add below will be visible to other users.
-              </span>
-              <a
-                className="dashboard_profile_new_tab"
-                href={`/profile/${user?.username}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Open profile in new tab
-              </a>
+          </div>
+          
+          {/* Main content area */}
+          <div className="profile-main-content">
+            {/* Mobile section navigation */}
+            <div className="section-nav">
+              <div className="section-nav-inner">
+                <a 
+                  className={`section-nav-item ${activeSection === 'about' ? 'active' : ''}`}
+                  onClick={() => handleScrollToSection('about')}
+                >
+                  About
+                </a>
+                <a 
+                  className={`section-nav-item ${activeSection === 'experience' ? 'active' : ''}`}
+                  onClick={() => handleScrollToSection('experience')}
+                >
+                  Experience
+                </a>
+                <a 
+                  className={`section-nav-item ${activeSection === 'education' ? 'active' : ''}`}
+                  onClick={() => handleScrollToSection('education')}
+                >
+                  Education
+                </a>
+                <a 
+                  className={`section-nav-item ${activeSection === 'skills' ? 'active' : ''}`}
+                  onClick={() => handleScrollToSection('skills')}
+                >
+                  Skills
+                </a>
+                <a 
+                  className={`section-nav-item ${activeSection === 'social' ? 'active' : ''}`}
+                  onClick={() => handleScrollToSection('social')}
+                >
+                  Social
+                </a>
+                <a 
+                  className={`section-nav-item ${activeSection === 'achievements' ? 'active' : ''}`}
+                  onClick={() => handleScrollToSection('achievements')}
+                >
+                  Achievements
+                </a>
+                <a 
+                  className={`section-nav-item ${activeSection === 'projects' ? 'active' : ''}`}
+                  onClick={() => handleScrollToSection('projects')}
+                >
+                  Projects
+                </a>
+              </div>
             </div>
-
-            <div className="dashboard_profile_mid_section">
-              {
-                <div className="dashboard_info_main_container">
-                  <div className="dashboard_info dashboard_info_resume_upload">
-                    <div className="resumedisplay">
-                      <h2>Resume</h2>
-                      <button
-                        className={`dashboard_resume_view_buttonmobile${!resumeFileUrl ? 'disabled' : ''
-                          }`}
-                        onClick={handleOpenResume}
-                        disabled={!resumeFileUrl}
-                      >
-                        Your Resume
-                      </button>
-                    </div>
-                    <p>
-                      Upload an updated resume to increase your chances of being
-                      discovered by recruiters by 70%.
+            
+            {/* About section */}
+            <section id="about" className="content-section">
+              <div className="section-header">
+                <div className="section-title">
+                  <div className="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <span>About</span>
+                </div>
+                <button 
+                  className="edit-button"
+                  data-subsection={1}
+                  data-dataindex={-1}
+                  onClick={openSectionToEdit}
+                >
+                  <Image src={editIcon} alt="Edit" width={18} height={18} />
+                </button>
+              </div>
+              
+              {!userInfo?.about?.bio || userInfo?.about?.bio?.length === 0 ? (
+                <p style={{ opacity: 0.7 }}>
+                  Tell people a bit about yourself! Sprinkle ✨ in some
+                  relevant keywords from your field. This can help people
+                  find you when searching for specific skills or expertise.
+                </p>
+              ) : (
+                <>
+                  {userInfo?.about?.bio?.length > 150 ? (
+                    <p className="dashboard_info_hide_text">
+                      {userInfo?.about?.bio || ''}
                     </p>
-
-                    <div
-                      onClick={handleHeaderClick}
-                      onDrop={handleFileDrop}
-                      onDragOver={handleDragOver}
-                      className={uploadBoxClass}
-                      onDragLeave={() => setIsDragging(false)}
+                  ) : (
+                    <p>{userInfo?.about?.bio || ''}</p>
+                  )}
+                  
+                  {userInfo?.about?.bio?.length > 150 && (
+                    <button
+                      className="dashboard_info_truncate_btn"
+                      data-status="hide"
+                      onClick={toggleDescription}
                     >
-                      <input
-                        type="file"
-                        id="fileInput"
-                        onChange={handleFileSelect}
-                        ref={fileInputRef}
-                        style={{ display: 'none' }}
-                      />
-                      <Image src={resumeUploadIcon} alt="" />
-                      {resumeFileUrl ? (
-                        <h4>
-                          {resumeUploadStatus ? (
-                            <h4>Uploading...</h4>
-                          ) : (
-                            <h4>Upload New Resume?</h4>
-                          )}
-                        </h4>
-                      ) : (
-                        <h4>
-                          {resumeUploadStatus ? (
-                            <h4>Uploading...</h4>
-                          ) : (
-                            <h4>Upload Your Resume Here</h4>
-                          )}
-                        </h4>
-                      )}
-                      <p style={{ color: '#475462' }}>
-                        Supported Format: PDF, max 5MB
-                      </p>
-                    </div>
-                    {resumeFileUrl && (
-                      <div className="downloadDelete">
-                        <Image
-                          src={downloadResume}
-                          className="downloadDeleteImage"
-                          onClick={HandledownloadResume}
-                          alt=""
-                        />
-
-                        {revealDeleteMsg === false ? (
-                          <Image
-                            src={deleteResume}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              showDeleteConfirmationMessage(e);
-                            }}
-                            alt=""
-                            className="downloadDeleteImage"
-                          />
-                        ) : (
-                          <div>
-                            <span>Are you sure?</span>
-                            <button onClick={handleDeleteresume}>Yes</button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                notShowDeleteConfirmationMessage(e);
-                              }}
-                            >
-                              No
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                      Show more
+                    </button>
+                  )}
+                </>
+              )}
+            </section>
+            
+            {/* Experience section */}
+            <section id="experience" className="content-section">
+              <div className="section-header">
+                <div className="section-title">
+                  <div className="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
                   </div>
-                  <div
-                    id="about"
-                    className="dashboard_info dashboard_info_about"
-                  >
-                    <h2>About</h2>
-                    {userInfo?.about?.bio?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Tell people a bit about yourself! Sprinkle ✨ in some
-                        relevant keywords from your field. This can help people
-                        find you when searching for specific skills or
-                        expertise.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={1}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_edit"
-                      src={editIcon}
-                      style={{
-                        position: 'absolute',
-                        top: '2rem',
-                        right: '3rem',
-                        cursor: 'pointer',
-                      }}
-                      alt="update entered information"
-                    />
-                    {userInfo?.about?.bio?.length > 150 ? (
-                      <pre className="dashboard_info_hide_text">
-                        {userInfo?.about?.bio || ''}
-                      </pre>
-                    ) : (
-                      <pre>{userInfo?.about?.bio || ''}</pre>
-                    )}
-
-                    {/* display this button only if the description contains
-                        more than 200 characters */}
-                    {userInfo?.about?.bio?.length > 150 && (
-                      <button
-                        className="dashboard_info_truncate_btn"
-                        data-status="hide"
-                        onClick={toggleDescription}
-                      >
-                        Show more
-                      </button>
-                    )}
-                  </div>
-
-                  <div
-                    id="experience"
-                    className="dashboard_info dashboard_info_experiences"
-                  >
-                    <h2>Experience</h2>
-                    {userInfo?.experience?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Mention your employment history, including the present
-                        and prior companies you have worked for.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={2}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add another experience information"
-                    />
-                    {userInfo?.experience?.map((experience, index) => {
-                      return (
-                        <div className="dashboard_info_experience" key={index}>
-                          <h3>{experience?.jobTitle}</h3>
-                          <div className="dashboard_info_actions">
-                            <Image
-                              data-subsection={2}
-                              data-dataindex={index}
-                              onClick={(e) => openSectionToEdit(e)}
-                              className="dashboard_info_section_action_edit"
-                              src={editIcon}
-                              alt="update experience"
-                            />
-                          </div>
-
-                          <p>
-                            {experience?.companyName}
-
-                            {/* display this part only if experience
-                                includes the employmentType */}
-                            {experience?.employmentType ? (
-                              <>
-                                <Image
-                                  className="dashboard_info_seperator"
-                                  src={seperatorIcon}
-                                  alt=""
-                                />
-                                {experience.employmentType}
-                              </>
-                            ) : null}
-                          </p>
-
-                          <p className="subsection_time_stamp">
-                            {/* format start date and end date
-                              of the experience */}
-                            {experience?.startMonth?.substr(0, 3) +
-                              ' ' +
-                              experience?.startYear}{' '}
-                            -
-                            {experience?.currentlyWorking === true
-                              ? ' Present'
-                              : ' ' +
-                              experience?.endMonth?.substr(0, 3) +
-                              ' ' +
-                              experience?.endYear}
-                            {/* display the time difference if the user
-                              is not working here presently */}
-                            {!experience?.currentlyWorking && (
-                              <>
-                                <Image
-                                  className="dashboard_info_seperator"
-                                  src={seperatorIcon}
-                                  alt=""
-                                />
-                                {getTimeDifference(experience)}
-                              </>
-                            )}
-                          </p>
-
-                          <div className="dashboard_info_experience_description">
-                            {experience?.description?.length > 0 ? (
-                              <ul
-                                id="description_sentences"
-                                className={
-                                  experience?.description?.length > 150
-                                    ? 'dashboard_info_hide_text'
-                                    : ''
-                                }
-                              >
-                                {experience?.description
-                                  .split('\n')
-                                  .map((sentence, index) => {
-                                    return (
-                                      <li key={index}>
-                                        {sentence} <br></br>
-                                      </li>
-                                    );
-                                  })}
-                              </ul>
-                            ) : null}
-
+                  <span>Experience</span>
+                </div>
+                <button 
+                  className="add-button"
+                  data-subsection={2}
+                  data-dataindex={-1}
+                  onClick={openSectionToEdit}
+                >
+                  <Image src={addIcon} alt="Add" width={20} height={20} />
+                </button>
+              </div>
+              
+              {!userInfo?.experience || userInfo?.experience?.length === 0 ? (
+                <p style={{ opacity: 0.7 }}>
+                  Mention your employment history, including the present
+                  and prior companies you have worked for.
+                </p>
+              ) : (
+                <div className="timeline">
+                  {userInfo?.experience?.map((experience, index) => (
+                    <div className="timeline-item" key={index}>
+                      <div className="timeline-dot"></div>
+                      <div className="timeline-content">
+                        <h3 className="timeline-title">{experience?.jobTitle}</h3>
+                        <p className="timeline-subtitle">
+                          {experience?.companyName}
+                          {experience?.employmentType && (
+                            <> • {experience?.employmentType}</>
+                          )}
+                        </p>
+                        <p className="timeline-date">
+                          {experience?.startMonth?.substr(0, 3) + ' ' + experience?.startYear} - 
+                          {experience?.currentlyWorking ? ' Present' : ' ' + experience?.endMonth?.substr(0, 3) + ' ' + experience?.endYear}
+                          {!experience?.currentlyWorking && (
+                            <> • {getTimeDifference(experience)}</>
+                          )}
+                        </p>
+                        
+                        {experience?.description?.length > 0 && (
+                          <div className="timeline-description">
+                            <ul className={experience?.description?.length > 150 ? 'dashboard_info_hide_text' : ''}>
+                              {experience?.description
+                                .split('\n')
+                                .map((sentence, idx) => (
+                                  <li key={idx}>{sentence}</li>
+                                ))}
+                            </ul>
+                            
                             {experience?.description.length > 150 && (
                               <button
                                 className="dashboard_info_truncate_btn"
@@ -1367,402 +1190,482 @@ const ProfilePage = () => {
                               </button>
                             )}
                           </div>
-
-                          {experience?.skills.length > 0 ? (
-                            <p>
-                              Skills: {'\t'}
-                              {experience?.skills.map((skill, skillIdx) => {
-                                return (
-                                  <Fragment key={skillIdx}>
-                                    <span style={{ fontWeight: '500' }}>
-                                      {skill}
-                                    </span>
-
-                                    {skillIdx <
-                                      experience?.skills?.length - 1 ? (
-                                      <Image
-                                        className="dashboard_info_seperator"
-                                        src={seperatorIcon}
-                                        alt="dashboard"
-                                      />
-                                    ) : null}
-                                  </Fragment>
-                                );
-                              })}
-                            </p>
-                          ) : null}
-
-                          {index < userInfo?.experience?.length - 1 ? (
-                            <hr></hr>
-                          ) : null}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div
-                    id="education"
-                    className="dashboard_info dashboard_info_all_education"
-                  >
-                    <h2>Education</h2>
-                    {userInfo?.education?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Fill in your education details (school, college, degree)
-                        to strengthen your profile.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={3}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add new education"
-                    />
-                    <div>
-                      {userInfo?.education?.map((education, index) => {
-                        return (
-                          <div className="dashboard_info_education" key={index}>
-                            <h3>{education?.school || ''}</h3>
-                            <div className="dashboard_info_actions">
-                              <Image
-                                data-subsection={3}
-                                data-dataindex={index}
-                                onClick={(e) => openSectionToEdit(e)}
-                                className="dashboard_info_section_action_edit"
-                                src={editIcon}
-                                alt="update education info"
-                              />
-                            </div>
-                            <p>
-                              {/* display this if education object
-                                includes degree */}
-                              {education?.degree ? (
-                                <>
-                                  {education?.degree}
-                                  {/* display this if education
-                                    includes fieldOfStudy */}
-                                  {education?.fieldOfStudy ? (
-                                    <>{', in ' + education?.fieldOfStudy}</>
-                                  ) : null}
-                                </>
-                              ) : null}
-                            </p>
-                            <p className="subsection_time_stamp">
-                              {education?.startYear} - {education?.endYear}
-                            </p>
-
-                            {index < userInfo?.education?.length - 1 ? (
-                              <hr></hr>
-                            ) : null}
+                        )}
+                        
+                        {experience?.skills?.length > 0 && (
+                          <div className="skill-tags">
+                            {experience?.skills.map((skill, skillIdx) => (
+                              <span className="skill-tag" key={skillIdx}>
+                                {skill}
+                              </span>
+                            ))}
                           </div>
-                        );
-                      })}
+                        )}
+                        
+                        <button
+                          className="item-edit-button"
+                          data-subsection={2}
+                          data-dataindex={index}
+                          onClick={openSectionToEdit}
+                        >
+                          <Image src={editIcon} alt="Edit" width={18} height={18} />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-
-                  <div
-                    id="skills"
-                    className="dashboard_info dashboard_info_skills"
-                  >
-                    <h2>Skills</h2>
-                    {userInfo?.skills?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Specify details about programming languages (such as
-                        Java, Python, C/C++, node.js, SQL etc), softwares
-                        (Microsoft Word, Excel, Figma etc) or any other work
-                        related skills.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={5}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add skills"
-                    />
-                    {userInfo?.skills?.map((skill, index) => {
-                      return (
-                        <Fragment key={index}>
-                          <h4>{skill}</h4>
-                          <hr></hr>
-                        </Fragment>
-                      );
-                    })}
-                  </div>
-
-                  <div
-                    id="social"
-                    className="dashboard_info dashboard_info_socials"
-                  >
-                    <h2>Social</h2>
-                    {userInfo?.socials?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Enter the usernames for your LinkedIn, Behance, GitHub,
-                        and other profiles.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={4}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add social links"
-                    />
-                    <div className="dashboard_info_all_socials">
-                      {userInfo?.socials?.map((social, index) => {
-                        return (
-                          <div key={index} className="dashboard_info_social">
-                            <Link href={social} target="_blank">
-                              {/* display the icon based on the given link */}
-                              <Image src={getLinkIcon(social)} alt="" />
-                            </Link>
-
-                            <span>{social.split('//')[1]}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div
-                    id="achievements"
-                    className="dashboard_info dashboard_info_achievements"
-                  >
-                    <h2>Achievements</h2>
-                    {userInfo?.achievements?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Share information about any honors or awards you&apos;ve
-                        received. 🏆
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={6}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="add achievements"
-                    />
-                    {userInfo?.achievements?.map((achievement, index) => {
-                      return (
-                        <div key={index} className="dashboard_info_achievement">
-                          <div className="dashboard_info_actions">
-                            <Image
-                              data-subsection={6}
-                              data-dataindex={index}
-                              onClick={(e) => openSectionToEdit(e)}
-                              className="dashboard_info_section_action_edit"
-                              src={editIcon}
-                              alt="update achievement"
-                            />
-                          </div>
-                          <div className="dashboard_info_achievement_header">
-                            <h3>{achievement?.heading}</h3>
-
-                            <span>
-                              {achievement?.document?.key?.length > 0 ? (
-                                <button
-                                  onClick={() => {
-                                    viewDocumentInNewTab(
-                                      achievement.document.key
-                                    );
-                                  }}
-                                >
-                                  <Image src={documentLinkIcon} alt="" />
-                                </button>
-                              ) : null}
-                              {achievement?.link?.length > 0 ? (
-                                <Link href={achievement?.link} target="_blank">
-                                  <Image
-                                    src={otherLinkIcon}
-                                    alt="achievement link"
-                                  />
-                                </Link>
-                              ) : null}
-                            </span>
-                          </div>
-                          <div className="dashboard_achievement_description">
-                            {achievement?.description?.length > 0 ? (
-                              <ul
-                                id="description_sentences"
-                                className={
-                                  achievement?.description?.length > 150
-                                    ? 'dashboard_info_hide_text'
-                                    : ''
-                                }
-                              >
-                                {achievement?.description
-                                  .split('\n')
-                                  .map((sentence, index) => {
-                                    return (
-                                      <li key={index}>
-                                        {sentence} <br></br>
-                                      </li>
-                                    );
-                                  })}
-                              </ul>
-                            ) : null}
-
-                            {achievement?.description.length > 150 && (
-                              <button
-                                className="dashboard_info_truncate_btn"
-                                data-status="hide"
-                                onClick={toggleDescription}
-                              >
-                                Show more
-                              </button>
-                            )}
-                          </div>
-
-                          {index < userInfo?.achievements?.length - 1 ? (
-                            <hr></hr>
-                          ) : null}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div
-                    id="projects"
-                    className="dashboard_info dashboard_info_projects"
-                  >
-                    <h2>Projects</h2>
-                    {userInfo?.projects?.length === 0 && (
-                      <p style={{ color: '#959697' }}>
-                        Add details about projects you have done in college,
-                        internship or at work.
-                      </p>
-                    )}
-                    <Image
-                      data-subsection={7}
-                      data-dataindex={-1}
-                      onClick={(e) => openSectionToEdit(e)}
-                      className="dashboard_info_section_action_add"
-                      src={addIcon}
-                      alt="Add projects"
-                    />
-                    {userInfo?.projects?.map((project, index) => {
-                      return (
-                        <div key={index} className="dashboard_info_project">
-                          <div className="dashboard_info_actions">
-                            <Image
-                              data-subsection={7}
-                              data-dataindex={index}
-                              onClick={(e) => openSectionToEdit(e)}
-                              className="dashboard_info_section_action_edit"
-                              src={editIcon}
-                              alt="update project info"
-                            />
-                          </div>
-
-                          <div className="dashboard_info_project_header">
-                            <h3>{project?.heading}</h3>
-                            <span>
-                              {project?.document?.key?.length > 0 ? (
-                                <button
-                                  onClick={() => {
-                                    viewDocumentInNewTab(project.document.key);
-                                  }}
-                                  target="_blank"
-                                >
-                                  <Image src={documentLinkIcon} alt="" />
-                                </button>
-                              ) : null}
-                              {project?.link?.length > 0 ? (
-                                <Link href={project?.link} target="_blank">
-                                  <Image src={otherLinkIcon} alt="" />
-                                </Link>
-                              ) : null}
-                            </span>
-                          </div>
-
-                          <div className="dashboard_info_project_description">
-                            {project?.description?.length > 0 ? (
-                              <ul
-                                id="description_sentences"
-                                className={
-                                  project?.description?.length > 150
-                                    ? 'dashboard_info_hide_text'
-                                    : ''
-                                }
-                              >
-                                {project?.description
-                                  .split('\n')
-                                  .map((sentence, index) => {
-                                    return (
-                                      <li key={index}>
-                                        {sentence} <br></br>
-                                      </li>
-                                    );
-                                  })}
-                              </ul>
-                            ) : null}
-
-                            {project?.description.length > 150 && (
-                              <button
-                                className="dashboard_info_truncate_btn"
-                                data-status="hide"
-                                onClick={toggleDescription}
-                              >
-                                Show more
-                              </button>
-                            )}
-                          </div>
-
-                          {project?.skills.length > 0 ? (
-                            <p>
-                              Skills: {'\t'}
-                              {project?.skills.map((skill, skillIdx) => {
-                                return (
-                                  <Fragment key={skillIdx}>
-                                    <span style={{ fontWeight: '500' }}>
-                                      {skill}
-                                    </span>
-
-                                    {skillIdx < project?.skills?.length - 1 ? (
-                                      <Image
-                                        className="dashboard_info_seperator"
-                                        src={seperatorIcon}
-                                        alt=""
-                                      />
-                                    ) : null}
-                                  </Fragment>
-                                );
-                              })}
-                            </p>
-                          ) : null}
-
-                          {index < userInfo?.projects?.length - 1 ? (
-                            <hr></hr>
-                          ) : null}
-                        </div>
-                      );
-                    })}
-                  </div>
+                  ))}
                 </div>
-              }
-            </div>
-          </section>
-
-          {/* popup window for taking initial user input */}
-          {/* we will reuse the components in ProfileActions to edit
-            and add data  */}
-          {actionPopup === true && (
-            <ProfileActions
-              setActionPopup={setActionPopup}
-              setUserInfo={setUserInfo}
-              subSection={subSection}
-              subSectionIndex={subSectionIndex}
-              isDataUpdated={isDataUpdated}
-            />
-          )}
+              )}
+            </section>
+            
+            {/* Education section */}
+            <section id="education" className="content-section">
+              <div className="section-header">
+                <div className="section-title">
+                  <div className="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                      <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                    </svg>
+                  </div>
+                  <span>Education</span>
+                </div>
+                <button 
+                  className="add-button"
+                  data-subsection={3}
+                  data-dataindex={-1}
+                  onClick={openSectionToEdit}
+                >
+                  <Image src={addIcon} alt="Add" width={20} height={20} />
+                </button>
+              </div>
+              
+              {!userInfo?.education || userInfo?.education?.length === 0 ? (
+                <p style={{ opacity: 0.7 }}>
+                  Fill in your education details (school, college, degree)
+                  to strengthen your profile.
+                </p>
+              ) : (
+                <div className="timeline">
+                  {userInfo?.education?.map((education, index) => (
+                    <div className="timeline-item" key={index}>
+                      <div className="timeline-dot"></div>
+                      <div className="timeline-content">
+                        <h3 className="timeline-title">{education?.school || ''}</h3>
+                        {education?.degree && (
+                          <p className="timeline-subtitle">
+                            {education?.degree}
+                            {education?.fieldOfStudy && (
+                              <>, in {education?.fieldOfStudy}</>
+                            )}
+                          </p>
+                        )}
+                        <p className="timeline-date">
+                          {education?.startYear} - {education?.endYear}
+                        </p>
+                        
+                        <button
+                          className="item-edit-button"
+                          data-subsection={3}
+                          data-dataindex={index}
+                          onClick={openSectionToEdit}
+                        >
+                          <Image src={editIcon} alt="Edit" width={18} height={18} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+            
+            {/* Skills section */}
+            <section id="skills" className="content-section">
+              <div className="section-header">
+                <div className="section-title">
+                  <div className="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <span>Skills</span>
+                </div>
+                <button 
+                  className="add-button"
+                  data-subsection={5}
+                  data-dataindex={-1}
+                  onClick={openSectionToEdit}
+                >
+                  <Image src={addIcon} alt="Add" width={20} height={20} />
+                </button>
+              </div>
+              
+              {!userInfo?.skills || userInfo?.skills?.length === 0 ? (
+                <p style={{ opacity: 0.7 }}>
+                  Specify details about programming languages (such as
+                  Java, Python, C/C++, node.js, SQL etc), softwares
+                  (Microsoft Word, Excel, Figma etc) or any other work
+                  related skills.
+                </p>
+              ) : (
+                <div className="skills-grid">
+                  {userInfo?.skills?.map((skill, index) => (
+                    <div className="skill-card" key={index}>
+                      <h3 className="skill-name">{skill}</h3>
+                      <div className="skill-level">
+                        <div className="skill-progress" style={{ width: '85%' }}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+            
+            {/* Social section */}
+            <section id="social" className="content-section">
+              <div className="section-header">
+                <div className="section-title">
+                  <div className="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  </div>
+                  <span>Social</span>
+                </div>
+                <button 
+                  className="add-button"
+                  data-subsection={4}
+                  data-dataindex={-1}
+                  onClick={openSectionToEdit}
+                >
+                  <Image src={addIcon} alt="Add" width={20} height={20} />
+                </button>
+              </div>
+              
+              {!userInfo?.socials || userInfo?.socials?.length === 0 ? (
+                <p style={{ opacity: 0.7 }}>
+                  Enter the usernames for your LinkedIn, Behance, GitHub,
+                  and other profiles.
+                </p>
+              ) : (
+                <div className="social-links">
+                  {userInfo?.socials?.map((social, index) => (
+                    <Link href={social} target="_blank" key={index} className="social-link">
+                      <Image 
+                        src={getLinkIcon(social)} 
+                        alt="" 
+                        width={24} 
+                        height={24} 
+                      />
+                      <span className="social-link-text">{new URL(social).hostname.replace('www.', '')}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </section>
+            
+            {/* Achievements section */}
+            <section id="achievements" className="content-section">
+              <div className="section-header">
+                <div className="section-title">
+                  <div className="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                  </div>
+                  <span>Achievements</span>
+                </div>
+                <button 
+                  className="add-button"
+                  data-subsection={6}
+                  data-dataindex={-1}
+                  onClick={openSectionToEdit}
+                >
+                  <Image src={addIcon} alt="Add" width={20} height={20} />
+                </button>
+              </div>
+              
+              {!userInfo?.achievements || userInfo?.achievements?.length === 0 ? (
+                <p style={{ opacity: 0.7 }}>
+                  Share information about any honors or awards you&apos;ve
+                  received. 🏆
+                </p>
+              ) : (
+                <div className="timeline">
+                  {userInfo?.achievements?.map((achievement, index) => (
+                    <div className="timeline-item" key={index}>
+                      <div className="timeline-dot"></div>
+                      <div className="timeline-content">
+                        <h3 className="timeline-title">{achievement?.heading}</h3>
+                        
+                        <div className="timeline-description">
+                          {achievement?.description?.length > 0 && (
+                            <ul className={achievement?.description?.length > 150 ? 'dashboard_info_hide_text' : ''}>
+                              {achievement?.description
+                                .split('\n')
+                                .map((sentence, idx) => (
+                                  <li key={idx}>{sentence}</li>
+                                ))}
+                            </ul>
+                          )}
+                          
+                          {achievement?.description?.length > 150 && (
+                            <button
+                              className="dashboard_info_truncate_btn"
+                              data-status="hide"
+                              onClick={toggleDescription}
+                            >
+                              Show more
+                            </button>
+                          )}
+                        </div>
+                        
+                        <div className="skill-tags">
+                          {achievement?.document?.key?.length > 0 && (
+                            <span 
+                              className="skill-tag" 
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => viewDocumentInNewTab(achievement.document.key)}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                              </svg>
+                              View Document
+                            </span>
+                          )}
+                          
+                          {achievement?.link?.length > 0 && (
+                            <Link href={achievement?.link} target="_blank" className="skill-tag">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                              </svg>
+                              Link
+                            </Link>
+                          )}
+                        </div>
+                        
+                        <button
+                          className="item-edit-button"
+                          data-subsection={6}
+                          data-dataindex={index}
+                          onClick={openSectionToEdit}
+                        >
+                          <Image src={editIcon} alt="Edit" width={18} height={18} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+            
+            {/* Projects section */}
+            <section id="projects" className="content-section">
+              <div className="section-header">
+                <div className="section-title">
+                  <div className="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                  </div>
+                  <span>Projects</span>
+                </div>
+                <button 
+                  className="add-button"
+                  data-subsection={7}
+                  data-dataindex={-1}
+                  onClick={openSectionToEdit}
+                >
+                  <Image src={addIcon} alt="Add" width={20} height={20} />
+                </button>
+              </div>
+              
+              {!userInfo?.projects || userInfo?.projects?.length === 0 ? (
+                <p style={{ opacity: 0.7 }}>
+                  Add details about projects you have done in college,
+                  internship or at work.
+                </p>
+              ) : (
+                <div className="timeline">
+                  {userInfo?.projects?.map((project, index) => (
+                    <div className="timeline-item" key={index}>
+                      <div className="timeline-dot"></div>
+                      <div className="timeline-content">
+                        <h3 className="timeline-title">{project?.heading}</h3>
+                        
+                        <div className="timeline-description">
+                          {project?.description?.length > 0 && (
+                            <ul className={project?.description?.length > 150 ? 'dashboard_info_hide_text' : ''}>
+                              {project?.description
+                                .split('\n')
+                                .map((sentence, idx) => (
+                                  <li key={idx}>{sentence}</li>
+                                ))}
+                            </ul>
+                          )}
+                          
+                          {project?.description?.length > 150 && (
+                            <button
+                              className="dashboard_info_truncate_btn"
+                              data-status="hide"
+                              onClick={toggleDescription}
+                            >
+                              Show more
+                            </button>
+                          )}
+                        </div>
+                        
+                        <div className="skill-tags">
+                          {project?.document?.key?.length > 0 && (
+                            <span 
+                              className="skill-tag" 
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => viewDocumentInNewTab(project.document.key)}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                              </svg>
+                              View Document
+                            </span>
+                          )}
+                          
+                          {project?.link?.length > 0 && (
+                            <Link href={project?.link} target="_blank" className="skill-tag">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '4px' }}>
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                              </svg>
+                              Link
+                            </Link>
+                          )}
+                          
+                          {project?.skills?.length > 0 && project?.skills.map((skill, skillIdx) => (
+                            <span className="skill-tag" key={skillIdx}>
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                        
+                        <button
+                          className="item-edit-button"
+                          data-subsection={7}
+                          data-dataindex={index}
+                          onClick={openSectionToEdit}
+                        >
+                          <Image src={editIcon} alt="Edit" width={18} height={18} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
         </div>
       </div>
-    </ProfileContextProvider>
-  );
+      
+      {/* Action popup for editing content */}
+      {actionPopup && (
+        <ProfileActions
+          setActionPopup={setActionPopup}
+          setUserInfo={setUserInfo}
+          subSection={subSection}
+          subSectionIndex={subSectionIndex}
+          isDataUpdated={isDataUpdated}
+        />
+      )}
+      
+      {/* Notice period popup */}
+      {shouldDisplayMessage && (
+        <div className="joining_toggle_message_bg">
+          <div className="joining_toggle_message">
+            <h4>Please confirm your notice period</h4>
+            <div
+              className="closeFormOptionForPopup_joining_toggle"
+              onClick={handlePopupClose}
+            >
+              <Image src={crossIcon} alt="close" />
+            </div>
+            <div className="buttons_for_joining_toggle_message">
+              <button
+                className={`joining_toggle_message_button ${selectedButton === 'immediateJoiner'
+                  ? 'joining_toggle_message_buttonselected'
+                  : ''}`}
+                onClick={() => handleButtonClick('immediateJoiner')}
+              >
+                Immediate Joiner
+              </button>
+              <button
+                className={`joining_toggle_message_button ${selectedButton === 'noticePeriod'
+                  ? 'joining_toggle_message_buttonselected'
+                  : ''}`}
+                onClick={() => handleButtonClick('noticePeriod')}
+              >
+                Currently Serving Notice Period
+              </button>
+            </div>
+            {openDateForm && (
+              <div className="joining_toggle_message_dateForm">
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={handleDateChange}
+                  minDate={new Date()}
+                  maxDate={maxDate}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="Select a date"
+                />
+              </div>
+            )}
+            <button
+              className="joining_toggle_message_update_button"
+              onClick={handleUpdateButtonClick}
+            >
+              Update
+            </button>
+          </div>
+        </div>
+      )}
+      
+      {/* Signup confirmation popup */}
+      {signUpPopup && (
+        <SignUpFormPopup
+          user={user}
+          closePopUp={() => setSignUpPopup(false)}
+        />
+      )}
+      
+      {/* Signup form popup */}
+      {showSignUpForm && (
+        <SignUpFormPopup
+          user={user}
+          userData={userData}
+          closePopUp={() => setShowSignUpForm(false)}
+        />
+      )}
+      
+      {/* Profile upload dialog - rendered conditionally with proper z-index */}
+      {openProfileUploadDialog && (
+        <div className="profile-upload-container">
+          <ProfileUploadDialog
+            setOpenFileUploadDialog={setOpenFileUploadDialog}
+          />
+        </div>
+      )}
+      
+      <ToastContainer />
+    </div>
+  </ProfileContextProvider>
+);
 };
 
 export default ProfilePage;

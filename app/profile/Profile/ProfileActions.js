@@ -56,6 +56,7 @@ const ProfileActions = ({
   subSection,
   subSectionIndex,
   isDataUpdated,
+  updateProgressBar,
 }) => {
   /* This component is reused for the user input process initially
      and to edit and add new information later. */
@@ -222,7 +223,10 @@ const ProfileActions = ({
         // display the data after submitting
         const { data } = res.data;
         setUserInfo(data?.userInfo);
-
+        // Trigger progress bar update
+        if (typeof updateProgressBar === 'function') {
+          updateProgressBar(data?.userInfo);
+        }
         // change the data in sessionStorage
         dispatch({ type: 'CLEAR_STATE' });
       }
@@ -258,6 +262,10 @@ const ProfileActions = ({
 
       // save the new data into state
       setUserInfo(resData.userInfo);
+      // Trigger progress bar update
+      if (typeof updateProgressBar === 'function') {
+        updateProgressBar(resData.userInfo);
+      }
     } catch (error) {
       console.log(error);
       // TODO: remove log statement with popup message
@@ -303,7 +311,10 @@ const ProfileActions = ({
 
         // save updated user info
         setUserInfo(updatedUserInfo);
-
+        // Trigger progress bar update
+        if (typeof updateProgressBar === 'function') {
+          updateProgressBar(updatedUserInfo);
+        }
         // display a message to the user
         showBottomMessage('Successfully deleted data.');
 

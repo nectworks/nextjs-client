@@ -1,0 +1,139 @@
+/* 
+  ProfileHeaderWrapper.css
+  Consistent styling for the ProfileHeader across all pages
+*/
+
+.profile-header-wrapper {
+    width: 100%;
+    position: relative;
+    margin-bottom: 1.5rem;
+    z-index: 100;
+  }
+  
+  /* 
+    Global styles to ensure consistent header appearance
+    These styles will override the page-specific ones
+  */
+  .profile-header-wrapper .dashboard_profile_header {
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Fix dropdown initial state - prevent auto-opening */
+  .profile-header-wrapper .profile_header_options {
+    z-index: 5; /* Lower than profile image by default */
+  }
+  
+  /* Only when active, make the dropdown appear above profile */
+  .profile-header-wrapper .display_profile_header_options {
+    z-index: 500; /* Higher than profile when active */
+  }
+  
+  /* Make sure dropdown options are properly hidden by default */
+  .profile-header-wrapper .profile_header_option {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  /* Ensure options are visible when dropdown is active */
+  .profile-header-wrapper .display_profile_header_options .profile_header_option {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Media Queries for consistent responsive behavior */
+  @media screen and (max-width: 768px) {
+    .profile-header-wrapper {
+      margin-bottom: 1rem;
+    }
+    
+    .profile-header-wrapper .dashboard_profile_header {
+      padding: 0.5rem;
+      height: auto;
+      min-height: 50px;
+      position: relative;
+      box-shadow: none;
+    }
+    
+    /* Ensure hamburger icon is visible and properly positioned */
+    .profile-header-wrapper .dashboard_profile_hamburger_icon {
+      display: block;
+      position: relative;
+      left: -24px;
+      top: 0;
+    }
+    
+    .profile-header-wrapper .dashboard_profile_float_profile {
+      right: 10px;
+      top: 0;
+    }
+    
+    .profile-header-wrapper .dashboard_profile_header_nectcoins {
+      margin-right: 15px;
+      position: relative;
+    }
+    
+    .profile-header-wrapper .notification-container {
+      margin-right: 15px;
+      position: relative;
+    }
+    
+    /* Fix dropdown positioning in mobile view */
+    .profile-header-wrapper .profile_header_options {
+      right: 10px;
+      top: 0;
+    }
+    
+    .profile-header-wrapper .profile_header_option:nth-child(1) {
+      top: 50px;
+      right: 10px;
+    }
+    
+    .profile-header-wrapper .profile_header_option:nth-child(2) {
+      top: 100px;
+      right: 10px;
+    }
+  }
+  
+  /* Specific fix for 768px width */
+  @media screen and (width: 768px) {
+    .profile-header-wrapper {
+      margin-bottom: 0.75rem;
+    }
+    
+    .profile-header-wrapper .dashboard_profile_header {
+      padding: 0.5rem;
+    }
+    
+    /* Specific positioning for dropdown at 768px */
+    .profile-header-wrapper .profile_header_options {
+      right: 10px;
+    }
+    
+    .profile-header-wrapper .profile_header_option:nth-child(1) {
+      top: 50px;
+    }
+    
+    .profile-header-wrapper .profile_header_option:nth-child(2) {
+      top: 100px;
+    }
+  }
+  
+  /* Mobile optimizations */
+  @media screen and (max-width: 480px) {
+    .profile-header-wrapper .dashboard_profile_header {
+      padding: 0.5rem;
+    }
+    
+    .profile-header-wrapper .notification-container {
+      margin-right: 10px;
+    }
+    
+    .profile-header-wrapper .dashboard_profile_header_nectcoins {
+      margin-right: 10px;
+      min-width: 70px;
+    }
+  }

@@ -15,7 +15,7 @@ import './Help.css';
 import Image from 'next/image';
 import green_tick from '@/public/greenTick.svg';
 import ClipLoader from 'react-spinners/ClipLoader';
-import ProfileHeader from '../../_components/Profile/ProfileHeader/ProfileHeader';
+import ProfileHeaderWrapper from '@/app/_components/ProfileHeaderWrapper/ProfileHeaderWrapper';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import checkFileSize from '@/Utils/checkFileSize';
 import checkFileExtension from '@/Utils/checkFileExtension';
@@ -177,19 +177,6 @@ const Help = () => {
     }
   };
 
-  function calculateDaysDifference(inputDate) {
-    // Parse the input date as a Date object
-    const inputDateTime = new Date(inputDate);
-    // Get the current date and time
-    const currentDate = new Date();
-    // Calculate the time difference in milliseconds
-    const timeDifference = currentDate - inputDateTime;
-    // Convert milliseconds to days
-    const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
-    // Use Math.floor to get a whole number of days
-    return Math.floor(daysDifference);
-  }
-
   const [requestUnderProcess, setRequestUnderProcess] = useState(false);
 
   const getUserData = async () => {
@@ -220,7 +207,8 @@ const Help = () => {
     <div className="dashboard_outer_container">
       <DashboardMenu />
       <div className="starting_heading">
-        <ProfileHeader />
+        {/* Use the ProfileHeaderWrapper instead of ProfileHeader directly */}
+        <ProfileHeaderWrapper />
         <div className="helpContainer">
           <h3>Help</h3>
           {!requestUnderProcess ? (

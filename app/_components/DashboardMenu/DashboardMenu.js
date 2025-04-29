@@ -16,7 +16,6 @@ import postAJobIcon from '../../../public/Dashboard/postAJob.svg';
 import settingsIcon from '../../../public/Dashboard/settings.svg';
 import arrowIcon from '../../../public/Dashboard/arrow.svg';
 import crossIcon from '../../../public/SignUpConfirmPopup/crossIcon.svg';
-import hamburgerIcon from '../../../public/Dashboard/hamburgerIcon.svg';
 import logoutIcon from '../../../public/Dashboard/logout.svg';
 import toggleIcon from '../../../public/Dashboard/toggleIcon.svg';
 import './DashboardMenu.css';
@@ -232,12 +231,6 @@ function DashboardMenu() {
 
   return (
     <>
-      <Image
-        onClick={toggleDashboardMenuMobile}
-        className="dashboard_menu_hamburger_icon"
-        src={hamburgerIcon}
-        alt="menu icon"
-      />
       <div className="dashboard_menu_container" onClick={openMenuOnMouseHover}>
         <div className="dashboard_menu_icons_container">
           <Link className="dashboard_menu_logo" href="/profile">
