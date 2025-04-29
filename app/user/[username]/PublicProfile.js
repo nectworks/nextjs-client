@@ -48,6 +48,7 @@ import ProfileImage from '../../_components/Profile/ProfileImage/ProfileImage';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { publicAxios, privateAxios } from '@/config/axiosInstance';
 import { UserContext } from '@/context/User/UserContext';
+import { getSkillDescription, getSkillEmoji } from '@/Utils/skillDescriptions';
 
 // Import CSS for the Gen Z profile
 import './PublicProfile.css';
@@ -73,6 +74,7 @@ const PublicProfile = () => {
   const [sending, setSending] = useState(false);
   const [shareOptionsVisible, setShareOptionsVisible] = useState(false);
   const [showOwnerInfo, setShowOwnerInfo] = useState(true);
+  const [companyColors, setCompanyColors] = useState({});
   
   const spanRef = useRef(null);
   const sectionRefs = {
@@ -94,6 +96,37 @@ const PublicProfile = () => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1;
+
+  // Array of vibrant colors for company markers
+  const vibrantColors = [
+    '#FF6B6B', // Red
+    '#4ECDC4', // Teal
+    '#FFD166', // Yellow
+    '#6A0572', // Purple
+    '#1A535C', // Dark Teal
+    '#F86624', // Orange
+    '#662E9B', // Deep Purple
+    '#43AA8B', // Green
+    '#F94144', // Bright Red
+    '#277DA1', // Blue
+    '#9C6644', // Brown
+    '#F9C80E', // Gold
+    '#2B2D42', // Navy
+    '#06D6A0', // Mint
+    '#5F0F40'  // Burgundy
+  ];
+
+  // Generate random colors for companies
+  const generateCompanyColors = (companies) => {
+    const colorMap = {};
+    
+    companies.forEach((exp, index) => {
+      // Use index % array length to cycle through colors if more companies than colors
+      colorMap[exp.companyName] = vibrantColors[index % vibrantColors.length];
+    });
+    
+    return colorMap;
+  };
 
   // Data fetching functions
   const getUserViaUsername = async () => {
@@ -117,9 +150,15 @@ const PublicProfile = () => {
       if (res.status === 200) {
         const data = res.data.data;
         setAbout(data?.about);
-        setExperience(data?.experience);
-        setSkills(data?.skills);
-        setSocials(data?.socials);
+        setExperience(data?.experience || []);
+        setSkills(data?.skills || []);
+        setSocials(data?.socials || []);
+        
+        // Generate colors for companies
+        if (data?.experience && data.experience.length > 0) {
+          setCompanyColors(generateCompanyColors(data.experience));
+        }
+        
         setShowLoader(false);
       }
     } catch (err) {
@@ -156,6 +195,29 @@ const PublicProfile = () => {
     } catch (e) {
       return null;
     }
+  }
+
+  // Helper function to get main expertise from skills
+  function getMainExpertise() {
+    if (!skills || skills.length === 0) {
+      return '';
+    }
+    
+    // Try to find common programming languages or skills
+    const techKeywords = ['javascript', 'python', 'java', 'ruby', 'c++', 'c#', 'php', 'golang', 'rust', 
+                          'oracle', 'sql', 'database', 'aws', 'azure', 'gcp', 'cloud', 'react', 'angular', 
+                          'vue', 'node', 'frontend', 'backend', 'fullstack', 'mobile', 'android', 'ios'];
+    
+    for (const skill of skills) {
+      for (const keyword of techKeywords) {
+        if (skill.toLowerCase().includes(keyword)) {
+          return skill;
+        }
+      }
+    }
+    
+    // If no tech skill found, return the first skill
+    return skills[0];
   }
 
   // Calculate total experience
@@ -216,8 +278,7 @@ const PublicProfile = () => {
 
   // Event handlers
   const copyProfileUrl = () => {
-    if (!user) return;
-    const publicProfileURL = `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`;
+    const publicProfileURL = `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${username}`;
     navigator.clipboard.writeText(publicProfileURL);
     showBottomMessage('Public URL copied!');
     setShareOptionsVisible(false);
@@ -393,8 +454,38 @@ const PublicProfile = () => {
 
   // Fetch user data
   useEffect(() => {
-    getUserViaUsername().then(() => getProfileDetails());
-  }, []);
+    const fetchData = async () => {
+      await getUserViaUsername();
+      await getProfileDetails();
+    };
+    
+    fetchData();
+    
+    // Clean up function to handle component unmounting
+    return () => {
+      setUserData({});
+      setAbout('');
+      setExperience([]);
+      setSkills([]);
+      setSocials([]);
+    };
+  }, [username]);
+
+  // Add event listener for page visibility changes to reload data when returning to page
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // Reload data when page becomes visible again
+        getUserViaUsername().then(() => getProfileDetails());
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [username]);
 
   // Observe sections for intersection to update active tab
   useEffect(() => {
@@ -438,18 +529,24 @@ const PublicProfile = () => {
     );
   }
 
+  // Get user's main expertise for CTA card
+  const userExpertise = getMainExpertise();
+
   return (
     <div className="profile-container">
-      {/* Top navigation bar */}
-      <div className="profile-navbar">
-        <div className="profile-navbar-brand">DevConnect</div>
+      {/* Brand header (removed navbar class) */}
+      <div className="profile-brand-header">
+        <Link href="https://nectworks.com/" target="_blank" className="profile-navbar-brand">
+          Nectworks
+        </Link>
         <div className="profile-navbar-actions">
-          <button className="profile-navbar-icon-btn">
-            <FaEnvelope className="profile-navbar-icon" />
-          </button>
-          <div className="profile-navbar-avatar">
-            {user ? user.firstName?.charAt(0) : 'G'}
-          </div>
+          <Link href="/profile">
+            <button 
+              className="profile-avatar-button"
+              title="Profile">
+              {user ? user.firstName?.charAt(0) : 'G'}
+            </button>
+          </Link>
         </div>
       </div>
       
@@ -475,10 +572,6 @@ const PublicProfile = () => {
           {/* Status indicators */}
           <div className="profile-status-indicators">
             <div className="profile-status-badge profile-status-work">
-              <span className="profile-status-dot"></span>
-              <span>Open to work</span>
-            </div>
-            <div className="profile-status-badge profile-status-refer">
               <span className="profile-status-dot"></span>
               <span>Open to refer</span>
             </div>
@@ -557,6 +650,7 @@ const PublicProfile = () => {
                 <button 
                   className="profile-secondary-btn-genz"
                   onClick={toggleInvite}
+                  data-tooltip="Invite friends"
                 >
                   <FaEnvelope className="profile-btn-icon" />
                 </button>
@@ -565,6 +659,7 @@ const PublicProfile = () => {
                   <button 
                     className="profile-secondary-btn-genz"
                     onClick={() => setShareOptionsVisible(!shareOptionsVisible)}
+                    data-tooltip="Share profile"
                   >
                     <FaArrowUpRightFromSquare className="profile-btn-icon" />
                   </button>
@@ -616,12 +711,12 @@ const PublicProfile = () => {
             <div className="profile-invite-body">
               <div className="profile-invite-group">
                 <label><strong>From:</strong></label>
-                <p>{user.email}</p>
+                <p>{user?.email}</p>
               </div>
               
               <div className="profile-invite-group">
                 <label><strong>Subject:</strong></label>
-                <p>{user.firstName} has invited you to join DevConnect</p>
+                <p>{user?.firstName} has invited you to join Nectworks</p>
               </div>
               
               <div className="profile-invite-group">
@@ -733,9 +828,15 @@ const PublicProfile = () => {
                     startMonth
                   );
                   
+                  // Get color for this company
+                  const companyColor = companyColors[exp.companyName] || vibrantColors[0];
+                  
                   return (
                     <div key={index} className="profile-timeline-item-genz">
-                      <div className="profile-timeline-marker-genz">
+                      <div 
+                        className="profile-timeline-marker-genz"
+                        style={{ backgroundColor: companyColor, color: '#fff' }}
+                      >
                         <span>{exp.companyName.charAt(0)}</span>
                       </div>
                       <div className="profile-timeline-content-genz">
@@ -790,15 +891,27 @@ const PublicProfile = () => {
                 {/* Skill cards - Gen Z element */}
                 <div className="profile-skill-cards">
                   <div className="profile-skill-card profile-skill-card-blue">
-                    <div className="profile-skill-emoji">👨‍💻</div>
-                    <h3 className="profile-skill-card-title">Database Expert</h3>
-                    <p className="profile-skill-card-desc">Deep knowledge of Oracle technologies</p>
+                    <div className="profile-skill-emoji">
+                      {skills.length > 0 ? getSkillEmoji(skills[0]) : '👨‍💻'}
+                    </div>
+                    <h3 className="profile-skill-card-title">
+                      {skills.length > 0 ? skills[0] : 'Technical Expert'}
+                    </h3>
+                    <p className="profile-skill-card-desc">
+                      {skills.length > 0 ? getSkillDescription(skills[0]) : 'Applying specialized knowledge to solve complex problems'}
+                    </p>
                   </div>
                   
                   <div className="profile-skill-card profile-skill-card-orange">
-                    <div className="profile-skill-emoji">🔄</div>
-                    <h3 className="profile-skill-card-title">Integration Wizard</h3>
-                    <p className="profile-skill-card-desc">Connecting systems seamlessly</p>
+                    <div className="profile-skill-emoji">
+                      {skills.length > 1 ? getSkillEmoji(skills[1]) : '🔄'}
+                    </div>
+                    <h3 className="profile-skill-card-title">
+                      {skills.length > 1 ? skills[1] : 'Problem Solver'}
+                    </h3>
+                    <p className="profile-skill-card-desc">
+                      {skills.length > 1 ? getSkillDescription(skills[1]) : 'Supporting projects with specialized knowledge'}
+                    </p>
                   </div>
                 </div>
               </>
@@ -818,8 +931,14 @@ const PublicProfile = () => {
               <div className="profile-social-links-genz">
                 {socials.map((social, index) => {
                   const icon = getLinkIcon(social);
-                  const url = new URL(social);
-                  const hostname = url.hostname.replace('www.', '').split('.')[0];
+                  let hostname = '';
+                  
+                  try {
+                    const url = new URL(social);
+                    hostname = url.hostname.replace('www.', '').split('.')[0];
+                  } catch (e) {
+                    hostname = 'link';
+                  }
                   
                   return (
                     <a 
@@ -851,10 +970,18 @@ const PublicProfile = () => {
                 })}
               </div>
               
-              {/* CTA Card - Gen Z element */}
+              {/* Dynamic CTA Card based on user's current company */}
               <div className="profile-cta-card">
-                <h3 className="profile-cta-title">Need Oracle DB expertise?</h3>
-                <p className="profile-cta-text">Let&apos;s connect and talk about your project!</p>
+                <h3 className="profile-cta-title">
+                  {experience && experience.length > 0 && !experience[0].endMonth
+                    ? `Interested in working at ${experience[0].companyName}?`
+                    : `Looking for a referral opportunity?`}
+                </h3>
+                <p className="profile-cta-text">
+                  {experience && experience.length > 0 && !experience[0].endMonth
+                    ? `I can refer you for roles at ${experience[0].companyName}. Send me your details to get started!`
+                    : `I can help connect you with opportunities in my network. Let me know what you're looking for!`}
+                </p>
                 <button className="profile-cta-button" onClick={handleReferralRequest}>
                   Request a Referral
                 </button>
@@ -862,15 +989,6 @@ const PublicProfile = () => {
             </div>
           </section>
         )}
-        
-        {/* Footer promo card - Gen Z element */}
-        <div className="profile-footer-card">
-          <h3 className="profile-footer-title">Are you looking for Oracle Database expertise?</h3>
-          <p className="profile-footer-text">I&apos;m working on efficient &amp; scalable Node.js/Python drivers for Oracle</p>
-          <button className="profile-footer-button" onClick={handleReferralRequest}>
-            Let&apos;s Connect
-          </button>
-        </div>
       </main>
       
       {/* Profile owner info box */}
