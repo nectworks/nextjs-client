@@ -1,4 +1,4 @@
-/* Public Profile CSS - Gen Z Edition */
+/* Public Profile CSS */
 
 /* Core variables */
 :root {
@@ -10,7 +10,7 @@
   --text-light: #6c6c6c;
   --background-color: #f9f9f9;
   --card-background: #fff;
-  --border-radius: 16px;  /* Increased border radius for Gen Z aesthetic */
+  --border-radius: 16px;  /* Increased border radius */
   --card-radius: 20px;    /* Rounded cards */
   --btn-radius: 50px;     /* Pill buttons */
   --tag-radius: 50px;     /* Pill tags */
@@ -105,8 +105,8 @@
   font-weight: 600;
 }
 
-/* Header styles - Gen Z version */
-.profile-header-genz {
+/* Header styles */
+.profile-header {
   position: relative;
   margin-bottom: 1.5rem;
 }
@@ -193,19 +193,19 @@
   background-color: #3498db;
 }
 
-.profile-header-content-genz {
+.profile-header-content {
   padding: 0 20px;
   position: relative;
   margin-top: -70px;
 }
 
-.profile-image-container-genz {
+.profile-image-container {
   position: relative;
   margin-bottom: 15px;
   width: fit-content;
 }
 
-.profile-image-container-genz .profile_image {
+.profile-image-container .profile_image {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -218,7 +218,7 @@
   object-fit: cover;
 }
 
-.profile-verified-badge-genz {
+.profile-verified-badge {
   position: absolute;
   bottom: 5px;
   right: 5px;
@@ -234,17 +234,17 @@
   font-size: 0.8rem;
 }
 
-.profile-user-info-genz {
+.profile-user-info {
   margin-bottom: 16px;
 }
 
-.profile-name-genz {
+.profile-name {
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
-.profile-title-genz {
+.profile-title {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -254,19 +254,19 @@
   margin-bottom: 8px;
 }
 
-.profile-icon-genz {
+.profile-icon {
   color: var(--primary-color);
 }
 
-.profile-meta-info-genz {
+.profile-meta-info {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 10px;
 }
 
-.profile-location-genz,
-.profile-experience-genz {
+.profile-location,
+.profile-experience {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -279,7 +279,7 @@
   color: var(--text-light);
 }
 
-.profile-companies-genz {
+.profile-companies {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -295,13 +295,13 @@
   font-weight: 500;
 }
 
-.profile-actions-genz {
+.profile-actions {
   display: flex;
   gap: 10px;
   margin-bottom: 16px;
 }
 
-.profile-primary-btn-genz {
+.profile-primary-btn {
   background: var(--primary-gradient);
   color: white;
   border: none;
@@ -319,12 +319,12 @@
   transition: var(--transition);
 }
 
-.profile-primary-btn-genz:hover {
+.profile-primary-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 87, 177, 0.3);
 }
 
-.profile-secondary-btn-genz {
+.profile-secondary-btn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -338,12 +338,12 @@
   position: relative; /* For tooltip positioning */
 }
 
-.profile-secondary-btn-genz:hover {
+.profile-secondary-btn:hover {
   background-color: #f8f8f8;
   transform: translateY(-2px);
 }
 
-.profile-secondary-btn-genz.explore-btn {
+.profile-secondary-btn.explore-btn {
   width: auto;
   padding: 0 20px;
   border-radius: var(--btn-radius);
@@ -357,7 +357,7 @@
 }
 
 /* Share dropdown */
-.profile-share-container-genz {
+.profile-share-container {
   position: relative;
 }
 
@@ -575,11 +575,11 @@
 }
 
 /* Main content */
-.profile-main-genz {
+.profile-main {
   padding: 0 20px 30px;
 }
 
-.profile-section-genz {
+.profile-section {
   background-color: white;
   border-radius: var(--card-radius);
   margin-bottom: 20px;
@@ -603,14 +603,14 @@
 }
 
 /* About section */
-.profile-bio-genz {
+.profile-bio {
   white-space: pre-line;
   margin-bottom: 20px;
   color: var(--text-color);
   line-height: 1.6;
 }
 
-.profile-additional-info-genz {
+.profile-additional-info {
   background: linear-gradient(to right, #e6eef8, #edf1fa);
   padding: 16px;
   border-radius: 16px;
@@ -624,12 +624,12 @@
   font-size: 1.05rem;
 }
 
-.profile-empty-genz {
+.profile-empty {
   color: var(--text-light);
   font-style: italic;
 }
 
-/* Current vibe box - Gen Z element */
+/* Current vibe box */
 .profile-vibe-box {
   background: linear-gradient(to right, rgba(255, 170, 0, 0.1), rgba(255, 123, 0, 0.1));
   padding: 16px;
@@ -670,22 +670,22 @@
 }
 
 /* Experience timeline */
-.profile-timeline-genz {
+.profile-timeline {
   position: relative;
 }
 
-.profile-timeline-item-genz {
+.profile-timeline-item {
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
 }
 
-.profile-timeline-item-genz:last-child {
+.profile-timeline-item:last-child {
   margin-bottom: 0;
 }
 
 /* Timeline marker with customizable colors (Issue #5) */
-.profile-timeline-marker-genz {
+.profile-timeline-marker {
   position: relative;
   width: 36px;
   height: 36px;
@@ -701,12 +701,12 @@
   z-index: 1;
 }
 
-.profile-timeline-content-genz {
+.profile-timeline-content {
   flex-grow: 1;
   position: relative;
 }
 
-.profile-timeline-item-genz:not(:last-child) .profile-timeline-content-genz::before {
+.profile-timeline-item:not(:last-child) .profile-timeline-content::before {
   content: '';
   position: absolute;
   top: 36px;
@@ -717,25 +717,25 @@
   z-index: 0;
 }
 
-.profile-job-title-genz {
+.profile-job-title {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 4px;
 }
 
-.profile-company-info-genz {
+.profile-company-info {
   display: flex;
   align-items: center;
   margin-bottom: 4px;
 }
 
-.profile-company-name-genz {
+.profile-company-name {
   color: var(--primary-color);
   font-weight: 500;
   margin-right: 8px;
 }
 
-.profile-employment-type-genz {
+.profile-employment-type {
   font-size: 0.85rem;
   color: var(--text-light);
   padding: 2px 8px;
@@ -743,7 +743,7 @@
   border-radius: 4px;
 }
 
-.profile-job-duration-genz {
+.profile-job-duration {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -753,19 +753,19 @@
   color: var(--text-light);
 }
 
-.profile-duration-time-genz {
+.profile-duration-time {
   padding: 2px 8px;
   background-color: #f0f3f8;
   border-radius: 50px;
   font-size: 0.8rem;
 }
 
-.profile-job-description-genz {
+.profile-job-description {
   margin: 10px 0;
   color: var(--text-color);
 }
 
-.profile-job-skills-genz {
+.profile-job-skills {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -773,14 +773,14 @@
 }
 
 /* Skills section */
-.profile-skills-genz {
+.profile-skills {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 20px;
 }
 
-.profile-skill-tag-genz {
+.profile-skill-tag {
   background-color: var(--primary-light);
   color: var(--primary-color);
   padding: 8px 16px;
@@ -797,7 +797,7 @@
   font-size: 0.8rem;
 }
 
-/* Skill cards - Gen Z element */
+/* Skill cards */
 .profile-skill-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -842,14 +842,14 @@
 }
 
 /* Connect section */
-.profile-social-links-genz {
+.profile-social-links {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 12px;
   margin-bottom: 20px;
 }
 
-.profile-social-link-genz {
+.profile-social-link {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -861,7 +861,7 @@
   transition: var(--transition);
 }
 
-.profile-social-link-genz:hover {
+.profile-social-link:hover {
   background-color: #edf1fa;
   transform: translateY(-2px);
 }
@@ -877,7 +877,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.profile-social-icon-genz {
+.profile-social-icon {
   width: 20px;
   height: 20px;
 }
@@ -887,7 +887,7 @@
   flex-direction: column;
 }
 
-.profile-social-name-genz {
+.profile-social-name {
   font-weight: 500;
 }
 
@@ -896,7 +896,7 @@
   color: var(--text-light);
 }
 
-/* CTA Card - Gen Z element */
+/* CTA Card */
 .profile-cta-card {
   background: linear-gradient(to right, #e6eef8, #edf1fa);
   padding: 20px;
@@ -935,7 +935,7 @@
 }
 
 /* Profile owner info box */
-.profile-owner-info-genz {
+.profile-owner-info {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -960,7 +960,7 @@
   }
 }
 
-.profile-owner-info-close-genz {
+.profile-owner-info-close {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -975,7 +975,7 @@
   justify-content: center;
 }
 
-.profile-owner-info-close-genz:hover {
+.profile-owner-info-close:hover {
   background-color: #f5f5f5;
 }
 
@@ -1045,23 +1045,23 @@
 
 /* Responsive styles */
 @media (max-width: 992px) {
-  .profile-header-content-genz {
+  .profile-header-content {
     margin-top: -50px;
   }
   
-  .profile-image-container-genz .profile_image {
+  .profile-image-container .profile_image {
     width: 100px;
     height: 100px;
   }
   
-  .profile-verified-badge-genz {
+  .profile-verified-badge {
     width: 24px;
     height: 24px;
     bottom: 3px;
     right: 3px;
   }
   
-  .profile-name-genz {
+  .profile-name {
     font-size: 1.5rem;
   }
   
@@ -1069,11 +1069,11 @@
     grid-template-columns: 1fr;
   }
   
-  .profile-social-links-genz {
+  .profile-social-links {
     grid-template-columns: 1fr;
   }
   
-  .profile-owner-info-genz {
+  .profile-owner-info {
     width: calc(100% - 40px);
     max-width: 380px;
   }
@@ -1084,17 +1084,17 @@
     height: 150px;
   }
   
-  .profile-actions-genz {
+  .profile-actions {
     flex-wrap: wrap;
   }
   
-  .profile-primary-btn-genz {
+  .profile-primary-btn {
     width: 100%;
     order: 1;
   }
   
-  .profile-secondary-btn-genz,
-  .profile-share-container-genz {
+  .profile-secondary-btn,
+  .profile-share-container {
     order: 0;
   }
   
@@ -1115,21 +1115,21 @@
     padding: 16px;
   }
   
-  .profile-timeline-item-genz {
+  .profile-timeline-item {
     gap: 12px;
   }
   
-  .profile-timeline-marker-genz {
+  .profile-timeline-marker {
     width: 30px;
     height: 30px;
     font-size: 0.8rem;
   }
   
-  .profile-timeline-item-genz:not(:last-child) .profile-timeline-content-genz::before {
+  .profile-timeline-item:not(:last-child) .profile-timeline-content::before {
     left: -21px;
   }
   
-  .profile-job-title-genz {
+  .profile-job-title {
     font-size: 1rem;
   }
 }
@@ -1158,33 +1158,33 @@
     font-size: 0.75rem;
   }
   
-  .profile-header-content-genz {
+  .profile-header-content {
     margin-top: -40px;
     padding: 0 16px;
   }
   
-  .profile-image-container-genz .profile_image {
+  .profile-image-container .profile_image {
     width: 80px;
     height: 80px;
     border-width: 3px;
   }
   
-  .profile-verified-badge-genz {
+  .profile-verified-badge {
     width: 20px;
     height: 20px;
     border-width: 2px;
     font-size: 0.7rem;
   }
   
-  .profile-name-genz {
+  .profile-name {
     font-size: 1.3rem;
   }
   
-  .profile-title-genz {
+  .profile-title {
     font-size: 1rem;
   }
   
-  .profile-meta-info-genz {
+  .profile-meta-info {
     font-size: 0.85rem;
   }
   
@@ -1193,7 +1193,7 @@
     margin-bottom: 16px;
   }
   
-  .profile-main-genz {
+  .profile-main {
     padding: 0 16px 24px;
   }
   
@@ -1221,7 +1221,7 @@
     padding: 16px;
   }
   
-  .profile-owner-info-genz {
+  .profile-owner-info {
     bottom: 16px;
     right: 16px;
     width: calc(100% - 32px);
@@ -1250,7 +1250,7 @@
 }
 
 /* Hover effects */
-.profile-skill-tag-genz:hover {
+.profile-skill-tag:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: var(--transition);
@@ -1268,7 +1268,7 @@
 }
 
 /* Scroll animations */
-.profile-section-genz {
+.profile-section {
   opacity: 0;
   transform: translateY(10px);
   animation: fadeIn 0.5s forwards;
@@ -1281,19 +1281,19 @@
   }
 }
 
-.profile-section-genz:nth-child(1) {
+.profile-section:nth-child(1) {
   animation-delay: 0.1s;
 }
 
-.profile-section-genz:nth-child(2) {
+.profile-section:nth-child(2) {
   animation-delay: 0.2s;
 }
 
-.profile-section-genz:nth-child(3) {
+.profile-section:nth-child(3) {
   animation-delay: 0.3s;
 }
 
-.profile-section-genz:nth-child(4) {
+.profile-section:nth-child(4) {
   animation-delay: 0.4s;
 }
 
@@ -1315,7 +1315,8 @@
 }
 
 .profile-avatar-button {
-  background: linear-gradient(to bottom right, #e6eef8, #edf1fa);
+  background: #FFF6EB; /* Default background color */
+  border: 1px solid #FF7B00; /* Border color */
   border: none;
   font-size: 1rem;
   font-weight: bold;
@@ -1331,7 +1332,8 @@
 }
 
 .profile-avatar-button:hover {
-  background: #4267B2; /* Change background to #4267B2 on hover */
-  color: #ffffff; /* Change text color to match the border */
+  background: #FFE7C7; /* Change background to #FFE7C7 on hover */
+  color: #FF7B00; /* Change text color to match the border */
+  font-size: 1.2rem; /* Increase font size on hover */
   text-decoration: none;
 }

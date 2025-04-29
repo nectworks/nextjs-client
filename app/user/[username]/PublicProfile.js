@@ -2,7 +2,7 @@
 
 /*
     File - PublicProfile.js
-    Desc - This file is responsible for displaying a Gen Z-friendly public profile
+    Desc - This file is responsible for displaying a user-friendly public profile
     page for a user, including their personal details, work history,
     skills, and social links. It features modern UI elements like gradients,
     floating animations, and a more engaging visual layout.
@@ -50,7 +50,7 @@ import { publicAxios, privateAxios } from '@/config/axiosInstance';
 import { UserContext } from '@/context/User/UserContext';
 import { getSkillDescription, getSkillEmoji } from '@/Utils/skillDescriptions';
 
-// Import CSS for the Gen Z profile
+// Import CSS
 import './PublicProfile.css';
 
 const PublicProfile = () => {
@@ -551,7 +551,7 @@ const PublicProfile = () => {
       </div>
       
       {/* Header with gradient background */}
-      <header className="profile-header-genz">
+      <header className="profile-header">
         <div className="profile-header-bg">
           {/* Animated background dots */}
           <div className="profile-animated-dots">
@@ -578,42 +578,42 @@ const PublicProfile = () => {
           </div>
         </div>
         
-        <div className="profile-header-content-genz">
+        <div className="profile-header-content">
           {/* Profile image with verification badge */}
-          <div className="profile-image-container-genz">
+          <div className="profile-image-container">
             <ProfileImage isLoggedInUser={false} otherUser={userData} />
             
             {userData.professionalDetails?.isVerifiedEmail && (
-              <div className="profile-verified-badge-genz">
+              <div className="profile-verified-badge">
                 <span>✓</span>
               </div>
             )}
           </div>
           
           {/* User info */}
-          <div className="profile-user-info-genz">
-            <h1 className="profile-name-genz">
+          <div className="profile-user-info">
+            <h1 className="profile-name">
               {userData.firstName} {userData.lastName}
             </h1>
             
             {experience && experience.length > 0 && (
-              <div className="profile-title-genz">
-                <FaBriefcase className="profile-icon-genz" />
+              <div className="profile-title">
+                <FaBriefcase className="profile-icon" />
                 <span>
                   {experience[0].jobTitle} @ {experience[0].companyName}
                 </span>
               </div>
             )}
             
-            <div className="profile-meta-info-genz">
+            <div className="profile-meta-info">
               {userData?.userDetails?.location && (
-                <div className="profile-location-genz">
+                <div className="profile-location">
                   <FaLocationDot className="profile-icon-sm" />
                   <span>{userData.userDetails.location}</span>
                 </div>
               )}
               
-              <div className="profile-experience-genz">
+              <div className="profile-experience">
                 <FaCalendarDays className="profile-icon-sm" />
                 <span>
                   {calcTotalExperience().countYear > 0 
@@ -625,7 +625,7 @@ const PublicProfile = () => {
             
             {/* Previous companies */}
             {experience && experience.length > 1 && (
-              <div className="profile-companies-genz">
+              <div className="profile-companies">
                 {experience.slice(0, 3).map((exp, idx) => (
                   <div key={idx} className="profile-company-badge">
                     {exp.companyName}
@@ -636,9 +636,9 @@ const PublicProfile = () => {
           </div>
           
           {/* Action buttons */}
-          <div className="profile-actions-genz">
+          <div className="profile-actions">
             <button 
-              className="profile-primary-btn-genz"
+              className="profile-primary-btn"
               onClick={handleReferralRequest}
             >
               <span>Request Referral</span>
@@ -648,16 +648,16 @@ const PublicProfile = () => {
             {user && user.username === username && (
               <>
                 <button 
-                  className="profile-secondary-btn-genz"
+                  className="profile-secondary-btn"
                   onClick={toggleInvite}
                   data-tooltip="Invite friends"
                 >
                   <FaEnvelope className="profile-btn-icon" />
                 </button>
                 
-                <div className="profile-share-container-genz">
+                <div className="profile-share-container">
                   <button 
-                    className="profile-secondary-btn-genz"
+                    className="profile-secondary-btn"
                     onClick={() => setShareOptionsVisible(!shareOptionsVisible)}
                     data-tooltip="Share profile"
                   >
@@ -689,7 +689,7 @@ const PublicProfile = () => {
             )}
             
             {!user && (
-              <a href="/" className="profile-secondary-btn-genz explore-btn">
+              <a href="/" className="profile-secondary-btn explore-btn">
                 Explore
               </a>
             )}
@@ -776,21 +776,21 @@ const PublicProfile = () => {
       </div>
       
       {/* Main content */}
-      <main className="profile-main-genz">
+      <main className="profile-main">
         {/* About section */}
-        <section id="about" ref={sectionRefs.about} className="profile-section-genz">
+        <section id="about" ref={sectionRefs.about} className="profile-section">
           <div className="profile-section-header">
             <h2 className="profile-section-title">About</h2>
           </div>
           <div className="profile-section-body">
             {about?.bio ? (
-              <p className="profile-bio-genz">{about.bio}</p>
+              <p className="profile-bio">{about.bio}</p>
             ) : (
-              <p className="profile-empty-genz">No bio provided</p>
+              <p className="profile-empty">No bio provided</p>
             )}
             
             {about?.additionalInfo && (
-              <div className="profile-additional-info-genz">
+              <div className="profile-additional-info">
                 <h3 className="profile-additional-title">What {userData.firstName} loves about their job</h3>
                 <p>{about.additionalInfo}</p>
               </div>
@@ -811,13 +811,13 @@ const PublicProfile = () => {
         </section>
         
         {/* Experience section */}
-        <section id="experience" ref={sectionRefs.experience} className="profile-section-genz">
+        <section id="experience" ref={sectionRefs.experience} className="profile-section">
           <div className="profile-section-header">
             <h2 className="profile-section-title">Experience</h2>
           </div>
           <div className="profile-section-body">
             {experience && experience.length > 0 ? (
-              <div className="profile-timeline-genz">
+              <div className="profile-timeline">
                 {experience.map((exp, index) => {
                   const startMonth = allMonths.indexOf(exp.startMonth);
                   const endMonth = exp.endMonth ? allMonths.indexOf(exp.endMonth) : currentMonth - 1;
@@ -832,32 +832,32 @@ const PublicProfile = () => {
                   const companyColor = companyColors[exp.companyName] || vibrantColors[0];
                   
                   return (
-                    <div key={index} className="profile-timeline-item-genz">
+                    <div key={index} className="profile-timeline-item">
                       <div 
-                        className="profile-timeline-marker-genz"
+                        className="profile-timeline-marker"
                         style={{ backgroundColor: companyColor, color: '#fff' }}
                       >
                         <span>{exp.companyName.charAt(0)}</span>
                       </div>
-                      <div className="profile-timeline-content-genz">
-                        <h3 className="profile-job-title-genz">{exp.jobTitle}</h3>
-                        <div className="profile-company-info-genz">
-                          <span className="profile-company-name-genz">{exp.companyName}</span>
-                          <span className="profile-employment-type-genz">{exp.employmentType}</span>
+                      <div className="profile-timeline-content">
+                        <h3 className="profile-job-title">{exp.jobTitle}</h3>
+                        <div className="profile-company-info">
+                          <span className="profile-company-name">{exp.companyName}</span>
+                          <span className="profile-employment-type">{exp.employmentType}</span>
                         </div>
-                        <div className="profile-job-duration-genz">
-                          <span className="profile-duration-dates-genz">
+                        <div className="profile-job-duration">
+                          <span className="profile-duration-dates">
                             {exp.startMonth} {exp.startYear} - {exp.endMonth || 'Present'} {exp.endYear || ''}
                           </span>
-                          <span className="profile-duration-time-genz">
+                          <span className="profile-duration-time">
                             {formatExperienceDuration(durationMonths)}
                           </span>
                         </div>
                         {exp.description && (
-                          <p className="profile-job-description-genz">{exp.description}</p>
+                          <p className="profile-job-description">{exp.description}</p>
                         )}
                         {exp.skills && exp.skills.length > 0 && (
-                          <div className="profile-job-skills-genz">
+                          <div className="profile-job-skills">
                             {exp.skills.map((skill, idx) => (
                               <span key={idx} className="profile-skill-tag-small">{skill}</span>
                             ))}
@@ -869,26 +869,26 @@ const PublicProfile = () => {
                 })}
               </div>
             ) : (
-              <p className="profile-empty-genz">No experience listed</p>
+              <p className="profile-empty">No experience listed</p>
             )}
           </div>
         </section>
         
         {/* Skills section */}
-        <section id="skills" ref={sectionRefs.skills} className="profile-section-genz">
+        <section id="skills" ref={sectionRefs.skills} className="profile-section">
           <div className="profile-section-header">
             <h2 className="profile-section-title">Skills & Superpowers</h2>
           </div>
           <div className="profile-section-body">
             {skills && skills.length > 0 ? (
               <>
-                <div className="profile-skills-genz">
+                <div className="profile-skills">
                   {skills.map((skill, index) => (
-                    <div key={index} className="profile-skill-tag-genz">{skill}</div>
+                    <div key={index} className="profile-skill-tag">{skill}</div>
                   ))}
                 </div>
                 
-                {/* Skill cards - Gen Z element */}
+                {/* Skill cards section */}
                 <div className="profile-skill-cards">
                   <div className="profile-skill-card profile-skill-card-blue">
                     <div className="profile-skill-emoji">
@@ -916,19 +916,19 @@ const PublicProfile = () => {
                 </div>
               </>
             ) : (
-              <p className="profile-empty-genz">No skills listed</p>
+              <p className="profile-empty">No skills listed</p>
             )}
           </div>
         </section>
         
         {/* Connect section */}
         {socials && socials.length > 0 && (
-          <section id="social" ref={sectionRefs.social} className="profile-section-genz">
+          <section id="social" ref={sectionRefs.social} className="profile-section">
             <div className="profile-section-header">
               <h2 className="profile-section-title">Connect With Me</h2>
             </div>
             <div className="profile-section-body">
-              <div className="profile-social-links-genz">
+              <div className="profile-social-links">
                 {socials.map((social, index) => {
                   const icon = getLinkIcon(social);
                   let hostname = '';
@@ -946,7 +946,7 @@ const PublicProfile = () => {
                       href={social} 
                       target="_blank" 
                       rel="noreferrer"
-                      className="profile-social-link-genz"
+                      className="profile-social-link"
                     >
                       <div className="profile-social-icon-container">
                         {icon ? (
@@ -955,14 +955,14 @@ const PublicProfile = () => {
                             alt={hostname} 
                             width={24} 
                             height={24} 
-                            className="profile-social-icon-genz" 
+                            className="profile-social-icon" 
                           />
                         ) : (
-                          <FaArrowUpRightFromSquare className="profile-social-icon-genz" />
+                          <FaArrowUpRightFromSquare className="profile-social-icon" />
                         )}
                       </div>
                       <div className="profile-social-info">
-                        <span className="profile-social-name-genz">{hostname}</span>
+                        <span className="profile-social-name">{hostname}</span>
                         <span className="profile-social-username">@{userData.username || 'username'}</span>
                       </div>
                     </a>
@@ -993,9 +993,9 @@ const PublicProfile = () => {
       
       {/* Profile owner info box */}
       {user && user.username === username && showOwnerInfo && (
-        <div className="profile-owner-info-genz">
+        <div className="profile-owner-info">
           <button 
-            className="profile-owner-info-close-genz" 
+            className="profile-owner-info-close" 
             onClick={closeOwnerInfo}
           >
             <Image src={crossIcon} alt="close" width={16} height={16} />
