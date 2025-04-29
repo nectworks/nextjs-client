@@ -2,10 +2,10 @@
 
 /*
     File - PublicProfile.js
-    Desc - This file is responsible for displaying a  public profile
+    Desc - This file is responsible for displaying a Gen Z-friendly public profile
     page for a user, including their personal details, work history,
-    skills, and social links. It features an improved UI with better responsiveness,
-    visual hierarchy, and user interaction elements.
+    skills, and social links. It features modern UI elements like gradients,
+    floating animations, and a more engaging visual layout.
 */
 import { useEffect, useRef, useState } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -49,7 +49,7 @@ import showBottomMessage from '@/Utils/showBottomMessage';
 import { publicAxios, privateAxios } from '@/config/axiosInstance';
 import { UserContext } from '@/context/User/UserContext';
 
-// Import CSS for the  profile
+// Import CSS for the Gen Z profile
 import './PublicProfile.css';
 
 const PublicProfile = () => {
@@ -72,6 +72,7 @@ const PublicProfile = () => {
   const [emailList, setEmailList] = useState('');
   const [sending, setSending] = useState(false);
   const [shareOptionsVisible, setShareOptionsVisible] = useState(false);
+  const [showOwnerInfo, setShowOwnerInfo] = useState(true);
   
   const spanRef = useRef(null);
   const sectionRefs = {
@@ -219,6 +220,7 @@ const PublicProfile = () => {
     const publicProfileURL = `${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${user?.username}`;
     navigator.clipboard.writeText(publicProfileURL);
     showBottomMessage('Public URL copied!');
+    setShareOptionsVisible(false);
   };
 
   const copyTextToClipboard = () => {
@@ -230,11 +232,12 @@ const PublicProfile = () => {
     }, 1000);
   };
 
+  // Scroll to section and update active tab
   const scrollToContent = (sectionId) => {
     setActiveSection(sectionId);
     const section = sectionRefs[sectionId]?.current;
     if (section) {
-      const offset = 100; // Offset from the top
+      const offset = 80; // Offset from the top to account for sticky header
       const sectionTop = section.getBoundingClientRect().top + window.pageYOffset - offset;
       window.scrollTo({ top: sectionTop, behavior: 'smooth' });
     }
@@ -311,6 +314,21 @@ const PublicProfile = () => {
     }
   };
 
+  // Handle referral request click
+  const handleReferralRequest = () => {
+    if (user && user._id === userData._id) {
+      showBottomMessage('Cannot send referral requests to yourself.');
+      return;
+    } else {
+      router.push(linkToRequestRefer);
+    }
+  };
+
+  // Close owner info box
+  const closeOwnerInfo = () => {
+    setShowOwnerInfo(false);
+  };
+
   // Initialize the one-tap login
   async function handleOneTapLogin(response) {
     try {
@@ -378,7 +396,7 @@ const PublicProfile = () => {
     getUserViaUsername().then(() => getProfileDetails());
   }, []);
 
-  // Observe sections for intersection
+  // Observe sections for intersection to update active tab
   useEffect(() => {
     const observerOptions = {
       root: null,
@@ -422,162 +440,204 @@ const PublicProfile = () => {
 
   return (
     <div className="profile-container">
-      {/* Responsive header */}
-      <header className="profile-header">
-        <div className="profile-header-content">
-          <div className="profile-image-container">
+      {/* Top navigation bar */}
+      <div className="profile-navbar">
+        <div className="profile-navbar-brand">DevConnect</div>
+        <div className="profile-navbar-actions">
+          <button className="profile-navbar-icon-btn">
+            <FaEnvelope className="profile-navbar-icon" />
+          </button>
+          <div className="profile-navbar-avatar">
+            {user ? user.firstName?.charAt(0) : 'G'}
+          </div>
+        </div>
+      </div>
+      
+      {/* Header with gradient background */}
+      <header className="profile-header-genz">
+        <div className="profile-header-bg">
+          {/* Animated background dots */}
+          <div className="profile-animated-dots">
+            {[...Array(30)].map((_, i) => (
+              <div 
+                key={i} 
+                className="profile-animated-dot" 
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  width: `${Math.random() * 15 + 5}px`,
+                  height: `${Math.random() * 15 + 5}px`,
+                }}
+              />
+            ))}
+          </div>
+          
+          {/* Status indicators */}
+          <div className="profile-status-indicators">
+            <div className="profile-status-badge profile-status-work">
+              <span className="profile-status-dot"></span>
+              <span>Open to work</span>
+            </div>
+            <div className="profile-status-badge profile-status-refer">
+              <span className="profile-status-dot"></span>
+              <span>Open to refer</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="profile-header-content-genz">
+          {/* Profile image with verification badge */}
+          <div className="profile-image-container-genz">
             <ProfileImage isLoggedInUser={false} otherUser={userData} />
             
             {userData.professionalDetails?.isVerifiedEmail && (
-              <div className="verified-badge">
+              <div className="profile-verified-badge-genz">
                 <span>✓</span>
               </div>
             )}
           </div>
           
-          <div className="profile-header-info">
-            <h1 className="profile-name">
+          {/* User info */}
+          <div className="profile-user-info-genz">
+            <h1 className="profile-name-genz">
               {userData.firstName} {userData.lastName}
             </h1>
             
             {experience && experience.length > 0 && (
-              <div className="profile-title">
-                <FaBriefcase className="profile-icon" />
+              <div className="profile-title-genz">
+                <FaBriefcase className="profile-icon-genz" />
                 <span>
                   {experience[0].jobTitle} @ {experience[0].companyName}
                 </span>
               </div>
             )}
             
-            {userData?.userDetails?.location && (
-              <div className="profile-location">
-                <FaLocationDot className="profile-icon" />
-                <span>{userData.userDetails.location}</span>
+            <div className="profile-meta-info-genz">
+              {userData?.userDetails?.location && (
+                <div className="profile-location-genz">
+                  <FaLocationDot className="profile-icon-sm" />
+                  <span>{userData.userDetails.location}</span>
+                </div>
+              )}
+              
+              <div className="profile-experience-genz">
+                <FaCalendarDays className="profile-icon-sm" />
+                <span>
+                  {calcTotalExperience().countYear > 0 
+                    ? `${calcTotalExperience().countYear} years, ${calcTotalExperience().countMonth} months` 
+                    : `${calcTotalExperience().countMonth} months`}
+                </span>
               </div>
-            )}
-            
-            <div className="profile-total-experience">
-              <FaCalendarDays className="profile-icon" />
-              <span>
-                {calcTotalExperience().countYear > 0 
-                  ? `${calcTotalExperience().countYear} years, ${calcTotalExperience().countMonth} months experience` 
-                  : `${calcTotalExperience().countMonth} months experience`}
-              </span>
             </div>
             
             {/* Previous companies */}
             {experience && experience.length > 1 && (
-              <div className="profile-ex-companies">
-                <FaBuilding className="profile-icon" />
-                <span>Ex: </span>
-                {experience.slice(1, 4).map((exp, idx) => (
-                  <span key={idx} className="ex-company-tag">
+              <div className="profile-companies-genz">
+                {experience.slice(0, 3).map((exp, idx) => (
+                  <div key={idx} className="profile-company-badge">
                     {exp.companyName}
-                  </span>
+                  </div>
                 ))}
               </div>
             )}
+          </div>
+          
+          {/* Action buttons */}
+          <div className="profile-actions-genz">
+            <button 
+              className="profile-primary-btn-genz"
+              onClick={handleReferralRequest}
+            >
+              <span>Request Referral</span>
+              <Image src={rightIcon} alt="arrow" width={16} height={16} />
+            </button>
             
-            <div className="profile-actions">
-              <button 
-                className="profile-primary-btn"
-                onClick={() => {
-                  if (user && user._id === userData._id) {
-                    showBottomMessage('Cannot send referral requests to yourself.');
-                    return;
-                  } else {
-                    router.push(linkToRequestRefer);
-                  }
-                }}
-              >
-                Request Referral
-              </button>
-              
-              {user && user.username === username && (
-                <>
+            {user && user.username === username && (
+              <>
+                <button 
+                  className="profile-secondary-btn-genz"
+                  onClick={toggleInvite}
+                >
+                  <FaEnvelope className="profile-btn-icon" />
+                </button>
+                
+                <div className="profile-share-container-genz">
                   <button 
-                    className="profile-secondary-btn"
-                    onClick={toggleInvite}
+                    className="profile-secondary-btn-genz"
+                    onClick={() => setShareOptionsVisible(!shareOptionsVisible)}
                   >
-                    <FaEnvelope className="btn-icon" />
-                    Invite Friends
+                    <FaArrowUpRightFromSquare className="profile-btn-icon" />
                   </button>
                   
-                  <div className="profile-share-container">
-                    <button 
-                      className="profile-secondary-btn"
-                      onClick={() => setShareOptionsVisible(!shareOptionsVisible)}
-                    >
-                      <FaArrowUpRightFromSquare className="btn-icon" />
-                      Share
-                    </button>
-                    
-                    {shareOptionsVisible && (
-                      <div className="share-options-dropdown">
-                        <button onClick={handleLinkedinShare}>
-                          <FaLinkedin /> LinkedIn
-                        </button>
-                        <button onClick={handleTwitterShare}>
-                          <FaXTwitter /> Twitter
-                        </button>
-                        <button onClick={handleFacebookShare}>
-                          <FaFacebookF /> Facebook
-                        </button>
-                        <button onClick={copyProfileUrl}>
-                          Copy Link
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-              
-              {!user && (
-                <a href="/" className="profile-secondary-btn">
-                  Explore Nectworks
-                </a>
-              )}
-            </div>
+                  {shareOptionsVisible && (
+                    <div className="profile-share-dropdown">
+                      <button onClick={handleLinkedinShare} className="profile-share-option">
+                        <FaLinkedin className="profile-share-icon linkedin" /> LinkedIn
+                      </button>
+                      <button onClick={handleTwitterShare} className="profile-share-option">
+                        <FaXTwitter className="profile-share-icon twitter" /> Twitter
+                      </button>
+                      <button onClick={handleFacebookShare} className="profile-share-option">
+                        <FaFacebookF className="profile-share-icon facebook" /> Facebook
+                      </button>
+                      <button onClick={copyProfileUrl} className="profile-share-option">
+                        <Image src={copyIcon} alt="copy" width={16} height={16} className="profile-share-icon" />
+                        Copy Link
+                        {showGreenCheck && (
+                          <Image src={greenTickIcon} alt="copied" width={16} height={16} className="profile-check-icon" />
+                        )}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+            
+            {!user && (
+              <a href="/" className="profile-secondary-btn-genz explore-btn">
+                Explore
+              </a>
+            )}
           </div>
         </div>
       </header>
       
       {/* Invite modal */}
       {handleInvite && (
-        <div className="invite-modal">
-          <div className="invite-modal-content">
-            <div className="invite-modal-header">
+        <div className="profile-invite-modal">
+          <div className="profile-invite-content">
+            <div className="profile-invite-header">
               <h3>Invite friends via email</h3>
-              <button onClick={toggleInvite} className="invite-close">
+              <button onClick={toggleInvite} className="profile-invite-close">
                 <Image src={close} alt="close" width={20} height={20} />
               </button>
             </div>
             
-            <div className="invite-modal-body">
-              <div className="invite-form-group">
+            <div className="profile-invite-body">
+              <div className="profile-invite-group">
                 <label><strong>From:</strong></label>
                 <p>{user.email}</p>
               </div>
               
-              <div className="invite-form-group">
+              <div className="profile-invite-group">
                 <label><strong>Subject:</strong></label>
-                <p>{user.firstName} has invited you to join nectworks</p>
+                <p>{user.firstName} has invited you to join DevConnect</p>
               </div>
               
-              <div className="invite-form-group">
+              <div className="profile-invite-group">
                 <label><strong>To:</strong></label>
                 <textarea
-                  className="invite-textarea"
+                  className="profile-invite-textarea"
                   value={emailList}
                   onChange={(e) => setEmailList(e.target.value)}
                   placeholder="Enter email addresses separated by commas (max 3)..."
                   rows={3}
                 />
-                <p className="invite-hint">You can invite up to 3 people at once</p>
+                <p className="profile-invite-hint">You can invite up to 3 people at once</p>
               </div>
               
               <button
-                className="invite-send-btn"
+                className="profile-invite-send-btn"
                 onClick={handleSendEmails}
                 disabled={sending}
               >
@@ -588,180 +648,247 @@ const PublicProfile = () => {
         </div>
       )}
       
+      {/* Tabbed navigation */}
+      <div className="profile-tabs-container">
+        <div className="profile-tabs">
+          <button 
+            className={`profile-tab ${activeSection === 'about' ? 'active' : ''}`}
+            onClick={() => scrollToContent('about')}
+          >
+            About
+          </button>
+          <button 
+            className={`profile-tab ${activeSection === 'experience' ? 'active' : ''}`}
+            onClick={() => scrollToContent('experience')}
+          >
+            Experience
+          </button>
+          <button 
+            className={`profile-tab ${activeSection === 'skills' ? 'active' : ''}`}
+            onClick={() => scrollToContent('skills')}
+          >
+            Skills
+          </button>
+          {socials && socials.length > 0 && (
+            <button 
+              className={`profile-tab ${activeSection === 'social' ? 'active' : ''}`}
+              onClick={() => scrollToContent('social')}
+            >
+              Connect
+            </button>
+          )}
+        </div>
+      </div>
+      
       {/* Main content */}
-      <main className="profile-main">
-        <nav className="profile-nav">
-          <ul>
-            <li className={activeSection === 'about' ? 'active' : ''}>
-              <button onClick={() => scrollToContent('about')}>About</button>
-            </li>
-            <li className={activeSection === 'experience' ? 'active' : ''}>
-              <button onClick={() => scrollToContent('experience')}>Experience</button>
-            </li>
-            <li className={activeSection === 'skills' ? 'active' : ''}>
-              <button onClick={() => scrollToContent('skills')}>Skills</button>
-            </li>
-            {socials && socials.length > 0 && (
-              <li className={activeSection === 'social' ? 'active' : ''}>
-                <button onClick={() => scrollToContent('social')}>Connect</button>
-              </li>
-            )}
-          </ul>
-        </nav>
-        
-        <div className="profile-content">
-          {/* About section */}
-          <section id="about" ref={sectionRefs.about} className="profile-section">
+      <main className="profile-main-genz">
+        {/* About section */}
+        <section id="about" ref={sectionRefs.about} className="profile-section-genz">
+          <div className="profile-section-header">
             <h2 className="profile-section-title">About</h2>
-            <div className="profile-section-content">
-              {about?.bio ? (
-                <p className="profile-bio">{about.bio}</p>
-              ) : (
-                <p className="profile-empty">No bio provided</p>
-              )}
-              
-              {about?.additionalInfo && (
-                <div className="profile-additional-info">
-                  <h3>What {userData.firstName} loves about their job</h3>
-                  <p>{about.additionalInfo}</p>
+          </div>
+          <div className="profile-section-body">
+            {about?.bio ? (
+              <p className="profile-bio-genz">{about.bio}</p>
+            ) : (
+              <p className="profile-empty-genz">No bio provided</p>
+            )}
+            
+            {about?.additionalInfo && (
+              <div className="profile-additional-info-genz">
+                <h3 className="profile-additional-title">What {userData.firstName} loves about their job</h3>
+                <p>{about.additionalInfo}</p>
+              </div>
+            )}
+            
+            {/* Current vibe - Gen Z element */}
+            <div className="profile-vibe-box">
+              <h3 className="profile-vibe-title">Current Vibe</h3>
+              <div className="profile-vibe-content">
+                <div className="profile-vibe-emoji">🚀</div>
+                <div className="profile-vibe-text">
+                  <div className="profile-vibe-status">Ready to help others grow</div>
+                  <div className="profile-vibe-detail">Sharing knowledge &amp; opening doors</div>
                 </div>
-              )}
+              </div>
             </div>
-          </section>
-          
-          {/* Experience section */}
-          <section id="experience" ref={sectionRefs.experience} className="profile-section">
+          </div>
+        </section>
+        
+        {/* Experience section */}
+        <section id="experience" ref={sectionRefs.experience} className="profile-section-genz">
+          <div className="profile-section-header">
             <h2 className="profile-section-title">Experience</h2>
-            <div className="profile-section-content">
-              {experience && experience.length > 0 ? (
-                <div className="profile-timeline">
-                  {experience.map((exp, index) => {
-                    const startMonth = allMonths.indexOf(exp.startMonth);
-                    const endMonth = exp.endMonth ? allMonths.indexOf(exp.endMonth) : currentMonth - 1;
-                    const durationMonths = getMonthDifference(
-                      exp.endYear || currentYear,
-                      endMonth,
-                      exp.startYear,
-                      startMonth
-                    );
-                    
-                    return (
-                      <div key={index} className="profile-timeline-item">
-                        <div className="profile-timeline-marker"></div>
-                        <div className="profile-timeline-content">
-                          <h3 className="profile-job-title">{exp.jobTitle}</h3>
-                          <div className="profile-company">
-                            <span className="company-name">{exp.companyName}</span>
-                            <span className="employment-type">{exp.employmentType}</span>
-                          </div>
-                          <div className="profile-job-duration">
-                            <span className="duration-dates">
-                              {exp.startMonth} {exp.startYear} - {exp.endMonth || 'Present'} {exp.endYear || ''}
-                            </span>
-                            <span className="duration-time">
-                              {formatExperienceDuration(durationMonths)}
-                            </span>
-                          </div>
-                          {exp.description && (
-                            <p className="profile-job-description">{exp.description}</p>
-                          )}
-                          {exp.skills && exp.skills.length > 0 && (
-                            <div className="profile-job-skills">
-                              {exp.skills.map((skill, idx) => (
-                                <span key={idx} className="profile-skill-tag small">{skill}</span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
+          </div>
+          <div className="profile-section-body">
+            {experience && experience.length > 0 ? (
+              <div className="profile-timeline-genz">
+                {experience.map((exp, index) => {
+                  const startMonth = allMonths.indexOf(exp.startMonth);
+                  const endMonth = exp.endMonth ? allMonths.indexOf(exp.endMonth) : currentMonth - 1;
+                  const durationMonths = getMonthDifference(
+                    exp.endYear || currentYear,
+                    endMonth,
+                    exp.startYear,
+                    startMonth
+                  );
+                  
+                  return (
+                    <div key={index} className="profile-timeline-item-genz">
+                      <div className="profile-timeline-marker-genz">
+                        <span>{exp.companyName.charAt(0)}</span>
                       </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <p className="profile-empty">No experience listed</p>
-              )}
-            </div>
-          </section>
-          
-          {/* Skills section */}
-          <section id="skills" ref={sectionRefs.skills} className="profile-section">
-            <h2 className="profile-section-title">Skills</h2>
-            <div className="profile-section-content">
-              {skills && skills.length > 0 ? (
-                <div className="profile-skills">
+                      <div className="profile-timeline-content-genz">
+                        <h3 className="profile-job-title-genz">{exp.jobTitle}</h3>
+                        <div className="profile-company-info-genz">
+                          <span className="profile-company-name-genz">{exp.companyName}</span>
+                          <span className="profile-employment-type-genz">{exp.employmentType}</span>
+                        </div>
+                        <div className="profile-job-duration-genz">
+                          <span className="profile-duration-dates-genz">
+                            {exp.startMonth} {exp.startYear} - {exp.endMonth || 'Present'} {exp.endYear || ''}
+                          </span>
+                          <span className="profile-duration-time-genz">
+                            {formatExperienceDuration(durationMonths)}
+                          </span>
+                        </div>
+                        {exp.description && (
+                          <p className="profile-job-description-genz">{exp.description}</p>
+                        )}
+                        {exp.skills && exp.skills.length > 0 && (
+                          <div className="profile-job-skills-genz">
+                            {exp.skills.map((skill, idx) => (
+                              <span key={idx} className="profile-skill-tag-small">{skill}</span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="profile-empty-genz">No experience listed</p>
+            )}
+          </div>
+        </section>
+        
+        {/* Skills section */}
+        <section id="skills" ref={sectionRefs.skills} className="profile-section-genz">
+          <div className="profile-section-header">
+            <h2 className="profile-section-title">Skills & Superpowers</h2>
+          </div>
+          <div className="profile-section-body">
+            {skills && skills.length > 0 ? (
+              <>
+                <div className="profile-skills-genz">
                   {skills.map((skill, index) => (
-                    <span key={index} className="profile-skill-tag">{skill}</span>
+                    <div key={index} className="profile-skill-tag-genz">{skill}</div>
                   ))}
                 </div>
-              ) : (
-                <p className="profile-empty">No skills listed</p>
-              )}
+                
+                {/* Skill cards - Gen Z element */}
+                <div className="profile-skill-cards">
+                  <div className="profile-skill-card profile-skill-card-blue">
+                    <div className="profile-skill-emoji">👨‍💻</div>
+                    <h3 className="profile-skill-card-title">Database Expert</h3>
+                    <p className="profile-skill-card-desc">Deep knowledge of Oracle technologies</p>
+                  </div>
+                  
+                  <div className="profile-skill-card profile-skill-card-orange">
+                    <div className="profile-skill-emoji">🔄</div>
+                    <h3 className="profile-skill-card-title">Integration Wizard</h3>
+                    <p className="profile-skill-card-desc">Connecting systems seamlessly</p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <p className="profile-empty-genz">No skills listed</p>
+            )}
+          </div>
+        </section>
+        
+        {/* Connect section */}
+        {socials && socials.length > 0 && (
+          <section id="social" ref={sectionRefs.social} className="profile-section-genz">
+            <div className="profile-section-header">
+              <h2 className="profile-section-title">Connect With Me</h2>
             </div>
-          </section>
-          
-          {/* Social section */}
-          {socials && socials.length > 0 && (
-            <section id="social" ref={sectionRefs.social} className="profile-section">
-              <h2 className="profile-section-title">Connect</h2>
-              <div className="profile-section-content">
-                <div className="profile-social-links">
-                  {socials.map((social, index) => {
-                    const icon = getLinkIcon(social);
-                    const url = new URL(social);
-                    const hostname = url.hostname.replace('www.', '').split('.')[0];
-                    
-                    return (
-                      <a 
-                        key={index} 
-                        href={social} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="profile-social-link"
-                      >
+            <div className="profile-section-body">
+              <div className="profile-social-links-genz">
+                {socials.map((social, index) => {
+                  const icon = getLinkIcon(social);
+                  const url = new URL(social);
+                  const hostname = url.hostname.replace('www.', '').split('.')[0];
+                  
+                  return (
+                    <a 
+                      key={index} 
+                      href={social} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="profile-social-link-genz"
+                    >
+                      <div className="profile-social-icon-container">
                         {icon ? (
                           <Image 
                             src={icon} 
                             alt={hostname} 
                             width={24} 
                             height={24} 
-                            className="profile-social-icon" 
+                            className="profile-social-icon-genz" 
                           />
                         ) : (
-                          <FaArrowUpRightFromSquare className="profile-social-icon" />
+                          <FaArrowUpRightFromSquare className="profile-social-icon-genz" />
                         )}
-                        <span className="profile-social-name">{hostname}</span>
-                      </a>
-                    );
-                  })}
-                </div>
+                      </div>
+                      <div className="profile-social-info">
+                        <span className="profile-social-name-genz">{hostname}</span>
+                        <span className="profile-social-username">@{userData.username || 'username'}</span>
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
-            </section>
-          )}
+              
+              {/* CTA Card - Gen Z element */}
+              <div className="profile-cta-card">
+                <h3 className="profile-cta-title">Need Oracle DB expertise?</h3>
+                <p className="profile-cta-text">Let&apos;s connect and talk about your project!</p>
+                <button className="profile-cta-button" onClick={handleReferralRequest}>
+                  Request a Referral
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+        
+        {/* Footer promo card - Gen Z element */}
+        <div className="profile-footer-card">
+          <h3 className="profile-footer-title">Are you looking for Oracle Database expertise?</h3>
+          <p className="profile-footer-text">I&apos;m working on efficient &amp; scalable Node.js/Python drivers for Oracle</p>
+          <button className="profile-footer-button" onClick={handleReferralRequest}>
+            Let&apos;s Connect
+          </button>
         </div>
       </main>
       
       {/* Profile owner info box */}
-      {user && user.username === username && (
-        <div className="profile-owner-info">
+      {user && user.username === username && showOwnerInfo && (
+        <div className="profile-owner-info-genz">
           <button 
-            className="profile-owner-info-close" 
-            onClick={(e) => {
-              e.currentTarget.parentElement.style.opacity = 0;
-              setTimeout(() => {
-                e.currentTarget.parentElement.style.display = 'none';
-              }, 500);
-            }}
+            className="profile-owner-info-close-genz" 
+            onClick={closeOwnerInfo}
           >
             <Image src={crossIcon} alt="close" width={16} height={16} />
           </button>
           
-          <h3>Your Public Profile</h3>
-          <p>
-            Your public profile is visible to all users, whether they are signed in or not. 
-            Enhance your visibility and increase referral requests by ensuring <Link href="/profile">your profile</Link> is complete.
+          <h3 className="profile-owner-info-title">Your Public Profile</h3>
+          <p className="profile-owner-info-text">
+            Your public profile is visible to all users. Enhance your visibility and increase referral requests by ensuring <Link href="/profile" className="profile-owner-info-link">your profile</Link> is complete.
           </p>
           <button 
-            className="profile-copy-link-btn"
+            className="profile-owner-info-btn"
             onClick={copyProfileUrl}
           >
             Copy profile link
