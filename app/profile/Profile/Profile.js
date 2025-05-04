@@ -1129,7 +1129,7 @@ return (
               </div>
               
               {!userInfo?.about?.bio || userInfo?.about?.bio?.length === 0 ? (
-                <p style={{ opacity: 0.7 }}>
+                <p style={{ opacity: 0.4 }}>
                   Tell people a bit about yourself! Sprinkle ✨ in some
                   relevant keywords from your field. This can help people
                   find you when searching for specific skills or expertise.
@@ -1179,7 +1179,7 @@ return (
               </div>
               
               {!userInfo?.experience || userInfo?.experience?.length === 0 ? (
-                <p style={{ opacity: 0.7 }}>
+                <p style={{ opacity: 0.4 }}>
                   Mention your employment history, including the present
                   and prior companies you have worked for.
                 </p>
@@ -1275,7 +1275,7 @@ return (
               </div>
               
               {!userInfo?.education || userInfo?.education?.length === 0 ? (
-                <p style={{ opacity: 0.7 }}>
+                <p style={{ opacity: 0.4 }}>
                   Fill in your education details (school, college, degree)
                   to strengthen your profile.
                 </p>
@@ -1336,7 +1336,7 @@ return (
               </div>
               
               {!userInfo?.skills || userInfo?.skills?.length === 0 ? (
-                <p style={{ opacity: 0.7 }}>
+                <p style={{ opacity: 0.4 }}>
                   Specify details about programming languages (such as
                   Java, Python, C/C++, node.js, SQL etc), softwares
                   (Microsoft Word, Excel, Figma etc) or any other work
@@ -1378,7 +1378,7 @@ return (
               </div>
               
               {!userInfo?.socials || userInfo?.socials?.length === 0 ? (
-                <p style={{ opacity: 0.7 }}>
+                <p style={{ opacity: 0.4 }}>
                   Enter the usernames for your LinkedIn, Behance, GitHub,
                   and other profiles.
                 </p>
@@ -1421,7 +1421,7 @@ return (
               </div>
               
               {!userInfo?.achievements || userInfo?.achievements?.length === 0 ? (
-                <p style={{ opacity: 0.7 }}>
+                <p style={{ opacity: 0.4 }}>
                   Share information about any honors or awards you&apos;ve
                   received. 🏆
                 </p>
@@ -1521,7 +1521,7 @@ return (
               </div>
               
               {!userInfo?.projects || userInfo?.projects?.length === 0 ? (
-                <p style={{ opacity: 0.7 }}>
+                <p style={{ opacity: 0.4 }}>
                   Add details about projects you have done in college,
                   internship or at work.
                 </p>

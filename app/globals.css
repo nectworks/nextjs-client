@@ -31,7 +31,7 @@ button {
 .info-box {
   display: none;
   position: fixed;
-  z-index: 100;
+  z-index: 1000; /* Higher z-index to ensure visibility */
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
@@ -39,25 +39,31 @@ button {
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
   opacity: 0;
-  /* Start with opacity 0 for fade-in effect */
-  transition: opacity 0.5s ease-in-out;
-  /* Use CSS transitions for opacity */
+  text-align: center;
+  font-weight: 500;
+  max-width: 80%;
+  width: auto;
+  min-width: 200px;
+  pointer-events: none; /* Ensures box doesn't interfere with clicks */
+  transition: opacity 0.3s ease-in-out;
+  font-family: 'Inter', Arial, sans-serif;
 }
 
 /* CSS for the slide-down animation */
 .slide-down {
-  animation: slide-down 0.5s ease-in-out;
+  animation: slide-down 0.5s ease-in-out forwards;
 }
 
 @keyframes slide-down {
   from {
     transform: translate(-50%, 0);
+    opacity: 1;
   }
-
   to {
-    transform: translate(-50%, 100%);
+    transform: translate(-50%, 30px);
+    opacity: 0;
   }
 }
 

@@ -566,7 +566,7 @@ function SignUpFormPopup({ user, closePopUp }) {
           localStorage.setItem('isExperienced', 'true');
         }
         
-        showBottomMessage('Profile updated successfully!');
+        showBottomMessage('Status updated successfully!');
         setTimeout(() => {
           closePopUp();
         }, 1000);
