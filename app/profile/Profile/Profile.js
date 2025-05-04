@@ -99,6 +99,9 @@ const privateAxios = usePrivateAxios();
 // State for active section (for scrolling and highlighting in mobile nav)
 const [activeSection, setActiveSection] = useState('about');
 
+// Added state for showing the signup form
+const [showSignUpForm, setShowSignUpForm] = useState(false);
+
 // Function to fix and debug profile picture upload
 const handleProfileImageClick = () => {
   try {
@@ -769,15 +772,33 @@ useEffect(() => {
   };
 }, []);
 
-// Check if the user came from sign-up page
-useEffect(() => {
-  const from = sessionStorage.getItem('from');
-  // Check if the user came from the sign-up page
-  if (from === '/sign-up') {
-    setSignUpPopup(true);
+// Function to close signup popup properly
+const closeSignUpPopup = () => {
+  setSignUpPopup(false);
+  localStorage.setItem('signupFormShown', 'true');
+};
 
-    // Clear the 'from' value from session storage after using it
-    sessionStorage.removeItem('from');
+// Check if the user came from sign-up page with improved reliability
+useEffect(() => {
+  // Method 1: Check session storage
+  const from = sessionStorage.getItem('from');
+  
+  // Method 2: Check localStorage for a new signup flag
+  const isNewSignup = localStorage.getItem('newSignup');
+  
+  // If either method indicates a new signup, show the popup
+  if (from === '/sign-up' || isNewSignup === 'true') {
+    // Set a small delay to ensure the component is fully mounted
+    setTimeout(() => {
+      setSignUpPopup(true);
+      
+      // Clear the flags after using them
+      sessionStorage.removeItem('from');
+      localStorage.removeItem('newSignup');
+    }, 300);
+  } else if (user && !localStorage.getItem('filledForm')) {
+    // Fallback method: If the user doesn't have filledForm in localStorage, they might be a new user
+    setSignUpPopup(true);
   }
 
   // Check for shared post parameters
@@ -790,9 +811,8 @@ useEffect(() => {
     const newUrl = window.location.pathname;
     window.history.replaceState({}, document.title, newUrl);
   }
-}, []);
+}, [user]);
 
-const [showSignUpForm, setShowSignUpForm] = useState(false);
 const handleEditClick = () => {
   setShowSignUpForm(true);
 };
@@ -903,7 +923,7 @@ return (
                 </span>
                 <span>
                   {userData?.mobileNumber ? (
-                    `+${userData.mobileNumber}`
+                    `${userData.mobileNumber}`
                   ) : (
                     <span className="popupFormNotFilled" onClick={handleEditClick}>
                       Add Mobile Number
@@ -988,6 +1008,20 @@ return (
                   </p>
                 </div>
               )}
+            </div>
+            
+            {/* Complete profile CTA button */}
+            <div className="complete-profile-cta">
+              <button 
+                className={`complete-profile-button ${completion < 50 ? 'complete-profile-button-highlight' : ''}`}
+                onClick={handleEditClick}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="button-icon">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <span>Update Your Job status</span>
+              </button>
             </div>
             
             {/* Share profile button */}
@@ -1464,7 +1498,7 @@ return (
                 </div>
               )}
             </section>
-            
+
             {/* Projects section */}
             <section id="projects" className="content-section">
               <div className="section-header">
@@ -1640,7 +1674,7 @@ return (
       {signUpPopup && (
         <SignUpFormPopup
           user={user}
-          closePopUp={() => setSignUpPopup(false)}
+          closePopUp={closeSignUpPopup}
         />
       )}
       

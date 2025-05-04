@@ -1,347 +1,823 @@
-.signup_confirm_popup {
-  width: 500vw;
-  height: 500vh;
-  background-color: #fafafa;
+/* SignUpFormPopup.css - Modern and Fixed Styling */
+
+/* Popup Container */
+.signup-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 100;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-.closeFormOptionForPopup {
-  position: absolute;
-  right: 30px;
-  top: 3px;
-  cursor: pointer;
-}
-
-.signup_confirm_popup_content {
-  width: 450px;
-  height: 600px;
-  overflow-y: auto;
-  background-color: #fff;
-  border-radius: 8px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
-  flex-direction: column;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.signup_confirm_popup_contentfresher {
-  width: 450px;
-  height: auto;
-  background-color: #fff;
-  border-radius: 8px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  padding: 15px;
-}
-
-.AutoSuggestions_PopUpFormPage {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.AutoSuggestions_PopUpFormPage li {
-  padding: 8px;
-  cursor: pointer;
-}
-
-.AutoSuggestions_PopUpFormPage li:hover {
-  background-color: #f0f0f0;
-}
-
-.AutoSuggestions_PopUpFormPage li.selected {
-  background-color: #cceeff;
-}
-
-.signup_confirm_popup_content h1 {
-  color: #0057b1;
-  font-size: 22px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-}
-
-.radioSignUp {
-  background-color: #fff;
-  border: 1px solid #fff;
-  position: sticky;
-  top: -2%;
-  padding-top: 35px;
-  z-index: 1000;
-}
-
-.RadioButtons {
-  font-size: 17px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  width: 80%;
-  margin: 10px 0;
-  gap: 8px;
-  padding-left: 30px;
-  position: sticky;
-  top: 7%;
-  background-color: #fff;
-}
-
-.RadioButton {
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 5px;
-}
-
-.form__container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  padding: 0 2rem;
-}
-
-.form__container div {
-  margin: 8px 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.form__container input {
-  height: 35px;
-  border: 0.6px solid #8e99a4;
-  border-radius: 8px;
-  padding: 0 1rem;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 21px;
-  background: inherit;
-  margin-left: 0px;
-}
-
-.heroForPopUp {
-  display: flex;
   justify-content: center;
-  position: sticky;
-  top: 0;
-  background-color: #fff;
+  backdrop-filter: blur(2px);
 }
 
-.form__container label {
-  color: #000;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 21px;
-  /* 21px */
-  left: 5px;
-}
-
-.form__container .NextButton {
-  border: none;
-  color: white;
-  border-radius: 8px;
-  background: #0057b1;
-  padding: 0.5rem;
-  font-size: 1.1rem;
-  position: sticky;
-  top: 1%;
-  left: 0;
+.signup-form-modal {
   width: 100%;
-  cursor: pointer;
+  max-width: 420px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-height: 90vh; /* Ensures the modal is not taller than viewport */
 }
 
-.form__container .NextButtondisabled {
+/* Close Button */
+.close-popup-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
   border: none;
-  color: white;
-  border-radius: 8px;
-  background: grey;
-  padding: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.nextButtonDiv {
-  position: sticky;
-  bottom: 0%;
-  left: 0;
-  width: 100%;
+  padding: 4px;
   cursor: pointer;
-  background-color: #fff;
-  border: 1px solid #fff;
-  z-index: 1000;
-  width: 102%;
-  height: 8vh;
-  padding-bottom: 15px;
-  margin-bottom: 5px;
+  z-index: 5;
+  opacity: 0.8;
+  transition: opacity 0.2s;
 }
 
-.company-email {
+.close-popup-button:hover {
+  opacity: 1;
+}
+
+/* Header */
+.form-header {
+  padding: 24px 20px 16px;
+  background-color: #1756B3;
+  color: white;
   position: relative;
 }
 
-.company-email input[type='email'] {
-  padding-right: 100px;
-  /* Adjust as needed based on the width of the button */
-}
-
-.company-email .sendOTPButtonverifyButtonDisabled {
-  border: none;
-  color: gray;
+.form-header h1 {
+  font-size: 20px;
   font-weight: 600;
-  font-size: 14px;
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: inherit;
-  padding: 5px 10px;
-  cursor: pointer;
+  margin: 0 0 18px 0;
+  color: white;
 }
 
-.company-email .sendOTPButton {
+/* Close button in header */
+.form-header-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
   border: none;
-  color: #0057b1;
-  font-weight: 600;
-  font-size: 14px;
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #fafafa;
-  padding: 5px 10px;
+  padding: 4px;
   cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  z-index: 5;
 }
 
-.company-email-wrapper .otpInputs {
+.form-header-close:hover {
+  opacity: 1;
+}
+
+.form-header-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.progress-bar {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-indicator {
+  height: 100%;
+  background-color: white;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Job Status Selector - Modernized */
+.job-status-selector {
   display: flex;
-  flex-direction: row;
-  gap: 5px;
-  justify-content: start;
+  padding: 16px 20px;
+  gap: 16px;
+  border-bottom: 1px solid #eee;
 }
 
-.company-email-wrapper .otpInputs input {
-  width: 10px;
-  height: 30px;
+/* Modern radio buttons */
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.otpInputsForResendButton {
-  flex-direction: row !important;
-  justify-content: space-between;
-}
-
-.otpInputsForResendButton .resendOTPButtonverifyButtonDisabled {
-  border: none;
-  color: grey;
-  background: inherit;
-  font-weight: 600;
-  font-size: 14px;
+.radio-option input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #D9D9D9;
+  border-radius: 50%;
+  outline: none;
+  transition: all 0.2s ease;
+  position: relative;
   cursor: pointer;
 }
 
-.otpInputsForResendButton .resendOTPButton {
-  border: none;
-  color: #0057b1;
-  background: inherit;
-  font-weight: 600;
-  font-size: 14px;
+.radio-option input[type="radio"]:checked {
+  border-color: #1756B3;
+  border-width: 5px;
+  background-color: white;
+}
+
+.radio-option label {
+  font-size: 15px;
+  color: #333;
   cursor: pointer;
+  transition: color 0.2s;
 }
 
-.Experience_select {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-between;
-  gap: 10px;
+.radio-option input[type="radio"]:checked + label {
+  color: #1756B3;
+  font-weight: 500;
 }
 
-.experienceSelectOption {
+/* Step Indicators */
+.step-progress-container {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+}
+
+.step-indicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E6E6E6;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active {
+  background-color: #1756B3;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(23, 86, 179, 0.3);
+}
+
+.step-indicator.completed {
+  background-color: white;
+  color: #1756B3;
+  border-color: #1756B3;
+}
+
+.step-indicator svg {
+  width: 16px;
+  height: 16px;
+}
+
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background-color: #E6E6E6;
+  margin: 0 4px;
+  transition: background-color 0.3s;
+}
+
+.step-connector.completed {
+  background-color: #1756B3;
+}
+
+/* Form Content */
+.form-content {
+  padding: 16px 20px;
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(90vh - 200px);
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.form-step {
+  animation: fadeIn 0.3s ease;
   width: 100%;
-  height: 35px;
-  border: 0.6px solid var(--Stroke-Border, #8e99a4);
-  border-radius: 8px;
-  padding: 0 1rem;
+}
+
+.step-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #333;
+}
+
+/* Form Fields */
+.form-field {
+  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+}
+
+.form-field label {
+  display: block;
   font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 21px;
-  background: inherit;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
 }
-label {
+
+.required-field {
+  color: #FF0000;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #D9D9D9;
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 15px;
+  color: #333;
+  background-color: white;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  border-color: #1756B3;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(23, 86, 179, 0.1);
+}
+
+/* Custom select styling */
+.form-field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6' viewBox='0 0 12 6'%3E%3Cpath fill='%23666' d='M6 6L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 30px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.input-hint {
+  font-size: 12px;
+  color: #1756B3;
+  margin-top: 4px;
+}
+
+.input-error {
+  font-size: 12px;
+  color: #FF0000;
+  margin-top: 4px;
+}
+
+.form-error-message {
+  color: #FF0000;
+  font-size: 13px;
+  margin: 8px 0 16px;
+  background-color: #FFF0F0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 3px solid #FF0000;
+}
+
+/* Phone Input - Fixed sizes */
+.phone-input-group {
+  display: flex;
+  gap: 8px;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.country-code-container {
+  position: relative;
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.country-code-select {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #D9D9D9;
+  border-radius: 4px;
+  background-color: white;
+  padding: 0 10px;
   cursor: pointer;
-}
-@media screen and (min-width: 521px) and (max-width: 700px) {
-  .company-email-wrapper .otpInputs {
-    margin-right: 25px;
-  }
-
-  .otpInputsForResendButton {
-    flex-direction: row !important;
-    font-size: 10px;
-    gap: 0px;
-  }
-  .closeFormOptionForPopup {
-    position: absolute;
-    right: 5px;
-    top: 1px;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  position: relative;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 
-@media screen and (min-width: 406px) and (max-width: 520px) {
-  .signup_confirm_popup_content {
-    width: 350px;
-    top: 52%;
-  }
+.country-code-select:hover {
+  border-color: #B0B0B0;
+}
 
-  .signup_confirm_popup_contentfresher {
-    width: 350px;
-  }
+.dropdown-arrow {
+  width: 14px;
+  height: 14px;
+  color: #666;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
 
-  .company-email-wrapper .otpInputs {
-    gap: 5px;
-  }
+.country-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #D9D9D9;
+  border-radius: 4px;
+  margin-top: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+}
 
-  .closeFormOptionForPopup {
-    position: absolute;
-    right: 5px;
-    top: 1px;
+.country-dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.country-dropdown-item:hover {
+  background-color: #F5F5F5;
+}
+
+.country-dropdown-item.selected {
+  background-color: #E9F3FF;
+  color: #1756B3;
+  font-weight: 500;
+}
+
+.mobile-input {
+  flex: 1;
+  min-width: 0; /* Prevents flex item from overflowing */
+  width: calc(100% - 140px); /* Ensure not overlapping with country code */
+}
+
+/* Experience Inputs */
+.experience-inputs {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.experience-input {
+  flex: 1;
+  min-width: 0; /* Prevent overflow */
+}
+
+/* Email Verification */
+.email-input-group {
+  position: relative;
+  width: 100%;
+}
+
+.email-input {
+  padding-right: 100px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.email-input.verified {
+  border-color: #28A745;
+  background-color: rgba(40, 167, 69, 0.05);
+}
+
+.send-otp-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #E9EEFF;
+  color: #1756B3;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-otp-button:hover:not(.disabled) {
+  background-color: #D9E3FF;
+}
+
+.send-otp-button.disabled {
+  background-color: #F1F1F1;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Verified indicator */
+.verified-indicator {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background-color: #28A745;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.verified-indicator svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* OTP Verification */
+.otp-verification-section {
+  background-color: #F9F9F9;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.otp-inputs {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.otp-inputs input {
+  width: 56px;
+  height: 56px;
+  border: 1px solid #D9D9D9;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  background-color: white;
+}
+
+.otp-inputs input:focus {
+  border-color: #1756B3;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(23, 86, 179, 0.1);
+}
+
+.otp-inputs input.error {
+  border-color: #FF0000;
+}
+
+/* New Verify OTP button */
+.verify-otp-container {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+  width: 100%;
+}
+
+.verify-otp-button {
+  background-color: #1756B3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+}
+
+.verify-otp-button:hover:not(.disabled) {
+  background-color: #0E4DA1;
+}
+
+.verify-otp-button.disabled {
+  background-color: #CCCCCC;
+  cursor: not-allowed;
+}
+
+.loading-spinner.small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+.otp-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.resend-timer {
+  font-size: 13px;
+  color: #666;
+}
+
+.resend-otp-button {
+  background: none;
+  border: none;
+  color: #1756B3;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.resend-otp-button.disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Info and Warning Boxes */
+.info-box,
+.warning-box {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  background-color: #E9F3FF;
+  border: 1px solid #C2E0FF;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.warning-box {
+  background-color: #FFF8E9;
+  border-color: #FFE0B2;
+}
+
+.info-icon,
+.warning-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  color: #1756B3;
+}
+
+.warning-icon {
+  color: #F9A825;
+}
+
+.info-content h4,
+.warning-content h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1756B3;
+}
+
+.warning-content h4 {
+  color: #F57C00;
+}
+
+.info-content p,
+.warning-content p {
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Form Navigation */
+.form-navigation {
+  display: flex;
+  gap: 8px;
+  padding: 16px 20px;
+  background-color: #F9F9F9;
+  border-top: 1px solid #EFEFEF;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 16px;
+  height: 44px;
+  border: 1px solid #D9D9D9;
+  border-radius: 4px;
+  background-color: white;
+  color: #666;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.back-button:hover {
+  background-color: #F5F5F5;
+}
+
+.back-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.next-button,
+.submit-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  border: none;
+  border-radius: 4px;
+  background-color: #1756B3;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.next-button:hover:not(.disabled),
+.submit-button:hover:not(.disabled) {
+  background-color: #0E4DA1;
+}
+
+.next-button.disabled,
+.submit-button.disabled {
+  background-color: #CCCCCC;
+  cursor: not-allowed;
+}
+
+.next-button svg,
+.submit-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Step Counter */
+.step-counter {
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Scrollbar styling for dropdowns */
+.country-dropdown::-webkit-scrollbar,
+.form-content::-webkit-scrollbar {
+  width: 6px;
+  height: 0; /* Hide horizontal scrollbar */
+}
+
+.country-dropdown::-webkit-scrollbar-track,
+.form-content::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 3px;
+}
+
+.country-dropdown::-webkit-scrollbar-thumb,
+.form-content::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 3px;
+}
+
+.country-dropdown::-webkit-scrollbar-thumb:hover,
+.form-content::-webkit-scrollbar-thumb:hover {
+  background: #ccc;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@media screen and (max-width: 405px) {
-  .company-email-wrapper .otpInputs {
-    margin-right: 15px;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
-
-  .company-email-wrapper .otpInputs {
-    gap: 2px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .company-email-wrapper .otpInputs input {
-    width: 6px;
-    height: 30px;
+/* Media Queries */
+@media screen and (max-width: 480px) {
+  .signup-form-modal {
+    width: 95%;
+    max-height: 90vh;
   }
-
-  .signup_confirm_popup_content {
-    width: 350px;
-    top: 53%;
+  
+  .form-header {
+    padding: 20px 16px 12px;
   }
+  
+  .form-header h1 {
+    font-size: 18px;
+  }
+  
+  .job-status-selector,
+  .step-progress-container,
+  .form-content,
+  .form-navigation {
+    padding: 12px 16px;
+  }
+  
+  .step-title {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .form-field label {
+    font-size: 13px;
+  }
+  
+  .form-field input,
+  .form-field select,
+  .next-button,
+  .back-button,
+  .submit-button {
+    height: 40px;
+  }
+  
+  .otp-inputs input {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+  
+  .country-code-container {
+    width: 110px;
+  }
+  
+  .country-code-select {
+    height: 40px;
+    font-size: 13px;
+    padding: 0 8px;
+  }
+  
+  .country-dropdown-item {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
 
-  .closeFormOptionForPopup {
-    position: absolute;
-    right: 5px;
-    top: 1px;
+@media screen and (max-width: 380px) {
+  .otp-inputs {
+    gap: 8px;
+  }
+  
+  .otp-inputs input {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  
+  .country-code-container {
+    width: 95px;
+  }
+  
+  .country-code-select {
+    font-size: 12px;
+    padding: 0 6px;
   }
 }

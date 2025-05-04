@@ -1,107 +1,383 @@
-.signup_confirm_container {
-  width: 100vw;
-  height: 100vh;
-  background-color: #00000081;
-  z-index: 100;
+/* SignUpConfirmPopup.css - Modern and User-Friendly Design */
+
+.signup-confirm-overlay {
   position: fixed;
   top: 0;
-}
-
-.signup_confirm_window {
-  width: min(700px, 80vw);
-  height: 550px;
-  background-color: #fff;
-  border-radius: 8px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+  z-index: 100;
   display: flex;
-  flex-direction: row;
   align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
 }
 
-.signup_confirm_text {
+.signup-confirm-container {
+  width: min(750px, 90vw);
+  background-color: #fff;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.signup-confirm-close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.signup-confirm-close-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.signup-confirm-content {
+  display: flex;
+  min-height: 550px;
+}
+
+/* Illustration Section */
+.signup-confirm-illustration {
+  flex: 0 0 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f7ff, #e6f0ff);
+  padding: 24px;
+  overflow: hidden;
+}
+
+.signup-confirm-illustration img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 15px rgba(0, 87, 177, 0.1));
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Text Content Section */
+.signup-confirm-text {
+  flex: 1;
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  padding: 0 2rem;
 }
 
-.signup_confirm_text h2,
-.signup_confirm_text h4 {
-  text-align: left;
-  margin: 1rem 0;
+.signup-confirm-header {
+  margin-bottom: 24px;
 }
 
-.signup_confirm_text div {
-  margin: 0.7rem 0;
-  display: flex;
-  flex-direction: row;
-  width: 80%;
+.signup-confirm-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 8px 0;
 }
 
-.signup_confirm_text_highlight {
+.signup-confirm-header .highlight {
   color: #0057b1;
-  font-weight: bold;
 }
 
-.signup_confirm_pointer_number {
-  width: 30px;
-  height: 30px;
-  color: white;
-  flex-shrink: 0;
-  border-radius: 50%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 1rem;
+.signup-confirm-subheader {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
 }
 
-.number_one {
-  background-color: #ff7676;
+.signup-confirm-description {
+  font-size: 15px;
+  color: #555;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
 }
 
-.number_two {
-  background-color: #feb801;
+/* Steps Section */
+.signup-confirm-steps {
+  margin-bottom: 24px;
+  overflow: hidden;
+  flex: 1;
 }
 
-.number_three {
-  background-color: #5f509b;
-}
-
-.signup_confirm_text button {
-  width: 200px;
-  border-radius: 0.4rem;
-  border: none;
-  color: white;
-  background: #0057b1;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-.signup_confirm_cross_icon {
-  position: absolute;
-  top: 50px;
-  right: 50px;
+.signup-confirm-step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  transition: all 0.3s;
   cursor: pointer;
+  opacity: 0.7;
+  transform: translateY(20px);
+  animation: slideUp 0.6s forwards;
+  animation-delay: calc(var(--step-index, 0) * 0.1s);
 }
 
+.signup-confirm-step:nth-child(1) {
+  --step-index: 1;
+}
+
+.signup-confirm-step:nth-child(2) {
+  --step-index: 2;
+}
+
+.signup-confirm-step:nth-child(3) {
+  --step-index: 3;
+}
+
+.signup-confirm-step.active {
+  background-color: #f8faff;
+  box-shadow: 0 4px 12px rgba(0, 87, 177, 0.05);
+  opacity: 1;
+}
+
+.signup-confirm-step:hover {
+  background-color: #f8faff;
+  opacity: 0.9;
+}
+
+.step-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.signup-confirm-step.active .step-number {
+  transform: scale(1.1);
+}
+
+.step-one {
+  background-color: #ff5c5c;
+  box-shadow: 0 4px 8px rgba(255, 92, 92, 0.2);
+}
+
+.step-two {
+  background-color: #feb801;
+  box-shadow: 0 4px 8px rgba(254, 184, 1, 0.2);
+}
+
+.step-three {
+  background-color: #5f509b;
+  box-shadow: 0 4px 8px rgba(95, 80, 155, 0.2);
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.step-content p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Progress Navigation */
+.signup-confirm-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ddd;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.progress-dot.active {
+  background-color: #0057b1;
+  transform: scale(1.2);
+}
+
+.progress-navigation {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.nav-button:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Action Button */
+.signup-confirm-action {
+  width: 100%;
+  height: 48px;
+  background-color: #0057b1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.signup-confirm-action:hover {
+  background-color: #004998;
+}
+
+.signup-confirm-action svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s;
+}
+
+.signup-confirm-action:hover svg {
+  transform: translateX(3px);
+}
+
+/* Animations */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
 @media screen and (max-width: 850px) {
-  .signup_confirm_illustration img {
-    width: 200px;
+  .signup-confirm-content {
+    flex-direction: column;
+  }
+  
+  .signup-confirm-illustration {
+    flex: 0 0 auto;
+    height: 200px;
+    padding: 20px;
+  }
+  
+  .signup-confirm-text {
+    padding: 24px;
+  }
+  
+  .signup-confirm-header h1 {
+    font-size: 24px;
   }
 }
 
-@media screen and (max-width: 700px) {
-  .signup_confirm_illustration {
-    display: none;
+@media screen and (max-width: 600px) {
+  .signup-confirm-container {
+    width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
   }
-}
-
-@media screen and (max-width: 450px) {
-  .signup_confirm_window {
-    height: 80vh;
+  
+  .signup-confirm-illustration {
+    height: 160px;
+  }
+  
+  .signup-confirm-header h1 {
+    font-size: 20px;
+  }
+  
+  .signup-confirm-step {
+    padding: 12px;
+  }
+  
+  .step-number {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  
+  .step-content h3 {
+    font-size: 15px;
+  }
+  
+  .step-content p {
+    font-size: 13px;
   }
 }
