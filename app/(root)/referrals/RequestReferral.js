@@ -562,6 +562,12 @@ const RequestReferral = () => {
    * Submit referral request function
    */
   const submitReferralRequest = async () => {
+    // Check if user has enough NectCoins (at least 1)
+    if (user && user.totalCoins < 1) {
+      showBottomMessage('You need at least 1 coin to send the referral request');
+      return;
+    }
+    
     // Validate resume requirement
     if (!resumeUploaded && !user?.resume) {
       showBottomMessage('Please upload your resume!');
@@ -625,10 +631,10 @@ const RequestReferral = () => {
         resetForm();
       }, 2000);
     } catch (error) {
-      const { data, status } = error.response;
+      const { data, status } = error.response || {};
 
       if (status === 403) {
-        showBottomMessage(data.message);
+        showBottomMessage(data?.message || 'You need at least 1 coin to send the referral request');
       } else {
         showBottomMessage(`Couldn't submit referral request.`);
       }
@@ -750,6 +756,9 @@ const RequestReferral = () => {
   // Check if user can proceed (either logged in or email verified)
   const canProceed = user || otpVerified;
 
+  // Check if user has enough coins
+  const hasEnoughCoins = !user || (user && user.totalCoins > 0);
+
   return (
     <>
       {!isLoading ? (
@@ -808,6 +817,15 @@ const RequestReferral = () => {
                 <p>
                   {professionalUserData.firstName} is not accepting referral
                   requests at this moment.
+                </p>
+              </div>
+            )}
+            
+            {/* Warning message if user doesn't have enough NectCoins */}
+            {user && user.totalCoins < 1 && (
+              <div className="not-accepting-referrals">
+                <p>
+                  You need at least 1 NectCoin to send a referral request.
                 </p>
               </div>
             )}
@@ -957,7 +975,7 @@ const RequestReferral = () => {
                     <button 
                       className="next-button"
                       onClick={goToNextStep}
-                      disabled={!canProceed || sameUserWarning || (!isLoading && !professionalUserData.isExperienced)}
+                      disabled={!canProceed || sameUserWarning || (!isLoading && !professionalUserData.isExperienced) || !hasEnoughCoins}
                     >
                       Continue
                     </button>
@@ -985,7 +1003,7 @@ const RequestReferral = () => {
                               name="jobId"
                               value={job.jobId}
                               onChange={(e) => handleJobChangeInput(e, id)}
-                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                               placeholder="Enter job ID if available"
                             />
                             <p className="error-message errorMessage">&nbsp;</p>
@@ -1001,7 +1019,7 @@ const RequestReferral = () => {
                               name="jobUrl"
                               value={job.jobUrl}
                               onChange={(e) => handleJobChangeInput(e, id)}
-                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                               placeholder="Paste the job URL from company website"
                               required
                             />
@@ -1015,7 +1033,7 @@ const RequestReferral = () => {
                             <button
                               className="delete-job"
                               onClick={() => deleteJob(id)}
-                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                             >
                               <Image
                                 src={deleteIcon}
@@ -1030,7 +1048,7 @@ const RequestReferral = () => {
                             <button
                               className="add-job"
                               onClick={addJobs}
-                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                             >
                               <Image
                                 src={plusIcon}
@@ -1061,7 +1079,7 @@ const RequestReferral = () => {
                       name="message"
                       value={userInformation.message}
                       onChange={handleUserInfoInput}
-                      disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                      disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                       placeholder="Feel free to expand on your requirements by adding a message"
                       maxLength={300}
                     ></textarea>
@@ -1079,7 +1097,7 @@ const RequestReferral = () => {
                     <button 
                       className="next-button"
                       onClick={goToNextStep}
-                      disabled={sameUserWarning || (!isLoading && !professionalUserData.isExperienced)}
+                      disabled={sameUserWarning || (!isLoading && !professionalUserData.isExperienced) || !hasEnoughCoins}
                     >
                       Continue
                     </button>
@@ -1107,7 +1125,7 @@ const RequestReferral = () => {
                     
                     <div 
                       className={`resume-dropzone ${resumeUploaded || (user && user.resume) ? 'has-file' : ''}`}
-                      onClick={() => (!isSubmittingReferral && canProceed && professionalUserData.isExperienced) && fileInputRef.current.click()}
+                      onClick={() => (!isSubmittingReferral && canProceed && professionalUserData.isExperienced && hasEnoughCoins) && fileInputRef.current.click()}
                     >
                       {!(resumeUploaded || (user && user.resume)) ? (
                         <>
@@ -1139,7 +1157,7 @@ const RequestReferral = () => {
                             className="replace-file"
                             onClick={(e) => {
                               e.stopPropagation();
-                              canProceed && professionalUserData.isExperienced && fileInputRef.current.click();
+                              canProceed && professionalUserData.isExperienced && hasEnoughCoins && fileInputRef.current.click();
                             }}
                             disabled={isSubmittingReferral}
                           >
@@ -1170,7 +1188,8 @@ const RequestReferral = () => {
                         isSubmittingReferral || 
                         sameUserWarning || 
                         (!resumeUploaded && !user?.resume) || 
-                        (!isLoading && !professionalUserData.isExperienced)
+                        (!isLoading && !professionalUserData.isExperienced) ||
+                        (user && user.totalCoins < 1)
                       }
                     >
                       {isSubmittingReferral ? (
