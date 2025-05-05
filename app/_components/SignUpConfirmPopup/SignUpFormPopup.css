@@ -821,3 +821,92 @@
     padding: 0 6px;
   }
 }
+
+.profile-link-section {
+  margin-top: 20px;
+}
+
+.success-box {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f1f9f1;
+  border: 1px solid #d4edda;
+}
+
+.success-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.success-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  color: #28a745;
+}
+
+.success-box h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #28a745;
+}
+
+.success-box p {
+  margin: 5px 0;
+  color: #333;
+}
+
+.profile-url-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 8px 0;
+}
+
+.profile-url-link {
+  flex: 1;
+  color: #0057b1;
+  text-decoration: none;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-url-link:hover {
+  text-decoration: underline;
+}
+
+.verified-check {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.profile-advice {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #fff;
+  border-left: 3px solid #0057b1;
+  border-radius: 0 4px 4px 0;
+}
+
+.profile-advice p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.company-email-note {
+  margin-top: 12px !important;
+  color: #0057b1 !important;
+  font-size: 14px;
+  text-align: left;
+}

@@ -1,7 +1,8 @@
 'use client';
 /*
   File: SignUpFormPopup.js
-  Description: This file contains the pop up form for the user to fill in their details
+  Description: This is a component rendered inside the profile page.
+  This contains the pop up form for the user to fill in their details
   after signing up, with improved UX matching the provided designs
 */
 
@@ -23,7 +24,7 @@ function SignUpFormPopup({ user, closePopUp }) {
   
   // Form data state
   const [formData, setFormData] = useState({
-    jobStatus: user.isExperienced ? 'experienced' : 'fresher',
+    jobStatus: 'experienced', // Default to 'experienced' (Professional)
     jobTitle: '',
     companyName: '',
     location: '',
@@ -39,13 +40,14 @@ function SignUpFormPopup({ user, closePopUp }) {
   // UI state management
   const [uiState, setUiState] = useState({
     currentStep: 1,
-    maxSteps: user.isExperienced ? 3 : 2,
+    maxSteps: 3, // Since we default to experienced
     canClose: false,
     isFirstTime: true,
     formError: null,
     isSubmitting: false,
     showCountryDropdown: false,
     saveInProgress: false,
+    showCloseButton: false, // New state to control close button visibility
   });
   
   const [otpState, setOtpState] = useState({
@@ -68,7 +70,11 @@ function SignUpFormPopup({ user, closePopUp }) {
     }
     
     if (filledForm) {
-      setUiState(prev => ({ ...prev, canClose: true }));
+      setUiState(prev => ({ 
+        ...prev, 
+        canClose: true,
+        showCloseButton: true // Allow closing if form was previously filled
+      }));
     }
     
     // Calculate max steps based on job status
@@ -415,7 +421,6 @@ function SignUpFormPopup({ user, closePopUp }) {
           error: false, 
           verificationInProgress: false 
         }));
-        showBottomMessage('Email verified successfully!');
       } else {
         setOtpState(prev => ({ 
           ...prev, 
@@ -567,6 +572,10 @@ function SignUpFormPopup({ user, closePopUp }) {
         }
         
         showBottomMessage('Status updated successfully!');
+
+        // Now enable the close button
+        setUiState(prev => ({ ...prev, showCloseButton: true }));
+
         setTimeout(() => {
           closePopUp();
         }, 1000);
@@ -761,7 +770,7 @@ function SignUpFormPopup({ user, closePopUp }) {
               </svg>
               <div className="info-content">
                 <h4>Career Tip</h4>
-                <p>When you get a job, you can update your profile by selecting "Professional" to fill in your job details and experience.</p>
+                <p>When you get a job, you can update your profile by selecting &quot;Professional&quot; to fill in your job details and experience.</p>
               </div>
             </div>
           </div>
@@ -951,10 +960,37 @@ function SignUpFormPopup({ user, closePopUp }) {
                   </button>
                 )}
                 {otpState.verified && (
-                  <div className="verified-indicator">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
+                  <div className="profile-link-section">
+                    <div className="success-box">
+                      <div className="success-header">
+                        <svg className="success-icon" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="16 12 12 16 8 12"></polyline>
+                          <polyline points="12 8 12 16"></polyline>
+                        </svg>
+                        <h4>Email Verified Successfully!</h4>
+                      </div>
+                      <p>Your public profile is now available at:</p>
+                      <div className="profile-url-container">
+                        <a 
+                          href={`/user/${formData.username}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="profile-url-link"
+                        >
+                          {window.location.origin}/user/{formData.username}
+                        </a>
+                        <svg className="verified-check" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                      </div>
+                      <div className="profile-advice">
+                        <p>
+                          <strong>Recommended:</strong> Complete your Profile (experience, skills, social links ...) before sharing.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -1036,7 +1072,7 @@ function SignUpFormPopup({ user, closePopUp }) {
                 </svg>
                 <div className="warning-content">
                   <h4>Important Notice</h4>
-                  <p>By updating your profile as "Professional", you're transitioning from "Student" status. You won't be able to switch back to "Student" in the future.</p>
+                  <p>Verify email: share profile, manage all referrals in your dashboard. 🚫 No spam. EVER.</p>
                 </div>
               </div>
             )}
@@ -1051,22 +1087,8 @@ function SignUpFormPopup({ user, closePopUp }) {
   return (
     <div className="signup-form-overlay">
       <div className="signup-form-modal">
-        {/* Keeping this for backward compatibility, but the main close button is now in the header */}
-        {false && uiState.canClose && (
-          <button 
-            className="close-popup-button" 
-            onClick={closePopUp} 
-            aria-label="Close form"
-          >
-            <Image src={crossIcon} alt="Close" width={24} height={24} />
-          </button>
-        )}
-        
-        {/* Header */}
-        <div className="form-header">
-          <h1>What's your job status?</h1>
-          
-          {/* Close button in header */}
+        {/* Only show the close button if user has completed the form */}
+        {uiState.showCloseButton && (
           <button 
             className="form-header-close" 
             onClick={closePopUp} 
@@ -1077,6 +1099,11 @@ function SignUpFormPopup({ user, closePopUp }) {
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
+        )}
+
+        {/* Header */}
+        <div className="form-header">
+          <h1>What&apos;s your job status?</h1>
           
           {/* Progress bar */}
           <div className="progress-bar">

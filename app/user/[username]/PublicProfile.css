@@ -1315,25 +1315,14 @@
 }
 
 .profile-avatar-button {
-  background: #FFF6EB; /* Default background color */
-  border: 1px solid #FF7B00; /* Border color */
+  background: #ffffff; /* Default background color */
   border: none;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  color: inherit;
-  width: 35px; /* Set width for the circle */
-  height: 35px; /* Set height for the circle */
-  border-radius: 50%; /* Makes it a circle */
+  color: #0057b1;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.3s ease, color 0.3s ease; /* Smooth transition */
-}
-
-.profile-avatar-button:hover {
-  background: #FFE7C7; /* Change background to #FFE7C7 on hover */
-  color: #FF7B00; /* Change text color to match the border */
-  font-size: 1.2rem; /* Increase font size on hover */
-  text-decoration: none;
 }

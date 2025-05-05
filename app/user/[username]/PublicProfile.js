@@ -544,7 +544,7 @@ const PublicProfile = () => {
             <button 
               className="profile-avatar-button"
               title="Profile">
-              {user ? user.firstName?.charAt(0) : 'G'}
+                Profile
             </button>
           </Link>
         </div>
