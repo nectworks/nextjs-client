@@ -203,10 +203,6 @@ function SignUpFormPopup({ user, closePopUp }) {
           if (userDetails.emailVerified) {
             setOtpState(prev => ({ ...prev, verified: true }));
           }
-          
-          // For debugging purposes
-          console.log('Fetched user data:', userDetails);
-          console.log('Education level from API:', userDetails.educationLevel);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
