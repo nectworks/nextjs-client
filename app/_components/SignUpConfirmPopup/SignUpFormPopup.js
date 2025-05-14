@@ -114,18 +114,9 @@ function SignUpFormPopup({ user, closePopUp }) {
   // Check if this is the user's first time filling the form
   useEffect(() => {
     const filledExperience = localStorage.getItem('filledExperience');
-    const filledForm = localStorage.getItem('filledForm');
     
     if (filledExperience) {
       setUiState(prev => ({ ...prev, isFirstTime: false }));
-    }
-    
-    if (filledForm) {
-      setUiState(prev => ({ 
-        ...prev, 
-        canClose: true,
-        showCloseButton: true // Allow closing if form was previously filled
-      }));
     }
     
     // Calculate max steps based on job status
@@ -317,6 +308,26 @@ function SignUpFormPopup({ user, closePopUp }) {
           if (userDetails.emailVerified) {
             setOtpState(prev => ({ ...prev, verified: true }));
           }
+
+          const hasCompletedFormBefore = Boolean(
+            // Check for essential fields that indicate form completion
+            userDetails.mobileNumber && 
+            username &&
+            (
+              // Either professional path is complete
+              (userDetails.jobTitle && userDetails.companyName) ||
+              // Or student path is complete
+              (userDetails.desiredIndustry && userDetails.educationLevel)
+            )
+          );
+          
+          // Enable close button if basic profile exists
+          setUiState(prev => ({
+            ...prev,
+            isFirstTime: !hasCompletedFormBefore,
+            canClose: hasCompletedFormBefore,
+            showCloseButton: hasCompletedFormBefore
+          }));
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -457,12 +468,16 @@ function SignUpFormPopup({ user, closePopUp }) {
         const mobileValidation = validateMobileNumber(formData.mobileNumber);
         const usernameChanged = originalData && formData.username !== originalData.username;
         
+        // Only check username existence if the username was changed
+        // If username hasn't changed, we don't need to check existence
+        // If username has changed, we need to ensure it doesn't exist (checkUsernameExist is false)
+        const usernameIsValid = formData.username &&
+                              isUsernameValid(formData.username) &&
+                              (!usernameChanged || !checkUsernameExist);
+
         return mobileValidation.valid && 
-               formData.experience.years && 
-               formData.username && 
-               isUsernameValid(formData.username) &&
-               // Only check existence if username was changed
-               (!usernameChanged || (usernameChanged && !checkUsernameExist));
+              formData.experience.years &&
+              usernameIsValid;
       } else if (currentStep === 3) {
         // Email is valid AND (OTP is verified OR not yet sent)
         const emailValidation = validateEmailFormat(formData.emailID);
@@ -769,8 +784,6 @@ function SignUpFormPopup({ user, closePopUp }) {
   
   // Close popup handler
   const handleClosePopUp = () => {
-    // Clear filledExperience from localStorage when popup is closed
-    localStorage.removeItem('filledExperience');
     closePopUp();
   };
   
@@ -810,6 +823,8 @@ function SignUpFormPopup({ user, closePopUp }) {
       });
       
       if (response.status === 200 || response.status === 201) {
+        // Application no longer depends on this
+        // Still set localStorage for backward compatibility as we used this in the past
         localStorage.setItem('filledForm', 'true');
         
         if (uiState.isFirstTime) {
@@ -823,7 +838,6 @@ function SignUpFormPopup({ user, closePopUp }) {
         
         // Clear temporary state from localStorage since we've saved it permanently
         localStorage.removeItem('signUpFormTempState');
-        localStorage.removeItem('filledExperience');
         
         showBottomMessage('Profile updated successfully!');
 

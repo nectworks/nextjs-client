@@ -380,6 +380,54 @@ const ProfilePage = () => {
     }
   }, [user?.username]);
 
+  // State to track whether we've checked the user's profile data
+  const [profileChecked, setProfileChecked] = useState(false);
+
+  // This useEffect will check if the user needs to complete their profile
+  useEffect(() => {
+    // Skip if no user, no user ID, or we've already checked the profile
+    if (!user || !user._id || profileChecked) return;
+  
+    const checkProfileCompletion = async () => {
+      try {
+        // Make request to get user details - use the same endpoint that's used in SignUpFormPopup
+        const response = await publicAxios.get(`/signUpCards/get/${user._id}`);
+        const { userDetails, username } = response.data;
+
+        if (userDetails) {
+          // Check if essential profile data is missing using the same logic as in SignUpFormPopup
+          const hasCompletedBasicProfile = Boolean(
+            userDetails.mobileNumber &&
+            username &&
+            (
+              // Either professional path is complete
+              (userDetails.jobTitle && userDetails.companyName) ||
+              // Or student path is complete
+              (userDetails.desiredIndustry && userDetails.educationLevel)
+            )
+          );
+
+          // Only show popup if:
+          // 1. They haven't completed their profile, AND
+          // 2. They didn't just come from signup (which is handled by the other useEffect)
+          const comingFromSignup = sessionStorage.getItem('from') === '/sign-up' || 
+                                  localStorage.getItem('newSignup') === 'true';
+          
+          if (!hasCompletedBasicProfile && !comingFromSignup) {
+            setSignUpPopup(true);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking profile completion:', error);
+      } finally {
+        // Mark that we've checked the profile to avoid repeated checks
+        setProfileChecked(true);
+      }
+    };
+
+    checkProfileCompletion();
+  }, [user, profileChecked]);
+
   // Set max date for notice period (3 months from now)
   const maxDate = new Date();
   maxDate.setMonth(maxDate.getMonth() + 3);
@@ -973,9 +1021,6 @@ const ProfilePage = () => {
       }, 300);
       
       return () => clearTimeout(timeoutId);
-    } else if (user && !localStorage.getItem('filledForm')) {
-      // Fallback method: If the user doesn't have filledForm in localStorage, they might be a new user
-      setSignUpPopup(true);
     }
 
     // Check for shared post parameters
