@@ -106,6 +106,83 @@ function SignUpFormPopup({ user, closePopUp }) {
     verificationInProgress: false,
   });
 
+  // Job title suggestions state
+  const [jobTitleSuggestions, setJobTitleSuggestions] = useState([]);
+
+  // Location suggestions state
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
+
+  // Function to fetch location suggestions from the backend
+  async function fetchLocationSuggestions(inputText) {
+    try {
+      const url = '/suggestions/locations';
+      const data = { text: inputText };
+      const response = await privateAxios.get(url, { params: data });
+      if (response.status === 200) {
+        return response.data.suggestions;
+      }
+    } catch (error) {
+      console.error('Error fetching location suggestions:', error);
+      return [];
+    }
+  }
+
+  // Function to update location suggestions based on user input
+  const updateLocationSuggestions = async (inputText) => {
+    if (inputText.trim() === '') {
+      setLocationSuggestions([]); // Clear location suggestions when input is empty
+      return;
+    }
+    const suggestions = await fetchLocationSuggestions(inputText);
+
+    // Filter out locations that might already be selected
+    const filteredSuggestions = suggestions.filter(suggestion => {
+      const formattedLocation = `${suggestion.city} (${suggestion.country})`;
+      return formData.location !== formattedLocation;
+    });
+
+    setLocationSuggestions(filteredSuggestions);
+  };
+
+  // Function to handle selection of a location from suggestions
+  const handleLocationSelection = (selectedLocation) => {
+    // Format the location as "City (Country)" like in ProfilePreferences.js
+    const formattedLocation = `${selectedLocation.city} (${selectedLocation.country})`;
+    setFormData(prev => ({ ...prev, location: formattedLocation }));
+    setLocationSuggestions([]); // Clear location suggestions when a location is selected
+  };
+
+  // Function to fetch job title suggestions from the backend
+  async function fetchJobTitleSuggestions(inputText) {
+    try {
+      const url = '/suggestions/jobtitles';
+      const data = { text: inputText };
+      const response = await privateAxios.get(url, { params: data });
+      if (response.status === 200) {
+        return response.data.suggestions;
+      }
+    } catch (error) {
+      console.error('Error fetching job title suggestions:', error);
+      return [];
+    }
+  }
+
+  // Function to update job title suggestions based on user input
+  const updateJobTitleSuggestions = async (inputText) => {
+    if (inputText.trim() === '') {
+      setJobTitleSuggestions([]); // Clear job title suggestions when input is empty
+      return;
+    }
+    const suggestions = await fetchJobTitleSuggestions(inputText);
+    setJobTitleSuggestions(suggestions);
+  };
+
+  // Function to handle selection of a job title from suggestions
+  const handleJobTitleSelection = (selectedJobTitle) => {
+    setFormData(prev => ({ ...prev, jobTitle: selectedJobTitle }));
+    setJobTitleSuggestions([]); // Clear job title suggestions when a job title is selected
+  };
+
   // Username validation state
   const [checkUsernameExist, setCheckUsernameExist] = useState(false);
   const [showUsername, setShowUsername] = useState(false);
@@ -596,6 +673,13 @@ function SignUpFormPopup({ user, closePopUp }) {
       } else {
         setUiState(prev => ({ ...prev, formError: null }));
       }
+    } else if (name === 'jobTitle') {
+        // Update job title suggestions when job title input changes
+        updateJobTitleSuggestions(value);
+        setFormData(prev => ({ ...prev, [name]: value }));
+    } else if (name === 'location') {
+        updateLocationSuggestions(value);
+        setFormData(prev => ({ ...prev, [name]: value }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
@@ -944,8 +1028,22 @@ function SignUpFormPopup({ user, closePopUp }) {
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
-                placeholder="e.g. Bangalore"
+                placeholder="e.g. Bengaluru, India"
               />
+              {locationSuggestions.length > 0 && (
+                <div className="AutoSuggestions">
+                  <ul>
+                    {locationSuggestions.map((suggestion, index) => (
+                      <li
+                        key={index}
+                        onClick={() => handleLocationSelection(suggestion)}
+                      >
+                        {suggestion.city} ({suggestion.country})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
             
             <div className="form-field">
@@ -1096,8 +1194,21 @@ function SignUpFormPopup({ user, closePopUp }) {
                 placeholder="e.g. UI/UX Designer"
                 required
               />
+              {jobTitleSuggestions.length > 0 && (
+                <div className="AutoSuggestions">
+                  <ul>
+                    {jobTitleSuggestions.map((suggestion, index) => (
+                      <li
+                        key={index}
+                        onClick={() => handleJobTitleSelection(suggestion.jobTitle)}
+                      >
+                        {suggestion.jobTitle}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-            
             <div className="form-field">
               <label>
                 Company Name <span className="required-field">*</span>
@@ -1119,8 +1230,22 @@ function SignUpFormPopup({ user, closePopUp }) {
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
-                placeholder="e.g. Bangalore"
+                placeholder="e.g. Bengaluru, India"
               />
+              {locationSuggestions.length > 0 && (
+                <div className="AutoSuggestions">
+                  <ul>
+                    {locationSuggestions.map((suggestion, index) => (
+                      <li
+                        key={index}
+                        onClick={() => handleLocationSelection(suggestion)}
+                      >
+                        {suggestion.city} ({suggestion.country})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
             
             {uiState.formError && (
