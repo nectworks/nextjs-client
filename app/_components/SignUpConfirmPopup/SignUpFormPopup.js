@@ -77,6 +77,7 @@ function SignUpFormPopup({ user, closePopUp }) {
     username: user.username,
     desiredIndustry: '',
     educationLevel: '',
+    industry: '',
   });
   
   // Store the original data to detect changes
@@ -344,6 +345,10 @@ function SignUpFormPopup({ user, closePopUp }) {
         const response = await publicAxios.get(`/signUpCards/get/${user._id}`);
         const { userDetails, username } = response.data;
         
+      // Get the latest experience data 
+      const experienceResponse = await publicAxios.get(`/signUpCards/getLatestExperience/${user._id}`);
+      const { latestExperience } = experienceResponse.data;
+
         if (userDetails) {
           // Parse mobile number if it includes country code
           let mobileNum = userDetails.mobileNumber || '';
@@ -372,6 +377,8 @@ function SignUpFormPopup({ user, closePopUp }) {
             desiredIndustry: userDetails.desiredIndustry || '',
             educationLevel: userDetails.educationLevel || '',
             username: username || user.username,
+            // Prioritize industry from latestExperience if available, otherwise use userDetails
+            industry: (latestExperience && latestExperience.industry) || userDetails.industry || '',
           };
           
           setFormData(initialFormData);
@@ -540,7 +547,7 @@ function SignUpFormPopup({ user, closePopUp }) {
     
     if (formData.jobStatus === 'experienced') {
       if (currentStep === 1) {
-        return formData.jobTitle && formData.companyName;
+        return formData.jobTitle && formData.companyName && formData.industry;
       } else if (currentStep === 2) {
         const mobileValidation = validateMobileNumber(formData.mobileNumber);
         const usernameChanged = originalData && formData.username !== originalData.username;
@@ -872,77 +879,133 @@ function SignUpFormPopup({ user, closePopUp }) {
   };
   
   // Final submission
-  const handleSubmit = async () => {
-    // For experienced users with unverified emails but OTP sent, require verification
-    if (formData.jobStatus === 'experienced' && otpState.sent && !otpState.verified) {
-      showBottomMessage('Please verify your company email before proceeding');
-      return;
-    }
+  // In SignUpFormPopup.js, modify the handleSubmit function:
 
-    // Check username validation again
-    if (!isUsernameValid(formData.username)) {
-      setUiState(prev => ({ ...prev, formError: 'Username should be 3-15 characters (letters and numbers only)' }));
-      return;
-    }
+const handleSubmit = async () => {
+  // For experienced users with unverified emails but OTP sent, require verification
+  if (formData.jobStatus === 'experienced' && otpState.sent && !otpState.verified) {
+    showBottomMessage('Please verify your company email before proceeding');
+    return;
+  }
 
-    // Only check for username existence if username has changed
-    if (originalData && 
-        formData.username !== originalData.username && 
-        checkUsernameExist) {
-      setUiState(prev => ({ ...prev, formError: 'This username is already taken' }));
-      return;
+  // Check username validation again
+  if (!isUsernameValid(formData.username)) {
+    setUiState(prev => ({ ...prev, formError: 'Username should be 3-15 characters (letters and numbers only)' }));
+    return;
+  }
+
+  // Only check for username existence if username has changed
+  if (originalData && 
+      formData.username !== originalData.username && 
+      checkUsernameExist) {
+    setUiState(prev => ({ ...prev, formError: 'This username is already taken' }));
+    return;
+  }
+  
+  setUiState(prev => ({ ...prev, isSubmitting: true }));
+  
+  try {
+    // Combine country code and mobile number
+    const fullMobileNumber = `${formData.countryCode} ${formData.mobileNumber}`;
+    
+    // Extract years and months of experience for calculation
+    let experienceData = formData.experience;
+    if (formData.jobStatus === 'experienced' && 
+        formData.experience && 
+        (formData.experience.years || formData.experience.months)) {
+      experienceData = {
+        years: formData.experience.years || '0',
+        months: formData.experience.months || '0'
+      };
     }
     
-    setUiState(prev => ({ ...prev, isSubmitting: true }));
+    // Prepare the data for submission
+    const submitData = {
+      ...formData,
+      mobileNumber: fullMobileNumber,
+      userId: user._id,
+      isExperienced: formData.jobStatus === 'experienced',
+      experience: experienceData,
+      // Add any industry data if available (could be added to the form)
+      industry: 'Technology' // Default value, you could make this a form field 
+    };
     
-    try {
-      // Combine country code and mobile number
-      const fullMobileNumber = `${formData.countryCode} ${formData.mobileNumber}`;
+    // Call the new endpoint that handles both user update and experience creation
+    const response = await publicAxios.put('/signUpCards/saveWithExperience', submitData);
+    
+    if (response.status === 200 || response.status === 201) {
+      // Application no longer depends on this
+      // Still set localStorage for backward compatibility as we used this in the past
+      localStorage.setItem('filledForm', 'true');
       
-      const response = await publicAxios.put('/signUpCards/save', {
-        ...formData,
-        mobileNumber: fullMobileNumber,
-        userId: user._id,
-        isExperienced: formData.jobStatus === 'experienced',
-      });
-      
-      if (response.status === 200 || response.status === 201) {
-        // Application no longer depends on this
-        // Still set localStorage for backward compatibility as we used this in the past
-        localStorage.setItem('filledForm', 'true');
-        
-        if (uiState.isFirstTime) {
-          localStorage.setItem('filledExperience', 'true');
-        }
-        
-        // If user was previously a fresher and is now experienced, update status
-        if (formData.jobStatus === 'experienced') {
-          localStorage.setItem('isExperienced', 'true');
-        }
-        
-        // Clear temporary state from localStorage since we've saved it permanently
-        localStorage.removeItem('signUpFormTempState');
-        
-        showBottomMessage('Profile updated successfully!');
-
-        // Now enable the close button
-        setUiState(prev => ({ ...prev, showCloseButton: true }));
-
-        setTimeout(() => {
-          // Clear all form related localStorage items
-          localStorage.removeItem('signUpFormTempState');
-          localStorage.removeItem('filledExperience');
-          
-          closePopUp();
-        }, 1000);
+      if (uiState.isFirstTime) {
+        localStorage.setItem('filledExperience', 'true');
       }
-    } catch (error) {
-      console.error('Submit error:', error);
-      showBottomMessage('Failed to save information. Please try again.');
-    } finally {
-      setUiState(prev => ({ ...prev, isSubmitting: false }));
+      
+      // If user was previously a fresher and is now experienced, update status
+      if (formData.jobStatus === 'experienced') {
+        localStorage.setItem('isExperienced', 'true');
+      }
+      
+      // Clear temporary state from localStorage since we've saved it permanently
+      localStorage.removeItem('signUpFormTempState');
+      
+      // After successful save, refetch the latest data to ensure the form is up-to-date
+      try {
+        const refreshResponse = await publicAxios.get(`/signUpCards/getLatestExperience/${user._id}`);
+        const { latestExperience } = refreshResponse.data;
+        
+        // Update industry in form data to ensure it's in sync
+        if (latestExperience && latestExperience.industry) {
+          setFormData(prev => ({
+            ...prev,
+            industry: latestExperience.industry
+          }));
+        }
+      } catch (refreshError) {
+        console.log('Non-critical error refreshing data:', refreshError);
+        // Don't block the success flow for this non-critical operation
+      }
+      
+      // Show success message
+      showBottomMessage('Profile updated successfully!');
+
+      // Now enable the close button
+      setUiState(prev => ({ ...prev, showCloseButton: true }));
+
+      setTimeout(() => {
+        // Clear all form related localStorage items
+        localStorage.removeItem('signUpFormTempState');
+        localStorage.removeItem('filledExperience');
+        
+        closePopUp();
+      }, 1000);
     }
-  };
+  } catch (error) {
+    console.error('Submit error:', error);
+    
+    // Enhanced error handling
+    let errorMessage = 'Failed to save information.';
+    
+    if (error.response) {
+      // Server responded with an error
+      if (error.response.data && error.response.data.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response.status === 400) {
+        errorMessage = 'Please check your input and try again.';
+      } else if (error.response.status === 500) {
+        errorMessage = 'Server error. Please try again later.';
+      }
+    } else if (error.request) {
+      // Request was made but no response
+      errorMessage = 'No response from server. Please check your connection.';
+    }
+    
+    showBottomMessage(errorMessage);
+  } finally {
+    setUiState(prev => ({ ...prev, isSubmitting: false }));
+  }
+};
   
   // Country code options
   const countryCodes = [
@@ -1246,6 +1309,20 @@ function SignUpFormPopup({ user, closePopUp }) {
                   </ul>
                 </div>
               )}
+            </div>
+
+            <div className="form-field">
+              <label>
+                Industry <span className="required-field">*</span>
+              </label>
+              <input
+                type="text"
+                name="industry"
+                value={formData.industry || ''}
+                onChange={handleInputChange}
+                placeholder="e.g. Technology, Finance"
+                required
+              />
             </div>
             
             {uiState.formError && (
