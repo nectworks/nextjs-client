@@ -19,7 +19,7 @@ import infoIcon from '@/public/SignIn/information.webp';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { UserContext } from '@/context/User/UserContext.js';
-import ProfileHeader from '../_components/Profile/ProfileHeader/ProfileHeader';
+import ProfileHeaderWrapper from '@/app/_components/ProfileHeaderWrapper/ProfileHeaderWrapper';
 import addIcon from '@/public/Profile/addIcon.svg';
 import ProfilePreferences from '../_components/Profile/ProfilePreferences/ProfilePreferences';
 import seperatorIcon from '@/public/Profile/speratorIcon.svg';
@@ -717,7 +717,7 @@ const AccountSettings = () => {
       <DashboardMenu />
 
       <div className={`accountSettingsContainer`}>
-        <ProfileHeader />
+        <ProfileHeaderWrapper />
 
         {/* display a message when the user mode is changed */}
         <div className="info-box" id="info-box"></div>

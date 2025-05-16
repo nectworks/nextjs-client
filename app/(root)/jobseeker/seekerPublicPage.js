@@ -166,7 +166,6 @@ function SeekerPublicPage() {
 
       if (res.status === 200) {
         const data = res.data.data;
-        console.log(data.socials);
         setShowLoader(false);
         setAbout(data.about);
         setExperience(data.experience);

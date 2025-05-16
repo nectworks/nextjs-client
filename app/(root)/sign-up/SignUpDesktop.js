@@ -577,21 +577,20 @@ const SignUpDesktop = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
     if (firstName === lastName) {
       setFirstNameError('Firstname and lastName should not be same');
       setLastNameError('Firstname and lastName should not be same');
       return;
     }
-
+  
     // Call closeModal to verify OTP first
     const otpVerified = await closeModal(e);
-
+  
     if (!otpVerified) {
       // If OTP verification failed, don't proceed with signup
       return;
     }
-
+  
     showSignupSpinner(true);
     try {
       const res = await privateAxios.post('/signup', {
@@ -600,13 +599,19 @@ const SignUpDesktop = () => {
         username: username,
         email: email,
       });
-
+  
       if (res.status === 200) {
         showSignupSpinner(false);
         setUser(res.data.user);
-
+  
+        // Set a flag in localStorage to indicate this is a brand new signup
+        localStorage.setItem('newSignup', 'true');
         sessionStorage.setItem('from', '/sign-up');
-        router.push(prevLocation || '/profile');
+        
+        // Add a small delay before redirecting to ensure storage is set
+        setTimeout(() => {
+          router.push(prevLocation || '/profile');
+        }, 100);
       }
     } catch (err) {
       showSignupSpinner(false);

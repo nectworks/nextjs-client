@@ -46,10 +46,8 @@ const Logout = () => {
     }
     // Convert searchParams to a URLSearchParams object if it's not already
     const params = new URLSearchParams(searchParams.toString());
-    console.log(JSON.stringify(`params: ${params}`));
     // check if the user chose to logout from all devices
     const allDevices = params.get('all-devices');
-    console.log(JSON.stringify(`allDevices: ${allDevices}`));
     if (allDevices && allDevices === true.toString()) {
       logout(`/auth/logout-all`);
     } else {

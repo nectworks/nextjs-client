@@ -1,12 +1,15 @@
 'use client';
 /*
-    File - RequestReferral.js
-    Desc - This file handles the request referral functionality.
-    It includes a step-based UI for job seekers to request referrals from professionals.
-    It handles user input validation, OTP verification, and the submission
-    of referral requests.
-*/
-import { Fragment, useContext, useEffect, useRef, useState } from 'react';
+ * File: RequestReferral.js
+ * Description: Component for handling referral requests in a multi-step form
+ * Features:
+ * - Three-step form process (Personal Info, Job Details, Resume Upload)
+ * - Email verification with OTP
+ * - Dynamic job detail entries (add/remove jobs)
+ * - Resume upload and validation
+ * - Responsive design for mobile and desktop
+ */
+import { useContext, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter, usePathname } from 'next/navigation';
@@ -16,8 +19,6 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import plusIcon from '@/public/PublicProfile/plusIcon.png';
 import deleteIcon from '@/public/PublicProfile/deleteIcon.png';
 import greenTick from '@/public/AccountSettings/greenTick.webp';
-import defaultProfile from '@/public/Profile/defaultProfile.webp';
-import uploadIcon from '@/public/PublicProfile/uploadIcon.svg';
 import secondComer from '@/public/PublicProfile/secondComer.webp';
 
 // Styles
@@ -32,7 +33,7 @@ import checkFileSize from '@/Utils/checkFileSize';
 import { publicAxios } from '@/config/axiosInstance';
 import usePrivateAxios from '@/Utils/usePrivateAxios';
 
-const RequestReferral = (props) => {
+const RequestReferral = () => {
   const router = useRouter();
   const privateAxios = usePrivateAxios();
   const { username } = useParams();
@@ -95,17 +96,16 @@ const RequestReferral = (props) => {
   const fileInputRef = useRef(null);
   const [resumeUploaded, setResumeUploaded] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState('');
-  const [isUploading, setIsUploading] = useState(false);
 
   // Registered user states
   const [isRegisteredUser, setIsRegisteredUser] = useState(false);
-  const [firstNameOfRegisteredUser, setFirstNameOfRegisteredUser] = useState('');
-  const [lastNameOfRegisteredUser, setLastNameOfRegisteredUser] = useState('');
   const [emailOfRegisteredUser, setEmailOfRegisteredUser] = useState('');
   const [registeredUserId, setRegisteredUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Validation functions
+  /**
+   * Validation functions
+   */
   const isEmailValid = (email) => {
     const emailPattern = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
     return emailPattern.test(email) && email.endsWith('.com');
@@ -125,9 +125,11 @@ const RequestReferral = (props) => {
     return jobIdPattern.test(jobId);
   };
 
-  // Step navigation functions
+  /**
+   * Step navigation functions
+   */
   const goToNextStep = () => {
-    // Add validation for each step before proceeding
+    // Validate current step before proceeding
     if (currentStep === 1) {
       if (!validateStep1()) return;
     } else if (currentStep === 2) {
@@ -140,7 +142,9 @@ const RequestReferral = (props) => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
-  // Step validation functions
+  /**
+   * Step validation functions
+   */
   const validateStep1 = () => {
     let isValid = true;
     
@@ -188,7 +192,9 @@ const RequestReferral = (props) => {
     return isValid;
   };
 
-  // Error message helper function
+  /**
+   * Job field error message handler
+   */
   function getErrorMessage(inputEle) {
     const parentDiv = inputEle.closest('div');
     const errorContainer = parentDiv.querySelector('.errorMessage');
@@ -213,7 +219,9 @@ const RequestReferral = (props) => {
     }
   }
 
-  // Job input handlers
+  /**
+   * Job input handlers
+   */
   const handleJobChangeInput = (event, id) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -234,8 +242,6 @@ const RequestReferral = (props) => {
     if (totalJobs.length < 3) {
       setTotalJobs([...totalJobs, jobDetails]);
       setCurrId(totalJobs.length);
-    } else {
-      return;
     }
   };
 
@@ -245,11 +251,14 @@ const RequestReferral = (props) => {
     setCurrId(totalJobs.length - 2);
   };
 
-  // User info input handler
+  /**
+   * User info input handler
+   */
   const handleUserInfoInput = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
+    // Validate and set error messages
     if (name === 'email') {
       if (value === '') {
         setEmailError('Email is required');
@@ -279,15 +288,19 @@ const RequestReferral = (props) => {
     setUserInformation({ ...userInformation, [name]: value });
   };
 
-  // OTP handlers
+  /**
+   * OTP handlers
+   */
   const handleInputChange = (index, event) => {
     const value = event.target.value;
 
+    // Only allow single numeric digits
     if (!isNaN(value) && value.length <= 1) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
 
+      // Auto-focus next input
       if (value !== '') {
         if (index < 3) {
           inputRefs[index + 1].current.focus();
@@ -310,8 +323,11 @@ const RequestReferral = (props) => {
     setInvalidOtp(false);
   };
 
-  // Email verification function
+  /**
+   * Email verification function - sends OTP
+   */
   const verifyEmail = async (event) => {
+    // Validate inputs first
     if (!isEmailValid(userInformation.email)) {
       return;
     }
@@ -324,6 +340,7 @@ const RequestReferral = (props) => {
       return;
     }
 
+    // Update UI state
     setShowSpinner(true);
     setAddResendButton(true);
     setEnableResendButton(true);
@@ -333,14 +350,19 @@ const RequestReferral = (props) => {
       const sendOTP = await publicAxios.post(`/generateCommonOtp/${username}`, {
         email: userInformation.email,
       });
-      if (sendOTP.status === 200 || event.key === 'Enter') {
+      
+      if (sendOTP.status === 200 || event?.key === 'Enter') {
         setShowSpinner(false);
         setIsActive(true);
         setOtpSent(true);
         setShowOtpSentMessage(true);
+        
+        // Hide "OTP sent" message after 2 seconds
         setTimeout(() => {
           setShowOtpSentMessage(false);
         }, 2000);
+        
+        // Enable resend button after 60 seconds
         setTimeout(() => {
           setEnableResendButton(false);
           setSeconds(0);
@@ -353,7 +375,9 @@ const RequestReferral = (props) => {
     }
   };
 
-  // OTP verification function
+  /**
+   * OTP verification function - verifies entered OTP
+   */
   const verifyOTP = async () => {
     setShowSpinnerToVerify(true);
     try {
@@ -372,6 +396,7 @@ const RequestReferral = (props) => {
           email,
           secondComer: true,
         });
+        
         if (unRegisteredData.status === 200) {
           setUnRegisteredUserId(unRegisteredData.data._id);
           setOtpSent(false);
@@ -386,7 +411,9 @@ const RequestReferral = (props) => {
     }
   };
 
-  // Go to signup function
+  /**
+   * Go to signup function - redirects to signup page
+   */
   const goToSignup = () => {
     document.body.style.overflow = 'auto';
     router.push('/sign-up', {
@@ -397,7 +424,9 @@ const RequestReferral = (props) => {
     });
   };
 
-  // Check for registered user function
+  /**
+   * Check for registered user function
+   */
   const checkForRegisteredUser = async () => {
     if (user) {
       return;
@@ -420,7 +449,9 @@ const RequestReferral = (props) => {
     }
   };
 
-  // Check unregistered user data function
+  /**
+   * Check unregistered user data function
+   */
   const getUnregisteredUserData = async () => {
     if (user) {
       return;
@@ -445,30 +476,24 @@ const RequestReferral = (props) => {
     }
   };
 
-  // File input handler
+  /**
+   * File input handler - validates file type and size
+   */
   const handleFileInputChange = async (event) => {
     const uploadedFile = event.target.files[0];
 
-    // check if the file has a valid extension
+    // Check if the file has a valid extension (PDF only)
     const isValidExtension = checkFileExtension(uploadedFile, true);
-
-    // if the extension is not valid, display the message and discard the file
     if (isValidExtension === false) {
       showBottomMessage('Invalid file type. Only PDF files are accepted');
-
-      // clear the file input
       event.target.value = '';
       return;
     }
 
-    // check the size of the file
+    // Check the size of the file (5MB limit)
     const isValidSize = checkFileSize(uploadedFile);
-
-    // if the file size is more than the limit, display the message and discard the file
     if (isValidSize === false) {
       showBottomMessage('File exceeds the limit of 5MB');
-
-      // clear the file input
       event.target.value = '';
       return;
     }
@@ -477,11 +502,13 @@ const RequestReferral = (props) => {
     setResumeUploaded(true);
   };
 
-  // Resume upload function
+  /**
+   * Resume upload function - handles S3 upload
+   */
   async function uploadResume(data) {
     const resume = document.getElementById('resumeUpload').files[0];
 
-    // (1). Fetch a signed url
+    // 1. Fetch a signed URL
     let res = await privateAxios.get(`/file/s3-url-put`, {
       headers: {
         fileContentType: resume.type,
@@ -495,7 +522,7 @@ const RequestReferral = (props) => {
 
     const { signedUrl, fileName } = res.data;
 
-    // save the resume in the context
+    // Save the resume in the context for logged-in users
     if (user) {
       setUser({
         ...user,
@@ -503,7 +530,7 @@ const RequestReferral = (props) => {
       });
     }
 
-    // (2). Using the signed url upload the file directly to s3
+    // 2. Using the signed URL, upload the file directly to S3
     res = await fetch(signedUrl, {
       method: 'PUT',
       body: resume,
@@ -517,7 +544,7 @@ const RequestReferral = (props) => {
       throw new Error(`Couldn't upload file. Try again!!`);
     }
 
-    // (3). Send info after successful file upload to the server
+    // 3. Send info after successful file upload to the server
     res = await privateAxios.post(
       `/referrals/private/upload-resume?fileName=${fileName}`,
       {},
@@ -531,17 +558,25 @@ const RequestReferral = (props) => {
     );
   }
 
-  // Submit referral request function
+  /**
+   * Submit referral request function
+   */
   const submitReferralRequest = async () => {
+    // Check if user has enough NectCoins (at least 1)
+    if (user && user.totalCoins < 1) {
+      showBottomMessage('You need at least 1 coin to send the referral request');
+      return;
+    }
+    
+    // Validate resume requirement
     if (!resumeUploaded && !user?.resume) {
       showBottomMessage('Please upload your resume!');
       return;
     }
 
-    // if jobId and job url is not provided at any entry, show error message
+    // Validate that at least job URL or job ID is provided
     for (let i = 0; i < totalJobs.length; i += 1) {
       const job = totalJobs[i];
-
       if (!job.jobId && !job.jobUrl) {
         showBottomMessage(
           `Kindly include either the Job ID, Job URL, or both.`
@@ -550,7 +585,7 @@ const RequestReferral = (props) => {
       }
     }
 
-    // construct the data to be sent to the API
+    // Construct the data to be sent to the API
     const data = {
       jobsAskedForReferral: {
         jobDetails: totalJobs,
@@ -560,24 +595,24 @@ const RequestReferral = (props) => {
       unRegisteredUserId: unRegisteredUserId,
     };
 
-    // network request starts
+    // Network request starts
     setIsSubmittingReferral(true);
 
     try {
-      // upload the resume to s3 and save info in server
+      // Upload the resume to S3 if a new one was selected
       if (resumeUploaded) {
         await uploadResume(data);
       }
 
       showBottomMessage('Saving data...');
 
-      // submit other data to the backend
+      // Submit referral data to the backend
       const res = await privateAxios.post(`/referrals/private`, data);
 
       if (res.status === 200) {
         showBottomMessage('Successfully submitted referral request');
 
-        // deduct a coin for the user
+        // Deduct a coin for the user if logged in
         if (user) {
           setUser((prevState) => {
             return {
@@ -588,7 +623,7 @@ const RequestReferral = (props) => {
         }
       }
 
-      // network request ends
+      // Network request ends
       setIsSubmittingReferral(false);
       
       // Show success state for a moment before resetting the form
@@ -596,10 +631,10 @@ const RequestReferral = (props) => {
         resetForm();
       }, 2000);
     } catch (error) {
-      const { data, status } = error.response;
+      const { data, status } = error.response || {};
 
       if (status === 403) {
-        showBottomMessage(data.message);
+        showBottomMessage(data?.message || 'You need at least 1 coin to send the referral request');
       } else {
         showBottomMessage(`Couldn't submit referral request.`);
       }
@@ -608,7 +643,9 @@ const RequestReferral = (props) => {
     }
   };
   
-  // Reset form after submission
+  /**
+   * Reset form after submission
+   */
   const resetForm = () => {
     // Clear the fields and reset other state
     if (user) {
@@ -637,11 +674,13 @@ const RequestReferral = (props) => {
     setResumeUploaded(false);
     setCurrentStep(1);
 
-    // discard the uploaded file
+    // Discard the uploaded file
     document.getElementById('resumeUpload').value = '';
   };
 
-  // Get user via username function
+  /**
+   * Get user via username function - fetches professional's info
+   */
   const getUserViaUsername = async () => {
     try {
       const res = await publicAxios.get(`/getUser/${username}`);
@@ -656,17 +695,19 @@ const RequestReferral = (props) => {
     }
   };
 
-  // Effect hooks
+  // Effect to fetch professional's data on mount
   useEffect(() => {
     getUserViaUsername();
   }, []);
 
+  // Effect to check if user is registered when email changes
   useEffect(() => {
     if (isEmailValid(userInformation.email)) {
       checkForRegisteredUser();
     }
   }, [userInformation.email]);
 
+  // Effect to auto-verify OTP when all digits are entered
   useEffect(() => {
     const enteredOTP = otp.join('');
     if (enteredOTP.length === 4) {
@@ -674,6 +715,7 @@ const RequestReferral = (props) => {
     }
   }, [otp]);
 
+  // Effect to handle OTP timer countdown
   useEffect(() => {
     let interval = null;
     if (isActive) {
@@ -689,8 +731,8 @@ const RequestReferral = (props) => {
     };
   }, [isActive]);
 
+  // Effect to prefill fields when user is logged in
   useEffect(() => {
-    // prefill the fields if the user is already logged in
     if (user) {
       setUserInformation({
         firstName: user.firstName,
@@ -703,8 +745,7 @@ const RequestReferral = (props) => {
       setOtpVerified(true);
     }
 
-    /* if the logged in user and the profile of the professional is
-    same, display a popup and redirect the user */
+    // Check if user is trying to request a referral from themselves
     if (user && professionalUserData) {
       if (user._id === professionalUserData._id) {
         setSameUserWarning(true);
@@ -715,15 +756,17 @@ const RequestReferral = (props) => {
   // Check if user can proceed (either logged in or email verified)
   const canProceed = user || otpVerified;
 
+  // Check if user has enough coins
+  const hasEnoughCoins = !user || (user && user.totalCoins > 0);
+
   return (
     <>
       {!isLoading ? (
         <div className={`referral-request-container ${showPopup ? 'blur-background' : ''}`}>
-          {/* Header */}
+          {/* Header with professional's info */}
           <div className="referral-header">
             <Link href={`/user/${username}`} className="professional-info">
               <div className="professional-avatar">
-                {/* Fall back to ProfileImage component which seems to work correctly */}
                 <ProfileImage
                   isLoggedInUser={false}
                   otherUser={professionalUserData}
@@ -741,9 +784,9 @@ const RequestReferral = (props) => {
             </button>
           </div>
 
-          {/* Content */}
+          {/* Main content */}
           <div className="referral-content">
-            {/* Progress Steps */}
+            {/* Progress Steps indicator */}
             <div className="progress-steps">
               <div className={`step ${currentStep >= 1 ? 'active' : ''}`}>
                 <div className="step-number">1</div>
@@ -774,6 +817,15 @@ const RequestReferral = (props) => {
                 <p>
                   {professionalUserData.firstName} is not accepting referral
                   requests at this moment.
+                </p>
+              </div>
+            )}
+            
+            {/* Warning message if user doesn't have enough NectCoins */}
+            {user && user.totalCoins < 1 && (
+              <div className="not-accepting-referrals">
+                <p>
+                  You need at least 1 NectCoin to send a referral request.
                 </p>
               </div>
             )}
@@ -892,6 +944,7 @@ const RequestReferral = (props) => {
                             key={index}
                             ref={ref}
                             type="text"
+                            inputMode="numeric"
                             maxLength={1}
                             value={otp[index]}
                             onChange={(e) => handleInputChange(index, e)}
@@ -922,7 +975,7 @@ const RequestReferral = (props) => {
                     <button 
                       className="next-button"
                       onClick={goToNextStep}
-                      disabled={!canProceed || sameUserWarning || (!isLoading && !professionalUserData.isExperienced)}
+                      disabled={!canProceed || sameUserWarning || (!isLoading && !professionalUserData.isExperienced) || !hasEnoughCoins}
                     >
                       Continue
                     </button>
@@ -950,10 +1003,10 @@ const RequestReferral = (props) => {
                               name="jobId"
                               value={job.jobId}
                               onChange={(e) => handleJobChangeInput(e, id)}
-                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                               placeholder="Enter job ID if available"
                             />
-                            <p className="error-message">&nbsp;</p>
+                            <p className="error-message errorMessage">&nbsp;</p>
                           </div>
                           
                           <div className="input-group">
@@ -966,11 +1019,11 @@ const RequestReferral = (props) => {
                               name="jobUrl"
                               value={job.jobUrl}
                               onChange={(e) => handleJobChangeInput(e, id)}
-                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                               placeholder="Paste the job URL from company website"
                               required
                             />
-                            <p className="error-message">{!job.jobUrl ? 'Job URL is required' : ''}</p>
+                            <p className="error-message errorMessage">{!job.jobUrl ? 'Job URL is required' : ''}</p>
                           </div>
                         </div>
                         
@@ -980,7 +1033,7 @@ const RequestReferral = (props) => {
                             <button
                               className="delete-job"
                               onClick={() => deleteJob(id)}
-                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                             >
                               <Image
                                 src={deleteIcon}
@@ -995,7 +1048,7 @@ const RequestReferral = (props) => {
                             <button
                               className="add-job"
                               onClick={addJobs}
-                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                              disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                             >
                               <Image
                                 src={plusIcon}
@@ -1026,7 +1079,7 @@ const RequestReferral = (props) => {
                       name="message"
                       value={userInformation.message}
                       onChange={handleUserInfoInput}
-                      disabled={(!otpVerified && !user) || !professionalUserData.isExperienced}
+                      disabled={(!otpVerified && !user) || !professionalUserData.isExperienced || !hasEnoughCoins}
                       placeholder="Feel free to expand on your requirements by adding a message"
                       maxLength={300}
                     ></textarea>
@@ -1044,7 +1097,7 @@ const RequestReferral = (props) => {
                     <button 
                       className="next-button"
                       onClick={goToNextStep}
-                      disabled={sameUserWarning || (!isLoading && !professionalUserData.isExperienced)}
+                      disabled={sameUserWarning || (!isLoading && !professionalUserData.isExperienced) || !hasEnoughCoins}
                     >
                       Continue
                     </button>
@@ -1072,7 +1125,7 @@ const RequestReferral = (props) => {
                     
                     <div 
                       className={`resume-dropzone ${resumeUploaded || (user && user.resume) ? 'has-file' : ''}`}
-                      onClick={() => (!isSubmittingReferral && canProceed && professionalUserData.isExperienced) && fileInputRef.current.click()}
+                      onClick={() => (!isSubmittingReferral && canProceed && professionalUserData.isExperienced && hasEnoughCoins) && fileInputRef.current.click()}
                     >
                       {!(resumeUploaded || (user && user.resume)) ? (
                         <>
@@ -1104,7 +1157,7 @@ const RequestReferral = (props) => {
                             className="replace-file"
                             onClick={(e) => {
                               e.stopPropagation();
-                              canProceed && professionalUserData.isExperienced && fileInputRef.current.click();
+                              canProceed && professionalUserData.isExperienced && hasEnoughCoins && fileInputRef.current.click();
                             }}
                             disabled={isSubmittingReferral}
                           >
@@ -1135,7 +1188,8 @@ const RequestReferral = (props) => {
                         isSubmittingReferral || 
                         sameUserWarning || 
                         (!resumeUploaded && !user?.resume) || 
-                        (!isLoading && !professionalUserData.isExperienced)
+                        (!isLoading && !professionalUserData.isExperienced) ||
+                        (user && user.totalCoins < 1)
                       }
                     >
                       {isSubmittingReferral ? (
@@ -1156,7 +1210,7 @@ const RequestReferral = (props) => {
         </div>
       )}
 
-      {/* Second Comer Popup */}
+      {/* Second Comer Popup - Shown when user has exceeded free requests */}
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup-content">

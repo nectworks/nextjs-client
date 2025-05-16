@@ -1,3 +1,9 @@
+/* 
+ * RequestReferral.css
+ * Contains styles for the multi-step referral request flow
+ * Includes responsive designs for both desktop and mobile views
+ */
+
 /* Core layout styles */
 .referral-request-container {
   width: min(800px, 95%);
@@ -12,13 +18,14 @@
   filter: blur(5px);
 }
 
-/* Header styles */
+/* Header styles - Professional information display */
 .referral-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid #eaeaea;
+  flex-wrap: nowrap;
 }
 
 .professional-info {
@@ -28,12 +35,15 @@
   color: inherit;
 }
 
+/* Profile avatar container - sized for mobile by default */
 .professional-avatar {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 1rem;
+  position: relative;
+  margin-right: 0.75rem;
   background-color: #f0f0f0;
   display: flex;
   align-items: center;
@@ -49,11 +59,22 @@
   justify-content: center;
 }
 
+/* Fix for ProfileImage component to ensure images respect parent container size */
+img.profile_image,
+.professional-avatar img,
+.avatar-image-container img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover;
+}
+
 .avatar-image {
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -61,16 +82,25 @@
   object-fit: cover;
 }
 
+/* Professional name and role with text truncation */
 .professional-name h2 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
 }
 
 .professional-role {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: #666;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
 }
 
 .close-button {
@@ -92,7 +122,7 @@
   padding: 1.5rem;
 }
 
-/* Progress steps */
+/* Progress steps - Step indicator at the top */
 .progress-steps {
   display: flex;
   align-items: center;
@@ -142,7 +172,7 @@
   margin-bottom: 1.5rem;
 }
 
-/* Step form content */
+/* Step form content animation */
 .step-form {
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -170,7 +200,7 @@
   margin-bottom: 1.5rem;
 }
 
-/* Form elements */
+/* Form elements - Common styles */
 .input-group {
   margin-bottom: 1.25rem;
 }
@@ -179,7 +209,7 @@
   width: 100%;
 }
 
-/* Specific styles for name fields to ensure equal width */
+/* Name fields layout */
 .name-fields {
   display: flex;
   justify-content: space-between;
@@ -192,6 +222,7 @@
   max-width: calc(50% - 12px);
 }
 
+/* Form inputs and labels */
 input, textarea {
   width: 100%;
   padding: 0.75rem;
@@ -214,15 +245,6 @@ label {
   color: #e53935;
 }
 
-input, textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  transition: border 0.2s ease;
-}
-
 input:focus, textarea:focus {
   border-color: #0057B1;
   outline: none;
@@ -239,15 +261,9 @@ input:disabled, textarea:disabled, button:disabled {
 }
 
 textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  transition: border 0.2s ease;
   min-height: 120px;
-  max-width: 100%; /* Prevent horizontal stretching */
-  resize: vertical; /* Allow only vertical resizing */
+  max-width: 100%;
+  resize: vertical;
 }
 
 .char-count {
@@ -263,20 +279,24 @@ textarea {
   margin-top: 0.25rem;
 }
 
-/* Email verification section */
+/* Email verification section - Fixed layout */
 .email-verification {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   gap: 12px;
   width: 100%;
 }
 
 .email-verification input {
-  flex-grow: 1;
-  width: calc(100% - 100px);
+  flex: 1;
+  min-width: 0; /* Important to allow flex shrinking */
+  width: auto;
 }
 
-.verify-button, .resend-button, .verified-button {
+/* Verification buttons styling */
+.verify-button, 
+.resend-button, 
+.verified-button {
   flex-shrink: 0;
   padding: 0 1rem;
   border: none;
@@ -289,6 +309,7 @@ textarea {
 .verify-button {
   background-color: #0057B1;
   color: white;
+  height: 45px;
 }
 
 .verify-button:hover:not(:disabled) {
@@ -307,10 +328,10 @@ textarea {
 .verified-button {
   background-color: #4caf50;
   color: white;
-  cursor: default;
+  height: 45px;
 }
 
-/* OTP container */
+/* OTP container - Verification code input */
 .otp-container {
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -359,7 +380,7 @@ textarea {
   margin-left: 0.5rem;
 }
 
-/* Job details container */
+/* Job details container - Step 2 */
 .job-details-container {
   margin-bottom: 1.5rem;
 }
@@ -427,7 +448,7 @@ textarea {
   margin-bottom: 1.5rem;
 }
 
-/* Resume upload section */
+/* Resume upload section - Step 3 */
 .resume-upload-container {
   margin: 1.5rem 0;
 }
@@ -488,7 +509,7 @@ textarea {
   margin-top: 0.5rem;
 }
 
-/* Step navigation */
+/* Step navigation - Back/Next/Submit buttons */
 .step-navigation {
   display: flex;
   justify-content: space-between;
@@ -527,7 +548,7 @@ textarea {
   min-width: 130px;
 }
 
-/* Login prompt */
+/* Login prompt for registered non-logged-in users */
 .login-prompt {
   background-color: #e3f2fd;
   border-radius: 8px;
@@ -573,7 +594,7 @@ textarea {
   height: 300px;
 }
 
-/* Popup styles */
+/* Popup styles for "Second Comer" */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -661,51 +682,23 @@ textarea {
   background-color: #004598;
 }
 
-/* Responsive styles */
-@media screen and (max-width: 768px) {
-  .name-fields, .job-fields {
-    flex-direction: column;
-    gap: 0;
-  }
-  
-  .job-actions {
-    top: auto;
-    right: auto;
-    position: relative;
-    margin-top: 1rem;
-    justify-content: flex-end;
-  }
-  
-  .resume-dropzone {
-    padding: 1.5rem 1rem;
-  }
-  
-  .login-prompt {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
-  
-  .step-navigation {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .back-button, .next-button, .submit-button {
-    width: 100%;
-  }
-}
+/* ======== RESPONSIVE STYLES ======== */
 
-@media screen and (max-width: 480px) {
+/* Tablet and mobile - up to 768px */
+@media screen and (max-width: 768px) {
   .referral-request-container {
+    width: 100%;
     margin: 0;
     border-radius: 0;
-    width: 100%;
+    box-shadow: none;
+  }
+  
+  .referral-content {
+    padding: 1rem;
   }
   
   .progress-steps {
-    overflow-x: auto;
-    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
   
   .step-number {
@@ -716,5 +709,161 @@ textarea {
   
   .step-label {
     font-size: 0.75rem;
+  }
+  
+  /* Stack fields vertically on mobile */
+  .name-fields, 
+  .job-fields,
+  .email-verification {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .name-fields .input-group,
+  .job-fields .input-group {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .email-verification input {
+    width: 100%;
+  }
+  
+  .verify-button, 
+  .resend-button, 
+  .verified-button {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Job actions position adjustment */
+  .job-actions {
+    top: auto;
+    right: auto;
+    position: relative;
+    margin-top: 1rem;
+    justify-content: flex-end;
+  }
+  
+  /* Smaller padding for dropzone */
+  .resume-dropzone {
+    padding: 1.5rem 1rem;
+  }
+  
+  /* Stack login prompt */
+  .login-prompt {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  /* Form element spacing */
+  .input-group {
+    margin-bottom: 1rem;
+  }
+  
+  label {
+    margin-bottom: 0.25rem;
+  }
+  
+  input, textarea {
+    padding: 0.6rem;
+  }
+  
+  /* Step titles and navigation */
+  .step-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .step-description {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Stack navigation buttons */
+  .step-navigation {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  
+  .back-button, 
+  .next-button, 
+  .submit-button {
+    width: 100%;
+    padding: 0.7rem 1rem;
+  }
+  
+  /* OTP container adjustments */
+  .otp-container {
+    padding: 0.75rem;
+  }
+  
+  .otp-inputs {
+    gap: 0.4rem;
+  }
+  
+  .otp-inputs input {
+    width: 35px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
+
+/* Small mobile - up to 480px */
+@media screen and (max-width: 480px) {
+  .professional-name h2 {
+    max-width: 150px;
+  }
+  
+  .professional-role {
+    max-width: 150px;
+  }
+  
+  .otp-inputs input {
+    width: 32px;
+    height: 38px;
+  }
+  
+  .step-line {
+    margin: 0 0.3rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .upload-text,
+  .file-name {
+    font-size: 0.9rem;
+  }
+  
+  .upload-hint {
+    font-size: 0.75rem;
+  }
+  
+  .resume-dropzone {
+    padding: 1rem;
+  }
+  
+  .progress-steps {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+}
+
+/* Desktop - 769px and up */
+@media screen and (min-width: 769px) {
+  .professional-avatar {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+  
+  /* The image constraints still apply at larger screen sizes */
+  img.profile_image,
+  .professional-avatar img,
+  .avatar-image-container img,
+  .avatar-image {
+    width: 100% !important;
+    height: 100% !important;
   }
 }

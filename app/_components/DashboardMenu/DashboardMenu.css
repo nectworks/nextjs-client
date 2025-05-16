@@ -3,10 +3,6 @@
    Desc - This CSS file defines the styling for a dashboard menu container in a web application. The menu container provides a user interface for navigating through different sections and features of the dashboard.
 */
 
-.dashboard_menu_hamburger_icon {
-  display: none;
-}
-
 .dashboard_menu_container {
   box-sizing: border-box;
   height: max(100vh, 480px);
@@ -316,18 +312,8 @@
     position: fixed;
     left: -250px;
     transition: left 0.35s ease-out;
-    z-index: 5;
+    z-index: 1001; /* Increased z-index to ensure it appears in front of everything */
     height: -webkit-fill-available;
-  }
-
-  .dashboard_menu_hamburger_icon {
-    display: block;
-    width: 35px;
-    position: absolute;
-    top: -45px;
-    left: 20px;
-    cursor: pointer;
-    z-index: 2;
   }
 
   /* display the close icon in tablet/mobile view */

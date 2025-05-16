@@ -10,7 +10,7 @@ import { useContext, useEffect, useState } from 'react';
 import usePrivateAxios from '@/Utils/usePrivateAxios';
 import './NectCoins.css';
 import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
-import ProfileHeader from '../../_components/Profile/ProfileHeader/ProfileHeader';
+import ProfileHeaderWrapper from '@/app/_components/ProfileHeaderWrapper/ProfileHeaderWrapper';
 import nectCoinsImg from '@/public/Profile/nectCoin.svg';
 import { UserContext } from '@/context/User/UserContext';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -214,7 +214,7 @@ function NectCoins() {
       <DashboardMenu />
 
       <div className="dashboard_nectcoins_container">
-        <ProfileHeader />
+        <ProfileHeaderWrapper />
 
         <div className="dashboard_nectcoins_inner_container">
           <h1>Your Nectcoins</h1>

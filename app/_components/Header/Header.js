@@ -22,7 +22,6 @@ const Header = () => {
   const [user, setUser] = userState;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
-  console.log(pathname);
   const RenderMenu = () => {
     // if the user is not logged in the button (in the header) will
     // be displayed on pages other than login and signup pages
