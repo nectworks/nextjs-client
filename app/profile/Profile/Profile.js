@@ -380,6 +380,24 @@ const ProfilePage = () => {
     }
   }, [user?.username]);
 
+  useEffect(() => {
+    const initializeNewUserProfile = async () => {
+      if (!user || !user._id) return;
+      
+      try {
+        // Make a call to initialize the profile for new users
+        await publicAxios.post(`/signUpCards/initializeProfile/${user._id}`);
+        
+        // No need to handle the response - this just ensures the UserInfo document exists
+      } catch (error) {
+        // Silently handle errors - this is just a helper operation
+        console.log('Profile initialization error (non-critical):', error);
+      }
+    };
+    
+    initializeNewUserProfile();
+  }, [user]);
+
   // State to track whether we've checked the user's profile data
   const [profileChecked, setProfileChecked] = useState(false);
 
@@ -390,37 +408,30 @@ const ProfilePage = () => {
   
     const checkProfileCompletion = async () => {
       try {
-        // Make request to get user details - use the same endpoint that's used in SignUpFormPopup
+        // Make request to get user details
         const response = await publicAxios.get(`/signUpCards/get/${user._id}`);
         const { userDetails, username } = response.data;
-
-        if (userDetails) {
-          // Check if essential profile data is missing using the same logic as in SignUpFormPopup
-          const hasCompletedBasicProfile = Boolean(
-            userDetails.mobileNumber &&
-            username &&
-            (
-              // Either professional path is complete
-              (userDetails.jobTitle && userDetails.companyName) ||
-              // Or student path is complete
-              (userDetails.desiredIndustry && userDetails.educationLevel)
-            )
-          );
-
-          // Only show popup if:
-          // 1. They haven't completed their profile, AND
-          // 2. They didn't just come from signup (which is handled by the other useEffect)
-          const comingFromSignup = sessionStorage.getItem('from') === '/sign-up' || 
-                                  localStorage.getItem('newSignup') === 'true';
-          
-          if (!hasCompletedBasicProfile && !comingFromSignup) {
-            setSignUpPopup(true);
-          }
+        
+        // Check if essential profile data is present
+        const hasCompletedBasicProfile = Boolean(
+          userDetails?.mobileNumber &&
+          username &&
+          (
+            // Either professional path is complete
+            (userDetails?.jobTitle && userDetails?.companyName) ||
+            // Or student path is complete
+            (userDetails?.desiredIndustry && userDetails?.educationLevel)
+          )
+        );
+        
+        // Always show popup for new users who haven't completed their profile
+        // Remove the comingFromSignup check that was allowing skipping
+        if (!hasCompletedBasicProfile) {
+          setSignUpPopup(true);
         }
       } catch (error) {
         console.error('Error checking profile completion:', error);
       } finally {
-        // Mark that we've checked the profile to avoid repeated checks
         setProfileChecked(true);
       }
     };
@@ -996,44 +1007,26 @@ const ProfilePage = () => {
   }, []);
 
   // Function to close signup popup properly
-  const closeSignUpPopup = () => {
-    setSignUpPopup(false);
-    localStorage.setItem('signupFormShown', 'true');
+  const closeSignUpPopup = (updatedData) => {
+    if (updatedData) {
+      // Update the userData state with the new data
+      setUserData(prev => ({
+        ...prev,
+        ...updatedData
+      }));
+      setSignUpPopup(false);
+    } else {
+      // Original validation logic for cases where no data is passed
+      if (userData?.mobileNumber && 
+          user?.username && 
+          ((userData?.jobTitle && userData?.companyName) || 
+          (userData?.desiredIndustry && userData?.educationLevel))) {
+        setSignUpPopup(false);
+      } else {
+        showBottomMessage('Please complete all required profile information first');
+      }
+    }
   };
-
-  // Check if the user came from sign-up page with improved reliability
-  useEffect(() => {
-    // Method 1: Check session storage
-    const from = sessionStorage.getItem('from');
-    
-    // Method 2: Check localStorage for a new signup flag
-    const isNewSignup = localStorage.getItem('newSignup');
-    
-    // If either method indicates a new signup, show the popup
-    if (from === '/sign-up' || isNewSignup === 'true') {
-      // Set a small delay to ensure the component is fully mounted
-      const timeoutId = setTimeout(() => {
-        setSignUpPopup(true);
-        
-        // Clear the flags after using them
-        sessionStorage.removeItem('from');
-        localStorage.removeItem('newSignup');
-      }, 300);
-      
-      return () => clearTimeout(timeoutId);
-    }
-
-    // Check for shared post parameters
-    const params = new URLSearchParams(window.location.search);
-    const sharePostParam = params.get('post_shared');
-    if (sharePostParam && sharePostParam === 'success') {
-      showBottomMessage('Successfully shared the post');
-      
-      // Clean up the URL
-      const newUrl = window.location.pathname;
-      window.history.replaceState({}, document.title, newUrl);
-    }
-  }, [user]);
 
   // Handle edit profile button click
   const handleEditClick = () => {

@@ -6,6 +6,19 @@
   after signing up, with improved UX matching the provided designs
 */
 
+/*
+  Update: 16th May 2025
+  This complete version of SignUpFormPopup.js includes all the fixes we discussed:
+
+  Added proper username validation with debouncing to reduce API calls
+  Updated the checkUsernameExists function to properly handle 404 responses as successful "username available" responses
+  Fixed the issue with initial "Username already taken" messages by clearing errors and setting proper initial states
+  Added proper validation for all form fields
+  Improved overall error handling with better user feedback
+  Used the validateStatus option in axios to prevent 404 errors from showing in the console
+  Properly handled and maintained UI states to reflect the current status of validationname)
+*/
+
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './SignUpFormPopup.css';
 import Image from 'next/image';
@@ -63,6 +76,7 @@ function SignUpFormPopup({ user, closePopUp }) {
   const privateAxios = usePrivateAxios();
   const otpInputRefs = useRef([]);
   const countrySelectRef = useRef(null);
+  const usernameDebounceTimer = useRef(null);
   
   // Form data state
   const [formData, setFormData] = useState({
@@ -264,6 +278,32 @@ function SignUpFormPopup({ user, closePopUp }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Debounced username validation
+  useEffect(() => {
+    // Clear any previous timer
+    if (usernameDebounceTimer.current) {
+      clearTimeout(usernameDebounceTimer.current);
+    }
+    
+    // Don't check if username is empty or invalid
+    if (!formData.username || !isUsernameValid(formData.username)) {
+      setShowUsername(false);
+      return;
+    }
+    
+    // Set a new timer to delay the check
+    usernameDebounceTimer.current = setTimeout(() => {
+      checkUsernameExists();
+    }, 800); // Wait 800ms after typing stops
+    
+    // Clean up on unmount or when formData.username changes again
+    return () => {
+      if (usernameDebounceTimer.current) {
+        clearTimeout(usernameDebounceTimer.current);
+      }
+    };
+  }, [formData.username]);
   
   // Handle keyboard navigation in OTP inputs
   useEffect(() => {
@@ -423,35 +463,41 @@ function SignUpFormPopup({ user, closePopUp }) {
     fetchUserData();
   }, [user._id]);
 
-  // Check username existence when username changes
-  useEffect(() => {
-    // Only check if the username is valid and different from the original username
-    if (isUsernameValid(formData.username) && 
-        originalData && 
-        formData.username !== originalData.username) {
-      checkUsernameExists();
-    } else if (originalData && formData.username === originalData.username) {
-      // If username is unchanged, it's always valid (since it's already theirs)
-      setCheckUsernameExist(false);
-      setShowUsername(true);
-      setShowLoadingOnUsernameChange(false);
-    }
-  }, [formData.username, originalData]);
-  
   // Helpers
   const updateMaxSteps = (status) => {
     const maxSteps = status === 'experienced' ? 3 : 2;
     setUiState(prev => ({ ...prev, maxSteps }));
   };
   
-  // Check if username exists
+  // Updated checkUsernameExists function with proper error handling
   const checkUsernameExists = async () => {
+    // Don't check if username is empty or too short
+    if (!formData.username || formData.username.length < 3) {
+      setShowLoadingOnUsernameChange(false);
+      setShowUsername(false);
+      setCheckUsernameExist(false);
+      return;
+    }
+    
     setShowLoadingOnUsernameChange(true);
+    
     try {
-      const checkUser = await publicAxios.post('/signup/findusername', {
-        username: formData.username,
+      // Use axios with validateStatus to prevent 404 from being treated as error
+      const response = await publicAxios({
+        method: 'post',
+        url: '/signup/findusername',
+        data: {
+          username: formData.username,
+          currentUserId: user?._id || ''
+        },
+        // This is key - tell axios to not reject on 404
+        validateStatus: function (status) {
+          return status === 200 || status === 404; // Accept both 200 and 404 as valid
+        }
       });
-      if (checkUser.status === 200) {
+      
+      if (response.status === 200) {
+        // Username exists/taken
         setShowLoadingOnUsernameChange(false);
         setShowUsername(false);
         setUiState(prev => ({ 
@@ -459,10 +505,21 @@ function SignUpFormPopup({ user, closePopUp }) {
           formError: 'This username is already taken' 
         }));
         setCheckUsernameExist(true);
+      } else if (response.status === 404) {
+        // Username available
+        setShowLoadingOnUsernameChange(false);
+        setShowUsername(true);
+        setCheckUsernameExist(false);
+        // Clear any previous error message about username
+        if (uiState.formError === 'This username is already taken') {
+          setUiState(prev => ({ ...prev, formError: null }));
+        }
       }
     } catch (err) {
+      // This will only happen for network errors or unexpected issues
+      console.error('Error checking username:', err);
       setShowLoadingOnUsernameChange(false);
-      setShowUsername(true);
+      setShowUsername(false);
       setCheckUsernameExist(false);
     }
   };
@@ -588,6 +645,18 @@ function SignUpFormPopup({ user, closePopUp }) {
   const canSubmitForm = () => {
     // First check if the form has changed
     if (!uiState.formChanged) {
+      // For new users with empty initial data, allow submission
+      if (!originalData || 
+          (originalData.jobTitle === '' && 
+          originalData.companyName === '' && 
+          originalData.desiredIndustry === '')) {
+        return true;
+      }
+      return false;
+    }
+
+    // Check required fields are filled
+    if (!formData.mobileNumber || formData.mobileNumber.trim() === '') {
       return false;
     }
 
@@ -603,23 +672,26 @@ function SignUpFormPopup({ user, closePopUp }) {
       return false;
     }
     
+    // Check job-specific required fields
     if (formData.jobStatus === 'experienced') {
-      // If email is already verified, allow submission without requiring verification again
+      if (!formData.jobTitle || !formData.companyName) {
+        return false;
+      }
+      
+      // Email validation for professionals
       if (otpState.verified) {
         return true;
       }
       
-      // If user has sent OTP but not verified yet, require verification
       if (otpState.sent && !otpState.verified) {
         return false;
       }
       
-      // If no OTP has been sent but the email is valid, allow submission
       const emailValidation = validateEmailFormat(formData.emailID);
       return emailValidation.valid;
     } else {
-      // Fresher form can be submitted without email verification
-      return true;
+      // Check student required fields
+      return formData.desiredIndustry && formData.educationLevel;
     }
   };
   
@@ -627,7 +699,11 @@ function SignUpFormPopup({ user, closePopUp }) {
   const handleOptionChange = (value) => {
     setFormData(prev => ({ ...prev, jobStatus: value }));
     updateMaxSteps(value);
-    setUiState(prev => ({ ...prev, currentStep: 1 }));
+    setUiState(prev => ({ 
+      ...prev, 
+      currentStep: 1,
+      formChanged: true
+    }));
   };
   
   const handleInputChange = (e) => {
@@ -879,133 +955,150 @@ function SignUpFormPopup({ user, closePopUp }) {
   };
   
   // Final submission
-  // In SignUpFormPopup.js, modify the handleSubmit function:
-
-const handleSubmit = async () => {
-  // For experienced users with unverified emails but OTP sent, require verification
-  if (formData.jobStatus === 'experienced' && otpState.sent && !otpState.verified) {
-    showBottomMessage('Please verify your company email before proceeding');
-    return;
-  }
-
-  // Check username validation again
-  if (!isUsernameValid(formData.username)) {
-    setUiState(prev => ({ ...prev, formError: 'Username should be 3-15 characters (letters and numbers only)' }));
-    return;
-  }
-
-  // Only check for username existence if username has changed
-  if (originalData && 
-      formData.username !== originalData.username && 
-      checkUsernameExist) {
-    setUiState(prev => ({ ...prev, formError: 'This username is already taken' }));
-    return;
-  }
-  
-  setUiState(prev => ({ ...prev, isSubmitting: true }));
-  
-  try {
-    // Combine country code and mobile number
-    const fullMobileNumber = `${formData.countryCode} ${formData.mobileNumber}`;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     
-    // Extract years and months of experience for calculation
-    let experienceData = formData.experience;
-    if (formData.jobStatus === 'experienced' && 
-        formData.experience && 
-        (formData.experience.years || formData.experience.months)) {
-      experienceData = {
-        years: formData.experience.years || '0',
-        months: formData.experience.months || '0'
+    // First check if the username is valid
+    if (!isUsernameValid(formData.username)) {
+      setUiState(prev => ({ 
+        ...prev, 
+        formError: 'Username should be 3-15 characters (letters and numbers only)' 
+      }));
+      return;
+    }
+  
+    // Check mobile number is filled
+    if (!formData.mobileNumber || formData.mobileNumber.trim() === '') {
+      setUiState(prev => ({ ...prev, formError: 'Mobile number is required' }));
+      return;
+    }
+  
+    // Only check for username existence if username has changed
+    if (originalData && 
+        formData.username !== originalData.username && 
+        checkUsernameExist) {
+      setUiState(prev => ({ ...prev, formError: 'This username is already taken' }));
+      return;
+    }
+    
+    // Check required fields based on job status
+    if (formData.jobStatus === 'experienced') {
+      if (!formData.jobTitle || !formData.companyName) {
+        setUiState(prev => ({ ...prev, formError: 'Job title and company name are required' }));
+        return;
+      }
+    } else {
+      if (!formData.desiredIndustry || !formData.educationLevel) {
+        setUiState(prev => ({ ...prev, formError: 'Desired industry and education level are required' }));
+        return;
+      }
+    }
+  
+    setUiState(prev => ({ ...prev, isSubmitting: true }));
+    
+    try {
+      // Combine country code and mobile number
+      const fullMobileNumber = `${formData.countryCode} ${formData.mobileNumber}`;
+      
+      // Extract years and months of experience for calculation
+      let experienceData = formData.experience;
+      if (formData.jobStatus === 'experienced' && 
+          formData.experience && 
+          (formData.experience.years || formData.experience.months)) {
+        experienceData = {
+          years: formData.experience.years || '0',
+          months: formData.experience.months || '0'
+        };
+      }
+      
+      // Prepare the data for submission
+      const submitData = {
+        ...formData,
+        mobileNumber: fullMobileNumber,
+        userId: user._id,
+        isExperienced: formData.jobStatus === 'experienced',
+        experience: experienceData,
       };
-    }
-    
-    // Prepare the data for submission
-    const submitData = {
-      ...formData,
-      mobileNumber: fullMobileNumber,
-      userId: user._id,
-      isExperienced: formData.jobStatus === 'experienced',
-      experience: experienceData,
-      // Add any industry data if available (could be added to the form)
-      industry: 'Technology' // Default value, you could make this a form field 
-    };
-    
-    // Call the new endpoint that handles both user update and experience creation
-    const response = await publicAxios.put('/signUpCards/saveWithExperience', submitData);
-    
-    if (response.status === 200 || response.status === 201) {
-      // Application no longer depends on this
-      // Still set localStorage for backward compatibility as we used this in the past
-      localStorage.setItem('filledForm', 'true');
       
-      if (uiState.isFirstTime) {
-        localStorage.setItem('filledExperience', 'true');
-      }
+      // Call the new endpoint that handles both user update and experience creation
+      const response = await publicAxios.put('/signUpCards/saveWithExperience', submitData);
       
-      // If user was previously a fresher and is now experienced, update status
-      if (formData.jobStatus === 'experienced') {
-        localStorage.setItem('isExperienced', 'true');
-      }
-      
-      // Clear temporary state from localStorage since we've saved it permanently
-      localStorage.removeItem('signUpFormTempState');
-      
-      // After successful save, refetch the latest data to ensure the form is up-to-date
-      try {
-        const refreshResponse = await publicAxios.get(`/signUpCards/getLatestExperience/${user._id}`);
-        const { latestExperience } = refreshResponse.data;
+      if (response.status === 200 || response.status === 201) {
+        // Application no longer depends on this
+        // Still set localStorage for backward compatibility as we used this in the past
+        localStorage.setItem('filledForm', 'true');
         
-        // Update industry in form data to ensure it's in sync
-        if (latestExperience && latestExperience.industry) {
-          setFormData(prev => ({
-            ...prev,
-            industry: latestExperience.industry
-          }));
+        if (uiState.isFirstTime) {
+          localStorage.setItem('filledExperience', 'true');
         }
-      } catch (refreshError) {
-        console.log('Non-critical error refreshing data:', refreshError);
-        // Don't block the success flow for this non-critical operation
+        
+        // If user was previously a fresher and is now experienced, update status
+        if (formData.jobStatus === 'experienced') {
+          localStorage.setItem('isExperienced', 'true');
+        }
+        
+        // Clear temporary state from localStorage since we've saved it permanently
+        localStorage.removeItem('signUpFormTempState');
+        
+        // After successful save, refetch the latest data to ensure the form is up-to-date
+        try {
+          const refreshResponse = await publicAxios.get(`/signUpCards/getLatestExperience/${user._id}`);
+          const { latestExperience } = refreshResponse.data;
+          
+          // Update industry in form data to ensure it's in sync
+          if (latestExperience && latestExperience.industry) {
+            setFormData(prev => ({
+              ...prev,
+              industry: latestExperience.industry
+            }));
+          }
+        } catch (refreshError) {
+          console.log('Non-critical error refreshing data:', refreshError);
+          // Don't block the success flow for this non-critical operation
+        }
+        
+        // Show success message
+        showBottomMessage('Profile updated successfully!');
+  
+        // Now enable the close button
+        setUiState(prev => ({ ...prev, showCloseButton: true }));
+  
+        setTimeout(() => {
+          closePopUp({
+            mobileNumber: fullMobileNumber,
+            jobTitle: formData.jobTitle,
+            companyName: formData.companyName,
+            desiredIndustry: formData.desiredIndustry,
+            educationLevel: formData.educationLevel,
+            username: formData.username
+          });
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Submit error:', error);
+      
+      // Enhanced error handling
+      let errorMessage = 'Failed to save information.';
+      
+      if (error.response) {
+        // Server responded with an error
+        if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.response.status === 400) {
+          errorMessage = 'Please check your input and try again.';
+        } else if (error.response.status === 500) {
+          errorMessage = 'Server error. Please try again later.';
+        }
+      } else if (error.request) {
+        // Request was made but no response
+        errorMessage = 'No response from server. Please check your connection.';
       }
       
-      // Show success message
-      showBottomMessage('Profile updated successfully!');
-
-      // Now enable the close button
-      setUiState(prev => ({ ...prev, showCloseButton: true }));
-
-      setTimeout(() => {
-        // Clear all form related localStorage items
-        localStorage.removeItem('signUpFormTempState');
-        localStorage.removeItem('filledExperience');
-        
-        closePopUp();
-      }, 1000);
+      showBottomMessage(errorMessage);
+    } finally {
+      setUiState(prev => ({ ...prev, isSubmitting: false }));
     }
-  } catch (error) {
-    console.error('Submit error:', error);
-    
-    // Enhanced error handling
-    let errorMessage = 'Failed to save information.';
-    
-    if (error.response) {
-      // Server responded with an error
-      if (error.response.data && error.response.data.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.response.status === 400) {
-        errorMessage = 'Please check your input and try again.';
-      } else if (error.response.status === 500) {
-        errorMessage = 'Server error. Please try again later.';
-      }
-    } else if (error.request) {
-      // Request was made but no response
-      errorMessage = 'No response from server. Please check your connection.';
-    }
-    
-    showBottomMessage(errorMessage);
-  } finally {
-    setUiState(prev => ({ ...prev, isSubmitting: false }));
-  }
-};
+  };
   
   // Country code options
   const countryCodes = [
@@ -1563,194 +1656,194 @@ const handleSubmit = async () => {
                     </button>
                   )}
                 </div>
-              </div>
-            )}
-            
-            {otpState.verified && (
-              <div className="profile-link-section">
-                <div className="success-box">
-                  <div className="success-header">
-                    <svg className="success-icon" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="16 12 12 16 8 12"></polyline>
-                      <polyline points="12 8 12 16"></polyline>
-                    </svg>
-                    <h4>Email Verified Successfully!</h4>
-                  </div>
-                  <p>Your public profile is now available at:</p>
-                  <div className="profile-url-container">
-                    <a 
-                      href={`/user/${formData.username}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="profile-url-link"
-                    >
-                      {typeof window !== 'undefined' ? window.location.origin : ''}/user/{formData.username}
-                    </a>
-                    <svg className="verified-check" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
-                  </div>
-                  <div className="profile-advice">
-                    <p>
-                      <strong>Note:</strong> You can still update your profile information and save changes.
-                    </p>
-                  </div>
                 </div>
-              </div>
-            )}
-            
-            {/* Warning for transitioning from fresher to experienced */}
-            {!user.isExperienced && (
-              <div className="warning-box">
-                <svg className="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                  <line x1="12" y1="9" x2="12" y2="13"></line>
-                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                </svg>
-                <div className="warning-content">
-                  <h4>Important Notice</h4>
-                  <p>Verify email: share profile, manage all referrals in your dashboard. 🚫 No spam. EVER.</p>
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      }
-    }
-    
-    return null;
-  };
-  
-  return (
-    <div className="signup-form-overlay">
-      <div className="signup-form-modal">
-        {/* Only show the close button if user has completed the form */}
-        {uiState.showCloseButton && (
-          <button 
-            className="form-header-close" 
-            onClick={handleClosePopUp} 
-            aria-label="Close form"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        )}
+           )}
+           
+           {otpState.verified && (
+             <div className="profile-link-section">
+               <div className="success-box">
+                 <div className="success-header">
+                   <svg className="success-icon" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     <circle cx="12" cy="12" r="10"></circle>
+                     <polyline points="16 12 12 16 8 12"></polyline>
+                     <polyline points="12 8 12 16"></polyline>
+                   </svg>
+                   <h4>Email Verified Successfully!</h4>
+                 </div>
+                 <p>Your public profile is now available at:</p>
+                 <div className="profile-url-container">
+                   <a 
+                     href={`/user/${formData.username}`} 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="profile-url-link"
+                   >
+                     {typeof window !== 'undefined' ? window.location.origin : ''}/user/{formData.username}
+                   </a>
+                   <svg className="verified-check" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                   </svg>
+                 </div>
+                 <div className="profile-advice">
+                   <p>
+                     <strong>Note:</strong> You can still update your profile information and save changes.
+                   </p>
+                 </div>
+               </div>
+             </div>
+           )}
+           
+           {/* Warning for transitioning from fresher to experienced */}
+           {!user.isExperienced && (
+             <div className="warning-box">
+               <svg className="warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                 <line x1="12" y1="9" x2="12" y2="13"></line>
+                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
+               </svg>
+               <div className="warning-content">
+                 <h4>Important Notice</h4>
+                 <p>Verify email: share profile, manage all referrals in your dashboard. 🚫 No spam. EVER.</p>
+               </div>
+             </div>
+           )}
+         </div>
+       );
+     }
+   }
+   
+   return null;
+ };
+ 
+ return (
+   <div className="signup-form-overlay">
+     <div className="signup-form-modal">
+       {/* Only show the close button if user has completed the form */}
+       {uiState.showCloseButton && (
+         <button 
+           className="form-header-close" 
+           onClick={handleClosePopUp} 
+           aria-label="Close form"
+         >
+           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+             <line x1="18" y1="6" x2="6" y2="18"></line>
+             <line x1="6" y1="6" x2="18" y2="18"></line>
+           </svg>
+         </button>
+       )}
 
-        {/* Header */}
-        <div className="form-header">
-          <h1>What&apos;s your job status?</h1>
-          
-          {/* Progress bar */}
-          <div className="progress-bar">
-            <div 
-              className="progress-indicator"
-              style={{ 
-                width: `${(uiState.currentStep / uiState.maxSteps) * 100}%` 
-              }}
-            ></div>
-          </div>
-        </div>
-        
-        {/* Job status selection - Only show both options if user is not experienced */}
-        {!user.isExperienced && (
-          <div className="job-status-selector">
-            <div className="radio-option">
-              <input
-                type="radio"
-                id="experienced"
-                name="jobStatus"
-                value="experienced"
-                checked={formData.jobStatus === 'experienced'}
-                onChange={() => handleOptionChange('experienced')}
-              />
-              <label htmlFor="experienced">Professional</label>
-            </div>
-            
-            <div className="radio-option">
-              <input
-                type="radio"
-                id="fresher"
-                name="jobStatus"
-                value="fresher"
-                checked={formData.jobStatus === 'fresher'}
-                onChange={() => handleOptionChange('fresher')}
-              />
-              <label htmlFor="fresher">Student</label>
-            </div>
-          </div>
-        )}
-        
-        {/* Step indicators */}
-        {renderStepIndicators()}
-        
-        {/* Form content */}
-        <div className="form-content">
-          {renderFormContent()}
-        </div>
-        
-        {/* Form navigation */}
-        <div className="form-navigation">
-          {uiState.currentStep > 1 && (
-            <button
-              type="button"
-              className="back-button"
-              onClick={prevStep}
-              disabled={uiState.isSubmitting}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6"></polyline>
-              </svg>
-              Back
-            </button>
-          )}
-          
-          {uiState.currentStep < uiState.maxSteps ? (
-            <button
-              type="button"
-              className={`next-button ${!canProceedToNextStep() ? 'disabled' : ''}`}
-              onClick={nextStep}
-              disabled={!canProceedToNextStep() || uiState.isSubmitting}
-            >
-              Next
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </button>
-          ) : (
-            <button
-              type="button"
-              className={`submit-button ${!canSubmitForm() ? 'disabled' : ''}`}
-              onClick={handleSubmit}
-              disabled={!canSubmitForm() || uiState.isSubmitting}
-            >
-              {uiState.isSubmitting ? (
-                <span className="loading-spinner"></span>
-              ) : (
-                <>
-                  {!user.isExperienced && formData.jobStatus === 'experienced' ? 
-                    'Update as Professional' : 
-                    uiState.formChanged ? 'Save Profile' : 'No Changes'}
-                  {uiState.formChanged && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  )}
-                </>
-              )}
-            </button>
-          )}
-        </div>
-        
-        {/* Step counter */}
-        <div className="step-counter">
-          Step {uiState.currentStep} of {uiState.maxSteps}
-        </div>
-      </div>
-    </div>
-  );
+       {/* Header */}
+       <div className="form-header">
+         <h1>What&apos;s your job status?</h1>
+         
+         {/* Progress bar */}
+         <div className="progress-bar">
+           <div 
+             className="progress-indicator"
+             style={{ 
+               width: `${(uiState.currentStep / uiState.maxSteps) * 100}%` 
+             }}
+           ></div>
+         </div>
+       </div>
+       
+       {/* Job status selection - Only show both options if user is not experienced */}
+       {!user.isExperienced && (
+         <div className="job-status-selector">
+           <div className="radio-option">
+             <input
+               type="radio"
+               id="experienced"
+               name="jobStatus"
+               value="experienced"
+               checked={formData.jobStatus === 'experienced'}
+               onChange={() => handleOptionChange('experienced')}
+             />
+             <label htmlFor="experienced">Professional</label>
+           </div>
+           
+           <div className="radio-option">
+             <input
+               type="radio"
+               id="fresher"
+               name="jobStatus"
+               value="fresher"
+               checked={formData.jobStatus === 'fresher'}
+               onChange={() => handleOptionChange('fresher')}
+             />
+             <label htmlFor="fresher">Student</label>
+           </div>
+         </div>
+       )}
+       
+       {/* Step indicators */}
+       {renderStepIndicators()}
+       
+       {/* Form content */}
+       <div className="form-content">
+         {renderFormContent()}
+       </div>
+       
+       {/* Form navigation */}
+       <div className="form-navigation">
+         {uiState.currentStep > 1 && (
+           <button
+             type="button"
+             className="back-button"
+             onClick={prevStep}
+             disabled={uiState.isSubmitting}
+           >
+             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+               <polyline points="15 18 9 12 15 6"></polyline>
+             </svg>
+             Back
+           </button>
+         )}
+         
+         {uiState.currentStep < uiState.maxSteps ? (
+           <button
+             type="button"
+             className={`next-button ${!canProceedToNextStep() ? 'disabled' : ''}`}
+             onClick={nextStep}
+             disabled={!canProceedToNextStep() || uiState.isSubmitting}
+           >
+             Next
+             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+               <polyline points="9 18 15 12 9 6"></polyline>
+             </svg>
+           </button>
+         ) : (
+           <button
+             type="button"
+             className={`submit-button ${!canSubmitForm() ? 'disabled' : ''}`}
+             onClick={handleSubmit}
+             disabled={!canSubmitForm() || uiState.isSubmitting}
+           >
+             {uiState.isSubmitting ? (
+               <span className="loading-spinner"></span>
+             ) : (
+               <>
+                 {!user.isExperienced && formData.jobStatus === 'experienced' ? 
+                   'Update as Professional' : 
+                   uiState.formChanged ? 'Save Profile' : 'No Changes'}
+                 {uiState.formChanged && (
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                     <polyline points="20 6 9 17 4 12"></polyline>
+                   </svg>
+                 )}
+               </>
+             )}
+           </button>
+         )}
+       </div>
+       
+       {/* Step counter */}
+       <div className="step-counter">
+         Step {uiState.currentStep} of {uiState.maxSteps}
+       </div>
+     </div>
+   </div>
+ );
 }
 
 export default SignUpFormPopup;
