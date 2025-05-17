@@ -22,6 +22,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '../../../context/User/UserContext';
 import io from 'socket.io-client';
+import showBottomMessage from '@/Utils/showBottomMessage';
 
 let socket;
 
@@ -218,9 +219,10 @@ function DashboardMenu() {
             <Link
               href={isProfessional ? '/dashboard/refer' : '/profile'}
               onClick={(e) => {
-                // disable this link, if the userMode is 'seeker'
+                // disable this link, if the userMode is 'student/seeker'
                 if (isProfessional === false) {
                   e.preventDefault();
+                  showBottomMessage('Verify work email. Go to Profile > Update your job status.');
                   return;
                 }
               }}
