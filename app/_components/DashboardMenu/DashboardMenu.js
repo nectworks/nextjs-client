@@ -61,6 +61,9 @@ function DashboardMenu() {
 
     // Toggle minimized class
     dashboardContainer.classList.toggle('dashboard_menu_container_mini');
+    
+    // Toggle menu-minimized class on the body element to adjust content area
+    document.body.classList.toggle('menu-minimized');
   }
 
   // function to view/hide dashboardMenu tablet and mobile view
@@ -75,9 +78,13 @@ function DashboardMenu() {
     if (menuContainerLeft < 0) {
       // reveal the hidden menu
       menuContainer.style.left = '0px';
+      // Add overlay class to body for mobile view
+      document.body.classList.add('menu-overlay');
     } else {
       // hide the menu
       menuContainer.style.left = '-250px';
+      // Remove overlay class from body
+      document.body.classList.remove('menu-overlay');
     }
   }
 
@@ -169,6 +176,16 @@ function DashboardMenu() {
 
   return (
     <>
+      {/* Mobile menu toggle button - only visible on mobile */}
+      <div className="mobile_menu_toggle" onClick={toggleDashboardMenuMobile}>
+        <Image
+          src={toggleIcon}
+          alt="menu toggle"
+          width={20}
+          height={20}
+        />
+      </div>
+
       <div className="dashboard_menu_container">
         <div className="dashboard_menu_icons_container">
           <div className="dashboard_menu_logo" onClick={openNectworksWebsite}>
@@ -194,7 +211,7 @@ function DashboardMenu() {
 
           {/* close icon in tablet/mobile view */}
           <Image
-            src={toggleIcon}
+            src={crossIcon}
             onClick={toggleDashboardMenuMobile}
             className="dashboard_menu_close_icon"
             alt="menu close icon"
