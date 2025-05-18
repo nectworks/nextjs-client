@@ -174,6 +174,16 @@ function DashboardMenu() {
     window.open('https://nectworks.com', '_blank');
   };
 
+  // Function to handle hard refresh navigation
+  const handleNavigation = (path, e) => {
+    // Check if this is a link that needs hard refresh
+    if (['/profile', '/help', '/account-settings', '/dashboard/refer'].includes(path)) {
+      e.preventDefault(); // Prevent default Link behavior
+      window.location.href = path; // Hard refresh
+    }
+    // For other links, let Next.js Link handle the navigation
+  };
+
   return (
     <>
       {/* Mobile menu toggle button - only visible on mobile */}
@@ -222,7 +232,7 @@ function DashboardMenu() {
 
         <ul className="dashboard_menu_item_list">
           <li>
-            <Link href="/profile">
+            <Link href="/profile" onClick={(e) => handleNavigation('/profile', e)}>
               <div className="dashboard_menu_item" data-path="profile">
                 <span className="dashboard_menu_item_icon">
                   <Image src={myProfileIcon} alt="user profile" />
@@ -241,6 +251,10 @@ function DashboardMenu() {
                   e.preventDefault();
                   showBottomMessage('Verify work email. Go to Profile > Update your job status.');
                   return;
+                }
+                // Apply hard refresh for refer page too
+                if (isProfessional) {
+                  handleNavigation('/dashboard/refer', e);
                 }
               }}
             >
@@ -263,7 +277,7 @@ function DashboardMenu() {
           </li>
 
           <li>
-            <Link href="/help">
+            <Link href="/help" onClick={(e) => handleNavigation('/help', e)}>
               <div className="dashboard_menu_item" data-path="help">
                 <span className="dashboard_menu_item_icon">
                   <Image src={helpIcon} alt="help" />
@@ -284,7 +298,7 @@ function DashboardMenu() {
           </li>
 
           <li>
-            <Link href="/account-settings">
+            <Link href="/account-settings" onClick={(e) => handleNavigation('/account-settings', e)}>
               <div className="dashboard_menu_item" data-path="account-settings">
                 <span className="dashboard_menu_item_icon">
                   <Image src={settingsIcon} alt="settings icon" />
