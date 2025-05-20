@@ -10,6 +10,7 @@
 */
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation'; // Import for path detection
 import ProgressBar from './_components/ProgressBar/ProgressBar';
 import UserContextProvider from '@/context/User/UserContext';
 import DashboardContextProvider from '@/context/Dashboard/DashboardContext';
@@ -19,6 +20,11 @@ import ReactGA from 'react-ga4';
 const Wrapper = ({ children }) => {
   // State to track loading status
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname(); // Get current path
+  
+  // Check if we're on the home/landing page
+  const isHomePage = pathname === '/' || pathname === '/home';
+  
   useEffect(() => {
     if (
       document.location.hostname.search(process.env.NEXT_PUBLIC_CLIENT_URL) !==
@@ -30,12 +36,18 @@ const Wrapper = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
+    // Skip loading or reduce loading time for home page
+    if (isHomePage) {
+      // For home page, set loading to false immediately or with minimal delay
       setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+    } else {
+      // For other pages, use the normal loading time
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isHomePage]);
 
   return (
     <>

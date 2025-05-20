@@ -23,6 +23,10 @@ export default function UserContextProvider({ children }) {
   // is fetching the user
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
+  
+  // Check if we're on the home/landing page - this must be after usePathname()
+  const isHomePage = pathname === '/' || pathname === '/home';
+  
   // Function to check if the user is logged in
   const checkCredentials = () => {
     setIsLoading(true);
@@ -77,7 +81,8 @@ export default function UserContextProvider({ children }) {
     >
       {/* if the network request to authenticate the user is
       still ongoing, display the loader. */}
-      {isLoading ? (
+      {/* Skip showing the loader on the home page */}
+      {isLoading && !isHomePage ? (
         <div className="authenticatingLoader">
           <ClipLoader size={50} />
         </div>
