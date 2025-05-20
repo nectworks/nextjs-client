@@ -9,23 +9,15 @@
     children within the context providers after a simulated loading time.
 */
 
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation'; // Import for path detection
-import ProgressBar from './_components/ProgressBar/ProgressBar';
+import { useEffect } from 'react';
 import UserContextProvider from '@/context/User/UserContext';
 import DashboardContextProvider from '@/context/Dashboard/DashboardContext';
 import ProfileContextProvider from '@/context/UpdateProfile/ProfileContext';
 import ReactGA from 'react-ga4';
 
 const Wrapper = ({ children }) => {
-  // State to track loading status
-  const [loading, setLoading] = useState(true);
-  const pathname = usePathname(); // Get current path
-  
-  // Check if we're on the home/landing page
-  const isHomePage = pathname === '/' || pathname === '/home';
-  
   useEffect(() => {
+    // Initialize Google Analytics if on the client URL
     if (
       document.location.hostname.search(process.env.NEXT_PUBLIC_CLIENT_URL) !==
       -1
@@ -35,32 +27,12 @@ const Wrapper = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    // Skip loading or reduce loading time for home page
-    if (isHomePage) {
-      // For home page, set loading to false immediately or with minimal delay
-      setLoading(false);
-    } else {
-      // For other pages, use the normal loading time
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isHomePage]);
-
   return (
-    <>
-      {loading ? (
-        <ProgressBar />
-      ) : (
-        <UserContextProvider>
-          <DashboardContextProvider>
-            <ProfileContextProvider>{children}</ProfileContextProvider>
-          </DashboardContextProvider>
-        </UserContextProvider>
-      )}
-    </>
+    <UserContextProvider>
+      <DashboardContextProvider>
+        <ProfileContextProvider>{children}</ProfileContextProvider>
+      </DashboardContextProvider>
+    </UserContextProvider>
   );
 };
 
