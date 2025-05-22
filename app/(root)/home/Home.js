@@ -83,7 +83,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    localStorage.setItem('singupval', username);
+    // Safe localStorage access
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('singupval', username);
+    }
 
     const inputName = document.querySelector('.input__name');
     if (inputName) {
@@ -95,18 +98,19 @@ export default function Home() {
     }
 
     // Google One Tap login
-    if (!user) {
+    if (!user && typeof window !== 'undefined') {
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.defer = true;
       script.async = true;
       script.onload = () => {
-        window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
-          callback: handleOneTapLogin,
-        });
-
-        window.google.accounts.id.prompt();
+        if (window.google && window.google.accounts) {
+          window.google.accounts.id.initialize({
+            client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
+            callback: handleOneTapLogin,
+          });
+          window.google.accounts.id.prompt();
+        }
       };
       document.body.appendChild(script);
     }
@@ -222,7 +226,7 @@ export default function Home() {
         <div className="tabs-container">
           <div className="section-header">
             <h2>Find Your Path</h2>
-            <p>Whether you're looking for a job or want to refer candidates, we've got you covered</p>
+            <p>Whether you&apos;re looking for a job or want to refer candidates, we&apos;ve got you covered</p>
           </div>
           
           <div className="tabs-header">

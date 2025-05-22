@@ -9,19 +9,45 @@ import SignUpDesktop from './SignUpDesktop';
 import SignUpMobile from './SignUpMobile';
 
 const SignUp = () => {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  // Initialize with a default value for SSR
+  const [innerWidth, setInnerWidth] = useState(1024); // Default to desktop
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
-    const handleResize = () => {
+    // Mark component as mounted
+    setIsMounted(true);
+    
+    // Set initial width from window
+    if (typeof window !== 'undefined') {
       setInnerWidth(window.innerWidth);
+    }
+
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setInnerWidth(window.innerWidth);
+      }
     };
 
-    window.addEventListener('resize', handleResize);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+    }
 
     // Clean up the event listener on component unmount
     return () => {
-      window.removeEventListener('resize', handleResize);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
     };
   }, []);
+
+  // Don't render until mounted to avoid hydration mismatch
+  if (!isMounted) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div>Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <>
