@@ -1,0 +1,137 @@
+/* 
+  FileName: LandingPageProgress.css
+  Desc: Styling specifically for the landing page loader component, 
+  with 'lp-' prefix to avoid conflicts with existing styles.
+*/
+
+/* Main overlay that covers the entire page during loading */
+.lp-progress-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it's above everything */
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Center content container */
+.lp-progress-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  max-width: 500px;
+}
+
+/* Logo styling */
+.lp-progress-logo {
+  width: 200px;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+/* Progress bar container */
+.lp-progress-container {
+  height: 0.3rem;
+  width: 100%;
+  background-color: #f0f0f0;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+/* Actual progress indicator */
+.lp-progress-container .lp-progress {
+  height: 100%;
+  width: 0;
+  border-radius: 0.4rem;
+  background: #0057b1;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+/* Loading status text */
+.lp-loading-status {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 1rem;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+/* Error messages container */
+.lp-loading-errors {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #fff8f8;
+  border: 1px solid #ffcdd2;
+  border-radius: 0.4rem;
+  max-width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  color: #d32f2f;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+/* Individual error items */
+.lp-error-item {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: #ffebee;
+  border-radius: 0.3rem;
+}
+
+/* Add pulse animation to progress bar for better user feedback */
+@keyframes lp-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.lp-progress-container .lp-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: lp-pulse 1.5s infinite;
+}
+
+/* Container for the Home component while loading */
+.lp-home-container {
+  min-height: 100vh; /* Ensure the container takes up at least the full viewport height */
+  width: 100%;
+  position: relative;
+}
+
+/* Handle mobile view */
+@media (max-width: 768px) {
+  .lp-progress-content {
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  .lp-progress-logo {
+    width: 160px;
+  }
+  
+  .lp-loading-status {
+    font-size: 0.9rem;
+  }
+}

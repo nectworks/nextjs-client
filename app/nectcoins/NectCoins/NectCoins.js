@@ -210,8 +210,9 @@ function NectCoins() {
   }, [paginationModel, data]);
 
   return (
-    <div className="dashboard_outer_container">
-      <DashboardMenu />
+    <>
+    <DashboardMenu />
+    <div className="dashboard-layout">
 
       <div className="dashboard_nectcoins_container">
         <ProfileHeaderWrapper />
@@ -375,6 +376,7 @@ function NectCoins() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

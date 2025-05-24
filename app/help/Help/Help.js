@@ -204,8 +204,9 @@ const Help = () => {
   }, []);
 
   return (
-    <div className="dashboard_outer_container">
+    <>
       <DashboardMenu />
+      <div className="dashboard-layout">
       <div className="starting_heading">
         {/* Use the ProfileHeaderWrapper instead of ProfileHeader directly */}
         <ProfileHeaderWrapper />
@@ -305,6 +306,7 @@ const Help = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

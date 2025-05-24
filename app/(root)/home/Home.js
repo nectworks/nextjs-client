@@ -2,14 +2,14 @@
   FileName: Home.js
   Desc: Main component for the Nectworks landing page. This file orchestrates the 
   entire landing page experience by importing and arranging various section components.
-  It includes a hero section with username input, audience-specific tab navigation,
-  feature showcases, testimonials, safety alert section, FAQ accordion, and final call-to-action.
-  The component also handles Google One-Tap login integration and user state management.
+  It includes a modernized hero section with animated elements, a data intelligence showcase,
+  feature highlights, testimonials, how it works section, company benefits, and a final call-to-action.
+  The component handles Google One-Tap login integration and user state management.
 */
 
 'use client';
 
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -25,6 +25,10 @@ import { privateAxios } from '@/config/axiosInstance.js';
 // Components
 import FeatureSection from './components/FeatureSection';
 import TestimonialSection from './components/TestimonialSection';
+import HowItWorksSection from './components/HowItWorksSection';
+import CTASection from './components/CTASection';
+import DataIntelligenceSection from './components/DataIntelligenceSection';
+import CompanySection from './components/CompanySection';
 import Accordion from '../../_components/Accordian/Accordion'; // Using existing Accordion
 
 // Styles
@@ -36,6 +40,10 @@ export default function Home() {
   const [username, setUsername] = useState('');
   const [activeTab, setActiveTab] = useState('referrer'); // Default to 'referrer'
   const router = useRouter();
+  const heroRef = useRef(null);
+
+  // Animation state for observed elements
+  const [isHeroVisible, setIsHeroVisible] = useState(false);
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -75,7 +83,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    localStorage.setItem('singupval', username);
+    // Safe localStorage access
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('singupval', username);
+    }
 
     const inputName = document.querySelector('.input__name');
     if (inputName) {
@@ -87,35 +98,66 @@ export default function Home() {
     }
 
     // Google One Tap login
-    if (!user) {
+    if (!user && typeof window !== 'undefined') {
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.defer = true;
       script.async = true;
       script.onload = () => {
-        window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
-          callback: handleOneTapLogin,
-        });
-
-        window.google.accounts.id.prompt();
+        if (window.google && window.google.accounts) {
+          window.google.accounts.id.initialize({
+            client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
+            callback: handleOneTapLogin,
+          });
+          window.google.accounts.id.prompt();
+        }
       };
       document.body.appendChild(script);
     }
+
+    // Setup Intersection Observer for animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === heroRef.current) {
+              setIsHeroVisible(true);
+            }
+            entry.target.classList.add('animate-in');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    // Observe all sections with animation-container class
+    document.querySelectorAll('.animation-container').forEach((el) => {
+      observer.observe(el);
+    });
+
+    // Observe hero section
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
   }, [user, username]);
 
   return (
     <main className="home">
-      {/* Hero Section */}
-      <section className="hero">
+      {/* Hero Section - Modernized with animation */}
+      <section className={`hero ${isHeroVisible ? 'animate-hero' : ''}`} ref={heroRef}>
         <div className="hero__container">
-          <div className="hero__content">
+          <div className="hero__content animation-container">
+            <div className="tag-line">Next Gen Professional Connections</div>
             <h1 className="hero__title">
-              The Future of <span className="highlight">Job Referrals</span> Has Arrived
+              <span className="text-gradient">Reimagining</span> How Talent Connects to Opportunity
             </h1>
             <p className="hero__subtitle">
-              Find your dream job, or become a top referrer. Connect with ease, 
-              ditch the cold messages. Join our hiring revolution today!
+              Simplify job referrals. No more inbox chaos. Build your network, showcase your talent, 
+              and advance your career with our data-driven platform.
             </p>
             
             {!user && (
@@ -124,7 +166,7 @@ export default function Home() {
                   <span>nectworks<span className="blinking-cursor">/</span></span>
                   <input 
                     type="text" 
-                    placeholder="username" 
+                    placeholder="choose your username" 
                     value={username}
                     onChange={handleUsernameChange}
                     className="input__name"
@@ -135,13 +177,29 @@ export default function Home() {
                     className={`signup-button ${!username ? 'disabled' : ''}`}
                     disabled={!username}
                   >
-                    Get Started
+                    <span className="button-text">Get Started</span>
+                    <span className="button-icon">→</span>
                   </button>
                 </Link>
               </div>
             )}
+            
+            <div className="hero-stats">
+              <div className="stat-item">
+                <span className="stat-number">100+</span>
+                <span className="stat-label">Active Referrers</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">1000+</span>
+                <span className="stat-label">Job Seekers</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">85%</span>
+                <span className="stat-label">Faster Referrals</span>
+              </div>
+            </div>
           </div>
-          <div className="hero__image">
+          <div className="hero__image animation-container">
             <div className="image-container">
               <img 
                 src="/heroSectionHeroImg.webp" 
@@ -150,14 +208,27 @@ export default function Home() {
               />
               <div className="floating-element one"></div>
               <div className="floating-element two"></div>
+              <div className="floating-element three"></div>
             </div>
           </div>
         </div>
+        <div className="hero-scroll-indicator">
+          <span>Scroll to explore</span>
+          <div className="scroll-arrow"></div>
+        </div>
       </section>
 
+      {/* Data Intelligence Section - NEW */}
+      <DataIntelligenceSection />
+
       {/* Audience Tabs Section */}
-      <section className="audience-tabs">
+      <section className="audience-tabs animation-container">
         <div className="tabs-container">
+          <div className="section-header">
+            <h2>Find Your Path</h2>
+            <p>Whether you&apos;re looking for a job or want to refer candidates, we&apos;ve got you covered</p>
+          </div>
+          
           <div className="tabs-header">
             <button
               className={`tab-button ${activeTab === 'referrer' ? 'active' : ''}`}
@@ -176,7 +247,7 @@ export default function Home() {
           <div className="tabs-content">
             {activeTab === 'referrer' ? (
               <div className="tab-panel">
-                <h2>Become a Meta-referrer</h2>
+                <h3>Become a Meta-referrer</h3>
                 <p>
                   Streamline your referral process, manage candidates efficiently,
                   and maximize your referral bonuses - all in one platform.
@@ -188,17 +259,17 @@ export default function Home() {
                   </div>
                   <div className="step">
                     <div className="step-number">2</div>
-                    <p>Share your personalized page on social media to attract candidates</p>
+                    <p>Share your personalized link to reach quality candidates</p>
                   </div>
                   <div className="step">
                     <div className="step-number">3</div>
-                    <p>Review candidates on your dashboard and earn referral bonuses</p>
+                    <p>Manage referrals and earn bonuses with minimal effort</p>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="tab-panel">
-                <h2>Find Your Dream Job</h2>
+                <h3>Find Your Dream Job</h3>
                 <p>
                   Connect with referrers at your target companies without awkward cold messages.
                   Send your profile to multiple potential referrers in just a few clicks.
@@ -221,50 +292,81 @@ export default function Home() {
             )}
             
             <Link href="/sign-up" onClick={scrollToTop}>
-              <button className="primary-button">Start Your Journey</button>
+              <button className="primary-button">
+                <span className="button-text">Start Your Journey</span>
+                <span className="button-icon">→</span>
+              </button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Feature Showcase Sections */}
-      <FeatureSection 
+      {/* How It Works Section - Updated */}
+      <HowItWorksSection />
+
+      <FeatureSection
         image="/Illustration.webp"
         imageAlt="AI-driven referral matching"
         title="AI-Driven Talent Matching"
         highlight="Smart Matching"
-        description="Our powerful AI algorithms connect the right candidates with the right referrers, increasing successful placements and reducing time-to-hire."
+        description="Our powerful AI algorithms connect the right candidates with the right referrers, increasing successful placements and reducing time-to-hire by analyzing patterns in professional data."
         reversed={false}
+        icon="sparkles"
+        featurePoints={[
+          "Data-driven insights",
+          "Easy implementation",
+          "24/7 access"
+        ]}
       />
-      
-      <FeatureSection 
+
+      <FeatureSection
         image="/Frame.webp"
         imageAlt="Referral dashboard"
         title="Refer Candidates 2x Faster"
         highlight="Save Time"
         description="No more wading through unqualified applications. Our streamlined dashboard helps you review and refer candidates in minutes, not hours."
         reversed={true}
+        icon="clock"
+        featurePoints={[
+          "Quick candidate filtering",
+          "User-friendly dashboard",
+          "Save hours every week"
+        ]}
       />
-      
-      <FeatureSection 
+
+      <FeatureSection
         image="/Isolation_Mode.webp"
         imageAlt="Centralized candidate management"
         title="All Your Candidates in One Place"
         highlight="Stay Organized"
         description="Keep track of all your referral requests and candidates in a single, easy-to-use dashboard. No more hunting through emails or messages."
         reversed={false}
+        icon="folder"
+        featurePoints={[
+          "Centralized tracking",
+          "Real-time updates",
+          "Simplified workflow"
+        ]}
       />
 
-      {/* Testimonial Section - Added to showcase user success stories */}
+      {/* Company Section - NEW */}
+      <CompanySection />
+
+      {/* Testimonial Section - Updated for more authentic voices */}
       <TestimonialSection />
 
-      {/* Safety Alert Section */}
-      <section className="alert-section">
+      {/* Safety Alert Section - Styled differently */}
+      <section className="alert-section animation-container">
         <div className="alert-container">
           <div className="alert-content">
+            <div className="alert-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 9V13M12 17H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
             <h2>Stay Safe from Fraudulent Practices</h2>
             <p>
-              In today&apos;s job market, your email can get flooded with suspicious job alerts.
+              In today&apos;s job market, your inbox can get flooded with suspicious job alerts.
               Learn how to identify and avoid fraudulent recruitment practices.
             </p>
           </div>
@@ -279,27 +381,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ Section - Using unmodified structure from original Home.js */}
-      <div className="outer__layer__bdy__com">
-        <div className="qna__header">
-          <h4>
-            <span className="color_change">Quick answers</span> to common
-            questions
-          </h4>
+      {/* FAQ Section - Improved styling */}
+      <section className="faq-section animation-container">
+        <div className="section-header">
+          <h2>
+            <span className="highlight">Quick answers</span> to common questions
+          </h2>
+          <p>Everything you need to know about our platform</p>
         </div>
-      </div>
-      <Accordion />
-
-      {/* Final CTA Section - Fixed button contrast issue */}
-      <section className="final-cta">
-        <div className="cta-container">
-          <h2>Ready to Transform Your Hiring Process?</h2>
-          <p>Join thousands of professionals already using Nectworks to streamline referrals.</p>
-          <Link href="/sign-up">
-            <button className="cta-button">Create Your Account</button>
-          </Link>
-        </div>
+        <Accordion />
       </section>
+
+      {/* Final CTA Section - Updated */}
+      <CTASection />
     </main>
   );
 }

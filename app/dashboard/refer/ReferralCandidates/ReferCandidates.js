@@ -7,7 +7,6 @@
 */
 
 import { useEffect, useState } from 'react';
-import DashboardMenu from '../../../_components/DashboardMenu/DashboardMenu';
 import './ReferCandidates.css';
 import Image from 'next/image';
 import searchIcon from '@/public/ReferCandidates/searchIcon.svg';
@@ -1118,10 +1117,6 @@ const ReferCandidates = () => {
         />
       )}
 
-      <div className="dashboard_outer_container">
-        {/* Dashboard Menu */}
-        <DashboardMenu />
-
         <div className="referCandidatesContainer">
           <div className="profileHeaderReferCandidates">
             <ProfileHeader />
@@ -1511,7 +1506,6 @@ const ReferCandidates = () => {
             )}
           </div>
         </div>
-      </div>
     </>
   );
 };

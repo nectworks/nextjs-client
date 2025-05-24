@@ -30,13 +30,20 @@ import showBottomMessage from '@/Utils/showBottomMessage';
 import LinkedInIcon from '@/public/SignIn/LinkedInIcon.svg';
 import GoogleIcon from '@/public/SignIn/GoogleIcon.svg';
 
+// Safe localStorage getter function
+const getSignupInputValFromMain = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('singupval') || '';
+  }
+  return '';
+};
+
 // Main component
 const SignUpDesktop = () => {
   const router = useRouter();
   // get the location from where the user was redirected to sign-up page.
   const [prevLocation, setPrevLocation] = useState(null);
 
-  const getSignupInputValFromMain = localStorage.getItem('singupval');
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
 
@@ -49,7 +56,7 @@ const SignUpDesktop = () => {
   const [lastName, setLastName] = useState('');
   const [lastNameError, setLastNameError] = useState('');
 
-  const [username, setUsername] = useState(getSignupInputValFromMain || '');
+  const [username, setUsername] = useState('');
   const [usernameError, setUsernameError] = useState('');
 
   const [isOTPSent, setIsOTPSent] = useState(false);
@@ -70,6 +77,7 @@ const SignUpDesktop = () => {
 
   const [seconds, setSeconds] = useState(60);
   const [isActive, setIsActive] = useState(false);
+  
   useEffect(() => {
     let interval = null;
 
@@ -172,12 +180,14 @@ const SignUpDesktop = () => {
         }, 60000);
         setShowOtpScreenUp(true);
         document.body.style.overflow = 'hidden';
-        window.scroll({
-          top: 0, // Scroll to the top (y-coordinate = 0).
-          left: 0, // Scroll to the left edge (x-coordinate = 0).
-          behavior: 'smooth',
-          // Use smooth scrolling animation for a nicer user experience.
-        });
+        if (typeof window !== 'undefined') {
+          window.scroll({
+            top: 0, // Scroll to the top (y-coordinate = 0).
+            left: 0, // Scroll to the left edge (x-coordinate = 0).
+            behavior: 'smooth',
+            // Use smooth scrolling animation for a nicer user experience.
+          });
+        }
       }
     } catch (err) {
       setShowSpinner(false);
@@ -605,8 +615,10 @@ const SignUpDesktop = () => {
         setUser(res.data.user);
   
         // Set a flag in localStorage to indicate this is a brand new signup
-        localStorage.setItem('newSignup', 'true');
-        sessionStorage.setItem('from', '/sign-up');
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('newSignup', 'true');
+          sessionStorage.setItem('from', '/sign-up');
+        }
         
         // Add a small delay before redirecting to ensure storage is set
         setTimeout(() => {
@@ -641,7 +653,7 @@ const SignUpDesktop = () => {
     }
   }
 
-  // function to sign in with likeding
+  // function to sign in with linkedin
   async function signInWithLinkedin(e) {
     e.preventDefault();
     try {
@@ -661,6 +673,14 @@ const SignUpDesktop = () => {
     }
   };
 
+  // Initialize username from localStorage after component mounts
+  useEffect(() => {
+    const savedUsername = getSignupInputValFromMain();
+    if (savedUsername) {
+      setUsername(savedUsername);
+    }
+  }, []);
+
   useEffect(() => {
     /* if the user is already registered, redirect them to where they came from
                or to the profile page */
@@ -679,7 +699,7 @@ const SignUpDesktop = () => {
         <div className="signIn-container cont" ref={contRef}>
           <div className="form sign-in">
             {/* Add your sign-in form content here */}
-            <p className="welcome__back__header">Let’s get you started!</p>
+            <p className="welcome__back__header">Let&apos;s get you started!</p>
             <div
               className="container__whole"
               style={{ position: 'relative', left: '2rem' }}

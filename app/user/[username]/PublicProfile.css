@@ -585,6 +585,7 @@
   margin-bottom: 20px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  position: relative; /* Added for overlay positioning */
 }
 
 .profile-section-header {
@@ -600,6 +601,88 @@
 
 .profile-section-body {
   padding: 20px;
+}
+
+/* BLUR EFFECTS FOR NON-LOGGED-IN USERS */
+.profile-section-blurred {
+  position: relative;
+}
+
+.profile-section-blurred .profile-section-body {
+  filter: blur(8px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.profile-blur-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: var(--card-radius);
+}
+
+.profile-blur-overlay h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+}
+
+.profile-blur-overlay p {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.profile-blur-overlay-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.profile-blur-btn {
+  padding: 12px 24px;
+  border-radius: var(--btn-radius);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: pointer;
+  border: none;
+  font-size: 0.95rem;
+}
+
+.profile-blur-btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 87, 177, 0.2);
+}
+
+.profile-blur-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 87, 177, 0.3);
+}
+
+.profile-blur-btn-secondary {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.profile-blur-btn-secondary:hover {
+  background: var(--primary-color);
+  color: white;
 }
 
 /* About section */
@@ -1132,6 +1215,29 @@
   .profile-job-title {
     font-size: 1rem;
   }
+
+  /* Mobile blur overlay adjustments */
+  .profile-blur-overlay {
+    padding: 30px 15px;
+  }
+
+  .profile-blur-overlay h3 {
+    font-size: 1.3rem;
+  }
+
+  .profile-blur-overlay p {
+    font-size: 0.9rem;
+  }
+
+  .profile-blur-overlay-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .profile-blur-btn {
+    width: 100%;
+    padding: 10px 20px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -1226,6 +1332,21 @@
     right: 16px;
     width: calc(100% - 32px);
     padding: 16px;
+  }
+
+  /* Small screen blur overlay */
+  .profile-blur-overlay {
+    padding: 25px 12px;
+  }
+
+  .profile-blur-overlay h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+
+  .profile-blur-overlay p {
+    font-size: 0.85rem;
+    margin-bottom: 15px;
   }
 }
 

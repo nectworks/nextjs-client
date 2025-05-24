@@ -29,7 +29,12 @@ import Image from 'next/image';
 
 const SignUpMobile = () => {
   const router = useRouter();
-  const getSignupInputValFromMain = localStorage.getItem('singupval');
+  const getSignupInputValFromMain = () => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('singupval') || '';
+    }
+    return '';
+  };
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
 
@@ -47,7 +52,8 @@ const SignUpMobile = () => {
   const [lastName, setLastName] = useState('');
   const [lastNameError, setLastNameError] = useState('');
 
-  const [username, setUsername] = useState(getSignupInputValFromMain || '');
+  const [username, setUsername] = useState('');
+
   const [usernameError, setUsernameError] = useState('');
 
   const [isOTPSentAgainSignup, setIsOTPSentAgainSignup] = useState(false);
@@ -75,6 +81,13 @@ const SignUpMobile = () => {
       clearInterval(interval);
     };
   }, [isActive]);
+
+  useEffect(() => {
+    const savedUsername = getSignupInputValFromMain();
+    if (savedUsername) {
+      setUsername(savedUsername);
+    }
+  }, []);
 
   useEffect(() => {
     if (router.query && router.query.from) {
@@ -159,12 +172,13 @@ const SignUpMobile = () => {
         }, 60000);
         setShowOtpScreenUp(true);
         document.body.style.overflow = 'hidden';
-        window.scroll({
-          top: 0, // Scroll to the top (y-coordinate = 0).
-          left: 0, // Scroll to the left edge (x-coordinate = 0).
-          behavior: 'smooth',
-          // Use smooth scrolling animation for a nicer user experience.
-        });
+        if (typeof window !== 'undefined') {
+          window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+          });
+        }
       }
     } catch (err) {
       console.log(err);

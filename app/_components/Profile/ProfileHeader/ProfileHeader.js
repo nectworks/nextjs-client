@@ -46,25 +46,6 @@ function ProfileHeader() {
     setHandleDiv(!handleDiv);
   };
 
-  // Function to toggle the dashboard menu in mobile view
-  function toggleDashboardMenuMobile() {
-    const menuContainer = document.querySelector('.dashboard_menu_container');
-
-    const menuContainerLeft = parseFloat(
-      window.getComputedStyle(menuContainer, null).getPropertyValue('left')
-    );
-
-    // if menu has negative 'left' value, it is hidden
-    if (menuContainerLeft < 0) {
-      // reveal the hidden menu
-      menuContainer.style.left = '0px';
-    } else {
-      /* if menu has positive 'left' value, it is visible
-         hide the menu */
-      menuContainer.style.left = '-250px';
-    }
-  }
-
   // Function to adjust dropdown position based on profile image position
   const adjustDropdownPosition = () => {
     if (profileImageRef.current && dropdownOptionsRef.current) {
@@ -299,14 +280,7 @@ function ProfileHeader() {
 
   return (
     <div className="dashboard_profile_header">
-      {/* Hamburger icon for mobile view at the beginning of the header */}
-      <Image
-        onClick={toggleDashboardMenuMobile}
-        className="dashboard_profile_hamburger_icon"
-        src={hamburgerIcon}
-        alt="menu icon"
-      />
-      
+     
       <p>
         Good {getTimeOfDay()}, {user?.firstName}
       </p>

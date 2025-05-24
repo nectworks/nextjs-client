@@ -1060,9 +1060,9 @@ const ProfilePage = () => {
   // Main component render
   return (
     <ProfileContextProvider initialState={initialState} reducer={reducer}>
-      <div className="dashboard_outer_container">
-        {/* Add dashboard menu */}
-        <DashboardMenu />
+      <>
+      <DashboardMenu />
+      <div className="dashboard-layout">
 
         {/* Main container */}
         <div className="dashboard_profile_container">
@@ -2013,6 +2013,7 @@ const ProfilePage = () => {
       )}
       
       <ToastContainer />
+    </>
   </ProfileContextProvider>
 );
 };
