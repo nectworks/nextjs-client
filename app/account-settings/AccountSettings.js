@@ -713,8 +713,9 @@ const AccountSettings = () => {
   }, [userPreferences]);
 
   return (
-    <div className="dashboard_outer_container">
+    <>
       <DashboardMenu />
+      <div className="dashboard-layout">
 
       <div className={`accountSettingsContainer`}>
         <ProfileHeaderWrapper />
@@ -1393,6 +1394,7 @@ const AccountSettings = () => {
         </div>
       </div>
     </div>
+  </>
   );
 };
 

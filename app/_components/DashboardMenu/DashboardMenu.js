@@ -62,8 +62,11 @@ function DashboardMenu() {
     // Toggle minimized class
     dashboardContainer.classList.toggle('dashboard_menu_container_mini');
     
-    // Toggle menu-minimized class on the body element to adjust content area
-    document.body.classList.toggle('menu-minimized');
+    // Toggle menu-minimized class on the dashboard layout wrapper
+    const dashboardLayout = document.querySelector('.dashboard-layout');
+    if (dashboardLayout) {
+      dashboardLayout.classList.toggle('menu-minimized');
+    }
   }
 
   // function to view/hide dashboardMenu tablet and mobile view

@@ -403,19 +403,19 @@
   }
 }
 
-/* Add space for the fixed dashboard menu */
-body {
+/* Dashboard layout wrapper styles */
+.dashboard-layout {
   margin-left: 240px;
   transition: margin-left 0.3s ease-out;
+  min-height: 100vh;
 }
 
-/* Adjust margin when menu is minimized */
-body.menu-minimized {
+.dashboard-layout.menu-minimized {
   margin-left: 80px;
 }
 
 @media screen and (max-width: 800px) {
-  body {
+  .dashboard-layout  {
     margin-left: 0; /* No margin on mobile as menu is hidden by default */
   }
   
