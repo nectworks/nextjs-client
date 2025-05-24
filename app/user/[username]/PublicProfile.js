@@ -116,6 +116,9 @@ const PublicProfile = () => {
     '#5F0F40'  // Burgundy
   ];
 
+  // Check if user is logged in (for blur functionality)
+  const isUserLoggedIn = Boolean(user && user._id);
+
   // Generate random colors for companies
   const generateCompanyColors = (companies) => {
     const colorMap = {};
@@ -393,52 +396,92 @@ const PublicProfile = () => {
   // Initialize the one-tap login
   async function handleOneTapLogin(response) {
     try {
+      console.log('One-tap response received:', response);
+      
       const res = await privateAxios.post(`/google/one-tap/register`, {
         data: response,
       });
 
-      const { signUp, user } = res.data;
-      setUser(user);
+      console.log('API response:', res.data);
 
-      if (res.status === 200) {
+      const { signUp, user: userData } = res.data;
+      
+      if (res.status === 200 && userData) {
+        // Set user state first
+        setUser(userData);
+        console.log('User state updated:', userData);
+        
         showBottomMessage('Successfully authenticated.');
+        
+        // Use window.location for immediate redirect to avoid router issues
         if (signUp === true) {
-          router.push('/profile', {
-            state: { from: `/user/${username}` },
-            replace: true,
-          });
+          console.log('New signup - redirecting to profile');
+          window.location.href = '/profile';
         } else {
-          router.push('/profile');
+          console.log('Existing user - redirecting to profile');  
+          window.location.href = '/profile';
         }
+      } else {
+        console.error('Invalid response:', res);
+        showBottomMessage('Authentication failed. Please try again.');
       }
     } catch (error) {
-      showBottomMessage('Error while signing up');
+      console.error('One-tap login error:', error);
+      console.error('Error response:', error.response?.data);
+      showBottomMessage('Error while signing up.');
     }
   }
 
+  // Handle login/signup button clicks for blur overlay
+  const handleSignUp = () => {
+    router.push('/sign-up');
+  };
+
+  const handleLogin = () => {
+    router.push('/log-in');
+  };
+
+  // Render blur overlay component - shows only once on Experience section
+  const renderBlurOverlay = () => (
+    <div className="profile-blur-overlay">
+      <h3>Join Nectworks to see full details</h3>
+      <p>Sign up to view complete professional profiles, connect with professionals, and discover referral opportunities.</p>
+      <div className="profile-blur-overlay-buttons">
+        <button className="profile-blur-btn profile-blur-btn-primary" onClick={handleSignUp}>
+          Sign up for free
+        </button>
+        <button className="profile-blur-btn profile-blur-btn-secondary" onClick={handleLogin}>
+          Log in
+        </button>
+      </div>
+    </div>
+  );
+
   // Load Google One Tap
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.defer = true;
-    script.async = true;
-    script.onload = () => {
-      if (!user) {
-        window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
-          callback: handleOneTapLogin,
-        });
-        window.google.accounts.id.prompt();
-      }
-    };
-    document.body.appendChild(script);
-    
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
+    if (!user && typeof window !== 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.defer = true;
+      script.async = true;
+      script.onload = () => {
+        if (window.google && window.google.accounts) {
+          window.google.accounts.id.initialize({
+            client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
+            callback: handleOneTapLogin,
+          });
+          window.google.accounts.id.prompt();
+        }
+      };
+      document.body.appendChild(script);
+      
+      return () => {
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
+    }
+  }, [user]);
 
   // Load Twitter widgets
   useEffect(() => {
@@ -810,8 +853,12 @@ const PublicProfile = () => {
           </div>
         </section>
         
-        {/* Experience section */}
-        <section id="experience" ref={sectionRefs.experience} className="profile-section">
+        {/* Experience section with blur functionality - Shows overlay message only once */}
+        <section 
+          id="experience" 
+          ref={sectionRefs.experience} 
+          className={`profile-section ${!isUserLoggedIn ? 'profile-section-blurred' : ''}`}
+        >
           <div className="profile-section-header">
             <h2 className="profile-section-title">Experience</h2>
           </div>
@@ -872,10 +919,16 @@ const PublicProfile = () => {
               <p className="profile-empty">No experience listed</p>
             )}
           </div>
+          {/* Blur overlay for non-logged-in users - Shows only once here */}
+          {!isUserLoggedIn && renderBlurOverlay()}
         </section>
         
-        {/* Skills section */}
-        <section id="skills" ref={sectionRefs.skills} className="profile-section">
+        {/* Skills section with blur functionality - No overlay message */}
+        <section 
+          id="skills" 
+          ref={sectionRefs.skills} 
+          className={`profile-section ${!isUserLoggedIn ? 'profile-section-blurred' : ''}`}
+        >
           <div className="profile-section-header">
             <h2 className="profile-section-title">Skills & Superpowers</h2>
           </div>
@@ -921,9 +974,13 @@ const PublicProfile = () => {
           </div>
         </section>
         
-        {/* Connect section */}
+        {/* Connect section with blur functionality - No overlay message */}
         {socials && socials.length > 0 && (
-          <section id="social" ref={sectionRefs.social} className="profile-section">
+          <section 
+            id="social" 
+            ref={sectionRefs.social} 
+            className={`profile-section ${!isUserLoggedIn ? 'profile-section-blurred' : ''}`}
+          >
             <div className="profile-section-header">
               <h2 className="profile-section-title">Connect With Me</h2>
             </div>
