@@ -16,9 +16,7 @@ import '../Home.css'; // Import the CSS file
 
 export default function ForCompaniesPage() {
   const [activeFeature, setActiveFeature] = useState(0);
-  const videoRef = useRef(null);
-  const [isVideoVisible, setIsVideoVisible] = useState(false);
-
+  
   // Animation state for observed elements
   const [visibleSections, setVisibleSections] = useState(new Set());
 
@@ -154,7 +152,7 @@ export default function ForCompaniesPage() {
   };
 
   useEffect(() => {
-    // Setup Intersection Observer for animations
+    // Setup Intersection Observer for animations only
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -176,30 +174,31 @@ export default function ForCompaniesPage() {
       observer.observe(el);
     });
 
-    // Video intersection observer
-    const videoObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVideoVisible(true);
-            if (videoRef.current) {
-              videoRef.current.play().catch(console.error);
-            }
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    if (videoRef.current) {
-      videoObserver.observe(videoRef.current);
+    // Handle video poster fallback
+    const video = document.querySelector('.demo-video');
+    const fallbackPoster = document.querySelector('.video-fallback-poster');
+    
+    if (video && fallbackPoster) {
+      // Hide fallback when video loads metadata (has poster)
+      video.addEventListener('loadedmetadata', () => {
+        fallbackPoster.style.display = 'none';
+      });
+      
+      // Show fallback if poster fails to load
+      video.addEventListener('error', () => {
+        fallbackPoster.style.display = 'flex';
+      });
+      
+      // Hide fallback when video starts playing
+      video.addEventListener('play', () => {
+        fallbackPoster.style.display = 'none';
+      });
     }
 
     return () => {
       observer.disconnect();
-      videoObserver.disconnect();
     };
-  }, []);
+  }, []); // Empty dependency array - no re-runs
 
   return (
     <>
@@ -258,23 +257,28 @@ export default function ForCompaniesPage() {
             </div>
             <div className="video-container">
               <video
-                ref={videoRef}
                 className="demo-video"
                 controls
                 loop
                 muted
+                playsInline
                 poster="/videoThumbnail.jpg"
                 preload="metadata"
               >
                 <source src="/tutorialCompany.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
-              <div className="video-overlay">
-                <div className="play-button-overlay">
-                  <svg width="80" height="80" viewBox="0 0 100 100" fill="none">
-                    <circle cx="50" cy="50" r="50" fill="rgba(0, 87, 177, 0.9)"/>
-                    <path d="M35 25L75 50L35 75V25Z" fill="white"/>
-                  </svg>
+              {/* Fallback thumbnail if poster doesn't load */}
+              <div className="video-fallback-poster">
+                <div className="poster-content">
+                  <div className="play-icon">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>
+                      <polygon points="10,8 16,12 10,16" fill="white"/>
+                    </svg>
+                  </div>
+                  <h3>Watch Our Platform Demo</h3>
+                  <p>See how Nectworks transforms hiring</p>
                 </div>
               </div>
             </div>
@@ -400,6 +404,12 @@ export default function ForCompaniesPage() {
 
         {/* CTA Section */}
         <section className="companies-final-cta animation-container" data-section-id="cta">
+          <div className="floating-shapes">
+            <div className="floating-shape"></div>
+            <div className="floating-shape"></div>
+            <div className="floating-shape"></div>
+            <div className="floating-shape"></div>
+          </div>
           <div className="companies-cta-container">
             <div className="companies-cta-content">
               <h2>Ready to Transform Your Hiring?</h2>
@@ -417,9 +427,6 @@ export default function ForCompaniesPage() {
           </div>
         </section>
       </main>
-      
-      {/* Uncomment when Footer component is available */}
-      {/* <Footer /> */}
     </>
   );
 }
