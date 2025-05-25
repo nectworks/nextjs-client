@@ -1,6 +1,5 @@
 'use client';
 
-
 /*
   FileName: ForCompaniesPage.js
   Desc: Comprehensive page showcasing Nectworks for enterprise clients.
@@ -14,10 +13,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import '../Home.css'; // Import the CSS file
-
-// Import Header and Footer components (adjust paths as needed)
-// import Header from '../../_components/Header/Header';
-// import Footer from '../../_components/Footer/Footer';
 
 export default function ForCompaniesPage() {
   const [activeFeature, setActiveFeature] = useState(0);
