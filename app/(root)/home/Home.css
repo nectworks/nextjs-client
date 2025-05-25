@@ -2872,3 +2872,1085 @@ html, body {
     width: 90%; /* Further reduce width on smaller screens */
   }
 }
+
+/*
+  Desc: Updated styles for the For Companies page component featuring Gen Z design elements
+  while maintaining professional credibility for enterprise clients.
+  Includes improved centering, spacing, and UI components.
+  Location: app/(root)/home/Home.css
+*/
+
+/* For Companies Page Styles - Updated with proper centering and spacing */
+.for-companies-page {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--accent);
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Improved Container System */
+.companies-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+.companies-hero-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  text-align: center;
+}
+
+.companies-cta-container {
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Companies Hero Section - Light Theme */
+.companies-hero {
+  background: linear-gradient(135deg, var(--neutral-50) 0%, rgba(241, 245, 249, 0.8) 50%, var(--neutral-100) 100%);
+  color: var(--text-dark);
+  padding: 8rem 0 6rem;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.companies-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230057b1' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  animation: subtleFloat 20s ease-in-out infinite;
+  z-index: 1;
+}
+
+.companies-hero::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 87, 177, 0.05) 0%, transparent 70%);
+  animation: gentleRotate 30s linear infinite;
+  z-index: 1;
+}
+
+@keyframes subtleFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes gentleRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.companies-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.companies-hero .tag-line {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  border-radius: var(--border-radius-lg);
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0, 87, 177, 0.2);
+}
+
+.companies-hero-title {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.companies-hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 3rem;
+  color: var(--text-mid);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* Improved Button Styling for Light Theme */
+.companies-hero-buttons {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+
+.watch-demo-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: var(--border-radius-lg);
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 87, 177, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.watch-demo-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.watch-demo-button:hover::before {
+  left: 100%;
+}
+
+.watch-demo-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 87, 177, 0.3);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+.contact-us-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius-lg);
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 87, 177, 0.1);
+}
+
+.contact-us-button:hover {
+  background-color: var(--primary);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 87, 177, 0.2);
+}
+
+/* Hero Stats Grid - Updated for Light Theme */
+.companies-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.companies-stat-card {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  border: 1px solid var(--neutral-200);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 87, 177, 0.08);
+}
+
+.companies-stat-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 87, 177, 0.15);
+  border-color: var(--primary-light);
+}
+
+.companies-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.companies-stat-card:hover .companies-stat-icon {
+  transform: scale(1.1);
+}
+
+.companies-stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.companies-stat-label {
+  font-size: 1.125rem;
+  color: var(--text-mid);
+  font-weight: 500;
+}
+
+/* Video Demo Section - Improved */
+.video-demo-section {
+  background-color: white;
+  padding: 8rem 0;
+}
+
+.video-container {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  background-color: #000;
+}
+
+.demo-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--border-radius-lg);
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.demo-video:hover + .video-overlay,
+.video-container:hover .video-overlay {
+  opacity: 0;
+}
+
+.play-button-overlay {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  pointer-events: auto;
+}
+
+.play-button-overlay:hover {
+  transform: scale(1.1);
+}
+
+/* Features Showcase - Improved */
+.features-showcase {
+  background-color: var(--neutral-50);
+  padding: 8rem 0;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+  margin-top: 4rem;
+}
+
+.companies-feature-card {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  padding: 3rem 2.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--neutral-200);
+}
+
+.companies-feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.companies-feature-card:hover::before,
+.companies-feature-card.active::before {
+  transform: scaleX(1);
+}
+
+.companies-feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-light);
+}
+
+.companies-feature-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  border-radius: 50%;
+  margin-bottom: 2rem;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.companies-feature-card:hover .companies-feature-icon-container {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.companies-feature-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.companies-feature-description {
+  font-size: 1rem;
+  color: var(--text-mid);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.companies-feature-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.companies-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.95rem;
+}
+
+.companies-check-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: var(--primary-light);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Company Workflow Section - Improved */
+.company-workflow {
+  background-color: white;
+  padding: 8rem 0;
+}
+
+.companies-workflow-steps {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin-top: 4rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.companies-step-card {
+  flex: 1;
+  min-width: 300px;
+  max-width: 380px;
+  background: linear-gradient(135deg, var(--neutral-50), white);
+  border-radius: var(--border-radius-lg);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid var(--neutral-200);
+}
+
+.companies-step-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-light);
+}
+
+.companies-step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  border-radius: 50%;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 auto 2rem;
+}
+
+.companies-step-content h3 {
+  font-size: 1.375rem;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.companies-step-content p {
+  color: var(--text-mid);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.companies-connection-arrow {
+  font-size: 2.5rem;
+  color: var(--primary);
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+/* Privacy Section - Improved */
+.privacy-section {
+  background: linear-gradient(135deg, var(--secondary), rgba(193, 213, 255, 0.3));
+  padding: 8rem 0;
+}
+
+.companies-privacy-content {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+}
+
+.companies-privacy-text {
+  flex: 1;
+}
+
+.companies-privacy-text h2 {
+  font-size: 2.75rem;
+  margin-bottom: 2rem;
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+.companies-privacy-description {
+  font-size: 1.375rem;
+  color: var(--text-mid);
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.companies-privacy-features {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.companies-privacy-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  background-color: white;
+  padding: 2rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.companies-privacy-feature:hover {
+  transform: translateX(15px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.companies-privacy-feature .companies-feature-icon {
+  font-size: 2rem;
+  margin-top: 0.25rem;
+}
+
+.companies-privacy-feature h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.companies-privacy-feature p {
+  color: var(--text-mid);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.companies-privacy-visual {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.companies-security-badge {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  padding: 4rem 3rem;
+  border-radius: var(--border-radius-lg);
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 87, 177, 0.3);
+  transform: rotate(-3deg);
+  transition: all 0.3s ease;
+}
+
+.companies-security-badge:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+.companies-badge-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+.companies-security-badge h3 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.companies-security-badge p {
+  opacity: 0.95;
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+/* Final CTA Section - Improved with Simple Animations */
+.companies-final-cta {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: white;
+  padding: 8rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.companies-final-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  animation: gentleFloat 8s ease-in-out infinite;
+  z-index: 1;
+}
+
+.companies-final-cta::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.02) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.02) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02) 76%, transparent 77%, transparent);
+  background-size: 75px 75px;
+  animation: slowGrid 25s linear infinite;
+  z-index: 1;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { 
+    transform: translateY(0px) scale(1); 
+    opacity: 0.7;
+  }
+  50% { 
+    transform: translateY(-15px) scale(1.05); 
+    opacity: 1;
+  }
+}
+
+@keyframes slowGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(75px, 75px); }
+}
+
+/* Floating Elements for CTA */
+.companies-final-cta .floating-shapes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.companies-final-cta .floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  animation: floatUpDown 6s ease-in-out infinite;
+}
+
+.companies-final-cta .floating-shape:nth-child(1) {
+  width: 100px;
+  height: 100px;
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.companies-final-cta .floating-shape:nth-child(2) {
+  width: 60px;
+  height: 60px;
+  top: 60%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
+.companies-final-cta .floating-shape:nth-child(3) {
+  width: 80px;
+  height: 80px;
+  bottom: 30%;
+  left: 20%;
+  animation-delay: 4s;
+}
+
+.companies-final-cta .floating-shape:nth-child(4) {
+  width: 120px;
+  height: 120px;
+  top: 40%;
+  right: 25%;
+  animation-delay: 1s;
+}
+
+@keyframes floatUpDown {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 0.9;
+  }
+}
+
+.companies-cta-content {
+  position: relative;
+  z-index: 2;
+}
+
+.companies-final-cta h2 {
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  position: relative;
+}
+
+.companies-cta-content p {
+  font-size: 1.5rem;
+  margin-bottom: 3rem;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+.companies-cta-buttons {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.companies-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, white, rgba(255, 255, 255, 0.95));
+  color: var(--primary);
+  padding: 1.125rem 2.5rem;
+  border: none;
+  border-radius: var(--border-radius-lg);
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.companies-cta-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 87, 177, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.companies-cta-primary:hover::before {
+  left: 100%;
+}
+
+.companies-cta-primary:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1), white);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.companies-cta-note {
+  font-size: 1.125rem;
+  opacity: 0.9;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Performance Optimizations */
+.companies-final-cta {
+  will-change: transform; /* Optimizes for animations */
+}
+
+.companies-final-cta::before,
+.companies-final-cta::after {
+  will-change: transform;
+  backface-visibility: hidden; /* Prevents flickering */
+  perspective: 1000px;
+}
+
+.floating-shape {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Responsive Styles for Companies Page - Improved */
+@media (max-width: 1200px) {
+  .companies-container {
+    width: 92%;
+  }
+  
+  .companies-hero-container {
+    width: 92%;
+  }
+  
+  .companies-cta-container {
+    width: 92%;
+  }
+  
+  .companies-hero-title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .companies-hero-title {
+    font-size: 3rem;
+  }
+  
+  .companies-hero-stats {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .companies-privacy-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 3rem;
+  }
+  
+  .companies-privacy-text {
+    max-width: 100%;
+  }
+  
+  /* Reduce animation complexity on medium screens */
+  .companies-final-cta .floating-shape {
+    animation-duration: 8s; /* Slower animations */
+  }
+}
+
+@media (max-width: 768px) {
+  .companies-hero {
+    padding: 6rem 0 5rem;
+  }
+  
+  .companies-hero-title {
+    font-size: 2.75rem;
+  }
+  
+  .companies-hero-subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .companies-hero-buttons {
+    flex-direction: column;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 1.5rem;
+  }
+  
+  .companies-hero-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  .companies-workflow-steps {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .companies-connection-arrow {
+    transform: rotate(90deg);
+    margin: 1rem 0;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .companies-final-cta h2 {
+    font-size: 2.75rem;
+  }
+  
+  .companies-cta-buttons {
+    flex-direction: column;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .video-demo-section,
+  .features-showcase,
+  .company-workflow,
+  .privacy-section,
+  .companies-final-cta {
+    padding: 6rem 0;
+  }
+  
+  /* Hide some floating shapes on mobile for performance */
+  .companies-final-cta .floating-shape:nth-child(3),
+  .companies-final-cta .floating-shape:nth-child(4) {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .companies-hero-title {
+    font-size: 2.25rem;
+  }
+  
+  .companies-hero-subtitle {
+    font-size: 1.125rem;
+  }
+  
+  .companies-hero-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .companies-stat-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .companies-feature-card {
+    padding: 2.5rem 2rem;
+  }
+  
+  .companies-step-card {
+    padding: 2.5rem 2rem;
+    min-width: auto;
+  }
+  
+  .companies-final-cta h2 {
+    font-size: 2rem;
+  }
+  
+  .companies-privacy-feature {
+    padding: 1.5rem;
+  }
+  
+  .companies-security-badge {
+    padding: 3rem 2rem;
+  }
+  
+  .companies-container {
+    padding: 0 1rem;
+  }
+  
+  .companies-hero-container {
+    padding: 0 1rem;
+  }
+  
+  .companies-cta-container {
+    padding: 0 1rem;
+  }
+  
+  /* Minimal animations on very small screens */
+  .companies-final-cta .floating-shape {
+    animation-duration: 12s; /* Even slower */
+  }
+}
+
+/* Animation Classes - Improved */
+@keyframes companiesSlideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.for-companies-page .animation-container.animate-in {
+  animation: companiesSlideInFromBottom 0.8s ease-out;
+}
+
+/* Accessibility - Improved */
+@media (prefers-reduced-motion: reduce) {
+  .for-companies-page *,
+  .companies-final-cta::before,
+  .companies-final-cta::after,
+  .companies-hero::before,
+  .companies-hero::after,
+  .floating-shape {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Disable complex animations for accessibility */
+  .companies-final-cta::before,
+  .companies-final-cta::after,
+  .companies-hero::before,
+  .companies-hero::after {
+    animation: none !important;
+  }
+  
+  .floating-shape {
+    opacity: 0.3 !important;
+    animation: none !important;
+  }
+}
+
+/* High performance mode for older devices */
+@media (max-width: 480px) and (prefers-reduced-motion: no-preference) {
+  .companies-final-cta::after {
+    animation: none; /* Disable grid animation on small screens */
+  }
+}
+
+/* Focus styles for accessibility */
+.for-companies-page button:focus,
+.for-companies-page a:focus {
+  outline: 3px solid rgba(0, 87, 177, 0.6);
+  outline-offset: 2px;
+  border-radius: var(--border-radius);
+}
+
+/* Enhanced hover effects */
+.watch-demo-button,
+.contact-us-button,
+.companies-cta-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.watch-demo-button:active,
+.contact-us-button:active,
+.companies-cta-primary:active {
+  transform: translateY(-1px);
+}
+
+/* Section Header Improvements */
+.for-companies-page .section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.for-companies-page .section-header h2 {
+  font-size: 2.75rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.for-companies-page .section-header p {
+  font-size: 1.25rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+/* Improved highlight class */
+.for-companies-page .highlight {
+  color: var(--primary);
+  font-weight: 700;
+  position: relative;
+}
+
+.for-companies-page .text-gradient {
+  background: linear-gradient(135deg, var(--primary), #F1EB3C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
