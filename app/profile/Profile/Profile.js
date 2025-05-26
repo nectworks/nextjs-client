@@ -113,8 +113,9 @@ const ProfilePage = () => {
   const [isDataUpdated, setIsDataUpdated] = useState(false);
 
   // Use the 'UserContext' to get information about current logged in user
-  const { userState } = useContext(UserContext);
+  const { userState, authCheckComplete } = useContext(UserContext);
   const [user, setUser] = userState;
+  
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [openDateForm, setOpenDateForm] = useState(false);
   const router = useRouter();
@@ -382,21 +383,18 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const initializeNewUserProfile = async () => {
-      if (!user || !user._id) return;
+      // Wait for auth check to complete and ensure user exists
+      if (!authCheckComplete || !user || !user._id) return;
       
       try {
-        // Make a call to initialize the profile for new users
         await publicAxios.post(`/signUpCards/initializeProfile/${user._id}`);
-        
-        // No need to handle the response - this just ensures the UserInfo document exists
       } catch (error) {
-        // Silently handle errors - this is just a helper operation
         console.log('Profile initialization error (non-critical):', error);
       }
     };
     
     initializeNewUserProfile();
-  }, [user]);
+  }, [user, authCheckComplete]);
 
   // State to track whether we've checked the user's profile data
   const [profileChecked, setProfileChecked] = useState(false);

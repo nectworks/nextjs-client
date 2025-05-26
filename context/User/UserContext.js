@@ -3,6 +3,7 @@
   File: userContext.js
   Description: This file contains the state for user and the userMode.
   Utilising react's context API this state is accessible in all components.
+  Fixed version to prevent intermittent logout for new users.
 */
 
 import { createContext, useEffect, useState, useRef } from 'react';
@@ -22,6 +23,9 @@ export default function UserContextProvider({ children }) {
   const [userMode, setUserMode] = useState('seeker');
   // is fetching the user
   const [isLoading, setIsLoading] = useState(true);
+  // Track if initial auth check is complete
+  const [authCheckComplete, setAuthCheckComplete] = useState(false);
+  
   const pathname = usePathname();
   
   // Ref to track and cancel ongoing requests
@@ -38,6 +42,12 @@ export default function UserContextProvider({ children }) {
   
   // Function to check if the user is logged in
   const checkCredentials = (isInitialLoad = false) => {
+    // Prevent multiple concurrent authentication checks
+    if (!isInitialLoad && isLoading) {
+      console.log('Authentication check already in progress, skipping...');
+      return;
+    }
+    
     // Cancel any existing request
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -46,7 +56,9 @@ export default function UserContextProvider({ children }) {
     // Create new abort controller
     abortControllerRef.current = new AbortController();
     
-    setIsLoading(true);
+    if (isInitialLoad) {
+      setIsLoading(true);
+    }
 
     privateAxios
       .get('/authentication', {
@@ -59,27 +71,45 @@ export default function UserContextProvider({ children }) {
         // the user is authenticated and save the data in context.
         if (res.status === 200) {
           setUser(res.data.user);
+          console.log('User authenticated successfully');
         }
-        setIsLoading(false);
+        
+        if (isInitialLoad) {
+          setIsLoading(false);
+          setAuthCheckComplete(true);
+        }
       })
       .catch((err) => {
         // Only update state if component is still mounted and not aborted
         if (!isMountedRef.current || err.name === 'AbortError') return;
         
-        // An error occurred during the request, user is not authenticated
-        setUser(null);
-        setIsLoading(false);
+        console.log('Authentication check failed:', err.response?.status || err.message);
+        
+        // Only clear user state if this is an initial load or explicit auth failure (401/403)
+        // Don't clear user state for network errors, 500 errors, etc.
+        if (isInitialLoad || (err.response && [401, 403].includes(err.response.status))) {
+          setUser(null);
+        }
+        
+        if (isInitialLoad) {
+          setIsLoading(false);
+          setAuthCheckComplete(true);
+        }
       });
       
-    // Set a timeout to prevent infinite loading
-    setTimeout(() => {
-      if (isMountedRef.current && isLoading) {
-        console.warn('Authentication check timed out');
-        setIsLoading(false);
-      }
-    }, 10000); // 10 second timeout
+    // Set a timeout to prevent infinite loading (only for initial load)
+    if (isInitialLoad) {
+      setTimeout(() => {
+        if (isMountedRef.current && isLoading && !authCheckComplete) {
+          console.warn('Authentication check timed out');
+          setIsLoading(false);
+          setAuthCheckComplete(true);
+        }
+      }, 10000); // 10 second timeout
+    }
   };
 
+  // Initial authentication check
   useEffect(() => {
     isMountedRef.current = true;
     
@@ -97,6 +127,7 @@ export default function UserContextProvider({ children }) {
     } else {
       // For public pages without auth token, skip the check
       setIsLoading(false);
+      setAuthCheckComplete(true);
     }
     
     return () => {
@@ -109,12 +140,15 @@ export default function UserContextProvider({ children }) {
     };
   }, []);
 
-  useEffect(() => {
-    // Call checkCredentials only if the route is '/profile' or other protected routes
-    if (pathname === '/profile') {
-      checkCredentials();
+  // REMOVED: The problematic useEffect that was calling checkCredentials on pathname change
+  // This was causing double authentication calls and race conditions
+  
+  // Optional: Add a function to manually refresh user data if needed
+  const refreshUser = () => {
+    if (authCheckComplete && !isLoading) {
+      checkCredentials(false);
     }
-  }, [pathname]);
+  };
 
   useEffect(() => {
     /* whenever user state changes, update the usermode */
@@ -131,11 +165,23 @@ export default function UserContextProvider({ children }) {
     };
   }, []);
 
+  // Add debug logging for user state changes (remove in production)
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('UserContext: User state changed:', user ? `User ID: ${user._id}` : 'User is null');
+      if (!user && authCheckComplete) {
+        console.log('UserContext: User cleared after auth check completion');
+      }
+    }
+  }, [user, authCheckComplete]);
+
   return (
     <UserContext.Provider
       value={{
         userState: [user, setUser],
         userModeState: [userMode, setUserMode],
+        refreshUser, // Expose refresh function if needed
+        authCheckComplete, // Expose auth status
       }}
     >
       {/* Show loader only for protected pages and when actually loading */}

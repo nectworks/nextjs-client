@@ -81,12 +81,18 @@
 .dashboard_outer_container {
   display: flex;
   background-color: #fafafa;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .accountSettingsContainer {
-  width: 100vw;
+  width: 100%; /* Change from 100vw to 100% */
+  max-width: 100%;
   padding: 3rem 5rem;
   background-color: #fafafa;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .accountSettingContent {
@@ -1149,7 +1155,9 @@ input:checked + .slider:before {
   }
 
   .inputFields input {
-    width: 25vw;
+    width: 25%; /* Change from 25vw to 25% */
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .verifyCompanyContent {

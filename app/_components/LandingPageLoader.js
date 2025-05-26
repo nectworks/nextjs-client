@@ -10,9 +10,19 @@ import Image from 'next/image';
 import Logo from '@/public/nectworks-ssar04a-mil-11@2x.webp';
 import './LandingPageProgress.css';
 
-const LandingPageLoader = ({ onLoadComplete }) => {
-  const [progress, setProgress] = useState(0);
-  const [loadingStatus, setLoadingStatus] = useState('Checking components...');
+  const LandingPageLoader = ({ onLoadComplete }) => {
+    const [progress, setProgress] = useState(0);
+    const phrases = [
+    "Vibing up your referrals...",
+    "Zero spam. All glow-ups ✨",
+    "Referrals, but make it aesthetic 💼",
+    "Quiet hustle loading 🔇",
+    "Smart connects on the way 🔗",
+    "Magic referrals incoming 🧙"
+  ];
+
+  const [loadingStatus, setLoadingStatus] = useState(phrases[0]);
+  const statusIndex = useRef(0);
   
   // Component loading statuses
   const [components, setComponents] = useState({
@@ -45,7 +55,7 @@ const LandingPageLoader = ({ onLoadComplete }) => {
     // Save component load status to session storage
     sessionStorage.setItem(`component_${componentName}_loaded`, 'true');
     
-    setLoadingStatus(`Loaded ${formatComponentName(componentName)}...`);
+    //setLoadingStatus(`Loaded ${formatComponentName(componentName)}...`);
   };
   
   // Handle component load failure
@@ -92,7 +102,7 @@ const LandingPageLoader = ({ onLoadComplete }) => {
       return;
     }
     
-    setLoadingStatus(`Loading ${formatComponentName(componentName)}...`);
+    //setLoadingStatus(`Loading ${formatComponentName(componentName)}...`);
     
     // Set a timeout to prevent hanging indefinitely on a component
     const timeoutId = setTimeout(() => {
@@ -184,6 +194,14 @@ const LandingPageLoader = ({ onLoadComplete }) => {
     // Mark as not first load for subsequent loads
     isFirstLoad.current = false;
     
+    // Rotate status message every 2 seconds
+    const statusInterval = setInterval(() => {
+      statusIndex.current = (statusIndex.current + 1) % phrases.length;
+      setLoadingStatus(phrases[statusIndex.current]);
+    }, 2000);
+
+    timeoutIds.current.push(statusInterval);
+
     return () => {
       // Clean up all timeouts
       timeoutIds.current.forEach(id => clearTimeout(id));

@@ -99,3 +99,14 @@ a {
 a:visited {
   color: unset;
 }
+
+/* Prevent horizontal scrolling globally */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Ensure all containers use border-box sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
