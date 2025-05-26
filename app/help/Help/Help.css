@@ -1,11 +1,17 @@
 .dashboard_outer_container {
   display: flex;
   background-color: #fafafa;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .starting_heading {
   padding: 3rem 5rem;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .starting_heading h3 {
@@ -21,6 +27,8 @@
   border-bottom: 1px solid #000;
   outline: none;
   width: 85%;
+  max-width: 100%;
+  box-sizing: border-box;
   font-size: 18px;
 }
 
@@ -37,6 +45,8 @@
   border: 1px solid #000;
   border-radius: 5px;
   width: 83%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 10px;
   font-size: 18px;
   outline: none;
