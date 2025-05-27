@@ -1,73 +1,331 @@
+/* Fixed ManageAdmins.css - Responsive Layout */
+
 .manage_admin_outer_container * {
   box-sizing: border-box;
 }
 
 .manage_admin_outer_container {
-  width: 100vw;
+  width: 100%;
+  max-width: 100vw;
   display: flex;
   flex-direction: row;
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
 .manage_admin_inner_container {
-  padding: 3rem;
-  flex-grow: 0;
+  padding: 2rem;
+  flex: 1;
+  min-width: 0; /* Important: allows flex item to shrink below content size */
+  max-width: calc(100vw - 250px); /* Account for sidebar width */
+  overflow-x: auto;
 }
 
 .manage_admin_inner_container h1 {
   font-weight: 400;
+  margin-bottom: 1rem;
+  font-size: clamp(1.5rem, 4vw, 2rem); /* Responsive font size */
 }
 
+/* Header section with title and add button */
+.admin_header_section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin_header_section h1 {
+  margin: 0;
+}
+
+.add_admin_button {
+  background-color: #0057b1;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.add_admin_button:hover {
+  background-color: #004494;
+}
+
+/* Data Grid Container */
 .admin_users_data_grid {
   height: 500px;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.admin_user_actions button {
-  margin: 0 0.5rem;
-  padding: 0.2rem 0.5rem;
-  border: 1px solid;
-  outline: none;
-  border-radius: 6px;
-}
-
+/* Form Styling */
 .create_new_admin_form {
   background-color: white;
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 1.5rem;
+  margin: 1rem 0 2rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 100%;
 }
 
 .create_new_admin_form h3 {
   font-weight: 500;
+  margin: 0 0 1rem 0;
 }
 
-.create_new_admin_form button {
-  padding: 0.6rem 0.6rem;
+.form_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.form_header h3 {
+  margin: 0;
+}
+
+.cancel_button {
+  background-color: #666;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cancel_button:hover {
+  background-color: #555;
+}
+
+/* Form Controls */
+.admin_form_control {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin_form_control label {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.admin_form_control input,
+.admin_form_control select {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  max-width: 400px;
+  transition: border-color 0.2s ease;
+}
+
+.admin_form_control input:focus,
+.admin_form_control select:focus {
+  outline: none;
+  border-color: #0057b1;
+  box-shadow: 0 0 0 2px rgba(0, 87, 177, 0.1);
+}
+
+.admin_form_control small {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Form Buttons */
+.create_new_admin_form button[type="submit"] {
+  padding: 0.8rem 1.5rem;
   color: white;
   background-color: #0057b1;
   border: none;
   outline: none;
-  border-radius: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
 }
 
-.admin_form_control {
-  margin: 1rem 0;
+.create_new_admin_form button[type="submit"]:hover:not(:disabled) {
+  background-color: #004494;
+  transform: translateY(-1px);
 }
 
-.admin_form_control label {
-  display: inline-block;
-  width: 100px;
+.create_new_admin_form button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.admin_form_control input {
-  padding: 5px 10px;
-  background-color: transparent;
-  border: 1px solid gray;
-  border-radius: 15px;
-  width: 250px;
-  font-size: 1rem;
+/* Action Buttons in DataGrid */
+.admin_user_actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
-.admin_form_control select {
-  padding: 5px 10px;
+
+.admin_user_actions button {
+  border: none;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.admin_user_actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Security Notice */
+.security_notice {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #e3f2fd;
+  border-left: 4px solid #1565c0;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #1565c0;
+}
+
+.security_notice strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .manage_admin_inner_container {
+    max-width: calc(100vw - 200px);
+  }
+}
+
+@media (max-width: 768px) {
+  .manage_admin_outer_container {
+    flex-direction: column;
+  }
+  
+  .manage_admin_inner_container {
+    max-width: 100vw;
+    padding: 1rem;
+  }
+  
+  .admin_header_section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .admin_users_data_grid {
+    height: 400px;
+  }
+  
+  .admin_form_control {
+    margin: 0.8rem 0;
+  }
+  
+  .admin_form_control input,
+  .admin_form_control select {
+    max-width: 100%;
+  }
+  
+  .form_header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .admin_user_actions {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .admin_user_actions button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .manage_admin_inner_container {
+    padding: 0.5rem;
+  }
+  
+  .create_new_admin_form {
+    padding: 1rem;
+  }
+  
+  .admin_users_data_grid {
+    height: 350px;
+  }
+}
+
+/* DataGrid Custom Styling */
+.admin_users_data_grid .MuiDataGrid-root {
+  border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.admin_users_data_grid .MuiDataGrid-columnHeaders {
+  background-color: #f5f5f5;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.admin_users_data_grid .MuiDataGrid-cell {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.admin_users_data_grid .MuiDataGrid-row:hover {
+  background-color: #fafafa;
+}
+
+/* Utility Classes */
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.role-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.role-admin {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.role-content-editor {
+  background-color: #e8f5e8;
+  color: #2e7d32;
 }
