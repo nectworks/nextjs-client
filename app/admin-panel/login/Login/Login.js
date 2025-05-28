@@ -5,8 +5,6 @@
     and password inputs.
 */
 
-'use client';
-
 import { useContext, useEffect, useState } from 'react';
 import { privateAxios } from '@/config/axiosInstance';
 import { useRouter } from 'next/navigation';
@@ -24,6 +22,7 @@ function Login() {
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [isBlocked, setIsBlocked] = useState(false);
   const [blockTimeRemaining, setBlockTimeRemaining] = useState(0);
+  const [authChecked, setAuthChecked] = useState(false); // Prevent multiple auth checks
 
   async function loginAdmin(e) {
     e.preventDefault();
@@ -148,7 +147,11 @@ function Login() {
 
   useEffect(() => {
     async function checkAuthStatus() {
+      // Prevent multiple auth checks
+      if (authChecked) return;
+      
       if (admin) {
+        setAuthChecked(true);
         const privilegeLvl = admin.role.privilegeLvl;
         const redirectPath = privilegeLvl === 2 ? '/admin-panel/manage-blog' : '/admin-panel/users';
         router.push(redirectPath);
@@ -161,14 +164,17 @@ function Login() {
           setAdmin(res.data.admin);
         }
       } catch (error) {
+        // Silently handle auth check failures to prevent loops
         if (error.response?.status !== 401) {
           console.error('Auth check error:', error);
         }
+      } finally {
+        setAuthChecked(true);
       }
     }
 
     checkAuthStatus();
-  }, [admin, router, setAdmin]);
+  }, [admin, router, setAdmin, authChecked]);
 
   function formatTimeRemaining(seconds) {
     const minutes = Math.floor(seconds / 60);
