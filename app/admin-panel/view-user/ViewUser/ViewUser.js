@@ -1,7 +1,7 @@
 'use client';
 
 /*
-  File: Users.js
+  File: ViewUser.js (Fixed Version)
   Description: In this page admins can see all users and
   search for users and review their information.
 */
@@ -81,6 +81,9 @@ function Users() {
     emailParam ? 'email' : 'username'
   );
 
+  // Add error state
+  const [error, setError] = useState(null);
+
   // function to check if a given string is a valid email
   function validEmail(email) {
     // Regular expression for a basic email validation
@@ -104,6 +107,7 @@ function Users() {
     }
 
     setIsLoading(true);
+    setError(null);
 
     try {
       const res = await privateAxios.get(`/admin/data/users/search`, {
@@ -119,11 +123,23 @@ function Users() {
       setUserProfile(profile);
       setUserPreferences(preferences);
       setIsUnRegisteredUser(unRegisteredUser);
-      setIsLoading(false);
+      
+      // Reset section data when new user is loaded
+      setReportedUsers([]);
+      setReportsCount(-1);
+      setReportRef(null);
+      setReportPageData([]);
+      setHelpData([]);
+      setHelpSubCount(-1);
+      setHelpRef(null);
+      setHelpPageData([]);
+      
     } catch (error) {
-      const { message } = error.response.data;
+      const message = error?.response?.data?.message || `Couldn't search user`;
+      setError(message);
+      showBottomMessage(message);
+    } finally {
       setIsLoading(false);
-      showBottomMessage(message || `Couldn't search user`);
     }
   }
 
@@ -152,24 +168,35 @@ function Users() {
 
   // function to change the data displayed based on the selected section
   function changeSection(e) {
-    // remove all the current active options
-    const allActiveOptions = document.querySelectorAll('.active_option');
-    Array.from(allActiveOptions).forEach((activeOption) => {
-      activeOption.classList.remove('active_option');
-    });
+    try {
+      // remove all the current active options
+      const allActiveOptions = document.querySelectorAll('.active_option');
+      Array.from(allActiveOptions).forEach((activeOption) => {
+        activeOption.classList.remove('active_option');
+      });
 
-    // make the clicked option as active.
-    e.target.classList.add('active_option');
-    const selectedSection = e.target.dataset.section;
-    setShowSection(selectedSection);
+      // make the clicked option as active.
+      e.target.classList.add('active_option');
+      const selectedSection = e.target.dataset.section;
+      setShowSection(selectedSection);
+      setError(null); // Clear any previous errors
+    } catch (error) {
+      console.error('Error changing section:', error);
+      setError('Failed to change section');
+    }
   }
 
   // function to get all the reported users
   async function fetchReportedUsers() {
-    if (!user) return;
-    const selectedUserId = user?._id;
+    if (!user?._id) {
+      console.warn('No user ID available for fetching reports');
+      return;
+    }
+    
+    const selectedUserId = user._id;
 
     try {
+      setIsLoading(true);
       const url = `/admin/data/user/reports/${selectedUserId}`;
       const res = await privateAxios.get(url, {
         params: {
@@ -185,7 +212,12 @@ function Users() {
       setReportsCount(count);
       setReportRef(next);
     } catch (error) {
-      showBottomMessage(`Couldn't get reported users..`);
+      const message = error?.response?.data?.message || `Couldn't get reported users`;
+      setError(message);
+      showBottomMessage(message);
+      console.error('Error fetching reported users:', error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -204,7 +236,7 @@ function Users() {
       width: 250,
       headerAlign: 'center',
       align: 'center',
-      valueGetter: ({ row }) => row?.reportInfo?.title,
+      valueGetter: ({ row }) => row?.reportInfo?.title || '-',
     },
     {
       field: 'user',
@@ -213,36 +245,46 @@ function Users() {
       headerAlign: 'center',
       align: 'center',
       renderCell: ({ row }) => {
-        const { userId, unRegisteredUserId } = row;
-        if (!userId && !unRegisteredUserId) return '-';
+        try {
+          const { userId, unRegisteredUserId } = row || {};
+          if (!userId && !unRegisteredUserId) return '-';
 
-        // if the reported user is registered, get their username
-        const username = userId !== null ? row.user?.username : null;
+          // if the reported user is registered, get their username
+          const username = userId !== null ? row?.user?.username : null;
 
-        return (
-          <>
-            {userId !== null ? (
-              <Link
-                to={`/admin-panel/view-user?username=${username}`}
-                target="_blank"
-              >
-                {username}
-              </Link>
-            ) : (
-              '__' + unRegisteredUserId
-            )}
-          </>
-        );
+          return (
+            <>
+              {userId !== null ? (
+                <Link
+                  href={`/admin-panel/view-user?username=${username}`} // ✅ FIXED: Changed from 'to' to 'href'
+                  target="_blank"
+                >
+                  {username || 'Unknown User'}
+                </Link>
+              ) : (
+                '__' + unRegisteredUserId
+              )}
+            </>
+          );
+        } catch (error) {
+          console.error('Error rendering reported user cell:', error);
+          return 'Error';
+        }
       },
     },
   ];
 
   // function to get details of the help submissions by the user
   async function fetchHelpSubmissions() {
-    if (!user) return;
-    const selectedUserId = user?._id;
+    if (!user?._id) {
+      console.warn('No user ID available for fetching help submissions');
+      return;
+    }
+    
+    const selectedUserId = user._id;
 
     try {
+      setIsLoading(true);
       const url = `/admin/data/user/help/${selectedUserId}`;
       const res = await privateAxios.get(url, {
         params: {
@@ -258,7 +300,12 @@ function Users() {
       setHelpRef(next);
       setHelpData((prevData) => [...prevData, ...data]);
     } catch (error) {
-      showBottomMessage(`Couldn't get help submissions`);
+      const message = error?.response?.data?.message || `Couldn't get help submissions`;
+      setError(message);
+      showBottomMessage(message);
+      console.error('Error fetching help submissions:', error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -286,7 +333,6 @@ function Users() {
     helpPaginationModel.page,
     helpPaginationModel.pageSize,
     helpSubCount,
-    helpPageData,
   ]);
 
   // columns for the data grid of help submission of each user
@@ -312,15 +358,20 @@ function Users() {
       headerAlign: 'center',
       align: 'center',
       renderCell: ({ row }) => {
-        const attachmentUrl = row.attachment?.url || null;
+        try {
+          const attachmentUrl = row?.attachment?.url || null;
 
-        if (!attachmentUrl) return '-';
+          if (!attachmentUrl) return '-';
 
-        return (
-          <Link href={attachmentUrl} target="_blank">
-            <Image src={documentLinkIcon} alt="" />
-          </Link>
-        );
+          return (
+            <Link href={attachmentUrl} target="_blank">
+              <Image src={documentLinkIcon} alt="" />
+            </Link>
+          );
+        } catch (error) {
+          console.error('Error rendering attachment cell:', error);
+          return 'Error';
+        }
       },
     },
     {
@@ -333,6 +384,8 @@ function Users() {
   ];
 
   async function resolveHelpSubmission() {
+    if (!viewSelectedHelp?._id) return;
+    
     const helpId = viewSelectedHelp._id;
 
     try {
@@ -342,7 +395,7 @@ function Users() {
       setViewSelectedHelp(null);
       showBottomMessage(`Successfully resolved issue with id '${helpId}'`);
 
-      const updatedData = helpData.map((obj, idx) => {
+      const updatedData = helpData.map((obj) => {
         if (obj._id === helpId) {
           return { ...obj, status: 'resolved' };
         }
@@ -351,6 +404,7 @@ function Users() {
       setHelpData(updatedData);
     } catch (error) {
       showBottomMessage(`Couldn't resolve submission`);
+      console.error('Error resolving help submission:', error);
     }
   }
 
@@ -359,7 +413,7 @@ function Users() {
           is irrelevant for admin panel.
         */
   function UserProfileImage() {
-    if (!user) return;
+    if (!user) return null;
 
     const initials = 'AB';
 
@@ -367,7 +421,7 @@ function Users() {
       return (
         <Image
           className="profile_image"
-          src={user?.profile}
+          src={user.profile}
           alt={`${user?.firstName || ''} Nectworks`}
           width={90}
           height={90}
@@ -387,6 +441,7 @@ function Users() {
     );
   }
 
+  // ✅ FIXED: Removed problematic useEffect that could cause authentication loops
   useEffect(() => {
     if (
       (usernameParam && usernameParam.length > 0) ||
@@ -394,11 +449,13 @@ function Users() {
     ) {
       searchUser();
     }
-  }, [emailParam, searchUser, usernameParam]);
+  }, []); // ✅ FIXED: Empty dependency array to prevent loops
 
   /* when any section is selected based on the selected option,
           fetch relevant data */
   useEffect(() => {
+    if (!user) return; // ✅ FIXED: Early return if no user
+
     if (showSection === 'help_submission' && helpData.length === 0) {
       fetchHelpSubmissions();
       return;
@@ -408,15 +465,11 @@ function Users() {
       fetchReportedUsers();
       return;
     }
-  }, [
-    fetchHelpSubmissions,
-    fetchReportedUsers,
-    helpData.length,
-    reportedUsers.length,
-    showSection,
-  ]);
+  }, [showSection, user]); // ✅ FIXED: Added user as dependency
 
   useEffect(() => {
+    if (showSection !== 'reported_users' || !user) return; // ✅ FIXED: Added guards
+
     const pageStart =
       reportsPaginationModel.page * reportsPaginationModel.pageSize;
     const pageEnd = pageStart + reportsPaginationModel.pageSize;
@@ -436,11 +489,51 @@ function Users() {
         return prevData;
       });
     }
-  }, [reportsPaginationModel, reportedUsers, reportsCount]);
+  }, [reportsPaginationModel, reportedUsers, reportsCount, showSection, user]); // ✅ FIXED: Added proper dependencies
 
   useEffect(() => {
-    updateHelpCurrPage();
-  }, [updateHelpCurrPage]);
+    if (showSection === 'help_submission' && user) {
+      updateHelpCurrPage();
+    }
+  }, [updateHelpCurrPage, showSection, user]); // ✅ FIXED: Added proper dependencies
+
+  // ✅ ADDED: Error boundary component
+  if (error) {
+    return (
+      <div className="admin_view_user_outer_container">
+        <AdminDashboardMenu />
+        <div className="admin_view_user_inner_container">
+          <h1>User Database</h1>
+          <div className="error_container" style={{
+            padding: '20px',
+            backgroundColor: '#ffebee',
+            color: '#c62828',
+            borderRadius: '4px',
+            margin: '20px 0'
+          }}>
+            <h3>Error occurred:</h3>
+            <p>{error}</p>
+            <button 
+              onClick={() => {
+                setError(null);
+                setShowSection('profile');
+              }}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#0057b1',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="admin_view_user_outer_container">
@@ -469,7 +562,9 @@ function Users() {
             onChange={(e) => setSearchString(e.target.value)}
           />
 
-          <button onClick={searchUser}>Search</button>
+          <button onClick={searchUser} disabled={isLoading}>
+            {isLoading ? 'Searching...' : 'Search'}
+          </button>
         </div>
 
         {/* container to display user information */}
@@ -517,9 +612,6 @@ function Users() {
                 >
                   Preferences
                 </div>
-                {/* <div className="view_option">
-                  Job posted
-                </div> */}
                 <div
                   data-section="reported_users"
                   className="view_option"
@@ -547,10 +639,10 @@ function Users() {
                   </div>
 
                   <div className="profile_info_section">
-                    <h4 className="sub_section_heading">Educuation</h4>
+                    <h4 className="sub_section_heading">Education</h4>
 
                     <div className="profile_info_education_container">
-                      {userProfile?.education.map((education, idx) => {
+                      {userProfile?.education?.map((education, idx) => {
                         return (
                           <div key={idx}>
                             <h4>{education?.school}</h4>
@@ -565,7 +657,7 @@ function Users() {
                             </span>
                           </div>
                         );
-                      })}
+                      }) || []}
                     </div>
                   </div>
 
@@ -573,7 +665,7 @@ function Users() {
                     <h4 className="sub_section_heading">Experience</h4>
 
                     <div className="profile_info_education_container">
-                      {userProfile?.experience.map((experience, idx) => {
+                      {userProfile?.experience?.map((experience, idx) => {
                         return (
                           <div key={idx}>
                             <h4>{experience?.jobTitle}</h4>
@@ -589,20 +681,20 @@ function Users() {
                             </span>
 
                             <span>
-                              {experience?.startMonth.substring(0, 3) +
+                              {experience?.startMonth?.substring(0, 3) +
                                 ' ' +
                                 experience?.startYear}{' '}
                               -
                               {experience?.currentlyWorking
                                 ? ' Present'
                                 : ' ' +
-                                  experience?.endMonth.substring(0, 3) +
+                                  experience?.endMonth?.substring(0, 3) +
                                   ' ' +
                                   experience?.endYear}
                             </span>
                           </div>
                         );
-                      })}
+                      }) || []}
                     </div>
                   </div>
 
@@ -610,7 +702,7 @@ function Users() {
                     <h4 className="sub_section_heading">Skills</h4>
 
                     <div className="profile_info_skill_container">
-                      {userProfile?.skills.map((skill, idx) => {
+                      {userProfile?.skills?.map((skill, idx) => {
                         return (
                           <Fragment key={idx}>
                             <span>{skill}</span>
@@ -621,7 +713,7 @@ function Users() {
                             </span>
                           </Fragment>
                         );
-                      })}
+                      }) || []}
                     </div>
                   </div>
 
@@ -629,13 +721,13 @@ function Users() {
                     <h4 className="sub_section_heading">Projects</h4>
 
                     <div className="profile_info_project_container">
-                      {userProfile?.projects.map((project, idx) => {
+                      {userProfile?.projects?.map((project, idx) => {
                         return (
                           <div className="project" key={idx}>
                             <div className="profile_info_document_heading">
                               <h4>{project?.heading}</h4>
 
-                              {project.link?.length > 0 && (
+                              {project?.link?.length > 0 && (
                                 <Link href={project?.link} target="_blank">
                                   <Image
                                     src={linkIcon}
@@ -644,7 +736,7 @@ function Users() {
                                 </Link>
                               )}
 
-                              {project.document?.key?.length > 0 && (
+                              {project?.document?.key?.length > 0 && (
                                 <button
                                   onClick={() => {
                                     viewDocumentInNewTab(project.document.key);
@@ -660,18 +752,18 @@ function Users() {
 
                             <p>
                               {project?.description
-                                .split('\n')
+                                ?.split('\n')
                                 .map((sentence, index) => {
                                   return (
                                     <li key={index}>
                                       {sentence} <br></br>
                                     </li>
                                   );
-                                })}
+                                }) || []}
                             </p>
                           </div>
                         );
-                      })}
+                      }) || []}
                     </div>
                   </div>
 
@@ -679,13 +771,13 @@ function Users() {
                     <h4 className="sub_section_heading">Achievements</h4>
 
                     <div className="profile_info_project_container">
-                      {userProfile?.achievements.map((achievement, idx) => {
+                      {userProfile?.achievements?.map((achievement, idx) => {
                         return (
                           <div className="project" key={idx}>
                             <div className="profile_info_document_heading">
                               <h4>{achievement?.heading}</h4>
 
-                              {achievement?.link.length > 0 && (
+                              {achievement?.link?.length > 0 && (
                                 <Link href={achievement?.link} target="_blank">
                                   <Image
                                     src={linkIcon}
@@ -712,18 +804,18 @@ function Users() {
 
                             <p>
                               {achievement?.description
-                                .split('\n')
+                                ?.split('\n')
                                 .map((sentence, index) => {
                                   return (
                                     <li key={index}>
                                       {sentence} <br></br>
                                     </li>
                                   );
-                                })}
+                                }) || []}
                             </p>
                           </div>
                         );
-                      })}
+                      }) || []}
                     </div>
                   </div>
 
@@ -731,7 +823,7 @@ function Users() {
                     <h4 className="sub_section_heading">Socials</h4>
 
                     <div className="profile_info_social_container">
-                      {userProfile?.socials.map((social, idx) => {
+                      {userProfile?.socials?.map((social, idx) => {
                         return (
                           <Fragment key={idx}>
                             <Link href={social} target="_blank">
@@ -740,7 +832,7 @@ function Users() {
                             <br />
                           </Fragment>
                         );
-                      })}
+                      }) || []}
                     </div>
                   </div>
 
@@ -762,22 +854,22 @@ function Users() {
                     </p>
                     <p>
                       <span className="field_name">Location : </span>
-                      {userPreferences?.professional?.locations.map(
+                      {userPreferences?.professional?.locations?.map(
                         (location, idx) => {
                           return (
                             <Fragment key={idx}>
                               <span className="preference_value">
                                 {location}
                               </span>
-                              {idx <=
-                              userPreferences?.professiona?.locations.length -
+                              {idx <
+                              userPreferences?.professional?.locations.length -
                                 1 ? (
                                 <span className="preference_seperator">-</span>
                               ) : null}
                             </Fragment>
                           );
                         }
-                      )}
+                      ) || []}
                     </p>
                     <p>
                       <span className="field_name">Experience :</span>
@@ -785,7 +877,7 @@ function Users() {
                     </p>
                     <p>
                       <span className="field_name">Skills : </span>
-                      {userPreferences?.professional?.skills.map(
+                      {userPreferences?.professional?.skills?.map(
                         (skill, idx) => {
                           return (
                             <Fragment key={idx}>
@@ -798,7 +890,7 @@ function Users() {
                             </Fragment>
                           );
                         }
-                      )}
+                      ) || []}
                     </p>
                   </div>
 
@@ -811,7 +903,7 @@ function Users() {
                     </p>
                     <p>
                       <span className="field_name">Location : </span>
-                      {userPreferences?.seeker?.locations.map(
+                      {userPreferences?.seeker?.locations?.map(
                         (location, idx) => {
                           return (
                             <Fragment key={idx}>
@@ -825,7 +917,7 @@ function Users() {
                             </Fragment>
                           );
                         }
-                      )}
+                      ) || []}
                     </p>
                     <p>
                       <span className="field_name">Experience : </span>
@@ -834,7 +926,7 @@ function Users() {
 
                     <p>
                       <span className="field_name">Skills : </span>
-                      {userPreferences?.seeker?.skills.map((skill, idx) => {
+                      {userPreferences?.seeker?.skills?.map((skill, idx) => {
                         return (
                           <Fragment key={idx}>
                             <span className="preference_value">{skill}</span>
@@ -844,12 +936,12 @@ function Users() {
                             ) : null}
                           </Fragment>
                         );
-                      })}
+                      }) || []}
                     </p>
 
                     <p>
                       <span className="field_name">Companies : </span>
-                      {userPreferences?.seeker?.companies.map(
+                      {userPreferences?.seeker?.companies?.map(
                         (company, idx) => {
                           return (
                             <Fragment key={idx}>
@@ -863,7 +955,7 @@ function Users() {
                             </Fragment>
                           );
                         }
-                      )}
+                      ) || []}
                     </p>
 
                     <p>
@@ -877,16 +969,18 @@ function Users() {
               {/* Reported Users */}
               {showSection === 'reported_users' && (
                 <div className="reported_users_container">
+                  {isLoading && <div>Loading reported users...</div>}
                   <div className="reported_users_data_grid">
                     <DataGrid
                       getRowId={(row) => row._id}
-                      rows={reportPageData}
+                      rows={reportPageData || []} // ✅ FIXED: Provide fallback empty array
                       columns={reportedUserCols}
                       rowCount={reportsCount}
                       paginationMode="server"
                       paginationModel={reportsPaginationModel}
                       onPaginationModelChange={setReportsPaginationModel}
                       pageSizeOptions={[5, 10, 15, 20]}
+                      loading={isLoading}
                       sx={{
                         '& .MuiDataGrid-root': {
                           borderRadius: '8px',
@@ -938,10 +1032,11 @@ function Users() {
                     </div>
                   )}
 
+                  {isLoading && <div>Loading help submissions...</div>}
                   <div className="user_help_data_grid">
                     <DataGrid
                       getRowId={(row) => row._id}
-                      rows={helpPageData}
+                      rows={helpPageData || []} // ✅ FIXED: Provide fallback empty array
                       columns={helpSubmissionCols}
                       onRowClick={({ row }) => setViewSelectedHelp(row)}
                       rowCount={helpSubCount}
@@ -949,6 +1044,7 @@ function Users() {
                       paginationModel={helpPaginationModel}
                       onPaginationModelChange={setHelpPaginationModel}
                       pageSizeOptions={[2, 10, 15, 20]}
+                      loading={isLoading}
                       sx={{
                         '& .MuiDataGrid-root': {
                           borderRadius: '8px',
