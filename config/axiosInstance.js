@@ -1,4 +1,4 @@
-// config/axiosInstance.js (UPDATED)
+// config/axiosInstance.js
 // Fixed axios configuration for production admin authentication
 
 import axios from 'axios';
@@ -48,19 +48,20 @@ privateAxios.interceptors.response.use(
     // Handle 401 errors differently for admin vs user routes
     if (prevStatus === 401 && !prevRequest._retry) {
       
-      // For admin routes, don't attempt token refresh - redirect to admin login
+      // For admin routes, don't attempt token refresh - handle in component
       if (prevRequest.url?.includes('/admin/')) {
-        console.log('Admin authentication failed, redirecting to login');
+        console.log('Admin authentication failed');
         
-        // Only redirect if we're not already on the login page
+        // FIXED: Use AND operator and better path checking
         if (typeof window !== 'undefined' && 
-            !window.location.pathname.includes('/admin-panel') || 
+            !window.location.pathname.includes('/admin-panel') && 
             !window.location.pathname.includes('/login')) {
           // Clear any existing admin state
           if (window.localStorage) {
             window.localStorage.removeItem('admin');
           }
-          // Don't redirect automatically - let the component handle it
+          // Redirect to admin login
+          window.location.href = '/admin-panel';
         }
         
         return Promise.reject(error);
@@ -90,10 +91,26 @@ privateAxios.interceptors.response.use(
           isRefreshing = false;
           console.error('Token refresh failed:', refreshError.message);
           
-          // Only redirect to user login for user routes
-          if (typeof window !== 'undefined' && 
-              !window.location.pathname.includes('/admin-panel')) {
-            window.location.href = '/signin';
+          // FIXED: Only redirect if NOT already on auth-related pages AND it's a protected route
+          if (typeof window !== 'undefined') {
+            const currentPath = window.location.pathname;
+            const isOnAuthPage = currentPath.includes('/signin') || 
+                               currentPath.includes('/signup') || 
+                               currentPath.includes('/admin-panel');
+            
+            // FIXED: Only redirect for specific protected routes that actually need auth
+            const isProtectedRoute = currentPath.includes('/dashboard') || 
+                                   currentPath.includes('/profile') || 
+                                   currentPath.includes('/account-settings') ||
+                                   currentPath.includes('/nectcoins');
+            
+            // Only redirect if user is on a protected route and not already on auth page
+            if (isProtectedRoute && !isOnAuthPage) {
+              // Add a small delay to prevent immediate loops
+              setTimeout(() => {
+                window.location.href = '/signin';
+              }, 100);
+            }
           }
           
           return Promise.reject(refreshError);
@@ -102,7 +119,7 @@ privateAxios.interceptors.response.use(
 
       // Queue the request until the token refresh is complete
       return new Promise((resolve, reject) => {
-        addRefreshSubscriber(() => {
+        addRefreshSubscriber((newToken) => {
           resolve(privateAxios(prevRequest));
         });
       });
