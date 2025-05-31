@@ -3958,8 +3958,8 @@ html, body {
 
 /* Welcome back section for logged-in users */
 .hero__welcome-back {
-  text-align: center;
-  padding: 2rem;
+  text-align: left;
+  padding: 0rem;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   backdrop-filter: blur(10px);
@@ -3968,14 +3968,14 @@ html, body {
 }
 
 .hero__welcome-back h3 {
-  color: #ffffff;
+  color: var(--text-mid);
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
 .hero__welcome-back p {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-mid);
   margin-bottom: 1.5rem;
 }
 
@@ -4082,4 +4082,44 @@ html, body {
 
 .primary-button:hover .button-icon {
   transform: translateX(4px);
+}
+
+.profile-url-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.profile-url-link {
+  text-decoration: none;
+}
+
+.profile-url {
+  /*background: rgba(0, 212, 255, 0.1);*/
+  color: #4a7eb7;
+  padding: 0rem 1rem;
+  /*border-radius: 8px;*/
+  font-family: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /*border: 1px solid rgba(0, 212, 255, 0.3);*/
+}
+
+.profile-url:hover {
+  /*border-color: #0057b1;*/
+  color: #0057b1;
+  transform: scale(1.1);
+}
+
+.copy-icon {
+  color: #4a7eb7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-icon:hover {
+  color: #0057b1;
+  transform: scale(1.1);
 }

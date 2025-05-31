@@ -4,14 +4,13 @@
   with 'lp-' prefix to avoid conflicts with existing styles.
 */
 
-/* UPDATED: Enhanced background with gradient */
 .lp-progress-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Added gradient */
+  background: #f6f6f5;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +18,6 @@
   transition: opacity 0.5s ease-out;
 }
 
-/* UPDATED: Better content styling with white text */
 .lp-progress-content {
   display: flex;
   flex-direction: column;
@@ -27,7 +25,7 @@
   justify-content: center;
   width: 80%;
   max-width: 400px; /* CHANGED: Reduced max-width */
-  color: white; /* NEW: White text for gradient background */
+  color: black;
   text-align: center; /* NEW: Center align text */
   padding: 2rem; /* NEW: Added padding */
 }
@@ -84,7 +82,7 @@
   opacity: 0.9; /* NEW: Slight transparency */
   min-height: 1.5rem; /* NEW: Consistent height */
   animation: statusFade 0.5s ease-in-out; /* NEW: Fade animation */
-  color: white; /* NEW: White text */
+  color: black;
   font-family: 'Inter', sans-serif;
   text-align: center;
 }
@@ -100,7 +98,7 @@
   font-size: 2rem;
   font-weight: 700;
   margin: 1rem 0;
-  color: white;
+  color: black;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   animation: percentageGlow 2s ease-in-out infinite alternate;
 }
@@ -128,8 +126,8 @@
 }
 
 .lp-component-dot.loaded {
-  background-color: #00ff88;
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  background-color: #0057b1;
+  box-shadow: 0 0 10px rgba(11, 173, 232, 0.5);
   transform: scale(1.2);
 }
 
@@ -163,7 +161,7 @@
   max-width: 100%;
   max-height: 200px;
   overflow-y: auto;
-  color: white; /* CHANGED: White text */
+  color: black;
   font-size: 0.9rem;
   text-align: left;
 }

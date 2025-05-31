@@ -219,8 +219,53 @@ export default function Home() {
                 transform: showWelcomeMessage ? 'translateY(0)' : 'translateY(10px)',
                 transition: 'all 0.3s ease-in-out'
               }}>
+                {/* <h3>Welcome back, {user?.firstName || 'there'}!</h3>
+                <p>Continue building your professional network and exploring opportunities.</p> */}
                 <h3>Welcome back, {user?.firstName || 'there'}!</h3>
-                <p>Continue building your professional network and exploring opportunities.</p>
+                  <p>
+                    Share your link to get job referrals in your dashboard — no more email spam!
+                  </p>
+                  <div className="profile-url-container">         
+                    <Link href={`/user/${user?.username}`} passHref>
+                      <a
+                        className="profile-url-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <code className="profile-url">
+                          nectworks.com/user/{user?.username}
+                        </code>
+                      </a>
+                    </Link>
+                    <svg 
+                      onClick={() => navigator.clipboard.writeText(`https://nectworks.com/user/${user?.username}`)}
+                      className="copy-icon"
+                      width="20" 
+                      height="20" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      xmlns="http://www.w3.org/2000/svg"
+                      title="Copy URL"
+                    >
+                      <path 
+                        d="M8 4V16C8 17.1046 8.89543 18 10 18H18C19.1046 18 20 17.1046 20 16V7.41421C20 7.149 19.8946 6.89464 19.7071 6.70711L16.2929 3.29289C16.1054 3.10536 15.851 3 15.5858 3H10C8.89543 3 8 3.89543 8 5Z" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                      />
+                      <path 
+                        d="M16 18V20C16 21.1046 15.1046 22 14 22H6C4.89543 22 4 21.1046 4 20V9C4 7.89543 4.89543 7 6 7H8" 
+                        stroke="currentColor"
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <p className="url-description">
+                    Let others know you're available to help with job referrals at your company.
+                  </p>
                 <Link href="/profile">
                   <button className="primary-button">
                     <span className="button-text">Go to Profile</span>

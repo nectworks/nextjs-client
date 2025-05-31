@@ -15,7 +15,7 @@ const LandingPageLoader = ({ onLoadComplete }) => {
   const [isComplete, setIsComplete] = useState(false);
   
   const phrases = [
-    "Starting up your experience ✨",
+    "Whooosh... ✨",
     "Loading awesome features 🚀",
     "Almost ready to connect 🔗",
     "Preparing your dashboard 📊",
