@@ -3,6 +3,7 @@
 /*
   FileName - Login.js
   Desc - This file defines a React component (LoginForm) responsible for rendering a user login form, handling OTP verification, and providing responsive behavior based on the screen width. It enhances user experience by offering OTP-based authentication for a smooth login process.
+  Updated with auth redirect logic to prevent logged-in users from accessing login page.
 */
 
 import { useContext, useEffect, useState } from 'react';
@@ -17,11 +18,16 @@ import { UserContext } from '@/context/User/UserContext.js';
 import showBottomMessage from '@/Utils/showBottomMessage.js';
 import LinkedInIcon from '@/public/SignIn/LinkedInIcon.svg';
 import GoogleIcon from '@/public/SignIn/GoogleIcon.svg';
+import useAuthRedirect from '@/hooks/useAuthRedirect';
 
 export default function Login() {
+  // Auth redirect hook - handles redirecting logged-in users
+  const { user: redirectUser, authCheckComplete, isAuthenticating } = useAuthRedirect();
+  
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
   const router = useRouter();
+  
   // get the location from where the user was redirected to login page.
   const [prevLocation, setPrevLocation] = useState(null);
   const [email, setEmail] = useState('');
@@ -44,6 +50,7 @@ export default function Login() {
   const [onChangeEmailLoginInput, setOnChangeEmailLoginInput] = useState(true);
   const [userEmailNotExist, setUserEmailNotExist] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
+  
   // Function to handle email change and validate it
   const handleEmailChange = (e) => {
     const { value } = e.target;
@@ -249,14 +256,52 @@ export default function Login() {
     }
   }, [router.query]);
 
+  // Store redirect location for post-login navigation
   useEffect(() => {
-    /* if the user is already registered, redirect them to where they came from
-           or to the profile page */
-    if (user) {
-      router.replace(prevLocation || '/profile');
-      return;
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const from = urlParams.get('from');
+      if (from) {
+        sessionStorage.setItem('redirectAfterLogin', from);
+        setPrevLocation(from);
+      }
     }
-  }, [user]);
+  }, []);
+
+  // Show loading while checking authentication status
+  if (isAuthenticating) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        flexDirection: 'column',
+        gap: '1rem'
+      }}>
+        <ClipLoader size={50} />
+        <p>Checking authentication...</p>
+      </div>
+    );
+  }
+
+  // If user is already logged in, the useAuthRedirect hook will handle the redirect
+  // This is just a safety net that shouldn't normally be reached
+  if (redirectUser) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        flexDirection: 'column',
+        gap: '1rem'
+      }}>
+        <ClipLoader size={50} />
+        <p>Redirecting...</p>
+      </div>
+    );
+  }
 
   return (
     <>

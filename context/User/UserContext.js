@@ -3,7 +3,7 @@
   File: userContext.js
   Description: This file contains the state for user and the userMode.
   Utilising react's context API this state is accessible in all components.
-  Fixed version to prevent intermittent logout for new users.
+  Fixed version to work properly with httpOnly cookie authentication.
 */
 
 import { createContext, useEffect, useState, useRef } from 'react';
@@ -36,7 +36,7 @@ export default function UserContextProvider({ children }) {
   // Check if we're on the home/landing page
   const isHomePage = pathname === '/' || pathname === '/home';
   
-  // Pages that don't need authentication check
+  // Pages that don't need authentication check for loading state
   const publicPages = ['/', '/home', '/sign-up', '/log-in'];
   const isPublicPage = publicPages.includes(pathname);
   
@@ -120,15 +120,10 @@ export default function UserContextProvider({ children }) {
       tokenResInterceptor
     );
     
-    // Only check credentials on initial load for non-public pages
-    // or if we need to verify existing authentication
-    if (!isPublicPage || localStorage.getItem('authToken')) {
-      checkCredentials(true);
-    } else {
-      // For public pages without auth token, skip the check
-      setIsLoading(false);
-      setAuthCheckComplete(true);
-    }
+    // FIXED: Always check credentials for cookie-based authentication
+    // The only way to know if httpOnly cookies are valid is via server call
+    // This is fast and necessary for proper authentication state
+    checkCredentials(true);
     
     return () => {
       isMountedRef.current = false;
@@ -140,9 +135,6 @@ export default function UserContextProvider({ children }) {
     };
   }, []);
 
-  // REMOVED: The problematic useEffect that was calling checkCredentials on pathname change
-  // This was causing double authentication calls and race conditions
-  
   // Optional: Add a function to manually refresh user data if needed
   const refreshUser = () => {
     if (authCheckComplete && !isLoading) {
@@ -184,7 +176,7 @@ export default function UserContextProvider({ children }) {
         authCheckComplete, // Expose auth status
       }}
     >
-      {/* Show loader only for protected pages and when actually loading */}
+      {/* Show loader only for protected pages during initial load */}
       {isLoading && !isPublicPage ? (
         <div className="authenticatingLoader">
           <ClipLoader size={50} />

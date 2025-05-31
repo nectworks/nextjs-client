@@ -9,6 +9,7 @@
   last name, username, email address, and invite code.
   It also includes a mechanism to verify the user's
   email address using an OTP (One-Time Password).
+  Updated with auth redirect logic to prevent logged-in users from accessing signup page.
 */
 
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -26,8 +27,13 @@ import usePrivateAxios from '@/Utils/usePrivateAxios';
 import LinkedInIcon from '@/public/SignIn/LinkedInIcon.svg';
 import GoogleIcon from '@/public/SignIn/GoogleIcon.svg';
 import Image from 'next/image';
+import useAuthRedirect from '@/hooks/useAuthRedirect';
+import showBottomMessage from '@/Utils/showBottomMessage';
 
 const SignUpMobile = () => {
+  // Auth redirect hook - handles redirecting logged-in users
+  const { user: redirectUser, authCheckComplete, isAuthenticating } = useAuthRedirect();
+  
   const router = useRouter();
   const getSignupInputValFromMain = () => {
     if (typeof window !== 'undefined') {
@@ -89,11 +95,17 @@ const SignUpMobile = () => {
     }
   }, []);
 
+  // Store redirect location for post-signup navigation
   useEffect(() => {
-    if (router.query && router.query.from) {
-      setPrevLocation(router.query.from);
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const from = urlParams.get('from');
+      if (from) {
+        sessionStorage.setItem('redirectAfterLogin', from);
+        setPrevLocation(from);
+      }
     }
-  }, [router.query]);
+  }, []);
 
   // Create refs for each input field
   const inputRefsSignUp = [useRef(), useRef(), useRef(), useRef()];
@@ -454,21 +466,47 @@ const SignUpMobile = () => {
     }
   }
 
-  useEffect(() => {
-    /* if the user is already registered, redirect them to where they came from
-               or to the profile page */
-    if (user) {
-      router.push(prevLocation || '/profile', { replace: true });
-      return;
-    }
-  }, []);
+  // Show loading while checking authentication status
+  if (isAuthenticating || !authCheckComplete) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        flexDirection: 'column',
+        gap: '1rem'
+      }}>
+        <ClipLoader size={50} />
+        <p>Checking authentication...</p>
+      </div>
+    );
+  }
+
+  // If user is already logged in, the useAuthRedirect hook will handle the redirect
+  // This is just a safety net that shouldn't normally be reached
+  if (redirectUser) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        flexDirection: 'column',
+        gap: '1rem'
+      }}>
+        <ClipLoader size={50} />
+        <p>Redirecting...</p>
+      </div>
+    );
+  }
 
   return (
     <>
       <div
         className={`mob__container container ${showOtpScreenSignUp ? 'blurBG' : ''}`}
       >
-        <h2 className="mob__header">Let’s get you started!</h2>
+        <h2 className="mob__header">Let's get you started!</h2>
         <form>
           <div className="input-wrapper">
             <div

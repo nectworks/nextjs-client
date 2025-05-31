@@ -2,13 +2,19 @@
 /*
   FileName - SignUp.js
   Desc - This file defines a React component (MainForm) responsible for rendering either a sign-in page or a sign-up form based on the width of the browser window. The component dynamically adapts its content based on the screen size to provide a responsive user experience.
+  Updated with auth redirect logic to prevent logged-in users from accessing signup page.
 */
 
 import { useState, useEffect } from 'react';
 import SignUpDesktop from './SignUpDesktop';
 import SignUpMobile from './SignUpMobile';
+import useAuthRedirect from '@/hooks/useAuthRedirect';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const SignUp = () => {
+  // Auth redirect hook - handles redirecting logged-in users
+  const { user: redirectUser, authCheckComplete, isAuthenticating } = useAuthRedirect();
+  
   // Initialize with a default value for SSR
   const [innerWidth, setInnerWidth] = useState(1024); // Default to desktop
   const [isMounted, setIsMounted] = useState(false);
@@ -39,6 +45,41 @@ const SignUp = () => {
       }
     };
   }, []);
+
+  // Show loading while checking authentication status
+  if (isAuthenticating || !authCheckComplete) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        flexDirection: 'column',
+        gap: '1rem'
+      }}>
+        <ClipLoader size={50} />
+        <p>Checking authentication...</p>
+      </div>
+    );
+  }
+
+  // If user is already logged in, the useAuthRedirect hook will handle the redirect
+  // This is just a safety net that shouldn't normally be reached
+  if (redirectUser) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        flexDirection: 'column',
+        gap: '1rem'
+      }}>
+        <ClipLoader size={50} />
+        <p>Redirecting...</p>
+      </div>
+    );
+  }
 
   // Don't render until mounted to avoid hydration mismatch
   if (!isMounted) {

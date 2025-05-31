@@ -5,6 +5,7 @@
   It includes a modernized hero section with animated elements, a data intelligence showcase,
   feature highlights, testimonials, how it works section, company benefits, and a final call-to-action.
   The component handles Google One-Tap login integration and user state management.
+  Updated to work properly with the fixed authentication system.
 */
 
 'use client';
@@ -35,7 +36,7 @@ import Accordion from '../../_components/Accordian/Accordion'; // Using existing
 import './Home.css';
 
 export default function Home() {
-  const { userState } = useContext(UserContext);
+  const { userState, authCheckComplete } = useContext(UserContext);
   const [user, setUser] = userState;
   const [username, setUsername] = useState('');
   const [activeTab, setActiveTab] = useState('referrer'); // Default to 'referrer'
@@ -97,8 +98,8 @@ export default function Home() {
       });
     }
 
-    // Google One Tap login
-    if (!user && typeof window !== 'undefined') {
+    // Google One Tap login - only show if user is not authenticated and auth check is complete
+    if (!user && authCheckComplete && typeof window !== 'undefined') {
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.defer = true;
@@ -143,7 +144,11 @@ export default function Home() {
     return () => {
       observer.disconnect();
     };
-  }, [user, username]);
+  }, [user, username, authCheckComplete]);
+
+  // Don't render signup form or Google One-Tap if still checking auth
+  const showSignupForm = authCheckComplete && !user;
+  const showWelcomeBack = authCheckComplete && user;
 
   return (
     <main className="home">
@@ -160,7 +165,22 @@ export default function Home() {
               and advance your career with our data-driven platform.
             </p>
             
-            {!user && (
+            {/* Show welcome back message for logged-in users */}
+            {showWelcomeBack && (
+              <div className="hero__welcome-back">
+                <h3>Welcome back, {user.firstName}!</h3>
+                <p>Continue building your professional network and exploring opportunities.</p>
+                <Link href="/profile">
+                  <button className="primary-button">
+                    <span className="button-text">Go to Profile</span>
+                    <span className="button-icon">→</span>
+                  </button>
+                </Link>
+              </div>
+            )}
+            
+            {/* Show signup form for non-logged-in users */}
+            {showSignupForm && (
               <div className="hero__signup">
                 <div className="username-input">
                   <span>nectworks<span className="blinking-cursor">/</span></span>
@@ -181,6 +201,16 @@ export default function Home() {
                     <span className="button-icon">→</span>
                   </button>
                 </Link>
+              </div>
+            )}
+            
+            {/* Show placeholder while checking auth */}
+            {!authCheckComplete && (
+              <div className="hero__loading">
+                <div className="auth-loading-skeleton">
+                  <div className="skeleton-line"></div>
+                  <div className="skeleton-button"></div>
+                </div>
               </div>
             )}
             
@@ -291,9 +321,11 @@ export default function Home() {
               </div>
             )}
             
-            <Link href="/sign-up" onClick={scrollToTop}>
+            <Link href={showWelcomeBack ? "/profile" : "/sign-up"} onClick={scrollToTop}>
               <button className="primary-button">
-                <span className="button-text">Start Your Journey</span>
+                <span className="button-text">
+                  {showWelcomeBack ? "Go to Profile" : "Start Your Journey"}
+                </span>
                 <span className="button-icon">→</span>
               </button>
             </Link>
