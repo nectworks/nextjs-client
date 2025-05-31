@@ -6,7 +6,21 @@
     of the page. It is the default export of the file.
 */
 
-import NectCoins from './NectCoins/NectCoins';
+import dynamic from 'next/dynamic';
+
+const NectCoins = dynamic(() => import('./NectCoins/NectCoins'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh' 
+    }}>
+      <div>Loading NectCoins...</div>
+    </div>
+  )
+});
 
 const NectCoinsPage = () => {
   return <NectCoins />;

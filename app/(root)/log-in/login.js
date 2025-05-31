@@ -1,9 +1,9 @@
 'use client';
 
 /*
-  FileName - Login.js
-  Desc - This file defines a React component (LoginForm) responsible for rendering a user login form, handling OTP verification, and providing responsive behavior based on the screen width. It enhances user experience by offering OTP-based authentication for a smooth login process.
-  Updated with auth redirect logic to prevent logged-in users from accessing login page.
+  File: Login.js (OPTIMIZED)
+  Description: Fast-loading login component that renders immediately while
+  handling auth redirects in the background for optimal user experience.
 */
 
 import { useContext, useEffect, useState } from 'react';
@@ -21,37 +21,43 @@ import GoogleIcon from '@/public/SignIn/GoogleIcon.svg';
 import useAuthRedirect from '@/hooks/useAuthRedirect';
 
 export default function Login() {
-  // Auth redirect hook - handles redirecting logged-in users
-  const { user: redirectUser, authCheckComplete, isAuthenticating } = useAuthRedirect();
+  // OPTIMIZED: Non-blocking auth redirect
+  const { user: redirectUser, shouldShowAuthPage } = useAuthRedirect();
   
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
   const router = useRouter();
   
-  // get the location from where the user was redirected to login page.
+  // Form state
   const [prevLocation, setPrevLocation] = useState(null);
   const [email, setEmail] = useState('');
   const [otpInput, setOtpInput] = useState('');
 
-  // eslint-disable-next-line no-unused-vars
   const [emailError, setEmailError] = useState('');
   const [isOTPSent, setIsOTPSent] = useState(false);
   const [isOTPSentAgainLogin, setIsOTPSentAgainLogin] = useState(false);
   const [isEmailAndOTPEntered, setEmailandOTPEntered] = useState(false);
 
-  // -----------------otp for sign_up----------
-  const [showOtpScreenSignUp] = useState(false);
-
-  // Function to check if the email is valid
-  const isEmailValid = (email) => {
-    const emailPattern = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
-    return emailPattern.test(email) && email.endsWith('.com');
-  };
   const [onChangeEmailLoginInput, setOnChangeEmailLoginInput] = useState(true);
   const [userEmailNotExist, setUserEmailNotExist] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
   
-  // Function to handle email change and validate it
+  const [loginButtonBg, setLoginButtonBg] = useState(false);
+  const [showSpinnerLogin, setShowSpinnerLogin] = useState(false);
+  const [loginEmailDisable, setloginEmailDisable] = useState(false);
+  const [resendButton, setResendButton] = useState(true);
+  const [emailLoginError, setEmailLoginError] = useState('');
+  const [showSpinnerForLoginSendOTP, setShowSpinnerForLoginSendOTP] = useState(false);
+  const [showSpinnerForLoginResendOTP, setShowSpinnerForLoginResendOTP] = useState(false);
+  const [enableCross, setEnableCross] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+
+  // Email validation
+  const isEmailValid = (email) => {
+    const emailPattern = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+    return emailPattern.test(email) && email.endsWith('.com');
+  };
+
   const handleEmailChange = (e) => {
     const { value } = e.target;
     if (value) {
@@ -70,31 +76,21 @@ export default function Login() {
     }
   };
 
-  const [otpValues, setOtpValues] = useState(['', '', '', '']);
-
-  const [loginButtonBg, setLoginButtonBg] = useState(false);
-  const [showSpinnerLogin, setShowSpinnerLogin] = useState(false);
-
-  const [loginEmailDisable, setloginEmailDisable] = useState(false);
-  const [resendButton, setResendButton] = useState(true);
-  const [emailLoginError, setEmailLoginError] = useState('');
-  const [showSpinnerForLoginSendOTP, setShowSpinnerForLoginSendOTP] =
-    useState(false);
-
+  // OTP sending
   const handleSendOTP = async (e) => {
     e.preventDefault();
     if (!email) {
       setOnChangeEmailLoginInput(true);
-    }
-    if (!email) {
       setEmailLoginError('Please enter email');
       return;
     }
+    
     setShowSpinnerForLoginSendOTP(true);
     try {
       const sendOTP = await publicAxios.post('/login/generateOTP', {
         email: email,
       });
+      
       if (sendOTP.status == 200) {
         setShowSpinnerForLoginSendOTP(false);
         setDisableButton(true);
@@ -106,14 +102,15 @@ export default function Login() {
         setloginEmailDisable(true);
         setTimeout(() => {
           setIsOTPSent(false);
-        }, 2000); // Hide the OTP sent popup after 5 seconds
+        }, 2000);
       }
     } catch (err) {
-      const { status, data } = err.response;
+      const { status, data } = err.response || {};
+      setShowSpinnerForLoginSendOTP(false);
+      
       if (status === 404) {
         setEmailLoginError('Email does not exist!');
       } else if (status === 403) {
-        // user has been blocked from logging in
         const banTime = new Date(parseInt(data.banTime));
         const banTimeString = banTime.toLocaleTimeString();
         const banDateString = banTime.toLocaleDateString();
@@ -125,19 +122,19 @@ export default function Login() {
         showBottomMessage('Unknown error occured');
       }
       setUserEmailNotExist(true);
-      setShowSpinnerForLoginSendOTP(false);
     }
   };
 
-  const [showSpinnerForLoginResendOTP, setShowSpinnerForLoginResendOTP] =
-    useState(false);
+  // Resend OTP
   const handleSendOTPAgainLogin = async (e) => {
     e.preventDefault();
     setShowSpinnerForLoginResendOTP(true);
+    
     try {
       const sendOTP = await publicAxios.post('/login/generateOTP', {
         email: email,
       });
+      
       if (sendOTP.status === 200) {
         setShowSpinnerForLoginResendOTP(false);
         setEnableCross(false);
@@ -150,15 +147,15 @@ export default function Login() {
         setOtpValues(['', '', '', '']);
         setTimeout(() => {
           setIsOTPSentAgainLogin(false);
-        }, 2000); // Hide the OTP sent popup after 2 seconds
+        }, 2000);
       }
     } catch (err) {
-      const { status, data } = err.response;
+      const { status, data } = err.response || {};
+      setShowSpinnerForLoginResendOTP(false);
 
       if (status === 404) {
         setEmailLoginError('Email does not exist!');
       } else if (status === 403) {
-        // user has been blocked from logging in
         const banTime = new Date(parseInt(data.banTime));
         const banTimeString = banTime.toLocaleTimeString();
         const banDateString = banTime.toLocaleDateString();
@@ -169,33 +166,43 @@ export default function Login() {
       } else {
         showBottomMessage('Unknown error occured');
       }
-      setShowSpinnerForLoginResendOTP(false);
     }
   };
 
-  const [enableCross, setEnableCross] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(false);
-
-  // function to login the user
+  // Login function
   const handleLogin = async (e) => {
     e.preventDefault();
     setShowSpinnerLogin(true);
+    
     try {
       const res = await privateAxios.post('/login/verifyOTP', {
         email: email,
-        enteredOTP: otpInput, // Use the single input value
+        enteredOTP: otpInput,
       });
+      
       if (res.status === 200) {
         setUser(res.data.user);
         setShowSpinnerLogin(false);
         setOtpVerified(true);
-        router.replace(prevLocation || '/profile');
+        
+        // Handle redirect
+        let redirectTo = '/profile';
+        if (typeof window !== 'undefined') {
+          const storedRedirect = sessionStorage.getItem('redirectAfterLogin');
+          if (storedRedirect) {
+            redirectTo = storedRedirect;
+            sessionStorage.removeItem('redirectAfterLogin');
+          }
+        }
+        
+        router.replace(redirectTo);
       }
     } catch (err) {
-      const { status, data } = err.response;
+      const { status, data } = err.response || {};
+      setShowSpinnerLogin(false);
+      setOtpInput('');
 
       if (status === 403) {
-        // user has been blocked from logging in
         const banTime = new Date(parseInt(data.banTime));
         const banTimeString = banTime.toLocaleTimeString();
         const banDateString = banTime.toLocaleDateString();
@@ -208,13 +215,10 @@ export default function Login() {
       } else {
         showBottomMessage('Unknown error occurred');
       }
-
-      setOtpInput(''); // Clear OTP input on error
-      setShowSpinnerLogin(false);
     }
   };
 
-  // function to sign in with google
+  // Social login functions
   async function signInWithGoogle(e) {
     e.preventDefault();
     try {
@@ -226,7 +230,6 @@ export default function Login() {
     }
   }
 
-  // function to sign in with likeding
   async function signInWithLinkedin(e) {
     e.preventDefault();
     try {
@@ -238,6 +241,7 @@ export default function Login() {
     }
   }
 
+  // Button color logic
   const handleLoginButtonColour = () => {
     if (email && otpInput.length >= 3) {
       setLoginButtonBg(true);
@@ -249,12 +253,6 @@ export default function Login() {
   useEffect(() => {
     handleLoginButtonColour();
   }, [otpInput]);
-
-  useEffect(() => {
-    if (router.query && router.query.from) {
-      setPrevLocation(router.query.from);
-    }
-  }, [router.query]);
 
   // Store redirect location for post-login navigation
   useEffect(() => {
@@ -268,47 +266,12 @@ export default function Login() {
     }
   }, []);
 
-  // Show loading while checking authentication status
-  if (isAuthenticating) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        flexDirection: 'column',
-        gap: '1rem'
-      }}>
-        <ClipLoader size={50} />
-        <p>Checking authentication...</p>
-      </div>
-    );
-  }
-
-  // If user is already logged in, the useAuthRedirect hook will handle the redirect
-  // This is just a safety net that shouldn't normally be reached
-  if (redirectUser) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        flexDirection: 'column',
-        gap: '1rem'
-      }}>
-        <ClipLoader size={50} />
-        <p>Redirecting...</p>
-      </div>
-    );
-  }
+  // OPTIMIZED: Don't show loading states - render form immediately
+  // The auth redirect will happen in the background if user is already logged in
 
   return (
     <>
-      <div
-        className={`mob__container container
-              ${showOtpScreenSignUp ? 'blurBG' : ''}`}
-      >
+      <div className="mob__container container">
         <h2 className="mob__header">Welcome Back!</h2>
         <form>
           <label className="label__style">Email address</label>
@@ -374,19 +337,13 @@ export default function Login() {
                     value={otpInput}
                     onChange={(e) => {
                       const { value } = e.target;
-                      // Filter out non-numeric characters
-                      const numericValue = value.replace(/\D/g, '').slice(0, 4); // Limit to 4 digits
-                      // Update the state with the filtered value
-                      setOtpInput((prevOtp) => {
-                        // Call handleLoginButtonColour after state update
-                        setTimeout(() => handleLoginButtonColour(), 0);
-                        return numericValue;
-                      });
+                      const numericValue = value.replace(/\D/g, '').slice(0, 4);
+                      setOtpInput(numericValue);
+                      setTimeout(() => handleLoginButtonColour(), 0);
                     }}
                     maxLength={4}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
-                        // Trigger click event on the "Send OTP" button
                         document.getElementById('sendOTPButton').click();
                       }
                     }}
@@ -422,7 +379,9 @@ export default function Login() {
               </button>
             </div>
           </div>
+          
           <div className="gap-for-other-buttons"></div>
+          
           <div className="othersigninoptions">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -452,6 +411,7 @@ export default function Login() {
               />
             </svg>
           </div>
+          
           <div className="othersigninbuttons">
             <button onClick={signInWithGoogle}>
               <img src={GoogleIcon.src} alt="google icon" />
@@ -462,6 +422,7 @@ export default function Login() {
               Continue with LinkedIn
             </button>
           </div>
+          
           <div className="link-button-container">
             <p> New to Nectworks? </p>
             <Link href="/sign-up">Join now</Link>

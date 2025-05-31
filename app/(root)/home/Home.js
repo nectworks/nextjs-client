@@ -1,11 +1,7 @@
 /*
-  FileName: Home.js
-  Desc: Main component for the Nectworks landing page. This file orchestrates the 
-  entire landing page experience by importing and arranging various section components.
-  It includes a modernized hero section with animated elements, a data intelligence showcase,
-  feature highlights, testimonials, how it works section, company benefits, and a final call-to-action.
-  The component handles Google One-Tap login integration and user state management.
-  Updated to work properly with the fixed authentication system.
+  FileName: Home.js (FINAL SSR-SAFE VERSION)
+  Description: Completely SSR-safe home component that prevents build errors
+  while maintaining optimal performance and user experience.
 */
 
 'use client';
@@ -22,6 +18,7 @@ import { UserContext } from '@/context/User/UserContext';
 import scrollToTop from '@/Utils/scrollToTop';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { privateAxios } from '@/config/axiosInstance.js';
+import { safeLocalStorage } from '@/Utils/browserUtils';
 
 // Components
 import FeatureSection from './components/FeatureSection';
@@ -30,26 +27,53 @@ import HowItWorksSection from './components/HowItWorksSection';
 import CTASection from './components/CTASection';
 import DataIntelligenceSection from './components/DataIntelligenceSection';
 import CompanySection from './components/CompanySection';
-import Accordion from '../../_components/Accordian/Accordion'; // Using existing Accordion
+import Accordion from '../../_components/Accordian/Accordion';
 
 // Styles
 import './Home.css';
 
 export default function Home() {
-  const { userState, authCheckComplete } = useContext(UserContext);
+  const { userState, authCheckComplete, isInitialLoad } = useContext(UserContext);
   const [user, setUser] = userState;
   const [username, setUsername] = useState('');
-  const [activeTab, setActiveTab] = useState('referrer'); // Default to 'referrer'
+  const [activeTab, setActiveTab] = useState('referrer');
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
   const heroRef = useRef(null);
 
-  // Animation state for observed elements
+  // Animation state
   const [isHeroVisible, setIsHeroVisible] = useState(false);
+  
+  // OPTIMIZED: Track auth state changes for smooth transitions
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
+  const [showSignupForm, setShowSignupForm] = useState(true); // Start optimistically
+
+  // SSR-SAFE: Only set username from localStorage after mount
+  useEffect(() => {
+    setIsMounted(true);
+    
+    // Load saved username from localStorage (client-side only)
+    const savedUsername = safeLocalStorage.getItem('singupval');
+    if (savedUsername) {
+      setUsername(savedUsername);
+    }
+  }, []);
 
   const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-    if (document.querySelector('.blinking-cursor')) {
-      document.querySelector('.blinking-cursor').style.animation = 'none';
+    const newUsername = event.target.value;
+    setUsername(newUsername);
+    
+    // SSR-SAFE: Only access localStorage on client
+    if (isMounted) {
+      safeLocalStorage.setItem('singupval', newUsername);
+    }
+    
+    // Remove blinking cursor animation
+    if (typeof document !== 'undefined') {
+      const cursor = document.querySelector('.blinking-cursor');
+      if (cursor) {
+        cursor.style.animation = 'none';
+      }
     }
   };
 
@@ -66,16 +90,11 @@ export default function Home() {
 
       if (res.status === 200) {
         showBottomMessage('Successfully authenticated.');
-        if (signUp === true) {
-          navigate.push('/profile', {
-            state: {
-              from: '/sign-up',
-            },
-            replace: true,
-          });
-        } else {
-          navigate.push('/profile');
-        }
+        const destination = signUp ? '/profile' : '/profile';
+        navigate.push(destination, {
+          state: { from: signUp ? '/sign-up' : '/log-in' },
+          replace: true,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -83,22 +102,43 @@ export default function Home() {
     }
   }
 
+  // OPTIMIZED: Handle auth state changes smoothly
   useEffect(() => {
-    // Safe localStorage access
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('singupval', username);
+    if (authCheckComplete) {
+      if (user) {
+        setShowSignupForm(false);
+        setShowWelcomeMessage(true);
+      } else {
+        setShowSignupForm(true);
+        setShowWelcomeMessage(false);
+      }
     }
+  }, [user, authCheckComplete]);
 
+  // SSR-SAFE: Setup input event listener only after mount
+  useEffect(() => {
+    if (!isMounted) return;
+    
     const inputName = document.querySelector('.input__name');
     if (inputName) {
-      inputName.addEventListener('keyup', (e) => {
+      const handleKeyUp = (e) => {
         if (e.key === 'Enter') {
           router.push('/sign-up');
         }
-      });
+      };
+      inputName.addEventListener('keyup', handleKeyUp);
+      
+      // Cleanup
+      return () => {
+        inputName.removeEventListener('keyup', handleKeyUp);
+      };
     }
+  }, [router, isMounted]);
 
-    // Google One Tap login - only show if user is not authenticated and auth check is complete
+  // OPTIMIZED: Setup Google One Tap after auth is determined (CLIENT-SIDE ONLY)
+  useEffect(() => {
+    if (!isMounted || !user && authCheckComplete) return;
+    
     if (!user && authCheckComplete && typeof window !== 'undefined') {
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
@@ -114,9 +154,20 @@ export default function Home() {
         }
       };
       document.body.appendChild(script);
+      
+      return () => {
+        // Cleanup script if component unmounts
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
     }
+  }, [user, authCheckComplete, isMounted]);
 
-    // Setup Intersection Observer for animations
+  // Setup Intersection Observer for animations (CLIENT-SIDE ONLY)
+  useEffect(() => {
+    if (!isMounted) return;
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -144,15 +195,11 @@ export default function Home() {
     return () => {
       observer.disconnect();
     };
-  }, [user, username, authCheckComplete]);
-
-  // Don't render signup form or Google One-Tap if still checking auth
-  const showSignupForm = authCheckComplete && !user;
-  const showWelcomeBack = authCheckComplete && user;
+  }, [isMounted]);
 
   return (
     <main className="home">
-      {/* Hero Section - Modernized with animation */}
+      {/* Hero Section */}
       <section className={`hero ${isHeroVisible ? 'animate-hero' : ''}`} ref={heroRef}>
         <div className="hero__container">
           <div className="hero__content animation-container">
@@ -165,10 +212,14 @@ export default function Home() {
               and advance your career with our data-driven platform.
             </p>
             
-            {/* Show welcome back message for logged-in users */}
-            {showWelcomeBack && (
-              <div className="hero__welcome-back">
-                <h3>Welcome back, {user.firstName}!</h3>
+            {/* OPTIMIZED: Show welcome message with smooth transition */}
+            {showWelcomeMessage && (
+              <div className="hero__welcome-back" style={{
+                opacity: showWelcomeMessage ? 1 : 0,
+                transform: showWelcomeMessage ? 'translateY(0)' : 'translateY(10px)',
+                transition: 'all 0.3s ease-in-out'
+              }}>
+                <h3>Welcome back, {user?.firstName || 'there'}!</h3>
                 <p>Continue building your professional network and exploring opportunities.</p>
                 <Link href="/profile">
                   <button className="primary-button">
@@ -179,9 +230,13 @@ export default function Home() {
               </div>
             )}
             
-            {/* Show signup form for non-logged-in users */}
+            {/* OPTIMIZED: Show signup form immediately, fade out when user logs in */}
             {showSignupForm && (
-              <div className="hero__signup">
+              <div className="hero__signup" style={{
+                opacity: showSignupForm ? 1 : 0,
+                transform: showSignupForm ? 'translateY(0)' : 'translateY(-10px)',
+                transition: 'all 0.3s ease-in-out'
+              }}>
                 <div className="username-input">
                   <span>nectworks<span className="blinking-cursor">/</span></span>
                   <input 
@@ -204,9 +259,12 @@ export default function Home() {
               </div>
             )}
             
-            {/* Show placeholder while checking auth */}
-            {!authCheckComplete && (
-              <div className="hero__loading">
+            {/* OPTIMIZED: Show loading state only during very initial load */}
+            {isInitialLoad && !authCheckComplete && (
+              <div className="hero__loading" style={{
+                opacity: isInitialLoad ? 1 : 0,
+                transition: 'opacity 0.3s ease-in-out'
+              }}>
                 <div className="auth-loading-skeleton">
                   <div className="skeleton-line"></div>
                   <div className="skeleton-button"></div>
@@ -248,7 +306,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Data Intelligence Section - NEW */}
+      {/* Data Intelligence Section */}
       <DataIntelligenceSection />
 
       {/* Audience Tabs Section */}
@@ -321,10 +379,10 @@ export default function Home() {
               </div>
             )}
             
-            <Link href={showWelcomeBack ? "/profile" : "/sign-up"} onClick={scrollToTop}>
+            <Link href={showWelcomeMessage ? "/profile" : "/sign-up"} onClick={scrollToTop}>
               <button className="primary-button">
                 <span className="button-text">
-                  {showWelcomeBack ? "Go to Profile" : "Start Your Journey"}
+                  {showWelcomeMessage ? "Go to Profile" : "Start Your Journey"}
                 </span>
                 <span className="button-icon">→</span>
               </button>
@@ -333,7 +391,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works Section - Updated */}
+      {/* How It Works Section */}
       <HowItWorksSection />
 
       <FeatureSection
@@ -381,13 +439,13 @@ export default function Home() {
         ]}
       />
 
-      {/* Company Section - NEW */}
+      {/* Company Section */}
       <CompanySection />
 
-      {/* Testimonial Section - Updated for more authentic voices */}
+      {/* Testimonial Section */}
       <TestimonialSection />
 
-      {/* Safety Alert Section - Styled differently */}
+      {/* Safety Alert Section */}
       <section className="alert-section animation-container">
         <div className="alert-container">
           <div className="alert-content">
@@ -413,7 +471,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ Section - Improved styling */}
+      {/* FAQ Section */}
       <section className="faq-section animation-container">
         <div className="section-header">
           <h2>
@@ -424,7 +482,7 @@ export default function Home() {
         <Accordion />
       </section>
 
-      {/* Final CTA Section - Updated */}
+      {/* Final CTA Section */}
       <CTASection />
     </main>
   );

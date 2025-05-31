@@ -6,7 +6,21 @@
     of the page. It is the default export of the file.
 */
 
-import ProfilePage from './Profile/Profile';
+import dynamic from 'next/dynamic';
+
+const ProfilePage = dynamic(() => import('./Profile/Profile'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh' 
+    }}>
+      <div>Loading profile...</div>
+    </div>
+  )
+});
 
 const Profile = () => {
   return <ProfilePage />;

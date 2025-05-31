@@ -1,13 +1,11 @@
 'use client';
 /*
-  File: userContext.js
-  Description: This file contains the state for user and the userMode.
-  Utilising react's context API this state is accessible in all components.
-  Fixed version to work properly with httpOnly cookie authentication.
+  File: UserContext.js (SSR-SAFE VERSION)
+  Description: Completely SSR-safe user context that prevents all build errors
+  while maintaining optimized performance.
 */
 
 import { createContext, useEffect, useState, useRef } from 'react';
-import ClipLoader from 'react-spinners/ClipLoader';
 import {
   privateAxios,
   tokenResInterceptor,
@@ -17,133 +15,174 @@ import { usePathname } from 'next/navigation';
 export const UserContext = createContext(null);
 
 export default function UserContextProvider({ children }) {
-  // contains user information
+  // User state - starts as null (unknown)
   const [user, setUser] = useState(null);
-  // maintains the usermode (i.e., professional or seeker)
   const [userMode, setUserMode] = useState('seeker');
-  // is fetching the user
-  const [isLoading, setIsLoading] = useState(true);
-  // Track if initial auth check is complete
+  
+  // Auth states - Start with safe defaults for SSR
   const [authCheckComplete, setAuthCheckComplete] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   
   const pathname = usePathname();
-  
-  // Ref to track and cancel ongoing requests
   const abortControllerRef = useRef(null);
-  // Ref to track if component is mounted
   const isMountedRef = useRef(true);
   
-  // Check if we're on the home/landing page
-  const isHomePage = pathname === '/' || pathname === '/home';
-  
-  // Pages that don't need authentication check for loading state
+  // Pages that should render immediately without waiting for auth
   const publicPages = ['/', '/home', '/sign-up', '/log-in'];
   const isPublicPage = publicPages.includes(pathname);
   
-  // Function to check if the user is logged in
-  const checkCredentials = (isInitialLoad = false) => {
-    // Prevent multiple concurrent authentication checks
-    if (!isInitialLoad && isLoading) {
-      console.log('Authentication check already in progress, skipping...');
-      return;
+  // SSR-SAFE: Helper function to safely access sessionStorage
+  const safeSessionStorage = {
+    getItem: (key) => {
+      if (typeof window === 'undefined') return null;
+      try {
+        return sessionStorage.getItem(key);
+      } catch (error) {
+        console.warn('Error accessing sessionStorage:', error);
+        return null;
+      }
+    },
+    setItem: (key, value) => {
+      if (typeof window === 'undefined') return;
+      try {
+        sessionStorage.setItem(key, value);
+      } catch (error) {
+        console.warn('Error setting sessionStorage:', error);
+      }
+    },
+    removeItem: (key) => {
+      if (typeof window === 'undefined') return;
+      try {
+        sessionStorage.removeItem(key);
+      } catch (error) {
+        console.warn('Error removing from sessionStorage:', error);
+      }
     }
+  };
+  
+  // OPTIMIZED: Fast auth check function
+  const checkCredentials = async (isBackground = false) => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
     
     // Cancel any existing request
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
     
-    // Create new abort controller
     abortControllerRef.current = new AbortController();
     
-    if (isInitialLoad) {
-      setIsLoading(true);
-    }
-
-    privateAxios
-      .get('/authentication', {
-        signal: abortControllerRef.current.signal
-      })
-      .then((res) => {
-        // Only update state if component is still mounted
-        if (!isMountedRef.current) return;
-        
-        // the user is authenticated and save the data in context.
-        if (res.status === 200) {
-          setUser(res.data.user);
-          console.log('User authenticated successfully');
-        }
-        
-        if (isInitialLoad) {
-          setIsLoading(false);
-          setAuthCheckComplete(true);
-        }
-      })
-      .catch((err) => {
-        // Only update state if component is still mounted and not aborted
-        if (!isMountedRef.current || err.name === 'AbortError') return;
-        
-        console.log('Authentication check failed:', err.response?.status || err.message);
-        
-        // Only clear user state if this is an initial load or explicit auth failure (401/403)
-        // Don't clear user state for network errors, 500 errors, etc.
-        if (isInitialLoad || (err.response && [401, 403].includes(err.response.status))) {
-          setUser(null);
-        }
-        
-        if (isInitialLoad) {
-          setIsLoading(false);
-          setAuthCheckComplete(true);
-        }
+    try {
+      const res = await privateAxios.get('/authentication', {
+        signal: abortControllerRef.current.signal,
+        timeout: 3000, // OPTIMIZED: Shorter timeout
       });
       
-    // Set a timeout to prevent infinite loading (only for initial load)
-    if (isInitialLoad) {
-      setTimeout(() => {
-        if (isMountedRef.current && isLoading && !authCheckComplete) {
-          console.warn('Authentication check timed out');
-          setIsLoading(false);
-          setAuthCheckComplete(true);
-        }
-      }, 10000); // 10 second timeout
+      if (!isMountedRef.current) return;
+      
+      if (res.status === 200) {
+        setUser(res.data.user);
+        
+        // Store successful auth in sessionStorage for faster subsequent loads
+        safeSessionStorage.setItem('auth_status', 'authenticated');
+        safeSessionStorage.setItem('user_data', JSON.stringify(res.data.user));
+      }
+      
+      setAuthCheckComplete(true);
+      setIsInitialLoad(false);
+      
+    } catch (err) {
+      if (!isMountedRef.current || err.name === 'AbortError') return;
+      
+      // Clear any cached auth status on auth failure
+      safeSessionStorage.removeItem('auth_status');
+      safeSessionStorage.removeItem('user_data');
+      
+      // Only clear user on explicit auth failures, not network errors
+      if (err.response && [401, 403].includes(err.response.status)) {
+        setUser(null);
+      }
+      
+      setAuthCheckComplete(true);
+      setIsInitialLoad(false);
     }
   };
 
-  // Initial authentication check
+  // OPTIMIZED: Check for cached auth state first (CLIENT-SIDE ONLY)
+  const loadCachedAuthState = () => {
+    if (typeof window === 'undefined') return false;
+    
+    try {
+      const authStatus = safeSessionStorage.getItem('auth_status');
+      const userData = safeSessionStorage.getItem('user_data');
+      
+      if (authStatus === 'authenticated' && userData) {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        return true; // Found cached auth
+      }
+    } catch (error) {
+      console.warn('Error loading cached auth state:', error);
+      // Clear invalid cache
+      safeSessionStorage.removeItem('auth_status');
+      safeSessionStorage.removeItem('user_data');
+    }
+    
+    return false;
+  };
+
+  // SSR-SAFE: Initialize auth state only on client side
   useEffect(() => {
+    setIsMounted(true);
     isMountedRef.current = true;
     
-    /* Since the context is out of the router, this can not
-      utilise the `usePrivateAxios` hook */
+    // Set up axios interceptor
     const customInterceptor = privateAxios.interceptors.response.use(
       (response) => response,
       tokenResInterceptor
     );
     
-    // FIXED: Always check credentials for cookie-based authentication
-    // The only way to know if httpOnly cookies are valid is via server call
-    // This is fast and necessary for proper authentication state
-    checkCredentials(true);
+    // OPTIMIZED: Check cache first for instant loading (CLIENT-SIDE ONLY)
+    const hasCachedAuth = loadCachedAuthState();
+    
+    if (hasCachedAuth) {
+      // If we have cached auth, mark as complete immediately for better UX
+      setAuthCheckComplete(true);
+      setIsInitialLoad(false);
+      
+      // Still verify in background, but don't block UI
+      setTimeout(() => {
+        checkCredentials(true);
+      }, 100);
+    } else {
+      // No cached auth, check immediately but don't block public pages
+      if (isPublicPage) {
+        // For public pages, set auth as complete immediately and check in background
+        setAuthCheckComplete(true);
+        setIsInitialLoad(false);
+        
+        // Background auth check
+        setTimeout(() => {
+          checkCredentials(true);
+        }, 50);
+      } else {
+        // For protected pages, check auth immediately
+        checkCredentials(false);
+      }
+    }
     
     return () => {
       isMountedRef.current = false;
-      // Cancel any ongoing request
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
       privateAxios.interceptors.response.eject(customInterceptor);
     };
-  }, []);
+  }, []); // Empty dependency array to run only once
 
-  // Optional: Add a function to manually refresh user data if needed
-  const refreshUser = () => {
-    if (authCheckComplete && !isLoading) {
-      checkCredentials(false);
-    }
-  };
-
+  // Update user mode when user changes
   useEffect(() => {
-    /* whenever user state changes, update the usermode */
     setUserMode(!!user?.userDetails?.emailID ? 'professional' : 'seeker');
   }, [user]);
 
@@ -157,33 +196,42 @@ export default function UserContextProvider({ children }) {
     };
   }, []);
 
-  // Add debug logging for user state changes (remove in production)
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('UserContext: User state changed:', user ? `User ID: ${user._id}` : 'User is null');
-      if (!user && authCheckComplete) {
-        console.log('UserContext: User cleared after auth check completion');
-      }
+  // Manual refresh function
+  const refreshUser = () => {
+    if (isMounted && !isInitialLoad) {
+      checkCredentials(false);
     }
-  }, [user, authCheckComplete]);
+  };
+
+  // SSR-SAFE: Don't render context until mounted on client
+  if (!isMounted) {
+    // Return a safe default context during SSR
+    return (
+      <UserContext.Provider
+        value={{
+          userState: [null, () => {}],
+          userModeState: ['seeker', () => {}],
+          refreshUser: () => {},
+          authCheckComplete: false,
+          isInitialLoad: true,
+        }}
+      >
+        {children}
+      </UserContext.Provider>
+    );
+  }
 
   return (
     <UserContext.Provider
       value={{
         userState: [user, setUser],
         userModeState: [userMode, setUserMode],
-        refreshUser, // Expose refresh function if needed
-        authCheckComplete, // Expose auth status
+        refreshUser,
+        authCheckComplete,
+        isInitialLoad,
       }}
     >
-      {/* Show loader only for protected pages during initial load */}
-      {isLoading && !isPublicPage ? (
-        <div className="authenticatingLoader">
-          <ClipLoader size={50} />
-        </div>
-      ) : (
-        children
-      )}
+      {children}
     </UserContext.Provider>
   );
 }

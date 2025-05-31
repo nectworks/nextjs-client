@@ -6,10 +6,38 @@
     of the page. It is the default export of the file.
 */
 
-import Login from './Logout';
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 
-const LoginPage = () => {
-  return <Login />;
+const Logout = dynamic(() => import('./Logout'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh' 
+    }}>
+      <div>Logging out...</div>
+    </div>
+  )
+});
+
+const LogoutPage = () => {
+  return (
+    <Suspense fallback={
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        <div>Loading...</div>
+      </div>
+    }>
+      <Logout />
+    </Suspense>
+  );
 };
 
-export default LoginPage;
+export default LogoutPage;
