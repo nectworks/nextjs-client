@@ -1,7 +1,27 @@
 /*
-  FileName: Home.js (FINAL SSR-SAFE VERSION)
-  Description: Completely SSR-safe home component that prevents build errors
-  while maintaining optimal performance and user experience.
+  FileName: Home.js
+  Description: SSR-safe landing page component for Nectworks platform
+  
+  PURPOSE:
+  Main marketing landing page that adapts UI based on user authentication state.
+  Handles user onboarding flow and showcases platform features through multiple sections.
+
+  KEY FUNCTIONALITY:
+  - Dynamic content: Shows signup form for guests, welcome message for authenticated users
+  - Google One Tap integration for seamless login
+  - Username input with localStorage persistence
+  - Scroll-based animations using Intersection Observer
+  - Smooth state transitions between auth states
+  
+  MAIN SECTIONS:
+  Hero, Data Intelligence, Audience Tabs, How It Works, Features, Testimonials, FAQ, CTA
+  
+  TECHNICAL NOTES:
+  - SSR-safe with proper client-side hydration
+  - Context-based authentication state management
+  - Conditional rendering prevents hydration mismatches
+  - Cleanup functions for event listeners and observers
+  - Error handling for Google authentication flow
 */
 
 'use client';
@@ -135,33 +155,40 @@ export default function Home() {
     }
   }, [router, isMounted]);
 
-  // OPTIMIZED: Setup Google One Tap after auth is determined (CLIENT-SIDE ONLY)
+  // FIXED: Setup Google One Tap after auth is determined (CLIENT-SIDE ONLY)
   useEffect(() => {
-    if (!isMounted || !user && authCheckComplete) return;
+    // Only proceed if:
+    // 1. Component is mounted (client-side)
+    // 2. User is NOT logged in
+    // 3. Auth check is complete
+    // 4. Window object exists
+    if (!isMounted) return;
+    if (user) return; // Already logged in, don't show Google One Tap
+    if (!authCheckComplete) return; // Still checking auth state
+    if (typeof window === 'undefined') return; // Not client-side
+
+    // All conditions met - setup Google One Tap
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.defer = true;
+    script.async = true;
+    script.onload = () => {
+      if (window.google && window.google.accounts) {
+        window.google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
+          callback: handleOneTapLogin,
+        });
+        window.google.accounts.id.prompt();
+      }
+    };
+    document.body.appendChild(script);
     
-    if (!user && authCheckComplete && typeof window !== 'undefined') {
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.defer = true;
-      script.async = true;
-      script.onload = () => {
-        if (window.google && window.google.accounts) {
-          window.google.accounts.id.initialize({
-            client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
-            callback: handleOneTapLogin,
-          });
-          window.google.accounts.id.prompt();
-        }
-      };
-      document.body.appendChild(script);
-      
-      return () => {
-        // Cleanup script if component unmounts
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
-        }
-      };
-    }
+    return () => {
+      // Cleanup script if component unmounts
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
   }, [user, authCheckComplete, isMounted]);
 
   // Setup Intersection Observer for animations (CLIENT-SIDE ONLY)
@@ -219,8 +246,6 @@ export default function Home() {
                 transform: showWelcomeMessage ? 'translateY(0)' : 'translateY(10px)',
                 transition: 'all 0.3s ease-in-out'
               }}>
-                {/* <h3>Welcome back, {user?.firstName || 'there'}!</h3>
-                <p>Continue building your professional network and exploring opportunities.</p> */}
                 <h3>Welcome back, {user?.firstName || 'there'}!</h3>
                   <p>
                     Share your link to get job referrals in your dashboard — no more email spam!
@@ -264,7 +289,7 @@ export default function Home() {
                     </svg>
                   </div>
                   <p className="url-description">
-                    Let others know you're available to help with job referrals at your company.
+                    Let others know you&apos;re available to help with job referrals at your company.
                   </p>
                 <Link href="/profile">
                   <button className="primary-button">
