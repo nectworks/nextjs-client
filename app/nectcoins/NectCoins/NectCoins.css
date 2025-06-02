@@ -13,23 +13,25 @@
   gap: 2rem;
 }
 
-/* Header Section */
+/* Header Section - Updated layout with coins card next to title */
 .modern_header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   margin-bottom: 1rem;
 }
 
 .header_main {
-  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .modern_title {
   font-size: 2.5rem;
   font-weight: 700;
   color: #0f172a;
-  margin: 0 0 0.5rem 0;
+  margin: 0;
   letter-spacing: -0.025em;
 }
 
@@ -40,36 +42,38 @@
   font-weight: 400;
 }
 
+/* Smaller total coins card positioned next to title */
 .total_coins_card {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   background: white;
-  padding: 1rem 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
   border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
+  width: fit-content;
 }
 
 .total_coins_card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
 }
 
 .coin_icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 28px;
+  height: 28px;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   border-radius: 50%;
-  padding: 8px;
+  padding: 6px;
 }
 
 .total_amount {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #0f172a;
 }
@@ -485,10 +489,10 @@
     padding: 1rem;
   }
 
-  .modern_header {
+  .header_main {
     flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 
   .modern_title {
@@ -496,7 +500,7 @@
   }
 
   .total_coins_card {
-    justify-content: center;
+    align-self: flex-start;
   }
 
   .streak_header {

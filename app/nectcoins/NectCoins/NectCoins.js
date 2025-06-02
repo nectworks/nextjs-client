@@ -225,20 +225,20 @@ function NectCoins() {
           <ProfileHeaderWrapper />
 
           <div className="modern_nectcoins_content">
-            {/* Header Section */}
+            {/* Header Section - Coins card moved next to title */}
             <div className="modern_header">
               <div className="header_main">
                 <h1 className="modern_title">NectCoins</h1>
-                <p className="modern_subtitle">
-                  Your digital currency for the Nectworks ecosystem
-                </p>
-              </div>
-              <div className="total_coins_card">
-                <div className="coin_icon">
-                  <Image src={nectCoinsImg} alt="NectCoin" width={24} height={24} />
+                <div className="total_coins_card">
+                  <div className="coin_icon">
+                    <Image src={nectCoinsImg} alt="NectCoin" width={20} height={20} />
+                  </div>
+                  <span className="total_amount">{formatNectCoins(user?.totalCoins)}</span>
                 </div>
-                <span className="total_amount">{formatNectCoins(user?.totalCoins)}</span>
               </div>
+              <p className="modern_subtitle">
+                Your digital currency for the Nectworks ecosystem
+              </p>
             </div>
 
             {/* Streak Section */}
