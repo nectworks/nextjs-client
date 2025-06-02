@@ -420,8 +420,9 @@ export default function Home() {
                 <span className="text-gradient">Reimagining</span> How Talent Connects to Opportunity
               </h1>
               <p className="hero__subtitle" itemProp="description">
-                Simplify job referrals. No more inbox chaos. Build your network, showcase your talent, 
-                and advance your career with our data-driven platform.
+                No more messy DMs or emails. Drop your custom link on LinkedIn, 
+                Twitter, or anywhere you vibe — and let job seekers send you their job info straight to your dashboard.
+                Or, Looking for a job or want a referral? Sign up, plug in, and make career moves happen.
               </p>
               
               {showWelcomeMessage && (

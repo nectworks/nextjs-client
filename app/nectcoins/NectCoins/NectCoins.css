@@ -110,8 +110,15 @@
 .streak_message {
   color: #6366f1;
   font-weight: 500;
-  margin: 0;
+  margin: 0 0 0.5rem 0;
   font-size: 0.95rem;
+}
+
+.streak_urgency {
+  color: #f59e0b;
+  font-weight: 600;
+  margin: 0;
+  font-size: 0.875rem;
 }
 
 .streak_counter {
@@ -201,6 +208,74 @@
   50% {
     box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
   }
+}
+
+/* Streak Timing & Urgency Section */
+.streak_timing_info {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.daily_reward_info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.reward_item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  flex: 1;
+}
+
+.reward_item.bonus {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.streak_reminder {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background: #eff6ff;
+  border-radius: 0.5rem;
+  border: 1px solid #bfdbfe;
+}
+
+.reminder_icon {
+  font-size: 1rem;
+}
+
+.reminder_text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e40af;
+}
+
+.streak_warning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.warning_text {
+  font-size: 0.75rem;
+  color: #dc2626;
+  font-weight: 500;
 }
 
 /* Activities Section */
@@ -449,6 +524,15 @@
   .faq_grid {
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .daily_reward_info {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .reward_item {
+    justify-content: center;
   }
 }
 
