@@ -1,8 +1,8 @@
 'use client';
 /*
-  File: UserContext.js (SSR-SAFE VERSION)
-  Description: Completely SSR-safe user context that prevents all build errors
-  while maintaining optimized performance.
+  File: UserContext.js (ENHANCED FOR RELIABILITY)
+  Description: Completely SSR-safe user context with improved state management
+  and better handling of auth transitions to fix Google One Tap issues.
 */
 
 import { createContext, useEffect, useState, useRef } from 'react';
@@ -11,6 +11,7 @@ import {
   tokenResInterceptor,
 } from '../../config/axiosInstance.js';
 import { usePathname } from 'next/navigation';
+import { safeSessionStorage, safeCookies, authStorage } from '@/Utils/browserUtils.js';
 
 export const UserContext = createContext(null);
 
@@ -27,44 +28,23 @@ export default function UserContextProvider({ children }) {
   const pathname = usePathname();
   const abortControllerRef = useRef(null);
   const isMountedRef = useRef(true);
+  const authCheckTimeoutRef = useRef(null);
+  
+  // ENHANCED: Track authentication verification attempts
+  const authVerifyAttempts = useRef(0);
+  const MAX_AUTH_VERIFY_ATTEMPTS = 2;
   
   // Pages that should render immediately without waiting for auth
   const publicPages = ['/', '/home', '/sign-up', '/log-in'];
   const isPublicPage = publicPages.includes(pathname);
   
-  // SSR-SAFE: Helper function to safely access sessionStorage
-  const safeSessionStorage = {
-    getItem: (key) => {
-      if (typeof window === 'undefined') return null;
-      try {
-        return sessionStorage.getItem(key);
-      } catch (error) {
-        console.warn('Error accessing sessionStorage:', error);
-        return null;
-      }
-    },
-    setItem: (key, value) => {
-      if (typeof window === 'undefined') return;
-      try {
-        sessionStorage.setItem(key, value);
-      } catch (error) {
-        console.warn('Error setting sessionStorage:', error);
-      }
-    },
-    removeItem: (key) => {
-      if (typeof window === 'undefined') return;
-      try {
-        sessionStorage.removeItem(key);
-      } catch (error) {
-        console.warn('Error removing from sessionStorage:', error);
-      }
-    }
-  };
-  
-  // OPTIMIZED: Fast auth check function
+  // OPTIMIZED: Fast auth check function with better error handling
   const checkCredentials = async (isBackground = false) => {
     // Only run on client side
     if (typeof window === 'undefined') return;
+    
+    // Increment verification attempts
+    authVerifyAttempts.current += 1;
     
     // Cancel any existing request
     if (abortControllerRef.current) {
@@ -87,6 +67,9 @@ export default function UserContextProvider({ children }) {
         // Store successful auth in sessionStorage for faster subsequent loads
         safeSessionStorage.setItem('auth_status', 'authenticated');
         safeSessionStorage.setItem('user_data', JSON.stringify(res.data.user));
+        
+        // ENHANCED: Reset attempts counter on success
+        authVerifyAttempts.current = 0;
       }
       
       setAuthCheckComplete(true);
@@ -104,7 +87,35 @@ export default function UserContextProvider({ children }) {
         setUser(null);
       }
       
-      setAuthCheckComplete(true);
+      // ENHANCED: Handle network errors more gracefully
+      if (!err.response) {
+        console.warn('Network error during auth check:', err.message);
+        
+        // If we're on a public page, still mark auth as complete
+        if (isPublicPage) {
+          setAuthCheckComplete(true);
+        } 
+        // If we've exceeded max retries, mark as complete
+        else if (authVerifyAttempts.current >= MAX_AUTH_VERIFY_ATTEMPTS) {
+          console.warn(`Auth check failed after ${authVerifyAttempts.current} attempts. Proceeding anyway.`);
+          setAuthCheckComplete(true);
+        }
+        // Otherwise, retry with exponential backoff (if not already at max attempts)
+        else if (authVerifyAttempts.current < MAX_AUTH_VERIFY_ATTEMPTS && isMountedRef.current) {
+          const retryDelay = Math.min(1000 * (2 ** (authVerifyAttempts.current - 1)), 5000);
+          authCheckTimeoutRef.current = setTimeout(() => {
+            if (isMountedRef.current) {
+              checkCredentials(isBackground);
+            }
+          }, retryDelay);
+          
+          return; // Don't mark as complete yet, we're retrying
+        }
+      } else {
+        // For standard HTTP errors, mark check as complete
+        setAuthCheckComplete(true);
+      }
+      
       setIsInitialLoad(false);
     }
   };
@@ -114,6 +125,21 @@ export default function UserContextProvider({ children }) {
     if (typeof window === 'undefined') return false;
     
     try {
+      // ENHANCED: Check cookies first as they're most reliable
+      const hasAccessCookie = !!safeCookies.get('access');
+      
+      if (hasAccessCookie) {
+        // Cookie exists, but we still need user data
+        const userData = safeSessionStorage.getItem('user_data');
+        
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          setUser(parsedUser);
+          return true; // Found cached auth
+        }
+      }
+      
+      // If no cookie or missing user data, fall back to session storage check
       const authStatus = safeSessionStorage.getItem('auth_status');
       const userData = safeSessionStorage.getItem('user_data');
       
@@ -172,11 +198,27 @@ export default function UserContextProvider({ children }) {
       }
     }
     
+    // ENHANCED: Set up a periodic background auth check every 5 minutes
+    // This helps keep the auth state fresh and prevents issues with expired tokens
+    const authRefreshInterval = setInterval(() => {
+      if (isMountedRef.current && user) {
+        // Only refresh if we have a user (we're logged in)
+        checkCredentials(true);
+      }
+    }, 5 * 60 * 1000); // 5 minutes
+    
     return () => {
       isMountedRef.current = false;
+      
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
+      
+      if (authCheckTimeoutRef.current) {
+        clearTimeout(authCheckTimeoutRef.current);
+      }
+      
+      clearInterval(authRefreshInterval);
       privateAxios.interceptors.response.eject(customInterceptor);
     };
   }, []); // Empty dependency array to run only once
@@ -184,14 +226,32 @@ export default function UserContextProvider({ children }) {
   // Update user mode when user changes
   useEffect(() => {
     setUserMode(!!user?.userDetails?.emailID ? 'professional' : 'seeker');
+    
+    // ENHANCED: When user changes, update Google One Tap state
+    if (user) {
+      // If user is authenticated, clear Google One Tap state
+      // This prevents Google One Tap from showing after login
+      if (typeof window !== 'undefined') {
+        try {
+          safeSessionStorage.setItem('googleOneTapAttempted', 'true');
+        } catch (error) {
+          console.warn('Error updating Google One Tap state:', error);
+        }
+      }
+    }
   }, [user]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
+      
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
+      }
+      
+      if (authCheckTimeoutRef.current) {
+        clearTimeout(authCheckTimeoutRef.current);
       }
     };
   }, []);
@@ -199,8 +259,17 @@ export default function UserContextProvider({ children }) {
   // Manual refresh function
   const refreshUser = () => {
     if (isMounted && !isInitialLoad) {
+      // Reset attempt counter when manually refreshing
+      authVerifyAttempts.current = 0;
       checkCredentials(false);
     }
+  };
+  
+  // ENHANCED: Add function to clear user state (useful for logout)
+  const clearUser = () => {
+    setUser(null);
+    safeSessionStorage.removeItem('auth_status');
+    safeSessionStorage.removeItem('user_data');
   };
 
   // SSR-SAFE: Don't render context until mounted on client
@@ -212,6 +281,7 @@ export default function UserContextProvider({ children }) {
           userState: [null, () => {}],
           userModeState: ['seeker', () => {}],
           refreshUser: () => {},
+          clearUser: () => {},
           authCheckComplete: false,
           isInitialLoad: true,
         }}
@@ -227,6 +297,7 @@ export default function UserContextProvider({ children }) {
         userState: [user, setUser],
         userModeState: [userMode, setUserMode],
         refreshUser,
+        clearUser,
         authCheckComplete,
         isInitialLoad,
       }}
