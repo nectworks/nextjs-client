@@ -7,6 +7,7 @@
     skills, and social links. It features modern UI elements like gradients,
     floating animations, and a more engaging visual layout.
 */
+
 import { useEffect, useRef, useState } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { useRouter, useParams } from 'next/navigation';
@@ -49,6 +50,7 @@ import showBottomMessage from '@/Utils/showBottomMessage';
 import { publicAxios, privateAxios } from '@/config/axiosInstance';
 import { UserContext } from '@/context/User/UserContext';
 import { getSkillDescription, getSkillEmoji } from '@/Utils/skillDescriptions';
+import { safeSessionStorage } from '@/Utils/browserUtils';
 
 // Import CSS
 import './PublicProfile.css';
@@ -75,6 +77,15 @@ const PublicProfile = () => {
   const [shareOptionsVisible, setShareOptionsVisible] = useState(false);
   const [showOwnerInfo, setShowOwnerInfo] = useState(true);
   const [companyColors, setCompanyColors] = useState({});
+  
+  // IMPROVED: Refs to track Google One Tap state and prevent issues
+  const googleInitialized = useRef(false);
+  const googleScript = useRef(null);
+  const oneTapShown = useRef(false);
+  const authCheckTimeoutRef = useRef(null);
+  const googleCancelled = useRef(false);
+  const googleContainerRef = useRef(null);
+  const isMounted = useRef(false);
   
   const spanRef = useRef(null);
   const sectionRefs = {
@@ -393,42 +404,54 @@ const PublicProfile = () => {
     setShowOwnerInfo(false);
   };
 
-  // Initialize the one-tap login
+  // IMPROVED: Better Google One Tap Login with proper state management
   async function handleOneTapLogin(response) {
     try {
-      console.log('One-tap response received:', response);
+      // Mark that we're handling a login to prevent duplicate prompts
+      googleCancelled.current = true;
       
       const res = await privateAxios.post(`/google/one-tap/register`, {
         data: response,
       });
-
-      console.log('API response:', res.data);
 
       const { signUp, user: userData } = res.data;
       
       if (res.status === 200 && userData) {
         // Set user state first
         setUser(userData);
-        console.log('User state updated:', userData);
+        
+        // Store successful login in session to prevent future prompts
+        if (typeof window !== 'undefined') {
+          try {
+            safeSessionStorage.setItem('googleOneTapAttempted', 'true');
+          } catch (e) {
+            console.warn('Error storing Google One Tap state:', e);
+          }
+        }
         
         showBottomMessage('Successfully authenticated.');
         
-        // Use window.location for immediate redirect to avoid router issues
-        if (signUp === true) {
-          console.log('New signup - redirecting to profile');
-          window.location.href = '/profile';
-        } else {
-          console.log('Existing user - redirecting to profile');  
-          window.location.href = '/profile';
-        }
+        // Better redirect logic
+        const destination = signUp ? '/profile' : '/profile';
+        router.push(destination, {
+          replace: true,
+        });
       } else {
         console.error('Invalid response:', res);
         showBottomMessage('Authentication failed. Please try again.');
       }
     } catch (error) {
       console.error('One-tap login error:', error);
-      console.error('Error response:', error.response?.data);
       showBottomMessage('Error while signing up.');
+      
+      // Still mark the attempt in session storage to reduce prompt frequency
+      if (typeof window !== 'undefined') {
+        try {
+          safeSessionStorage.setItem('googleOneTapAttempted', 'true');
+        } catch (e) {
+          console.warn('Error storing Google One Tap state:', e);
+        }
+      }
     }
   }
 
@@ -457,29 +480,175 @@ const PublicProfile = () => {
     </div>
   );
 
-  // Load Google One Tap
+  // COMPLETELY REWRITTEN: Google One Tap Initialization with safety checks
   useEffect(() => {
-    if (!user && typeof window !== 'undefined') {
+    isMounted.current = true;
+    
+    // Only run for non-authenticated users
+    if (user || typeof window === 'undefined') return;
+    
+    // Function to safely create container for Google One Tap
+    const createGoogleContainer = () => {
+      // First check if container already exists by ID
+      let container = document.getElementById('g_id_onload');
+      
+      // If not exists, create it
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'g_id_onload';
+        container.style.position = 'fixed';
+        container.style.top = '0';
+        container.style.right = '0';
+        container.style.zIndex = '1000';
+        container.dataset.createdBy = 'profile-component'; // Mark as created by this component
+        document.body.appendChild(container);
+        googleContainerRef.current = container;
+      } else {
+        // Container exists, just store reference
+        googleContainerRef.current = container;
+      }
+      
+      return container;
+    };
+    
+    // Function to safely remove the container
+    const removeGoogleContainer = () => {
+      // Only remove if we created it
+      if (googleContainerRef.current) {
+        // Safety check: verify it's still in the document and it's our container
+        if (document.body.contains(googleContainerRef.current) &&
+            googleContainerRef.current.dataset.createdBy === 'profile-component') {
+          try {
+            document.body.removeChild(googleContainerRef.current);
+          } catch (e) {
+            console.warn("Error removing Google container:", e);
+            // Don't throw - just continue
+          }
+        }
+        googleContainerRef.current = null;
+      }
+    };
+    
+    // Function to safely cancel Google One Tap
+    const cancelGoogleOneTap = () => {
+      if (window.google && window.google.accounts && oneTapShown.current) {
+        console.log("Explicitly cancelling Google One Tap on profile page");
+        try {
+          window.google.accounts.id.cancel();
+        } catch (e) {
+          console.warn("Error cancelling Google One Tap:", e);
+        }
+        oneTapShown.current = false;
+        googleCancelled.current = true;
+      }
+    };
+    
+    // Check if we've recently attempted Google One Tap
+    const hasRecentAttempt = typeof window !== 'undefined' && safeSessionStorage.getItem('googleOneTapAttempted') === 'true';
+    
+    // Skip initialization if there was a recent attempt (reduces prompt frequency)
+    if (hasRecentAttempt) {
+      console.log("Skipping Google One Tap - recent attempt detected");
+      return;
+    }
+    
+    // Skip if already initialized or cancelled
+    if (googleInitialized.current || googleCancelled.current) {
+      return;
+    }
+    
+    // Initialize Google One Tap with a delay to ensure auth state is settled
+    const initializeGoogleOneTap = () => {
+      if (user || googleInitialized.current || googleCancelled.current) {
+        return;
+      }
+      
+      console.log("Initializing Google One Tap on profile page");
+      googleInitialized.current = true;
+      
+      // Create container first (safely)
+      createGoogleContainer();
+      
+      // Load the Google script
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.defer = true;
       script.async = true;
       script.onload = () => {
-        if (window.google && window.google.accounts) {
-          window.google.accounts.id.initialize({
-            client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
-            callback: handleOneTapLogin,
-          });
-          window.google.accounts.id.prompt();
+        if (window.google && window.google.accounts && !googleCancelled.current && !user) {
+          try {
+            window.google.accounts.id.initialize({
+              client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
+              callback: handleOneTapLogin,
+              cancel_on_tap_outside: true,
+              prompt_parent_id: 'g_id_onload', // Only show in this container if it exists
+            });
+            
+            // Use a small delay before showing the prompt
+            setTimeout(() => {
+              if (!user && !googleCancelled.current && isMounted.current) {
+                console.log("Showing Google One Tap prompt on profile page");
+                try {
+                  window.google.accounts.id.prompt();
+                  oneTapShown.current = true;
+                } catch (e) {
+                  console.warn("Error showing Google One Tap:", e);
+                }
+              }
+            }, 1000);
+          } catch (e) {
+            console.warn("Error initializing Google One Tap:", e);
+          }
         }
       };
-      document.body.appendChild(script);
       
-      return () => {
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
+      document.body.appendChild(script);
+      googleScript.current = script;
+    };
+    
+    // Delay initialization to ensure auth state is stable
+    const timeoutId = setTimeout(() => {
+      if (!user && isMounted.current) {
+        initializeGoogleOneTap();
+      }
+    }, 1500);
+    
+    // Cleanup function
+    return () => {
+      isMounted.current = false;
+      clearTimeout(timeoutId);
+      
+      // Cancel Google One Tap if it was shown
+      cancelGoogleOneTap();
+      
+      // Remove the Google script if we created it
+      if (googleScript.current && document.body.contains(googleScript.current)) {
+        try {
+          document.body.removeChild(googleScript.current);
+        } catch (e) {
+          console.warn("Error removing Google script:", e);
         }
-      };
+        googleScript.current = null;
+        googleInitialized.current = false;
+      }
+      
+      // Remove the container
+      removeGoogleContainer();
+    };
+  }, [user]);
+
+  // Add effect to cancel Google One Tap when user changes
+  useEffect(() => {
+    // If user becomes authenticated, cancel Google One Tap
+    if (user && oneTapShown.current && window.google && window.google.accounts) {
+      console.log("User authenticated, cancelling Google One Tap");
+      try {
+        window.google.accounts.id.cancel();
+      } catch (e) {
+        console.warn("Error cancelling Google One Tap:", e);
+      }
+      oneTapShown.current = false;
+      googleCancelled.current = true;
     }
   }, [user]);
 
