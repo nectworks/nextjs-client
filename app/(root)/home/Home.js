@@ -632,11 +632,9 @@ export default function Home() {
                 <span className="text-gradient">Reimagining</span> How Talent Connects to Opportunity
               </h1>
               <p className="hero__subtitle" itemProp="description">
-                No more messy DMs or emails. Drop your custom link on LinkedIn, 
-                Twitter, or anywhere you vibe — and let job seekers send you their job info straight to your dashboard.
-                Or, Looking for a job or want a referral? Sign up, plug in, and make career moves happen.
+                No more messy DMs. Share your link anywhere — get referrals straight to your dashboard.
+                Job hunting or need a referral? Sign up, plug in, and make moves.
               </p>
-              
               {showWelcomeMessage && (
                 <section 
                   className="hero__welcome-back" 
