@@ -55,10 +55,10 @@ const keywords = [
 // Enhanced metadata with better SEO optimization
 export const metadata = {
   title: {
-    default: 'Nectworks - AI-Powered Job Referral Platform | Connect Talent with Opportunities',
+    default: "Nectworks | One Profile for Jobs & Referrals. That’s It.",
     template: '%s | Nectworks'
   },
-  description: 'Transform your hiring process with Nectworks - the AI-powered job referral platform. Connect job seekers with company insiders, streamline employee referrals, and reduce time-to-hire by 60%. Join 1000+ professionals building their careers through smart referrals.',
+  description: 'Tired of messy job hunts? Nectworks makes it easy — one profile, one link, zero chaos. Share, connect, and get referred by real people, not bots. Welcome to the future of job moves.',
   keywords: keywords,
   authors: [{ name: 'Nectworks Team' }],
   creator: 'Nectworks',
@@ -80,19 +80,18 @@ export const metadata = {
     },
   },
   
-  // Icons with comprehensive favicon support
+  // Updated icons with comprehensive favicon support
   icons: {
     icon: [
-      { url: '/icon.ico', sizes: '16x16 32x32 48x48', type: 'image/x-icon' },
-      { url: '/faviconLogo.png', sizes: '16x16', type: 'image/png' },
-      { url: '/faviconLogo.png', sizes: '32x32', type: 'image/png' },
-      { url: '/faviconLogo.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon/favicon.ico', sizes: '16x16 32x32 48x48', type: 'image/x-icon' },
+      { url: '/favicon/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
     ],
     apple: [
-      { url: '/faviconLogo.png', sizes: '180x180', type: 'image/png' },
+      { url: '/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
     other: [
-      { rel: 'mask-icon', url: '/faviconLogo.png', color: '#0057B1' },
+      { rel: 'mask-icon', url: '/favicon/favicon.svg', color: '#0057B1' },
     ],
   },
   
@@ -102,8 +101,8 @@ export const metadata = {
     locale: 'en_US',
     url: baseURL,
     siteName: 'Nectworks',
-    title: 'Nectworks - AI-Powered Job Referral Platform | Connect Talent with Opportunities',
-    description: 'Transform your hiring process with Nectworks. AI-powered job referrals, streamlined recruitment, and 60% faster hiring. Join 1000+ professionals building careers through smart referrals.',
+    title: "Nectworks | One Profile for Jobs & Referrals. That’s It.",
+    description: 'Tired of messy job hunts? Nectworks makes it easy — one profile, one link, zero chaos. Share, connect, and get referred by real people, not bots. Welcome to the future of job moves.',
     images: [
       {
         url: `${baseURL}/nectworksOgImage.webp`,
@@ -127,8 +126,8 @@ export const metadata = {
     card: 'summary_large_image',
     site: '@nectworks',
     creator: '@nectworks',
-    title: 'Nectworks - AI-Powered Job Referral Platform',
-    description: 'Transform hiring with AI-powered job referrals. 60% faster hiring, streamlined recruitment. Join 1000+ professionals building careers.',
+    title: "Nectworks | One Profile for Jobs & Referrals. That’s It.",
+    description: 'Tired of messy job hunts? Nectworks makes it easy — one profile, one link, zero chaos. Share, connect, and get referred by real people, not bots. Welcome to the future of job moves.',
     images: [`${baseURL}/nectworksOgImage.webp`],
   },
   
@@ -139,7 +138,7 @@ export const metadata = {
     'apple-mobile-web-app-title': 'Nectworks',
     'mobile-web-app-capable': 'yes',
     'msapplication-TileColor': '#0057B1',
-    'msapplication-TileImage': `${baseURL}/faviconLogo.png`,
+    'msapplication-TileImage': `${baseURL}/favicon/apple-touch-icon.png`,
     'theme-color': '#0057B1',
     'color-scheme': 'light',
     'format-detection': 'telephone=no',
@@ -270,6 +269,11 @@ export default function RootLayout({ children }) {
         {/* DNS prefetch for performance */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
+        
+        {/* Enhanced favicon support */}
+        <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
         
         {/* Structured Data */}
         <script

@@ -582,7 +582,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Nectworks - AI-Powered Job Referral Platform | Connect Talent with Opportunities</title>
+        <title>Nectworks | One Profile. That&apos;s It.</title>
         <meta name="description" content="Transform your hiring process with Nectworks - the AI-powered job referral platform. Connect job seekers with company insiders, streamline employee referrals, and reduce time-to-hire by 60%. Join 1000+ professionals building their careers through smart referrals." />
         <meta name="keywords" content="job referrals, employee referral platform, AI hiring, professional networking, career opportunities, talent acquisition, recruitment platform, job matching, referral management, hiring optimization" />
         <link rel="canonical" href={baseURL} />
@@ -633,7 +633,7 @@ export default function Home() {
               </h1>
               <p className="hero__subtitle" itemProp="description">
                 No more messy DMs. Share your link anywhere — get referrals straight to your dashboard.
-                Job hunting or need a referral? Sign up, plug in, and make moves.
+                Job hunting or just vibing? Plug in and make moves.
               </p>
               {showWelcomeMessage && (
                 <section 

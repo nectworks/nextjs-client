@@ -1,189 +1,141 @@
 {
-    "name": "Nectworks - AI-Powered Job Referral Platform",
-    "short_name": "Nectworks",
-    "description": "Transform your hiring process with AI-powered job referrals. Connect job seekers with company insiders, streamline employee referrals, and reduce time-to-hire by 60%.",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#0057B1",
-    "orientation": "portrait-primary",
-    "scope": "/",
-    "lang": "en-US",
-    "dir": "ltr",
-    
-    "icons": [
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "16x16",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "32x32",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "48x48",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "72x72",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "96x96",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "128x128",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "144x144",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "152x152",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "180x180",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "192x192",
-        "type": "image/png",
-        "purpose": "any maskable"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "384x384",
-        "type": "image/png",
-        "purpose": "any"
-      },
-      {
-        "src": "/faviconLogo.png",
-        "sizes": "512x512",
-        "type": "image/png",
-        "purpose": "any maskable"
-      }
-    ],
-    
-    "categories": [
-      "business",
-      "productivity",
-      "professional",
-      "networking",
-      "career"
-    ],
-    
-    "shortcuts": [
-      {
-        "name": "Sign Up",
-        "short_name": "Sign Up",
-        "description": "Create your Nectworks account",
-        "url": "/sign-up",
-        "icons": [
-          {
-            "src": "/faviconLogo.png",
-            "sizes": "96x96"
-          }
-        ]
-      },
-      {
-        "name": "For Professionals",
-        "short_name": "Professionals",
-        "description": "Refer candidates and earn bonuses",
-        "url": "/professional",
-        "icons": [
-          {
-            "src": "/faviconLogo.png",
-            "sizes": "96x96"
-          }
-        ]
-      },
-      {
-        "name": "For Job Seekers",
-        "short_name": "Job Seekers",
-        "description": "Find job referrals quickly",
-        "url": "/jobseeker",
-        "icons": [
-          {
-            "src": "/faviconLogo.png",
-            "sizes": "96x96"
-          }
-        ]
-      },
-      {
-        "name": "For Companies",
-        "short_name": "Companies",
-        "description": "Streamline your hiring process",
-        "url": "/for-companies",
-        "icons": [
-          {
-            "src": "/faviconLogo.png",
-            "sizes": "96x96"
-          }
-        ]
-      }
-    ],
-    
-    "screenshots": [
-      {
-        "src": "/nectworksOgImage.webp",
-        "sizes": "1200x630",
-        "type": "image/webp",
-        "platform": "wide",
-        "label": "Nectworks Dashboard Overview"
-      },
-      {
-        "src": "/heroSectionHeroImg.webp",
-        "sizes": "600x400",
-        "type": "image/webp",
-        "platform": "narrow",
-        "label": "Mobile App Interface"
-      }
-    ],
-    
-    "prefer_related_applications": false,
-    "edge_side_panel": {
-      "preferred_width": 400
+  "name": "Nectworks - AI-Powered Job Referral Platform",
+  "short_name": "Nectworks",
+  "description": "Transform your hiring process with AI-powered job referrals. Connect job seekers with company insiders, streamline employee referrals, and reduce time-to-hire by 60%.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0057B1",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "dir": "ltr",
+  
+  "icons": [
+    {
+      "src": "/favicon/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
     },
-    
-    "protocol_handlers": [
-      {
-        "protocol": "web+nectworks",
-        "url": "/profile?referral=%s"
-      }
-    ],
-    
-    "related_applications": [
-      {
-        "platform": "webapp",
-        "url": "https://nectworks.com/manifest.json"
-      }
-    ],
-    
-    "serviceworker": {
-      "src": "/sw.js",
-      "scope": "/",
-      "update_via_cache": "imports"
+    {
+      "src": "/favicon/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
     }
+  ],
+  
+  "categories": [
+    "business",
+    "productivity",
+    "professional",
+    "networking",
+    "career"
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Sign Up",
+      "short_name": "Sign Up",
+      "description": "Create your Nectworks account",
+      "url": "/sign-up",
+      "icons": [
+        {
+          "src": "/favicon/favicon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "For Professionals",
+      "short_name": "Professionals",
+      "description": "Refer candidates and earn bonuses",
+      "url": "/professional",
+      "icons": [
+        {
+          "src": "/favicon/favicon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "For Job Seekers",
+      "short_name": "Job Seekers",
+      "description": "Find job referrals quickly",
+      "url": "/jobseeker",
+      "icons": [
+        {
+          "src": "/favicon/favicon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "For Companies",
+      "short_name": "Companies",
+      "description": "Streamline your hiring process",
+      "url": "/for-companies",
+      "icons": [
+        {
+          "src": "/favicon/favicon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "/nectworksOgImage.webp",
+      "sizes": "1200x630",
+      "type": "image/webp",
+      "platform": "wide",
+      "label": "Nectworks Dashboard Overview"
+    },
+    {
+      "src": "/heroSectionHeroImg.webp",
+      "sizes": "600x400",
+      "type": "image/webp",
+      "platform": "narrow",
+      "label": "Mobile App Interface"
+    }
+  ],
+  
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+nectworks",
+      "url": "/profile?referral=%s"
+    }
+  ],
+  
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://nectworks.com/manifest.json"
+    }
+  ],
+  
+  "serviceworker": {
+    "src": "/sw.js",
+    "scope": "/",
+    "update_via_cache": "imports"
   }
+}
