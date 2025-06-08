@@ -1,7 +1,7 @@
 'use client';
 
 /*
-  File: useAuthRedirect.js (OPTIMIZED)
+  File: useAuthRedirect.js
   Description: Non-blocking auth redirect hook that allows immediate rendering
   while handling redirects in the background for better UX.
 */

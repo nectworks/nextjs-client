@@ -2,7 +2,11 @@
 
 /*
   File: Login.js (OPTIMIZED)
-  Description: Fast-loading login component that renders immediately while
+  Description: This file defines a React component (LoginForm) responsible for
+  rendering a user login form, handling OTP verification, and providing
+  responsive behavior based on the screen width.
+  It enhances user experience by offering OTP-based authentication for
+  a smooth login process.Fast-loading login component that renders immediately while
   handling auth redirects in the background for optimal user experience.
 */
 

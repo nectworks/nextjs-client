@@ -1,7 +1,7 @@
 {
-  "name": "Nectworks - AI-Powered Job Referral Platform",
+  "name": "Nectworks | One Profile for Jobs & Referrals. That’s It.",
   "short_name": "Nectworks",
-  "description": "Transform your hiring process with AI-powered job referrals. Connect job seekers with company insiders, streamline employee referrals, and reduce time-to-hire by 60%.",
+  "description": "Tired of messy job hunts? Nectworks makes it easy — one profile, one link, zero chaos. Share, connect, and get referred by real people, not bots. Welcome to the future of job moves.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

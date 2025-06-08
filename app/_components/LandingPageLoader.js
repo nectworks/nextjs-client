@@ -1,6 +1,6 @@
 'use client';
 /*
-  File: LandingPageLoader.js (ENHANCED)
+  File: LandingPageLoader.js
   Description: Optimized loading component with intelligent caching and faster load times.
   Provides smooth loading experience while avoiding SSR issues.
 */

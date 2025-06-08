@@ -1,7 +1,7 @@
 'use client';
 
 /*
-  File: ViewUser.js (Fixed Version)
+  File: ViewUser.js
   Description: In this page admins can see all users and
   search for users and review their information.
 */
