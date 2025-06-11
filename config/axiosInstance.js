@@ -1,6 +1,3 @@
-// config/axiosInstance.js
-// Fixed axios configuration for production admin authentication
-
 import axios from 'axios';
 
 const baseURL = process.env.NEXT_PUBLIC_APP_URL;
@@ -45,31 +42,17 @@ privateAxios.interceptors.response.use(
     
     const prevStatus = error.response.status;
 
-    // Handle 401 errors differently for admin vs user routes
+    // ✅ FIXED: Simplified 401 handling to prevent loops
     if (prevStatus === 401 && !prevRequest._retry) {
+      prevRequest._retry = true;
       
-      // For admin routes, don't attempt token refresh - handle in component
+      // For admin routes, don't attempt token refresh - let context handle it
       if (prevRequest.url?.includes('/admin/')) {
-        console.log('Admin authentication failed');
-        
-        // FIXED: Use AND operator and better path checking
-        if (typeof window !== 'undefined' && 
-            !window.location.pathname.includes('/admin-panel') && 
-            !window.location.pathname.includes('/login')) {
-          // Clear any existing admin state
-          if (window.localStorage) {
-            window.localStorage.removeItem('admin');
-          }
-          // Redirect to admin login
-          window.location.href = '/admin-panel';
-        }
-        
+        console.log('Admin authentication failed - letting context handle redirect');
         return Promise.reject(error);
       }
       
-      // For user routes, attempt token refresh
-      prevRequest._retry = true;
-
+      // For user routes, attempt token refresh only if not already refreshing
       if (!isRefreshing) {
         isRefreshing = true;
 
@@ -91,22 +74,22 @@ privateAxios.interceptors.response.use(
           isRefreshing = false;
           console.error('Token refresh failed:', refreshError.message);
           
-          // FIXED: Only redirect if NOT already on auth-related pages AND it's a protected route
+          // ✅ FIXED: Simplified redirect logic to prevent loops
           if (typeof window !== 'undefined') {
             const currentPath = window.location.pathname;
-            const isOnAuthPage = currentPath.includes('/signin') || 
-                               currentPath.includes('/signup') || 
-                               currentPath.includes('/admin-panel');
             
-            // FIXED: Only redirect for specific protected routes that actually need auth
+            // Only redirect for specific protected routes
             const isProtectedRoute = currentPath.includes('/dashboard') || 
                                    currentPath.includes('/profile') || 
                                    currentPath.includes('/account-settings') ||
                                    currentPath.includes('/nectcoins');
             
+            const isOnAuthPage = currentPath.includes('/signin') ||
+                               currentPath.includes('/signup') ||
+                               currentPath.includes('/admin-panel');
+
             // Only redirect if user is on a protected route and not already on auth page
             if (isProtectedRoute && !isOnAuthPage) {
-              // Add a small delay to prevent immediate loops
               setTimeout(() => {
                 window.location.href = '/signin';
               }, 100);

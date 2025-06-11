@@ -328,7 +328,7 @@ function DashboardMenu() {
               <span className="dashboard_menu_item_icon">
                 <Image src={postAJobIcon} alt="post icon" />
               </span>
-              <span className="dashboard_menu_item_text">Post a job</span>
+              <span className="dashboard_menu_item_text">Jobs</span>
               <span className="dashboard_beta_feature_alert">BETA</span>
             </div>
           </li>

@@ -1,3 +1,4 @@
+/* Profile Header Container - Main wrapper for the dashboard header */
 .dashboard_profile_header {
   width: 100%;
   position: relative;
@@ -12,17 +13,17 @@
   width: fit-content;
 }
 
-/* Hamburger icon styles for the profile header in mobile view */
+/* Hamburger Menu Icon - Hidden by default, shown on mobile */
 .dashboard_profile_hamburger_icon {
   display: none;
-  width: 30px; /* Reduced width for more compact appearance */
+  width: 30px;
   cursor: pointer;
   z-index: 1000;
-  margin: 0; /* Reset margins */
-  padding: 0; /* Reset padding */
+  margin: 0;
+  padding: 0;
 }
 
-/* Profile image container */
+/* Profile Image Container - Positioned absolutely on desktop */
 .dashboard_profile_float_profile {
   width: 40px;
   height: 40px;
@@ -30,7 +31,7 @@
   right: 20px;
   top: -3px;
   cursor: pointer;
-  z-index: 10; /* Keep this lower than profile_header_options when active */
+  z-index: 10; /* Lower z-index when dropdown is inactive */
 }
 
 .dashboard_profile_float_profile .profile_image {
@@ -43,24 +44,24 @@
   font-size: 1.2rem;
 }
 
-/* Core dropdown styling - container for dropdown options */
+/* Dropdown Options Container - Initially hidden behind profile image */
 .profile_header_options {
   position: absolute;
-  right: 20px; /* Same as profile image */
-  top: -3px; /* Same as profile image */
+  right: 20px;
+  top: -3px;
   z-index: 5; /* Lower than profile image by default */
-  pointer-events: none; /* Initially, let clicks pass through to profile image */
+  pointer-events: none; /* Prevent clicks when hidden */
   width: 40px;
   height: 40px;
 }
 
-/* Change z-index and enable pointer events when dropdown is active */
+/* Active state for dropdown - Higher z-index and enabled clicks */
 .display_profile_header_options {
-  z-index: 200; /* Higher than profile image when active */
-  pointer-events: auto; /* Enable clicks on options when active */
+  z-index: 200;
+  pointer-events: auto;
 }
 
-/* Individual dropdown option styling */
+/* Individual Dropdown Option Buttons */
 .profile_header_option {
   position: absolute;
   right: 0;
@@ -75,27 +76,27 @@
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease-in-out;
-  pointer-events: auto; /* Enable clicks on the buttons */
+  pointer-events: auto;
 }
 
-/* Position the options with proper alignment */
+/* Positioning for dropdown options */
 .profile_header_option:nth-child(1) {
-  top: 50px; /* Position below the profile image */
-  right: 0; /* Aligned with profile image */
+  top: 50px; /* First option below profile image */
+  right: 0;
 }
 
 .profile_header_option:nth-child(2) {
-  top: 95px; /* Position below the first option */
-  right: 0; /* Aligned with profile image */
+  top: 95px; /* Second option below first */
+  right: 0;
 }
 
-/* Show options when the active class is applied */
+/* Show options when dropdown is active */
 .display_profile_header_options .profile_header_option {
   opacity: 1;
   visibility: visible;
 }
 
-/* Tooltip styling */
+/* Tooltip Styling for Dropdown Options */
 .profile_header_option span {
   position: absolute;
   right: 45px;
@@ -117,7 +118,7 @@
   visibility: visible;
 }
 
-/* profile locked message */
+/* Profile Locked Message - Shown when profile is not complete */
 .profile_locked_message {
   display: none;
   width: min(300px, 80vw);
@@ -132,6 +133,7 @@
   z-index: 101;
 }
 
+/* Triangle pointer for locked message tooltip */
 .profile_locked_message span {
   border-bottom: 16px solid #262626;
   border-left: 12px solid #0000;
@@ -143,10 +145,12 @@
   right: 50px;
 }
 
+/* Show locked message on hover */
 .dashboard_profile_float_profile:hover .profile_locked_message {
   display: block;
 }
 
+/* NectCoins Display Button - Shows user's coin balance */
 .dashboard_profile_header_nectcoins {
   width: auto;
   min-width: 80px;
@@ -159,6 +163,14 @@
   align-items: center;
   border: 1px solid #ba6f0c;
   border-radius: 30px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect for coin button */
+.dashboard_profile_header_nectcoins:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(186, 111, 12, 0.2);
 }
 
 .dashboard_profile_header_nectcoins img {
@@ -168,6 +180,52 @@
   font-weight: 900;
 }
 
+/* SIMPLIFIED COIN ANIMATION - Clean fade and slide effect */
+.coin_animation {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 1.2rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  animation: simpleCoinAnimation 2.5s ease-out forwards;
+  z-index: 1000;
+}
+
+.coin_animation_text {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+/* Simplified animation - just fade in, stay, fade out with gentle upward movement */
+@keyframes simpleCoinAnimation {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  85% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+/* General Button Styles for Notification Actions */
 .booleanButton {
   background-color: #007bff;
   color: #fff;
@@ -184,6 +242,7 @@
   background-color: #0056b3;
 }
 
+/* Notification System Styles */
 .notificationImage {
   width: 2.5rem;
   height: 2.5rem;
@@ -209,6 +268,7 @@
   padding: 3rem;
 }
 
+/* Notification Icon Container */
 .notification-container {
   position: absolute;
   right: 170px;
@@ -220,6 +280,7 @@
   position: relative;
 }
 
+/* Red notification alert badge */
 .notificationAlert {
   position: absolute;
   top: 2px;
@@ -235,6 +296,7 @@
   justify-content: center;
 }
 
+/* Notification Panel - Slides in from right */
 .notification-list {
   position: fixed;
   top: 15%;
@@ -251,11 +313,13 @@
   border-bottom-left-radius: 1rem;
 }
 
+/* Active state for notification panel */
 .notification-list.slide-in {
   right: 0;
   animation: slideInFromRight 0.3s ease-in-out forwards;
 }
 
+/* Slide animation for notification panel */
 @keyframes slideInFromRight {
   from {
     right: -300px;
@@ -265,6 +329,7 @@
   }
 }
 
+/* Notification List Styling */
 .notification-list ul {
   list-style-type: none;
   padding: 0;
@@ -282,6 +347,7 @@
   gap: 1rem;
 }
 
+/* Custom scrollbar for notification panel */
 .notification-list::-webkit-scrollbar {
   width: 5px;
 }
@@ -295,15 +361,19 @@
   background-color: #0056b3;
 }
 
+/* Close button for notification panel */
 .close {
   width: 2rem;
   cursor: pointer;
   z-index: 70;
   border-radius: 50%;
 }
+
 .close:hover {
   box-shadow: 1.5px 1.6px 7px 5.5px #dddddd;
 }
+
+/* Notification panel header */
 .NotificationBar {
   display: flex;
   flex-direction: row;
@@ -316,6 +386,7 @@
   cursor: pointer;
 }
 
+/* Profile image in notifications */
 .notification-list .profile_image {
   width: 100%;
   height: 100%;
@@ -331,12 +402,14 @@
   height: 3rem;
 }
 
+/* MOBILE RESPONSIVE STYLES */
 @media screen and (max-width: 800px) {
+  /* Mobile Header Layout */
   .dashboard_profile_header {
     margin: 0;
     height: auto;
     min-height: 50px;
-    padding: 0.75rem 0; /* Remove horizontal padding */
+    padding: 0.75rem 0;
     display: flex;
     align-items: center;
     background-color: #fafafa;
@@ -344,29 +417,31 @@
     top: 0;
     width: 100%;
     box-sizing: border-box;
-    justify-content: flex-start; /* Start alignment to ensure proper spacing */
+    justify-content: flex-start;
   }
 
+  /* Hide greeting text on mobile */
   .dashboard_profile_header p {
     display: none;
   }
 
-  /* Fix hamburger icon positioning - position at far left */
+  /* Show hamburger menu on mobile */
   .dashboard_profile_hamburger_icon {
     display: block;
-    margin: 0 auto 0 0.5rem; /* Minimal left margin, auto right margin */
+    margin: 0 auto 0 0.5rem;
     position: static;
-    flex-shrink: 0; /* Prevent icon from shrinking */
-    box-sizing: content-box; /* Ensure dimensions include only content */
+    flex-shrink: 0;
+    box-sizing: content-box;
   }
 
-  /* Align other elements to the right with consistent spacing */
+  /* Mobile notification container positioning */
   .notification-container {
     position: static;
-    margin-left: auto; /* Push to right side */
+    margin-left: auto;
     margin-right: 0.75rem;
   }
 
+  /* Mobile coin button styling */
   .dashboard_profile_header_nectcoins {
     position: static;
     margin-right: 0.75rem;
@@ -374,7 +449,7 @@
     height: 35px;
   }
 
-  /* Fix profile image positioning */
+  /* Mobile profile image positioning */
   .dashboard_profile_float_profile {
     width: 40px;
     height: 40px;
@@ -382,14 +457,14 @@
     margin-right: 0.75rem;
   }
 
-  /* Fix dropdown alignment in mobile view */
+  /* Mobile dropdown positioning */
   .profile_header_options {
     position: absolute;
-    right: 0.75rem; /* Match profile image right margin */
+    right: 0.75rem;
     top: 0.75rem;
   }
 
-  /* Position dropdown options to avoid UI clutter in mobile */
+  /* Mobile dropdown option positioning */
   .profile_header_option:nth-child(1) {
     top: 50px;
     right: 0;
@@ -400,41 +475,48 @@
     right: 0;
   }
 
-  /* Adjust tooltip position for mobile to prevent cutoff */
+  /* Mobile tooltip positioning */
   .profile_header_option span {
     right: 45px;
   }
   
-  /* Improve mobile notification panel */
+  /* Mobile notification panel - wider */
   .notification-list {
     width: 80vw;
   }
+
+  /* Mobile coin animation adjustments */
+  .coin_animation {
+    top: -25px;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .coin_animation_text {
+    font-size: 0.75rem;
+  }
 }
 
-/* Specific adjustments for exactly 768px */
+/* Tablet Specific Styles (768px) */
 @media screen and (width: 768px) {
   .dashboard_profile_header {
     padding: 0.75rem 0;
     justify-content: flex-start;
   }
   
-  /* Ensure hamburger is positioned correctly at exactly 768px */
   .dashboard_profile_hamburger_icon {
     margin: 0 auto 0 0.5rem;
   }
   
-  /* Fix profile image positioning at exactly 768px */
   .dashboard_profile_float_profile {
     margin-right: 0.75rem;
   }
   
-  /* Fix dropdown alignment at exactly 768px */
   .profile_header_options {
     right: 0.75rem;
     top: 0.75rem;
   }
   
-  /* Make sure dropdown options align with profile image */
   .profile_header_option:nth-child(1) {
     top: 50px;
     right: 0;
@@ -446,41 +528,52 @@
   }
 }
 
-/* Enhanced mobile layout fixes for smaller screens */
+/* Small Mobile Devices (480px and below) */
 @media screen and (max-width: 480px) {
-  /* Maintain consistent layout on very small screens */
   .dashboard_profile_hamburger_icon {
-    margin: 0 auto 0 0.5rem; /* Keep consistent minimal left margin */
+    margin: 0 auto 0 0.5rem;
   }
   
   .notification-container {
-    margin-right: 0.75rem; /* Consistent spacing for small screens */
+    margin-right: 0.75rem;
   }
 
+  /* Full width notification panel on very small screens */
   .notification-list {
     width: 100vw;
   }
   
   .dashboard_profile_float_profile {
-    margin-right: 0.75rem; /* Consistent spacing for small screens */
+    margin-right: 0.75rem;
   }
   
+  /* Smaller coin button on mobile */
   .dashboard_profile_header_nectcoins {
-    margin-right: 0.75rem; /* Consistent spacing for small screens */
+    margin-right: 0.75rem;
     min-width: 65px;
     font-size: 0.9rem;
     height: 30px;
   }
   
-  /* Make dropdown tooltips work on mobile */
+  /* Smaller tooltips on mobile */
   .profile_header_option span {
     font-size: 11px;
     padding: 3px 6px;
     right: 42px;
   }
   
-  /* Fix dropdown positioning on very small screens */
   .profile_header_options {
-    right: 0.75rem; /* Match profile image right margin */
+    right: 0.75rem;
+  }
+
+  /* Even smaller coin animation on very small screens */
+  .coin_animation {
+    top: -20px;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .coin_animation_text {
+    font-size: 0.7rem;
   }
 }

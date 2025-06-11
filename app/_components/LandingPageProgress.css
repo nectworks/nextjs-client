@@ -4,134 +4,238 @@
   with 'lp-' prefix to avoid conflicts with existing styles.
 */
 
-/* Main overlay that covers the entire page during loading */
 .lp-progress-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background: #f6f6f5;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Ensure it's above everything */
-  transition: opacity 0.5s ease-in-out;
+  z-index: 9999;
+  transition: opacity 0.5s ease-out;
 }
 
-/* Center content container */
 .lp-progress-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 80%;
-  max-width: 500px;
+  max-width: 400px; /* CHANGED: Reduced max-width */
+  color: black;
+  text-align: center; /* NEW: Center align text */
+  padding: 2rem; /* NEW: Added padding */
 }
 
-/* Logo styling */
+/* UPDATED: Logo with floating animation */
 .lp-progress-logo {
-  width: 200px;
-  height: auto;
+  width: auto; /* CHANGED: Auto width */
+  height: 60px; /* CHANGED: Fixed height instead */
   margin-bottom: 2rem;
+  filter: brightness(1.1); /* NEW: Brighten logo */
+  animation: logoFloat 3s ease-in-out infinite; /* NEW: Floating animation */
 }
 
-/* Progress bar container */
+/* NEW: Logo floating animation */
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* UPDATED: Enhanced progress bar container */
 .lp-progress-container {
-  height: 0.3rem;
   width: 100%;
-  background-color: #f0f0f0;
-  border-radius: 0.4rem;
+  height: 8px; /* INCREASED: From 0.3rem to 8px */
+  background-color: rgba(255, 255, 255, 0.2); /* CHANGED: Semi-transparent white */
+  border-radius: 4px;
+  margin: 1.5rem 0; /* CHANGED: Vertical margin */
   overflow: hidden;
-  position: relative;
-  margin-bottom: 1rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* NEW: Inset shadow */
 }
 
-/* Actual progress indicator */
+/* UPDATED: Enhanced progress bar with shimmer effect */
 .lp-progress-container .lp-progress {
   height: 100%;
-  width: 0;
-  border-radius: 0.4rem;
-  background: #0057b1;
-  transition: width 0.3s ease;
-  position: relative;
+  background: linear-gradient(90deg, #00d4ff 0%, #090979 35%, #00d4ff 100%); /* NEW: Animated gradient */
+  background-size: 200% 100%; /* NEW: For animation */
+  border-radius: 4px;
+  transition: width 0.3s ease-out;
+  animation: progressShimmer 2s linear infinite; /* NEW: Shimmer animation */
+  box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3); /* NEW: Glow effect */
+  position: relative; /* Keep existing */
 }
 
-/* Loading status text */
+/* NEW: Progress shimmer animation (replaces old pulse) */
+@keyframes progressShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* UPDATED: Enhanced loading status */
 .lp-loading-status {
-  font-size: 1rem;
-  color: #666;
-  margin-top: 1rem;
+  font-size: 1.1rem; /* INCREASED: From 1rem */
+  font-weight: 500; /* NEW: Medium weight */
+  margin: 1rem 0;
+  opacity: 0.9; /* NEW: Slight transparency */
+  min-height: 1.5rem; /* NEW: Consistent height */
+  animation: statusFade 0.5s ease-in-out; /* NEW: Fade animation */
+  color: black;
   font-family: 'Inter', sans-serif;
   text-align: center;
 }
 
-/* Error messages container */
+/* NEW: Status fade animation */
+@keyframes statusFade {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 0.9; transform: translateY(0); }
+}
+
+/* NEW: Progress percentage display */
+.lp-progress-percentage {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1rem 0;
+  color: black;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: percentageGlow 2s ease-in-out infinite alternate;
+}
+
+/* NEW: Percentage glow animation */
+@keyframes percentageGlow {
+  from { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }
+  to { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3); }
+}
+
+/* NEW: Component loading indicators */
+.lp-component-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.lp-component-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.lp-component-dot.loaded {
+  background-color: #0057b1;
+  box-shadow: 0 0 10px rgba(11, 173, 232, 0.5);
+  transform: scale(1.2);
+}
+
+.lp-component-dot.loading {
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+/* NEW: Dot pulse animation */
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* NEW: Debug info for development */
+.lp-debug-info {
+  margin-top: 1rem;
+  opacity: 0.7;
+  font-size: 0.8rem;
+  font-family: monospace;
+  color: white;
+}
+
+/* UPDATED: Error styling for new background */
 .lp-loading-errors {
-  margin-top: 2rem;
+  margin-top: 1rem; /* CHANGED: Reduced margin */
   padding: 1rem;
-  background-color: #fff8f8;
-  border: 1px solid #ffcdd2;
-  border-radius: 0.4rem;
+  background-color: rgba(255, 255, 255, 0.1); /* CHANGED: Semi-transparent */
+  border: none; /* CHANGED: Removed border */
+  border-left: 4px solid #ff6b6b; /* NEW: Left accent border */
+  border-radius: 8px; /* INCREASED: Border radius */
   max-width: 100%;
   max-height: 200px;
   overflow-y: auto;
-  color: #d32f2f;
+  color: black;
   font-size: 0.9rem;
   text-align: left;
 }
 
-/* Individual error items */
+/* UPDATED: Error item styling */
 .lp-error-item {
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  background-color: #ffebee;
-  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  margin: 0.25rem 0; /* CHANGED: Reduced margin */
+  opacity: 0.8; /* NEW: Slight transparency */
+  padding: 0; /* REMOVED: Padding */
+  background-color: transparent; /* CHANGED: Transparent background */
+  border-radius: 0; /* REMOVED: Border radius */
 }
 
-/* Add pulse animation to progress bar for better user feedback */
-@keyframes lp-pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-  }
+/* NEW: Smooth completion transition */
+.lp-progress-overlay.completing {
+  opacity: 0;
+  transform: scale(1.05);
+  transition: all 0.5s ease-out;
 }
 
-.lp-progress-container .lp-progress::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: lp-pulse 1.5s infinite;
-}
-
-/* Container for the Home component while loading */
-.lp-home-container {
-  min-height: 100vh; /* Ensure the container takes up at least the full viewport height */
-  width: 100%;
-  position: relative;
-}
-
-/* Handle mobile view */
+/* UPDATED: Mobile optimizations */
 @media (max-width: 768px) {
   .lp-progress-content {
     width: 90%;
-    max-width: 400px;
+    max-width: 320px; /* CHANGED: Reduced max-width */
+    padding: 1rem; /* NEW: Reduced padding */
   }
   
   .lp-progress-logo {
-    width: 160px;
+    height: 50px; /* CHANGED: Smaller on mobile */
+    margin-bottom: 1.5rem; /* CHANGED: Reduced margin */
+  }
+  
+  .lp-progress-percentage {
+    font-size: 1.5rem; /* NEW: Smaller on mobile */
   }
   
   .lp-loading-status {
-    font-size: 0.9rem;
+    font-size: 1rem; /* CHANGED: Back to 1rem on mobile */
   }
+}
+
+/* NEW: Accessibility support */
+@media (prefers-contrast: high) {
+  .lp-progress-overlay {
+    background: #000;
+  }
+  
+  .lp-progress-container {
+    background-color: #333;
+  }
+  
+  .lp-progress-container .lp-progress {
+    background: #fff;
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-progress-logo,
+  .lp-progress-container .lp-progress,
+  .lp-component-dot,
+  .lp-progress-percentage {
+    animation: none;
+  }
+  
+  .lp-loading-status {
+    animation: none;
+  }
+}
+
+/* NEW: Focus indicators */
+.lp-progress-overlay:focus-within {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
 }

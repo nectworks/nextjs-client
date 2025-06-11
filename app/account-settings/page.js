@@ -6,7 +6,21 @@
     of the page. It is the default export of the file.
 */
 
-import AccountSettings from './AccountSettings';
+import dynamic from 'next/dynamic';
+
+const AccountSettings = dynamic(() => import('./AccountSettings'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      height: '100vh' 
+    }}>
+      <div>Loading account settings...</div>
+    </div>
+  )
+});
 
 const AccountSettingsPage = () => {
   return <AccountSettings />;

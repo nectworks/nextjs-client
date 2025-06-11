@@ -1,9 +1,6 @@
 /*
     FileName - page.js
-    Desc - This file defines a simple functional component named `page` which 
-    serves as an entry point for rendering the `JobSeeker` component. The `page` 
-    component returns the `JobSeeker` component, effectively making it the main content 
-    of the page. It is the default export of the file.
+    Desc - Entry point for the JobSeeker component with updated metadata
 */
 
 import JobSeeker from './JobSeeker';
@@ -11,26 +8,28 @@ import JobSeeker from './JobSeeker';
 const baseURL = process.env.NEXT_PUBLIC_CLIENT_URL || 'https://nectworks.com';
 
 export const metadata = {
-  title: 'Jobseeker | Nectworks',
+  title: 'Get Referred',
   description:
-    'Learn how job seekers can leverage Nectworks to ask for referrals, connect with company insiders, and find job opportunities.',
+    'Tap into our powerful referral network to get noticed by hiring managers and land your dream job with quality referrals from company insiders.',
   keywords: [
-    'Job seeker referrals',
-    'Find job referrals',
-    'Networking for job seekers',
-    'Ask for job referrals',
-    'Job search platform',
+    'Job referrals',
+    'Employee referrals',
+    'Get referred to jobs',
+    'Job application referrals',
+    'Tech job referrals',
+    'Career networking',
   ],
   openGraph: {
-    title: 'Jobseeker | Nectworks',
+    title: 'Get Referred to Your Dream Jobs',
     description:
-      'Learn how job seekers can leverage Nectworks to ask for referrals, connect with company insiders, and find job opportunities.',
+      'Skip the application black hole. Get personally referred by employees at top companies through our referral network.',
     keywords: [
-      'Job seeker referrals',
-      'Find job referrals',
-      'Networking for job seekers',
-      'Ask for job referrals',
-      'Job search platform',
+      'Job referrals',
+      'Employee referrals',
+      'Get referred to jobs',
+      'Job application referrals',
+      'Tech job referrals',
+      'Career networking',
     ],
     url: 'https://nectworks.com/jobseeker',
     siteName: 'Nectworks',
@@ -39,7 +38,7 @@ export const metadata = {
         url: `${baseURL}/nectworksOgImage.webp`,
         width: 1200,
         height: 630,
-        alt: 'Nectworks OG Image',
+        alt: 'Nectworks Job Referral Platform',
       },
     ],
     locale: 'en_US',

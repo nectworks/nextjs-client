@@ -298,7 +298,7 @@ html, body {
 .hero__container {
   display: flex;
   align-items: center;
-  gap: 4rem;
+  gap: 3rem; /* Reduced from 4rem */
   box-sizing: border-box;
   position: relative;
   z-index: 2;
@@ -309,6 +309,10 @@ html, body {
   max-width: 600px;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem; /* Reduced gap between elements */
 }
 
 .tag-line {
@@ -319,37 +323,45 @@ html, body {
   border-radius: var(--border-radius);
   font-weight: 600;
   font-size: 0.875rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem; /* Reduced from 1.5rem */
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .hero__title {
   font-size: 3.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem; /* Reduced from 1.5rem */
   line-height: 1.1;
 }
 
 .hero__subtitle {
   font-size: 1.25rem;
-  margin-bottom: 2.5rem;
   color: var(--text-mid);
+  max-width: 600px;
+  margin: 0;
 }
 
 .hero__signup {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
   max-width: 450px;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 2.5rem;
+  margin-top: 1rem;
 }
 
 .hero-stats {
   display: flex;
   gap: 2rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
+}
+
+.hero-stats dl {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  margin: 0;
 }
 
 .hero-stats .stat-item {
@@ -375,13 +387,14 @@ html, body {
   background-color: white;
   border: 2px solid var(--neutral-200);
   border-radius: var(--border-radius);
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 1rem; /* Reduced vertical padding */
   font-size: 1.125rem;
   width: 100%;
   box-sizing: border-box;
   max-width: 100%;
   overflow: hidden;
   transition: var(--transition);
+  margin: 0; /* Remove any margin */
 }
 
 .username-input:focus-within {
@@ -423,9 +436,9 @@ html, body {
 
 .signup-button {
   width: 100%;
-  padding: 0.9rem;
+  padding: 0.75rem;
   font-size: 1.125rem;
-  margin-top: 0.5rem;
+  margin: 0;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -1338,23 +1351,45 @@ html, body {
   margin: 0 auto;
   width: 92%;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
 }
 
-.testimonial-container {
-  display: flex;
-  transition: transform 0.6s ease-in-out;
-  width: 500%;
+/* Updated testimonial-slides container */
+.testimonial-slides {
+  position: relative;
+  min-height: 380px; /* Fixed consistent height for all cards */
+  width: 100%;
+  margin-bottom: 2rem;
 }
 
+/* Fix testimonial card display */
 .testimonial-card {
-  flex: 0 0 20%;
   background-color: white;
   border-radius: var(--border-radius-lg);
   padding: 2rem;
   box-shadow: var(--shadow-md);
   width: 100%;
   box-sizing: border-box;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transform: translateX(50px);
+}
+
+.testimonial-card.active {
+  opacity: 1;
+  transform: translateX(0);
+  z-index: 2;
+}
+
+/* Standardize the quote styles */
+.testimonial-quote {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: var(--text-dark);
 }
 
 .quote-icon {
@@ -1371,13 +1406,6 @@ html, body {
 .stars {
   display: flex;
   gap: 4px;
-}
-
-.testimonial-quote {
-  font-size: 1.25rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  color: var(--text-dark);
 }
 
 .testimonial-author {
@@ -1419,39 +1447,16 @@ html, body {
 }
 
 /* CTA Testimonial */
-.cta-testimonial {
-  text-align: center;
-  background-color: var(--secondary);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .cta-title {
   font-size: 1.75rem;
   color: var(--primary);
   margin-bottom: 1.5rem;
 }
 
-.cta-message {
-  font-size: 1.25rem;
-  color: var(--text-dark);
-  margin-bottom: 2rem;
-  max-width: 80%;
-}
-
 .cta-buttons {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.cta-testimonial .primary-button,
-.cta-testimonial .secondary-button {
-  min-width: 150px;
+  margin-top: 2rem;
 }
 
 /* Carousel Controls */
@@ -1459,10 +1464,12 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
   width: 100%;
   box-sizing: border-box;
   padding: 0 1rem;
+  position: relative;
+  z-index: 5;
 }
 
 .control-button {
@@ -1477,15 +1484,12 @@ html, body {
   justify-content: center;
   cursor: pointer;
   transition: var(--transition);
+  position: relative;
+  z-index: 10;
 }
 
-.control-button:hover:not(.disabled) {
+.control-button:hover {
   background-color: rgba(0, 87, 177, 0.1);
-}
-
-.control-button.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .carousel-indicators {
@@ -1502,6 +1506,8 @@ html, body {
   border: none;
   cursor: pointer;
   transition: var(--transition);
+  position: relative;
+  z-index: 10;
 }
 
 .indicator.active {
@@ -1587,19 +1593,70 @@ html, body {
 /* FAQ Section */
 .faq-section {
   background-color: white;
-  padding: 6rem 0;
+  padding: 6rem 0 4rem;
   text-align: center;
   width: 100%;
   box-sizing: border-box;
+}
+
+.faq-section .section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.faq-section .section-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.faq-section .section-header p {
+  font-size: 1.25rem;
+  color: var(--text-mid);
+  max-width: 600px;
+  margin: 0 auto 1rem;
 }
 
 .accordion-container {
   padding-top: 0 !important;
   padding-bottom: 2rem !important;
   width: 92%;
-  max-width: 1000px;
+  max-width: 800px; /* Reduced max-width for better readability */
   margin: 0 auto !important;
   box-sizing: border-box;
+}
+
+/* Style the accordion items to match the designs */
+.accordion-item {
+  background-color: white;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.accordion-header {
+  padding: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  font-weight: 600;
+}
+
+.accordion-content {
+  padding: 0 1.25rem 1.25rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+.accordion-icon {
+  transition: transform 0.3s ease;
+}
+
+.accordion-item.active .accordion-icon {
+  transform: rotate(180deg);
 }
 
 /* CTA Section */
@@ -1684,7 +1741,7 @@ html, body {
 .cta-container p {
   font-size: 1.25rem;
   margin-bottom: 2.5rem;
-  opacity: 0.9;
+  opacity: 0.95;
   max-width: 700px;
 }
 
@@ -1768,891 +1825,146 @@ html, body {
   box-shadow: var(--shadow-md);
 }
 
-/* Responsive Styles */
-@media (max-width: 1200px) {
-  .home h1, .hero__title {
-    font-size: 3rem;
-  }
-  
-  .home h2, .feature-title, .section-title {
-    font-size: 2.25rem;
-  }
-  
-  .feature-container, .data-intelligence .container, .company-features {
-    gap: 3rem;
-  }
-  
-  .image-wrapper {
-    height: 250px;
-  }
+/* Welcome back section for logged-in users */
+.hero__welcome-back {
+  text-align: left;
+  padding: 0rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 1rem 0; /* Reduced from 2rem */
 }
 
-@media (max-width: 992px) {
-  .home h1, .hero__title {
-    font-size: 2.75rem;
-  }
-  
-  .home h2, .feature-title, .section-title, .cta-container h2 {
-    font-size: 2rem;
-  }
-  
-  .home section {
-    padding: 5rem 0;
-  }
-  
-  .data-intelligence .container {
-    flex-direction: column;
-  }
-  
-  .data-content, .company-content {
-    max-width: 100%;
-  }
-  
-  .company-features {
-    flex-direction: column;
-  }
-  
-  .company-image {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 900px) {
-  .hero {
-    padding: 6rem 0 4rem;
-  }
-  
-  .hero__container {
-    flex-direction: column;
-    gap: 3rem;
-    text-align: center;
-  }
-  
-  .hero__content {
-    max-width: 100%;
-  }
-  
-  .tag-line {
-    display: inline-block;
-  }
-  
-  .hero__subtitle {
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .hero__signup {
-    margin: 0 auto;
-    max-width: 90%;
-  }
-  
-  .hero-stats {
-    justify-content: center;
-  }
-  
-  .feature-container {
-    flex-direction: column-reverse !important;
-    text-align: center;
-  }
-  
-  .feature-section.reversed .feature-container {
-    flex-direction: column-reverse !important;
-  }
-  
-  .feature-content {
-    max-width: 100%;
-  }
-  
-  .feature-icon {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .feature-points {
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .steps {
-    flex-direction: column;
-    max-width: 400px;
-    margin: 0 auto 2rem;
-  }
-  
-  .alert-container {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .alert-content {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .image-wrapper {
-    margin: 0 auto;
-    max-width: 90%;
-  }
-  
-  .cta-buttons {
-    flex-direction: column;
-    max-width: 300px;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .cta-stats {
-    flex-wrap: wrap;
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .home {
-    overflow-x: hidden;
-    max-width: 100vw;
-  }
-  
-  .home section {
-    padding: 4rem 0;
-  }
-  
-  .home h1, .hero__title {
-    font-size: 2.5rem;
-  }
-  
-  .home h2, .feature-title, .section-title {
-    font-size: 1.75rem;
-  }
-  
-  .hero__subtitle, .feature-description, .section-description {
-    font-size: 1.125rem;
-  }
-  
-  .tabs-header {
-    flex-direction: column;
-    max-width: 300px;
-    margin: 0 auto 2rem;
-  }
-  
-  .username-input {
-    font-size: 1rem;
-    padding: 0.875rem 0.875rem;
-  }
-  
-  .username-input input {
-    font-size: 1rem;
-    min-width: 0; /* Critical for preventing text overflow */
-  }
-  
-  .signup-button {
-    font-size: 1rem;
-  }
-  
-  .floating-element.one {
-    width: 100px;
-    height: 100px;
-    top: -20px;
-    left: -20px;
-  }
-  
-  .floating-element.two {
-    width: 70px;
-    height: 70px;
-    bottom: -15px;
-    right: -15px;
-  }
-  
-  .floating-element.three {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .data-metrics {
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: center;
-  }
-  
-  .data-metrics .metric {
-    text-align: center;
-  }
-  
-  .steps-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .step-card {
-    max-width: 100%;
-    width: 100%;
-  }
-  
-  .company-benefits {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .benefit-card {
-    max-width: 100%;
-    width: 100%;
-  }
-  
-  /* Testimonial adjustments */
-  .testimonial-card {
-    padding: 1.5rem;
-  }
-  
-  .testimonial-quote {
-    font-size: 1.125rem;
-  }
-  
-  /* Feature sections improvements */
-  .feature-section {
-    padding: 3rem 0;
-  }
-  
-  /* Image size adjustments */
-  .image-wrapper {
-    height: auto;
-    max-height: 250px;
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-  
-  .image-wrapper img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
-  
-  /* Fix hero section layout */
-  .hero {
-    padding: 4rem 0 3rem;
-  }
-  
-  /* Ensure buttons are properly sized */
-  .primary-button, .secondary-button, .signup-button, .cta-button {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  /* Improve alert button display */
-  .alert-button {
-    display: inline-flex;
-    justify-content: center;
-    width: auto;
-    min-width: 150px;
-    margin: 0 auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .home .container, 
-  .home .hero__container,
-  .home .tabs-container,
-  .home .feature-container,
-  .home .alert-container,
-  .home .cta-container,
-  .home .testimonial-carousel,
-  .accordion-container {
-    width: 90%;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  .home h1, .hero__title {
-    font-size: 2rem;
-  }
-  
-  .home h2, .feature-title, .section-title {
-    font-size: 1.5rem;
-  }
-  
-  .hero {
-    padding: 3rem 0 2rem;
-  }
-  
-  /* Fix hero image container for mobile */
-  .image-container {
-    max-width: 100%;
-    margin: 0 auto;
-  }
-  
-  .main-image {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
-  
-  /* Fix for username input field */
-  .username-input {
-    font-size: 0.9rem;
-    padding: 0.75rem 0.75rem;
-  }
-  
-  .username-input span {
-    font-size: 0.9rem;
-  }
-  
-  .username-input input {
-    font-size: 0.9rem;
-  }
-  
-  .signup-button {
-    font-size: 0.95rem;
-    padding: 0.75rem 1rem;
-  }
-  
-  /* Adjust floating elements to not overflow */
-  .floating-element.one {
-    width: 80px;
-    height: 80px;
-    top: -10px;
-    left: -10px;
-  }
-  
-  .floating-element.two {
-    width: 50px;
-    height: 50px;
-    bottom: -10px;
-    right: -10px;
-  }
-  
-  .floating-element.three {
-    width: 40px;
-    height: 40px;
-  }
-  
-  /* Testimonial container needs more height on mobile */
-  .testimonial-container {
-    min-height: 500px;
-  }
-  
-  /* Reduce font sizes in testimonials */
-  .testimonial-quote {
-    font-size: 1rem;
-  }
-  
-  .author-info h4 {
-    font-size: 1rem;
-  }
-  
-  .author-info p {
-    font-size: 0.8rem;
-  }
-  
-  /* Reduce size of CTA badge */
-  .cta-badge {
-    top: 0.5rem;
-    right: 1rem;
-    font-size: 0.5rem;
-    padding: 0.2rem 0.6rem;
-  }
-  
-  /* Adjust stats in CTA */
-  .cta-stats {
-    gap: 1.5rem;
-  }
-  
-  .cta-stats h3 {
-    font-size: 1.75rem;
-  }
-  
-  .cta-stats p {
-    font-size: 0.875rem;
-  }
-}
-
-@media (max-width: 375px) {
-  .home h1, .hero__title {
-    font-size: 1.75rem;
-  }
-  
-  .home h2, .feature-title, .section-title {
-    font-size: 1.35rem;
-  }
-  
-  .hero__subtitle {
-    font-size: 1rem;
-  }
-  
-  .feature-description, .section-description {
-    font-size: 1rem;
-  }
-  
-  /* Reduce padding further for very small screens */
-  .home section {
-    padding: 3rem 0;
-  }
-  
-  /* Ensure tab buttons are visible and tappable */
-  .tab-button {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.95rem;
-  }
-  
-  /* Adjust testimonial container height for smaller content */
-  .testimonial-container {
-    min-height: 550px;
-  }
-  
-  /* Reduce size of buttons */
-  .primary-button, .secondary-button, .alert-button, .cta-primary, .cta-secondary {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.95rem;
-  }
-  
-  .data-metrics .metric-value {
-    font-size: 2rem;
-  }
-  
-  .data-metrics .metric-label {
-    font-size: 0.875rem;
-  }
-}
-
-/* Add a pulse animation for an extra subtle effect */
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(0, 87, 177, 0.3);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(0, 87, 177, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(0, 87, 177, 0);
-  }
-}
-
-.image-wrapper:hover {
-  animation: pulse 1.5s infinite;
-}
-
-/* Fix for username input field */
-.hero__signup {
-  width: 100%;
-  max-width: 450px;
-  box-sizing: border-box;
-}
-
-.username-input {
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  width: 100%;
-  overflow: hidden;
-}
-
-.username-input span {
-  flex-shrink: 0;
-}
-
-.username-input input {
-  flex: 1;
-  width: 1px; /* This forces the input to properly shrink */
-  min-width: 0;
-  margin-left: 2px;
-  text-overflow: ellipsis;
-}
-
-/* Preserve existing styles for FAQ accordion integration */
-.qna__header {
-  text-align: center;
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 500;
-  display: none; /* Hide the original header since we have our own section header */
-}
-
-.qna__header h4 {
-  font-size: 2rem;
-  font-weight: 500;
-  margin: 0;
-}
-
-.color_change {
-  color: var(--primary);
+.hero__welcome-back h3 {
+  color: var(--text-mid);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
-/* Add Gen Z friendly touches */
-.tag-line {
-  position: relative;
-  overflow: hidden;
-}
-
-.tag-line::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  animation: shimmer 3s infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-/* Add custom scrollbar */
-.home ::-webkit-scrollbar {
-  width: 8px;
-}
-
-.home ::-webkit-scrollbar-track {
-  background: var(--neutral-100);
-  border-radius: 10px;
-}
-
-.home ::-webkit-scrollbar-thumb {
-  background: var(--primary-light);
-  border-radius: 10px;
-}
-
-.home ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
-}
-
-/* Add focus styles for accessibility */
-.home button:focus,
-.home a:focus,
-.home input:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-/* Add keyframe for tab focus */
-@keyframes tabFocus {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.tab-button:focus {
-  animation: tabFocus 0.3s ease-in-out;
-}
-
-/* Add a nice overlay effect for buttons */
-.primary-button::after,
-.signup-button::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius);
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.5s ease-out;
-}
-
-.primary-button:active::after,
-.signup-button:active::after {
-  transform: translate(-50%, -50%) scale(1.5);
-  opacity: 0;
-}
-
-/* Additional Gen Z friendly elements */
-.username-input::placeholder {
-  color: var(--neutral-400);
-}
-
-/* Add subtle animations to improve UX */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.home {
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Ensure existing bodyMain__container__outer styles are preserved for backwards compatibility */
-.bodyMain__container__outer {
-  padding: 2rem 0;
-  background-color: var(--neutral-50);
-}
-
-.bodyMain__container__inner {
-  max-width: 1000px;
-  margin: 0 auto;
-  width: 92%;
-}
-
-.bodyMain__btn {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.toggle__btns {
-  display: flex;
-  gap: 1rem;
-  background-color: white;
-  padding: 0.5rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-}
-
-.main__btn {
-  background-color: transparent;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: var(--border-radius);
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.bodyMain__three__components {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
-
-.bodyMain__component {
-  flex: 1;
-  background-color: white;
-  border-radius: var(--border-radius);
-  padding: 2rem;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-}
-
-.bodyMain__component:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
-}
-
-.component__num {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--secondary);
-  color: var(--primary);
-  border-radius: 50%;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.component__text {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--text-dark);
-}
-
-.down_btn {
-  background-color: var(--primary);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--border-radius);
-  font-size: 1rem;
-  transition: var(--transition);
-}
-
-.down_btn:hover {
-  background-color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-/* Make sure other existing classes are preserved */
-.outer__layer__bdy__com {
-  padding: 0;
-  background: var(--accent);
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-  .bodyMain__three__components {
-    flex-direction: column;
-  }
-  
-  .toggle__btns {
-    flex-direction: column;
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .component__text {
-    font-size: 0.95rem;
-  }
-}
-
-/* Accessibility improvements */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  
-  .floating-element,
-  .image-wrapper:hover,
-  .scroll-arrow,
-  .tag-line::before {
-    animation: none !important;
-  }
-}
-
-/* Testimonial Section Fixes */
-.testimonials {
-  background-color: var(--neutral-50);
-  padding: 6rem 0;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.testimonial-carousel {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto;
-  width: 92%;
-  box-sizing: border-box;
-  overflow: visible;
-}
-
-/* Updated testimonial-slides container */
-.testimonial-slides {
-  position: relative;
-  min-height: 380px; /* Fixed consistent height for all cards */
-  width: 100%;
-  margin-bottom: 2rem;
-}
-
-/* Fix testimonial card display */
-.testimonial-card {
-  background-color: white;
-  border-radius: var(--border-radius-lg);
-  padding: 2rem;
-  box-shadow: var(--shadow-md);
-  width: 100%;
-  box-sizing: border-box;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  transform: translateX(50px);
-}
-
-.testimonial-card.active {
-  opacity: 1;
-  transform: translateX(0);
-  z-index: 2;
-}
-
-/* Standardize the quote styles */
-.testimonial-quote {
-  font-size: 1.25rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  color: var(--text-dark);
-}
-
-/* CTA card specific styles (keeping same overall height) */
-.cta-title {
-  font-size: 1.75rem;
-  color: var(--primary);
+.hero__welcome-back p {
+  color: var(--text-mid);
   margin-bottom: 1.5rem;
 }
 
-.cta-buttons {
+/* Loading skeleton for auth check */
+.hero__loading {
+  margin: 1rem 0; /* Reduced from 2rem */
+}
+
+.auth-loading-skeleton {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
-  margin-top: 2rem;
-}
-
-/* Carousel Controls - Positioned at a fixed distance from the card */
-.carousel-controls {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  margin-top: 1rem;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0 1rem;
-  position: relative;
-  z-index: 5;
 }
 
-.control-button {
-  background: none;
-  border: none;
-  color: var(--primary);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
+.skeleton-line {
+  height: 48px;
+  width: 300px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+.skeleton-button {
+  height: 48px;
+  width: 140px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 87, 177, 0.3) 25%,
+    rgba(0, 87, 177, 0.5) 50%,
+    rgba(0, 87, 177, 0.3) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 24px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Improve primary button styles */
+.primary-button {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: var(--transition);
-  position: relative;
-  z-index: 10;
-}
-
-.control-button:hover {
-  background-color: rgba(0, 87, 177, 0.1);
-}
-
-.carousel-indicators {
-  display: flex;
   gap: 0.5rem;
-  margin: 0 1rem;
-}
-
-.indicator {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: var(--secondary);
+  padding: 12px 24px;
+  background: #0057B1;
+  color: white;
   border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
   cursor: pointer;
-  transition: var(--transition);
-  position: relative;
-  z-index: 10;
 }
 
-.indicator.active {
-  background-color: var(--primary);
-  transform: scale(1.2);
+.primary-button:hover {
+  background: #004494;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 87, 177, 0.3);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+}
+
+.primary-button .button-icon {
+  transition: transform 0.3s ease;
+}
+
+.primary-button:hover .button-icon {
+  transform: translateX(4px);
+}
+
+.profile-url-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.profile-url-link {
+  text-decoration: none;
+}
+
+.profile-url {
+  color: #4a7eb7;
+  padding: 0rem 1rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profile-url:hover {
+  color: #0057b1;
+  transform: scale(1.1);
+}
+
+.copy-icon {
+  color: #4a7eb7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-icon:hover {
+  color: #0057b1;
+  transform: scale(1.1);
 }
 
 /* Animation for testimonial transitions */
@@ -2672,215 +1984,8 @@ html, body {
   animation: fadeInRight 0.5s forwards;
 }
 
-/* FAQ Section fixes */
-.faq-section {
-  background-color: white;
-  padding: 6rem 0 4rem; /* Adjusted padding */
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.accordion-container {
-  padding-top: 0 !important;
-  padding-bottom: 2rem !important;
-  width: 92%;
-  max-width: 800px; /* Reduced max-width for better readability */
-  margin: 0 auto !important;
-  box-sizing: border-box;
-}
-
-/* Style the accordion items to match the designs in Image 3 & 4 */
-.accordion-item {
-  background-color: white;
-  border-radius: var(--border-radius);
-  margin-bottom: 1rem;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-
-.accordion-header {
-  padding: 1.25rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  font-weight: 600;
-}
-
-.accordion-content {
-  padding: 0 1.25rem 1.25rem;
-  color: var(--text-mid);
-  line-height: 1.6;
-}
-
-.accordion-icon {
-  transition: transform 0.3s ease;
-}
-
-.accordion-item.active .accordion-icon {
-  transform: rotate(180deg);
-}
-
-/* Responsive fixes for testimonials & FAQ */
-@media (max-width: 768px) {
-  .testimonial-slides {
-    min-height: 460px; /* Consistent height on mobile */
-  }
-  
-  .testimonial-card {
-    padding: 1.5rem;
-  }
-  
-  .testimonial-quote {
-    font-size: 1.125rem;
-  }
-  
-  .cta-buttons {
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .cta-buttons .primary-button,
-  .cta-buttons .secondary-button {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .testimonial-slides {
-    min-height: 480px; /* Adjusted height for smaller screens */
-  }
-  
-  .testimonial-quote {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .testimonial-card {
-    padding: 1.25rem;
-  }
-  
-  .accordion-header {
-    padding: 1rem;
-    font-size: 0.95rem;
-  }
-  
-  .accordion-content {
-    padding: 0 1rem 1rem;
-    font-size: 0.95rem;
-  }
-}
-
-/* FAQ Section Styles */
-.faq-section {
-  background-color: white;
-  padding: 6rem 0 4rem;
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.faq-section .section-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.faq-section .section-header h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
-}
-
-.faq-section .section-header p {
-  font-size: 1.25rem;
-  color: var(--text-mid);
-  max-width: 600px;
-  margin: 0 auto 1rem;
-}
-
-/* Override the existing accordion background for this page */
-.faq-section .accordion-container {
-  background-color: transparent !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-}
-
-/* Media queries for the FAQ section */
-@media (max-width: 992px) {
-  .faq-section .section-header h2 {
-    font-size: 2rem;
-  }
-  
-  .faq-section .section-header p {
-    font-size: 1.125rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .faq-section {
-    padding: 4rem 0 3rem;
-  }
-  
-  .faq-section .section-header h2 {
-    font-size: 1.75rem;
-  }
-  
-  .faq-section .section-header p {
-    font-size: 1rem;
-    max-width: 90%;
-  }
-}
-
-@media (max-width: 480px) {
-  .faq-section {
-    padding: 3rem 0 2rem;
-  }
-  
-  .faq-section .section-header h2 {
-    font-size: 1.5rem;
-  }
-}
-
-/* 
-  Fix for benefit-card and step-card spacing on mobile
-*/
-@media (max-width: 768px) {
-  .step-card,
-  .benefit-card {
-    width: 95%; /* Reduce width to create space on both sides */
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .steps-container,
-  .company-benefits {
-    width: 100%;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .step-card,
-  .benefit-card {
-    width: 90%; /* Further reduce width on smaller screens */
-  }
-}
-
-/*
-  Desc: Updated styles for the For Companies page component featuring Gen Z design elements
-  while maintaining professional credibility for enterprise clients.
-  Includes improved centering, spacing, and UI components.
-  Location: app/(root)/home/Home.css
-*/
-
-/* For Companies Page Styles - Updated with proper centering and spacing */
+/* ForCompaniesPage styles */
+/* For Companies Page Styles */
 .for-companies-page {
   font-family: 'Inter', sans-serif;
   background-color: var(--accent);
@@ -3510,17 +2615,6 @@ html, body {
   z-index: 1;
 }
 
-@keyframes gentleFloat {
-  0%, 100% { 
-    transform: translateY(0px) scale(1); 
-    opacity: 0.7;
-  }
-  50% { 
-    transform: translateY(-15px) scale(1.05); 
-    opacity: 1;
-  }
-}
-
 @keyframes slowGrid {
   0% { transform: translate(0, 0); }
   100% { transform: translate(75px, 75px); }
@@ -3660,25 +2754,76 @@ html, body {
   font-style: italic;
 }
 
-/* Performance Optimizations */
-.companies-final-cta {
-  will-change: transform; /* Optimizes for animations */
+/* Animation Classes - Improved */
+@keyframes companiesSlideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.companies-final-cta::before,
-.companies-final-cta::after {
-  will-change: transform;
-  backface-visibility: hidden; /* Prevents flickering */
-  perspective: 1000px;
+.for-companies-page .animation-container.animate-in {
+  animation: companiesSlideInFromBottom 0.8s ease-out;
 }
 
-.floating-shape {
-  will-change: transform;
-  backface-visibility: hidden;
+/* Section Header Improvements */
+.for-companies-page .section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Responsive Styles for Companies Page - Improved */
+.for-companies-page .section-header h2 {
+  font-size: 2.75rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.for-companies-page .section-header p {
+  font-size: 1.25rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+/* Improved highlight class */
+.for-companies-page .highlight {
+  color: var(--primary);
+  font-weight: 700;
+  position: relative;
+}
+
+.for-companies-page .text-gradient {
+  background: linear-gradient(135deg, var(--primary), #F1EB3C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive Styles */
 @media (max-width: 1200px) {
+  .home h1, .hero__title {
+    font-size: 3rem;
+  }
+  
+  .home h2, .feature-title, .section-title {
+    font-size: 2.25rem;
+  }
+  
+  .feature-container, .data-intelligence .container, .company-features {
+    gap: 3rem;
+  }
+  
+  .image-wrapper {
+    height: 250px;
+  }
+  
   .companies-container {
     width: 92%;
   }
@@ -3697,6 +2842,34 @@ html, body {
 }
 
 @media (max-width: 992px) {
+  .home h1, .hero__title {
+    font-size: 2.75rem;
+  }
+  
+  .home h2, .feature-title, .section-title, .cta-container h2 {
+    font-size: 2rem;
+  }
+  
+  .home section {
+    padding: 5rem 0;
+  }
+  
+  .data-intelligence .container {
+    flex-direction: column;
+  }
+  
+  .data-content, .company-content {
+    max-width: 100%;
+  }
+  
+  .company-features {
+    flex-direction: column;
+  }
+  
+  .company-image {
+    max-width: 100%;
+  }
+  
   .companies-hero-title {
     font-size: 3rem;
   }
@@ -3718,14 +2891,91 @@ html, body {
   .companies-privacy-text {
     max-width: 100%;
   }
-  
-  /* Reduce animation complexity on medium screens */
-  .companies-final-cta .floating-shape {
-    animation-duration: 8s; /* Slower animations */
-  }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .hero {
+    padding: 6rem 0 4rem;
+  }
+  
+  .hero__container {
+    flex-direction: column;
+    gap: 2rem; /* Reduced from 3rem */
+    text-align: center;
+  }
+  
+  .hero__content {
+    max-width: 100%;
+  }
+  
+  .tag-line {
+    display: inline-block;
+  }
+  
+  .hero__subtitle {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .hero__signup {
+    margin: 0 auto;
+    max-width: 90%;
+  }
+  
+  .hero-stats {
+    justify-content: center;
+  }
+  
+  .feature-container {
+    flex-direction: column-reverse !important;
+    text-align: center;
+  }
+  
+  .feature-section.reversed .feature-container {
+    flex-direction: column-reverse !important;
+  }
+  
+  .feature-content {
+    max-width: 100%;
+  }
+  
+  .feature-icon {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .feature-points {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .steps {
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto 2rem;
+  }
+  
+  .alert-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .alert-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .image-wrapper {
+    margin: 0 auto;
+    max-width: 90%;
+  }
+  
+  .testimonial-slides {
+    min-height: 460px; /* Consistent height on mobile */
+  }
+  
   .companies-hero {
     padding: 6rem 0 5rem;
   }
@@ -3760,6 +3010,198 @@ html, body {
     transform: rotate(90deg);
     margin: 1rem 0;
   }
+}
+
+@media (max-width: 768px) {
+  .home {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  .home section {
+    padding: 4rem 0;
+  }
+  
+  .home h1, .hero__title {
+    font-size: 2.5rem;
+  }
+  
+  .home h2, .feature-title, .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .hero__subtitle, .feature-description, .section-description {
+    font-size: 1.125rem;
+  }
+  
+  .tabs-header {
+    flex-direction: column;
+    max-width: 300px;
+    margin: 0 auto 2rem;
+  }
+  
+  .username-input {
+    font-size: 1rem;
+    padding: 0.75rem 0.75rem;
+  }
+  
+  .username-input input {
+    font-size: 1rem;
+    min-width: 0; /* Critical for preventing text overflow */
+  }
+  
+  .signup-button {
+    font-size: 1rem;
+  }
+  
+  .floating-element.one {
+    width: 100px;
+    height: 100px;
+    top: -20px;
+    left: -20px;
+  }
+  
+  .floating-element.two {
+    width: 70px;
+    height: 70px;
+    bottom: -15px;
+    right: -15px;
+  }
+  
+  .floating-element.three {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .data-metrics {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  
+  .data-metrics .metric {
+    text-align: center;
+  }
+  
+  .steps-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .step-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .company-benefits {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .benefit-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  /* Testimonial adjustments */
+  .testimonial-card {
+    padding: 1.5rem;
+  }
+  
+  .testimonial-quote {
+    font-size: 1.125rem;
+  }
+  
+  /* Feature sections improvements */
+  .feature-section {
+    padding: 3rem 0;
+  }
+  
+  /* Image size adjustments */
+  .image-wrapper {
+    height: auto;
+    max-height: 250px;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .image-wrapper img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  /* Fix hero section layout */
+  .hero {
+    padding: 4rem 0 3rem;
+  }
+  
+  /* Ensure buttons are properly sized */
+  .primary-button, .secondary-button, .signup-button, .cta-button {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Improve alert button display */
+  .alert-button {
+    display: inline-flex;
+    justify-content: center;
+    width: auto;
+    min-width: 150px;
+    margin: 0 auto;
+  }
+  
+  .step-card,
+  .benefit-card {
+    width: 95%; /* Reduce width to create space on both sides */
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .steps-container,
+  .company-benefits {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .hero__welcome-back {
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+  
+  .hero__welcome-back h3 {
+    font-size: 1.25rem;
+  }
+  
+  .skeleton-line {
+    width: 250px;
+    height: 40px;
+  }
+  
+  .skeleton-button {
+    width: 120px;
+    height: 40px;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    max-width: 300px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .cta-stats {
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
   
   .features-grid {
     grid-template-columns: 1fr;
@@ -3783,15 +3225,143 @@ html, body {
   .companies-final-cta {
     padding: 6rem 0;
   }
-  
-  /* Hide some floating shapes on mobile for performance */
-  .companies-final-cta .floating-shape:nth-child(3),
-  .companies-final-cta .floating-shape:nth-child(4) {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
+  .home .container, 
+  .home .hero__container,
+  .home .tabs-container,
+  .home .feature-container,
+  .home .alert-container,
+  .home .cta-container,
+  .home .testimonial-carousel,
+  .accordion-container {
+    width: 90%;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .home h1, .hero__title {
+    font-size: 2rem;
+  }
+  
+  .home h2, .feature-title, .section-title {
+    font-size: 1.5rem;
+  }
+  
+  .hero {
+    padding: 3rem 0 2rem;
+  }
+  
+  /* Fix hero image container for mobile */
+  .image-container {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .main-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  /* Fix for username input field */
+  .username-input {
+    font-size: 0.9rem;
+    padding: 0.75rem 0.75rem;
+  }
+  
+  .username-input span {
+    font-size: 0.9rem;
+  }
+  
+  .username-input input {
+    font-size: 0.9rem;
+  }
+  
+  .signup-button {
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Adjust floating elements to not overflow */
+  .floating-element.one {
+    width: 80px;
+    height: 80px;
+    top: -10px;
+    left: -10px;
+  }
+  
+  .floating-element.two {
+    width: 50px;
+    height: 50px;
+    bottom: -10px;
+    right: -10px;
+  }
+  
+  .floating-element.three {
+    width: 40px;
+    height: 40px;
+  }
+  
+  /* Testimonial container needs more height on mobile */
+  .testimonial-slides {
+    min-height: 480px; /* Adjusted height for smaller screens */
+  }
+  
+  /* Reduce font sizes in testimonials */
+  .testimonial-quote {
+    font-size: 1rem;
+  }
+  
+  .author-info h4 {
+    font-size: 1rem;
+  }
+  
+  .author-info p {
+    font-size: 0.8rem;
+  }
+  
+  /* Reduce size of CTA badge */
+  .cta-badge {
+    top: 0.5rem;
+    right: 1rem;
+    font-size: 0.5rem;
+    padding: 0.2rem 0.6rem;
+  }
+  
+  /* Adjust stats in CTA */
+  .cta-stats {
+    gap: 1.5rem;
+  }
+  
+  .cta-stats h3 {
+    font-size: 1.75rem;
+  }
+  
+  .cta-stats p {
+    font-size: 0.875rem;
+  }
+  
+  .step-card,
+  .benefit-card {
+    width: 90%; /* Further reduce width on smaller screens */
+  }
+  
+  .testimonial-card {
+    padding: 1.25rem;
+  }
+  
+  .accordion-header {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+  
+  .accordion-content {
+    padding: 0 1rem 1rem;
+    font-size: 0.95rem;
+  }
+  
   .companies-hero-title {
     font-size: 2.25rem;
   }
@@ -3840,117 +3410,232 @@ html, body {
   .companies-cta-container {
     padding: 0 1rem;
   }
+}
+
+@media (max-width: 375px) {
+  .home h1, .hero__title {
+    font-size: 1.75rem;
+  }
   
-  /* Minimal animations on very small screens */
-  .companies-final-cta .floating-shape {
-    animation-duration: 12s; /* Even slower */
+  .home h2, .feature-title, .section-title {
+    font-size: 1.35rem;
+  }
+  
+  .hero__subtitle {
+    font-size: 1rem;
+  }
+  
+  .feature-description, .section-description {
+    font-size: 1rem;
+  }
+  
+  /* Reduce padding further for very small screens */
+  .home section {
+    padding: 3rem 0;
+  }
+  
+  /* Ensure tab buttons are visible and tappable */
+  .tab-button {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
+  
+  /* Adjust testimonial container height for smaller content */
+  .testimonial-slides {
+    min-height: 550px;
+  }
+  
+  /* Reduce size of buttons */
+  .primary-button, .secondary-button, .alert-button, .cta-primary, .cta-secondary {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
+  
+  .data-metrics .metric-value {
+    font-size: 2rem;
+  }
+  
+  .data-metrics .metric-label {
+    font-size: 0.875rem;
   }
 }
 
-/* Animation Classes - Improved */
-@keyframes companiesSlideInFromBottom {
+/* Add a pulse animation for an extra subtle effect */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 87, 177, 0.3);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 87, 177, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 87, 177, 0);
+  }
+}
+
+.image-wrapper:hover {
+  animation: pulse 1.5s infinite;
+}
+
+/* Fix for username input field */
+.hero__signup {
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
+}
+
+.username-input {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+}
+
+.username-input span {
+  flex-shrink: 0;
+}
+
+.username-input input {
+  flex: 1;
+  width: 1px; /* This forces the input to properly shrink */
+  min-width: 0;
+  margin-left: 2px;
+  text-overflow: ellipsis;
+}
+
+/* Preserve existing styles for FAQ accordion integration */
+.qna__header {
+  text-align: center;
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 500;
+  display: none; /* Hide the original header since we have our own section header */
+}
+
+.qna__header h4 {
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.color_change {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Add Gen Z friendly touches */
+.tag-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.tag-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Add focus styles for accessibility */
+.home button:focus,
+.home a:focus,
+.home input:focus,
+.for-companies-page button:focus,
+.for-companies-page a:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Add keyframe for tab focus */
+@keyframes tabFocus {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.tab-button:focus {
+  animation: tabFocus 0.3s ease-in-out;
+}
+
+/* Add a nice overlay effect for buttons */
+.primary-button::after,
+.signup-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s ease-out;
+}
+
+.primary-button:active::after,
+.signup-button:active::after {
+  transform: translate(-50%, -50%) scale(1.5);
+  opacity: 0;
+}
+
+/* Add subtle animations to improve UX */
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(60px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
-.for-companies-page .animation-container.animate-in {
-  animation: companiesSlideInFromBottom 0.8s ease-out;
+.home {
+  animation: fadeIn 0.5s ease-out;
 }
 
-/* Accessibility - Improved */
+/* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .floating-element,
+  .image-wrapper:hover,
+  .scroll-arrow,
+  .tag-line::before,
   .for-companies-page *,
   .companies-final-cta::before,
   .companies-final-cta::after,
   .companies-hero::before,
   .companies-hero::after,
   .floating-shape {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  /* Disable complex animations for accessibility */
-  .companies-final-cta::before,
-  .companies-final-cta::after,
-  .companies-hero::before,
-  .companies-hero::after {
     animation: none !important;
   }
-  
-  .floating-shape {
-    opacity: 0.3 !important;
-    animation: none !important;
-  }
-}
-
-/* High performance mode for older devices */
-@media (max-width: 480px) and (prefers-reduced-motion: no-preference) {
-  .companies-final-cta::after {
-    animation: none; /* Disable grid animation on small screens */
-  }
-}
-
-/* Focus styles for accessibility */
-.for-companies-page button:focus,
-.for-companies-page a:focus {
-  outline: 3px solid rgba(0, 87, 177, 0.6);
-  outline-offset: 2px;
-  border-radius: var(--border-radius);
-}
-
-/* Enhanced hover effects */
-.watch-demo-button,
-.contact-us-button,
-.companies-cta-primary {
-  position: relative;
-  overflow: hidden;
-}
-
-.watch-demo-button:active,
-.contact-us-button:active,
-.companies-cta-primary:active {
-  transform: translateY(-1px);
-}
-
-/* Section Header Improvements */
-.for-companies-page .section-header {
-  text-align: center;
-  margin-bottom: 4rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.for-companies-page .section-header h2 {
-  font-size: 2.75rem;
-  margin-bottom: 1.5rem;
-  font-weight: 700;
-  color: var(--text-dark);
-}
-
-.for-companies-page .section-header p {
-  font-size: 1.25rem;
-  color: var(--text-mid);
-  line-height: 1.6;
-}
-
-/* Improved highlight class */
-.for-companies-page .highlight {
-  color: var(--primary);
-  font-weight: 700;
-  position: relative;
-}
-
-.for-companies-page .text-gradient {
-  background: linear-gradient(135deg, var(--primary), #F1EB3C);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
