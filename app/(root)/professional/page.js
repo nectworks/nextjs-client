@@ -11,20 +11,29 @@ import Professional from './Professional/Professional';
 const baseURL = process.env.NEXT_PUBLIC_CLIENT_URL || 'https://nectworks.com';
 
 export const metadata = {
-  title: 'Professional | Nectworks',
+  title: 'Become a Referrer',
   description:
-    "Discover how professionals can refer candidates to their companies using Nectworks' streamlined referral process and centralized dashboard.",
+    'Join the Nectworks referral network as a professional. Help candidates get noticed at your company while streamlining your referral process and tracking progress.',
   keywords: [
-    'Employee referral process',
-    'How to refer candidates',
-    'Referral dashboard',
+    'Employee referrals',
+    'Referral management',
     'Professional networking',
-    'Boost employee referrals',
+    'Company referral program',
+    'Talent acquisition',
+    'Hiring referrals',
   ],
   openGraph: {
-    title: 'Professional | Nectworks',
+    title: 'Become a Referrer at Your Company',
     description:
-      "Discover how professionals can refer candidates to their companies using Nectworks' streamlined referral process and centralized dashboard.",
+      'Simplify your referral process. Create your profile, manage candidate referrals, and help great talent find opportunities at your company.',
+    keywords: [
+      'Employee referrals',
+      'Referral management',
+      'Professional networking',
+      'Company referral program',
+      'Talent acquisition',
+      'Hiring referrals',
+    ],
     url: 'https://nectworks.com/professional',
     siteName: 'Nectworks',
     images: [
@@ -32,7 +41,7 @@ export const metadata = {
         url: `${baseURL}/nectworksOgImage.webp`,
         width: 1200,
         height: 630,
-        alt: 'Nectworks OG Image',
+        alt: 'Nectworks Professional Referral Platform',
       },
     ],
     locale: 'en_US',
