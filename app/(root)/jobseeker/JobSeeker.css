@@ -1,320 +1,433 @@
-.whole_page {
-  padding: 2rem 7rem;
+/* JobSeeker.css - Aligned with Home.css design system */
+
+:root {
+  --primary: #0057b1;
+  --primary-light: #2780df;
+  --primary-dark: #004694;
+  --secondary: #c1d5ff;
+  --accent: #f3f3f3;
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-300: #d1d5db;
+  --neutral-400: #9ca3af;
+  --neutral-500: #6b7280;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827;
+  --text-dark: #151515;
+  --text-mid: #6c6c6c;
+  --text-light: #f3f3f3;
+  --border-radius-sm: 0.25rem;
+  --border-radius: 0.625rem;
+  --border-radius-lg: 1rem;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --transition: all 0.3s ease;
 }
 
-.JobSeeker_heading_first {
-  text-align: center;
-  font-family: 'Inter';
-  font-size: 40px;
-  margin-top: 3%;
-  font-weight: bold;
-}
-
-.placeholders_mobile_first {
-  display: none;
-}
-
-.placeholders_mobile {
-  display: none;
-}
-
-.JobSeeker_heading_first_span {
-  color: #0057b1;
-  font-family: 'Inter';
-  font-weight: bold;
-  font-size: 40px;
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-.JobSeeker_subheading_first {
-  text-align: center;
-  font-family: 'Inter';
-  font-size: 24px;
-  margin-top: 1%;
-}
-
-.containers {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 3rem;
-  margin: 1.5rem 0;
-  gap: 1.5rem;
-}
-
-.content_first {
-  margin-bottom: 20px;
-  flex-direction: column;
+.jobseeker-page {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--accent);
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
   width: 100%;
-}
-
-.placeholders {
-  width: 476px;
-  height: 507px;
-}
-
-.placeholders > img {
-  width: 100%;
-  margin-top: 25px;
-}
-
-.content_heading {
-  font-size: 40px;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.second_content_heading {
-  font-size: 32px;
-  margin-bottom: 10px;
-}
-
-.first_paragraph {
-  text-align: center;
-}
-
-.content_paragraphs {
-  font-size: 24px;
-}
-
-.center-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-  margin: 0;
-  margin-bottom: 3rem;
-}
-
-.JobSeekerHeroImg {
   max-width: 100%;
-  max-height: 100%;
-}
-
-.banner-container {
-  width: 92%;
   box-sizing: border-box;
-  background-color: rgba(0, 87, 177, 1);
-  color: rgb(255, 255, 255);
-  padding: 65px 120px;
+}
+
+.jobseeker-container {
+  width: 92%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* Hero Section */
+.jobseeker-hero {
+  position: relative;
+  background-color: var(--neutral-50);
+  padding: 8rem 0 6rem;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.jobseeker-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230057b1' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  animation: subtleFloat 20s ease-in-out infinite;
+  z-index: 1;
+}
+
+.jobseeker-hero::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 87, 177, 0.05) 0%, transparent 70%);
+  animation: gentleRotate 30s linear infinite;
+  z-index: 1;
+}
+
+@keyframes subtleFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes gentleRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.jobseeker-hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.jobseeker-tag-line {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  border-radius: var(--border-radius-lg);
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0, 87, 177, 0.2);
+}
+
+.jobseeker-hero-title {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary), #F1EB3C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.jobseeker-hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 3rem;
+  color: var(--text-mid);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+.jobseeker-hero-image {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: 24px;
+  margin-top: 3rem;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.5s ease;
+}
+
+.jobseeker-hero-image:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Steps Section */
+.steps-section {
+  background-color: white;
+  padding: 8rem 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.section-header h2 {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+.section-header p {
+  font-size: 1.25rem;
+  color: var(--text-mid);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.step-card {
+  background-color: var(--neutral-50);
+  border-radius: var(--border-radius-lg);
+  padding: 3rem 2.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--neutral-200);
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover::before {
+  transform: scaleX(1);
+}
+
+.step-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
+}
+
+.step-number {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 4rem auto;
-  gap: 5.5rem;
-}
-
-.text-left {
-  width: 80%;
-}
-
-.text-left > h3 {
-  margin-bottom: 48px;
-  font-size: 32px;
-}
-
-.text-left > p {
-  font-size: 24px;
-}
-
-.btn-right {
-  display: flex;
-  align-items: center;
-  column-gap: 24px;
-  flex-direction: row;
-}
-
-.JobSeeker-btn {
-  display: flex;
-  padding: 8px 20px;
   justify-content: center;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  border-radius: 50%;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.step-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  color: var(--text-dark);
+}
+
+.step-description {
+  color: var(--text-mid);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 6rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.cta-description {
+  font-size: 1.25rem;
+  margin-bottom: 3rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-title, .cta-description {
+  color: rgba(255, 255, 255, 0.95); /* Light shade of white */
+  opacity: 1;
+}
+
+.cta-btn {
+  display: inline-flex;
   align-items: center;
-  border-radius: 38px;
-  background: #fff;
-  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
-  border: none;
-  font-size: 16px;
-  width: max-content;
+  gap: 0.75rem;
+  background: white;
+  color: var(--primary);
+  padding: 1rem 2rem;
+  border: 2px solid white;
+  border-radius: var(--border-radius-lg);
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
-.second_content_heading_left {
-  font-size: 26px;
-  margin-bottom: 10px;
+.cta-btn:hover {
+  background: transparent;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-.content_paragraphs_left {
-  font-size: 20px;
-  margin-right: 10px;
+/* Animation utilities */
+.animate-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.mobile-image {
-  display: none;
+.animation-container {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-@media screen and (max-width: 1200px) {
-  .whole_page {
-    padding: 2rem 4rem;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  .whole_page {
-    padding: 2rem;
-  }
-
-  .containers {
-    padding: 1rem;
-  }
-
-  .banner-container {
-    width: 95%;
-    padding: 2rem 3rem;
-    margin: 2rem auto;
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .jobseeker-hero-title {
+    font-size: 3.5rem;
   }
 }
 
-@media screen and (max-width: 767px) {
-  .mobile-image {
-    width: 100%;
-    height: 280px;
-    overflow: hidden;
-    display: block;
-
-    background-image: url('../../../public/JobSeeker/jobseekerHeroImg.webp');
-    background-size: cover;
-    background-position: 70px;
-    background-repeat: no-repeat;
+@media (max-width: 992px) {
+  .jobseeker-hero-title {
+    font-size: 3rem;
   }
-
-  .center-image {
-    display: none;
+  
+  .section-header h2 {
+    font-size: 2.25rem;
   }
-
-  .JobSeeker_heading_first {
-    text-align: center;
-    font-family: 'Inter';
-    font-size: 28px;
-    margin-top: 2rem;
-    text-align: left;
+  
+  .cta-title {
+    font-size: 2.25rem;
   }
+}
 
-  .JobSeeker_heading_first p {
-    text-align: center;
-    font-weight: bold;
+@media (max-width: 768px) {
+  .jobseeker-hero {
+    padding: 6rem 0 4rem;
   }
-
-  .JobSeeker_heading_first_span {
-    color: #0057b1;
-    display: inline-block;
-    font-size: 28px;
-    margin-right: 10px;
-    margin-left: 0%;
+  
+  .jobseeker-hero-title {
+    font-size: 2.5rem;
   }
-
-  .JobSeeker_subheading_first {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 20px;
-    font-weight: 400;
+  
+  .jobseeker-hero-subtitle {
+    font-size: 1.25rem;
   }
-
-  .second_content_heading_left {
-    font-size: 26px;
-    margin-bottom: 10px;
-    margin-left: 15px;
+  
+  .section-header h2 {
+    font-size: 2rem;
   }
-
-  .content_paragraphs_left {
-    font-size: 20px;
-    margin-right: 10px;
-    margin-left: 15px;
+  
+  .step-card {
+    padding: 2.5rem 2rem;
   }
-
-  .placeholder_mobile {
-    margin-top: 75px;
-    margin-bottom: 35px;
-  }
-
-  .placeholder_mobile_first {
-    margin-top: 75px;
-    margin-bottom: 35px;
-    margin-left: 12px;
-  }
-
-  .placeholders {
-    width: 400px;
-    height: 450px;
-    display: none;
-  }
-
-  .placeholders > img {
-    width: 100%;
-    display: none;
-  }
-
-  .content_heading {
-    font-size: 28px;
-    margin-bottom: 10px;
-  }
-
-  .second_content_heading {
-    font-size: 26px;
-    margin-bottom: 10px;
-  }
-
-  .content_paragraphs {
-    font-size: 18px;
-    margin-right: 10px;
-  }
-
-  .JobSeekerHeroImg {
-    max-width: 100%;
-    max-height: 100%;
-  }
-
-  .banner-container {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-  }
-
-  .text-left {
-    width: 80%;
+  
+  .cta-buttons {
+    flex-direction: column;
+    max-width: 300px;
     margin: 0 auto;
   }
-
-  .text-left > h3 {
-    width: 100%;
-    margin-top: 5%;
-    margin-bottom: 52px;
-    margin-top: 28px;
-    text-align: center;
-    font-size: 26px;
-  }
-
-  .text-left > p {
-    font-size: 18px;
-    margin-top: -6%;
-    text-align: center;
+  
+  .cta-btn {
     width: 100%;
   }
+}
 
-  .btn-right {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    column-gap: 24px;
-    max-width: 100%;
-    margin: 2rem auto;
+@media (max-width: 480px) {
+  .jobseeker-hero-title {
+    font-size: 2rem;
   }
-
-  .content_paragraphs_left {
-    margin-left: 15px;
-    margin-right: 10px;
-    font-size: 20px;
-    margin-top: 25px;
+  
+  .jobseeker-hero-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.75rem;
+  }
+  
+  .step-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .step-number {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+  
+  .step-title {
+    font-size: 1.25rem;
+  }
+  
+  .cta-title {
+    font-size: 1.75rem;
+  }
+  
+  .cta-description {
+    font-size: 1.1rem;
   }
 }
