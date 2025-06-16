@@ -1,285 +1,572 @@
-.dashboard_nectcoins_container {
-  padding: 3rem 5rem;
-  flex: 1;
-  background: #fafafa;
+/* Modern Gen-Z Minimalist Design for NectCoins */
+.modern_nectcoins_container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 2rem;
 }
 
-.dashboard_nectcoins_inner_container {
-  margin: 2rem 1rem;
-}
-
-.dashboard_nectcoins_inner_container h1,
-.dashboard_nectcoins_inner_container h3 {
-  font-weight: 300;
-  margin: 1rem 0;
-}
-
-/* progress bar styles */
-.nectcoins_streak_container {
-  margin: 2rem 0;
-}
-
-.nectcoins_streak_heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1.5rem 0;
-  color: #0057b1;
-  font-weight: 500;
-}
-
-.nectcoins_streak_heading span {
-  color: black;
-}
-
-.nectcoins_coin_progress {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 8px;
-}
-
-.coin_img {
-  width: 35px;
-}
-
-.last_coin {
-  position: absolute;
-  right: 110px;
-  width: 35px;
-}
-
-.nectcoins_timeline {
-  width: 98%;
-  height: 5px;
-  background-color: #ffecc1;
+.modern_nectcoins_content {
+  max-width: 1200px;
   margin: 0 auto;
-}
-
-.timeline_indicator {
-  height: 6px;
-  width: 0px;
-  background-color: #ffac33;
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25%,
-  75% {
-    transform: rotate(-12deg);
-  }
-  50% {
-    transform: rotate(12deg);
-  }
-}
-
-.animated_coin {
-  animation: shake 1s infinite;
-}
-
-/* each activity styles */
-.nectcoins_activities {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem 1rem;
-  margin-top: 4rem;
-}
-
-.nectcoins_activity {
-  min-height: 150px;
-  display: grid;
-  grid-template-columns: 0.9fr 1fr;
-  background-color: #fff3d7;
-  color: #ba6f0c;
-  border-radius: 15px;
-  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.25);
-  position: relative;
-}
-
-.activity_created_date {
-  position: absolute;
-  top: -30px;
-  left: 0;
-  color: #6c6c6c;
-}
-
-.nectcoins_awarded {
-  font-size: 1.5rem;
-}
-
-.nectcoins_activity div {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 2rem;
+}
+
+/* Header Section - Updated layout with coins card next to title */
+.modern_header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.header_main {
+  display: flex;
   align-items: center;
-  text-align: center;
-}
-
-.activity_coin_container {
-  flex-direction: row !important;
-  padding: 1rem;
-}
-
-.activity_description_container {
-  padding: 1rem 3rem 1rem 1rem;
-}
-
-.nectcoins_activity img {
-  width: 80px;
-  height: 80px;
-  margin-right: 1.5rem;
-}
-
-.nectcoin_special_activity {
-  display: block;
-  padding: 0.3rem 0.5rem;
-  border-radius: 10px;
-  background-color: #ffac33;
-  color: white;
+  gap: 1rem;
   margin-bottom: 0.5rem;
 }
 
-.nectcoin_message_container {
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 2rem auto;
-  gap: 1rem;
+.modern_title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.025em;
 }
 
-.nectcoin_message_container span {
+.modern_subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Smaller total coins card positioned next to title */
+.total_coins_card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  width: fit-content;
+}
+
+.total_coins_card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+}
+
+.coin_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 50%;
+  padding: 6px;
+}
+
+.total_amount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Streak Card */
+.modern_streak_card {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.modern_streak_card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.1), 0 8px 12px -2px rgba(0, 0, 0, 0.05);
+}
+
+.streak_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.streak_info {
+  flex: 1;
+}
+
+.streak_title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.streak_message {
+  color: #6366f1;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.streak_urgency {
+  color: #f59e0b;
+  font-weight: 600;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.streak_counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
 
-.nectcoin_pagination_actions {
-  width: 200px;
-  margin: 2rem auto;
+.streak_number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #6366f1;
+  line-height: 1;
+}
+
+.streak_label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Modern Progress Bar */
+.modern_progress_container {
+  position: relative;
+}
+
+.modern_progress_track {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.modern_progress_fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress_coins {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.progress_coin {
+  display: flex;
+  align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.progress_coin.completed_coin {
+  border-color: #6366f1;
+  background: #6366f1;
+  transform: scale(1.1);
+}
+
+.progress_coin.completed_coin img {
+  filter: brightness(0) invert(1);
+}
+
+.progress_coin.active_coin {
+  border-color: #6366f1;
+  background: white;
+  animation: pulse 2s infinite;
+  transform: scale(1.15);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+}
+
+/* Streak Timing & Urgency Section */
+.streak_timing_info {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.daily_reward_info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.reward_item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  flex: 1;
+}
+
+.reward_item.bonus {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.streak_reminder {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background: #eff6ff;
+  border-radius: 0.5rem;
+  border: 1px solid #bfdbfe;
+}
+
+.reminder_icon {
+  font-size: 1rem;
+}
+
+.reminder_text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e40af;
+}
+
+.streak_warning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.warning_text {
+  font-size: 0.75rem;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Activities Section */
+.activities_section {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.section_title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 1.5rem 0;
+}
+
+.modern_activities_grid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.modern_activity_card {
+  background: #f8fafc;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.modern_activity_card:hover {
+  background: white;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.activity_badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  width: fit-content;
+}
+
+.badge_emoji {
+  font-size: 0.875rem;
+}
+
+.activity_main {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
   align-items: center;
 }
 
-.nectcoin_pagination_actions button {
-  background-color: transparent;
-  border: none;
-  outline: none;
-  margin: 0 0.5rem;
+.activity_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: white;
+  border-radius: 50%;
+  border: 2px solid #e2e8f0;
 }
 
-.nectcoin_pagination_actions img {
+.activity_content {
+  min-width: 0;
+}
+
+.activity_description {
+  font-weight: 500;
+  color: #0f172a;
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+.activity_date {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.activity_reward {
+  text-align: right;
+}
+
+.reward_amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.reward_amount.positive {
+  color: #059669;
+}
+
+.reward_amount.negative {
+  color: #dc2626;
+}
+
+/* Loading State */
+.modern_loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Pagination */
+.modern_pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.pagination_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 40px;
   height: 40px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.basic_nectcoins_queries {
-  margin: 0rem 0;
+.pagination_btn:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
 }
 
-.basic_nectcoins_queries div {
-  margin: 2rem 0;
+.pagination_btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.nectcoin_question {
-  font-weight: 700;
-  font-size: 1.2rem;
-  margin: 0.5rem;
+.pagination_info {
+  font-weight: 500;
+  color: #64748b;
+  font-size: 0.875rem;
 }
 
-.nectcoin_answer {
-  color: #6c6c6c;
-  margin: 0.5rem;
+/* FAQ Section */
+.modern_faq {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
 }
 
-@media screen and (max-width: 1100px) {
-  .dashboard_nectcoins_container {
-    padding: 3rem;
-  }
-
-  .last_coin {
-    right: 75px;
-  }
-
-  .nectcoins_activity img {
-    width: 70px;
-    height: 70px;
-  }
-
-  .activity_description_container {
-    padding-right: 2.5rem;
-  }
+.faq_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
-@media screen and (max-width: 1000px) {
-  .nectcoins_activities {
-    grid-template-columns: 1fr;
-  }
+.faq_item {
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
 }
 
-@media screen and (max-width: 900px) {
-  .dashboard_nectcoins_container {
-    padding: 3rem 2rem;
-  }
-
-  .last_coin {
-    right: 60px;
-  }
+.faq_item:hover {
+  background: white;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
 }
 
-@media screen and (max-width: 800px) {
-  .nectcoins_activities {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .nectcoins_activity img {
-    width: 50px;
-    height: 50px;
-  }
-
-  .activity_description_container {
-    padding-right: 2rem;
-  }
+.faq_question {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 0.75rem 0;
 }
 
-@media screen and (max-width: 650px) {
-  .nectcoins_activities {
-    grid-template-columns: 1fr;
-  }
-
-  .activity_description_container {
-    padding-left: 0;
-  }
+.faq_answer {
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
-@media screen and (max-width: 400px) {
-  .nectcoins_activity {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modern_nectcoins_container {
     padding: 1rem;
-    min-height: unset;
+  }
+
+  .header_main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .modern_title {
+    font-size: 2rem;
+  }
+
+  .total_coins_card {
+    align-self: flex-start;
+  }
+
+  .streak_header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .modern_activities_grid {
+    gap: 0.75rem;
+  }
+
+  .activity_main {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.75rem;
+  }
+
+  .activity_reward {
+    grid-column: 1 / -1;
+    text-align: left;
+    margin-top: 0.5rem;
+  }
+
+  .faq_grid {
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .nectcoins_streak_heading {
+  .daily_reward_info {
     flex-direction: column;
-    align-items: flex-start;
+    gap: 0.75rem;
   }
 
-  .nectcoins_coin_progress {
-    margin-top: -15px;
+  .reward_item {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern_nectcoins_container {
+    padding: 0.75rem;
   }
 
-  .coin_img {
-    width: 25px;
+  .modern_nectcoins_content {
+    gap: 1.5rem;
   }
 
-  .activity_description_container,
-  .activity_coin_container {
-    padding: 0;
+  .modern_streak_card,
+  .activities_section,
+  .modern_faq {
+    padding: 1.5rem;
+    border-radius: 1rem;
+  }
+
+  .modern_title {
+    font-size: 1.75rem;
+  }
+
+  .progress_coin {
+    width: 32px;
+    height: 32px;
+  }
+
+  .activity_icon {
+    width: 40px;
+    height: 40px;
   }
 }
