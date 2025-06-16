@@ -39,14 +39,52 @@ function NectCoins() {
   const [currPageData, setCurrPageData] = useState(null);
   const [activityCount, setActivityCount] = useState(-1);
 
-  // Modern progress messages with Gen-Z energy
-  const progressMessages = [
-    'Just getting started! ✨',
-    'Building momentum! 🚀',
-    'Halfway there! 💪',
-    'Almost perfect! 🔥',
-    'Streak master! 🎯',
-  ];
+  // Urgency & timing-focused messages
+  const getStreakMessage = (streak) => {
+    const dayInCycle = (streak - 1) % 5;
+    const daysUntilBonus = 5 - dayInCycle - 1;
+    
+    switch (dayInCycle) {
+      case 0:
+        return {
+          main: 'Great start! Keep it going 🎯',
+          urgency: `${daysUntilBonus} more days for +5 bonus coins`,
+          reminder: 'Come back tomorrow to continue your streak!'
+        };
+      case 1:
+        return {
+          main: 'Building momentum! 🚀',
+          urgency: `${daysUntilBonus} more days for +5 bonus coins`,
+          reminder: 'Don\'t break the chain - login tomorrow!'
+        };
+      case 2:
+        return {
+          main: 'Halfway to bonus! 💪',
+          urgency: `${daysUntilBonus} more days for +5 bonus coins`,
+          reminder: 'Almost there! Keep your streak alive'
+        };
+      case 3:
+        return {
+          main: 'So close to bonus! 🔥',
+          urgency: 'Just 1 more day for +5 bonus coins!',
+          reminder: 'Don\'t miss tomorrow - bonus coins await!'
+        };
+      case 4:
+        return {
+          main: 'Streak milestone reached! 🎉',
+          urgency: 'You earned +5 bonus coins!',
+          reminder: 'Start your next 5-day cycle tomorrow'
+        };
+      default:
+        return {
+          main: 'Keep going! ✨',
+          urgency: 'Daily login rewards active',
+          reminder: 'Come back tomorrow for more coins'
+        };
+    }
+  };
+
+  const streakInfo = getStreakMessage(user?.loginStreak || 1);
 
   // function to fetch data about coins activity of the user
   const fetchData = async () => {
@@ -187,20 +225,20 @@ function NectCoins() {
           <ProfileHeaderWrapper />
 
           <div className="modern_nectcoins_content">
-            {/* Header Section */}
+            {/* Header Section - Coins card moved next to title */}
             <div className="modern_header">
               <div className="header_main">
                 <h1 className="modern_title">NectCoins</h1>
-                <p className="modern_subtitle">
-                  Your digital currency for the Nectworks ecosystem
-                </p>
-              </div>
-              <div className="total_coins_card">
-                <div className="coin_icon">
-                  <Image src={nectCoinsImg} alt="NectCoin" width={24} height={24} />
+                <div className="total_coins_card">
+                  <div className="coin_icon">
+                    <Image src={nectCoinsImg} alt="NectCoin" width={20} height={20} />
+                  </div>
+                  <span className="total_amount">{formatNectCoins(user?.totalCoins)}</span>
                 </div>
-                <span className="total_amount">{formatNectCoins(user?.totalCoins)}</span>
               </div>
+              <p className="modern_subtitle">
+                Your digital currency for the Nectworks ecosystem
+              </p>
             </div>
 
             {/* Streak Section */}
@@ -209,7 +247,10 @@ function NectCoins() {
                 <div className="streak_info">
                   <h3 className="streak_title">Daily Streak</h3>
                   <p className="streak_message">
-                    {progressMessages[(user?.loginStreak - 1) % 5]}
+                    {streakInfo.main}
+                  </p>
+                  <p className="streak_urgency">
+                    {streakInfo.urgency}
                   </p>
                 </div>
                 <div className="streak_counter">
@@ -228,6 +269,27 @@ function NectCoins() {
                       <Image src={nectCoinsImg} alt="Coin" width={20} height={20} />
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Timing & Urgency Section */}
+              <div className="streak_timing_info">
+                <div className="daily_reward_info">
+                  <div className="reward_item">
+                    <Image src={nectCoinsImg} alt="coin" width={16} height={16} />
+                    <span>+1 coin daily</span>
+                  </div>
+                  <div className="reward_item bonus">
+                    <Image src={nectCoinsImg} alt="coin" width={16} height={16} />
+                    <span>+5 bonus every 5 days</span>
+                  </div>
+                </div>
+                <div className="streak_reminder">
+                  <span className="reminder_icon">⏰</span>
+                  <span className="reminder_text">{streakInfo.reminder}</span>
+                </div>
+                <div className="streak_warning">
+                  <span className="warning_text">⚠️ Streak resets if you miss a day</span>
                 </div>
               </div>
             </div>
@@ -320,7 +382,7 @@ function NectCoins() {
                   </p>
                 </div>
                 <div className="faq_item">
-                  <h4 className="faq_question">What's next?</h4>
+                  <h4 className="faq_question">What&apos;s next?</h4>
                   <p className="faq_answer">
                     More earning opportunities and spending options are coming soon!
                   </p>
