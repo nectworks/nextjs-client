@@ -11,6 +11,14 @@
   height: 2.5rem;
 }
 
+/* Default styling for images in footer copyright area */
+.footer__copyright img {
+  width: 23px;
+  height: 23px;
+  padding-top: 0;
+  padding-left: 15px;
+}
+
 .footer__copyright img {
   width: 23px;
   height: 23px;
@@ -84,11 +92,14 @@
   margin-bottom: 0;
 }
 
-.social__media__icons {
+/* Higher specificity to override .footer__copyright img */
+.footer__copyright .social__media__icons {
   padding: 0;
-  width: 24px;
-  height: 24px;
+  width: 24px !important;
+  height: 24px !important;
   margin-left: 10px;
+  padding-left: 0 !important;
+  padding-top: 0 !important;
 }
 
 .footer__copyright {
@@ -230,10 +241,11 @@ hr {
     margin-bottom: 0;
   }
 
-  .footer__copyright img {
-    width: 20px;
-    height: 20px;
-    padding-left: 5px;
+  /* Keep social media icons consistent at 24x24px with higher specificity */
+  .footer__copyright .social__media__icons {
+    width: 24px !important;
+    height: 24px !important;
+    margin-left: 10px;
   }
 }
 
@@ -320,10 +332,11 @@ hr {
     margin-bottom: 0;
   }
 
-  .footer__copyright img {
-    width: 20px;
-    height: 20px;
-    padding-left: 5px;
+  /* Keep social media icons consistent at 24x24px with higher specificity */
+  .footer__copyright .social__media__icons {
+    width: 24px !important;
+    height: 24px !important;
+    margin-left: 10px;
   }
 }
 
@@ -418,10 +431,11 @@ hr {
     margin-bottom: 0;
   }
 
-  .footer__copyright img {
-    width: 20px;
-    height: 20px;
-    padding-left: 5px;
+  /* Keep social media icons consistent at 24x24px with higher specificity */
+  .footer__copyright .social__media__icons {
+    width: 24px !important;
+    height: 24px !important;
+    margin-left: 10px;
   }
 }
 
