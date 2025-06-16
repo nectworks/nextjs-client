@@ -21,36 +21,45 @@ const inter = Inter({
 });
 
 const baseURL = process.env.NEXT_PUBLIC_CLIENT_URL || 'https://nectworks.com';
+// Enhanced keywords for better SEO coverage
 const keywords = [
-  'Employee referral platform',
-  'Streamlined job referrals',
-  'Professional networking tool',
-  'Referral management software',
-  'Boost employee referrals',
-  'Recruitment process software',
+  'employee referral platform',
+  'job referrals',
+  'professional networking',
+  'referral management software',
+  'AI-powered hiring',
+  'streamlined recruitment',
+  'job seeker platform',
+  'career referrals',
+  'hiring optimization',
+  'talent acquisition',
+  'employee referral program',
+  'job matching platform',
+  'professional referrals',
+  'recruitment technology',
+  'job referral network',
+  'career opportunities India',
+  'tech jobs referrals',
+  'startup hiring platform',
+  'referral bonus system',
+  'job search optimization'
 ];
 
 export const metadata = {
-  title: 'Nectworks - Job Referrals and more',
-  //   icons: {
-  //     icon: [
-  //       {
-  //         url: '/faviconLogo.png',
-  //         sizes: '16x16 32x32 48x48',
-  //         type: 'image/png',
-  //       },
-  //     ],
-  //   },
-  icons: {
-    icon: '/icon.ico',
+  title: {
+    default: "Nectworks | One Profile for Jobs & Referrals. That's It.",
+    template: '%s | Nectworks'
   },
-  description:
-    'Nectworks offers a centralized platform for managing employee referrals, connecting job seekers with company insiders, and streamlining the recruitment process.',
+  icons: {
+    icon: '/favicon/favicon.ico',
+    apple: '/favicon/apple-touch-icon.png',
+    shortcut: '/favicon/favicon.ico',
+  },
+  description: 'Tired of messy job hunts? Nectworks makes it easy — one profile, one link, zero chaos. Share, connect, and get referred by real people, not bots. Welcome to the future of job moves.',
   keywords: keywords,
   openGraph: {
-    title: 'Nectworks - Job Referrals and more',
-    description:
-      'Nectworks offers a centralized platform for managing employee referrals, connecting job seekers with company insiders, and streamlining the recruitment process.',
+    title: "Nectworks | One Profile for Jobs & Referrals. That's It.",
+    description: 'Tired of messy job hunts? Nectworks makes it easy — one profile, one link, zero chaos. Share, connect, and get referred by real people, not bots. Welcome to the future of job moves.',
     url: 'https://nectworks.com/',
     siteName: 'Nectworks',
     images: [
@@ -64,6 +73,7 @@ export const metadata = {
     locale: 'en_US',
     type: 'website',
   },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }) {
