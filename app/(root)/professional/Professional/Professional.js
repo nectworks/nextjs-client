@@ -87,7 +87,7 @@ const Professional = () => {
               <div className="feature-number">1</div>
               <h3 className="feature-title">Verify Your Professional Email</h3>
               <p className="feature-description">
-                Add and verify your company email to access all professional features. This verification allows you to post job openings at your company and unlocks additional tools for managing referrals.
+                Add and verify your company email to access all professional features.
               </p>
             </div>
 
@@ -109,9 +109,9 @@ const Professional = () => {
 
             <div className="feature-card animation-container" style={{ '--step-delay': '0.7s' }}>
               <div className="feature-number">4</div>
-              <h3 className="feature-title">Post Job Openings</h3>
+              <h3 className="feature-title">Centralized Candidate Management</h3>
               <p className="feature-description">
-                Add available positions at your company with details like job title, location, work type, responsibilities, and job ID to attract qualified candidates seeking referrals for specific roles.
+                Easily manage all job referral requests in one place. Our intuitive dashboard ensures your inbox and LinkedIn messages stay clutter-free. Simply review, and refer—no more sifting through countless individual messages.
               </p>
             </div>
           </div>
