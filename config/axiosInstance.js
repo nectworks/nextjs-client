@@ -29,6 +29,16 @@ const addRefreshSubscriber = (callback) => {
   refreshSubscribers.push(callback);
 };
 
+// Helper function to handle logout across tabs
+const handleLogoutAllTabs = () => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('userAuthenticated');
+    localStorage.removeItem('lastAuthCheck');
+    // Trigger storage event for other tabs
+    localStorage.setItem('userLoggedOut', Date.now().toString());
+  }
+};
+
 privateAxios.interceptors.response.use(
   (response) => response, // Forward successful responses
   async (error) => {
@@ -49,6 +59,7 @@ privateAxios.interceptors.response.use(
       // For admin routes, don't attempt token refresh - let context handle it
       if (prevRequest.url?.includes('/admin/')) {
         console.log('Admin authentication failed - letting context handle redirect');
+        handleLogoutAllTabs(); // Add cross-tab logout
         return Promise.reject(error);
       }
       
@@ -64,6 +75,12 @@ privateAxios.interceptors.response.use(
           if (res.status === 200) {
             const newToken = res.data.accessToken;
             
+            // Update localStorage for cross-tab sync
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('userAuthenticated', 'true');
+              localStorage.setItem('lastAuthCheck', Date.now().toString());
+            }
+            
             // Notify subscribers
             onTokenRefreshed(newToken);
             isRefreshing = false;
@@ -74,7 +91,9 @@ privateAxios.interceptors.response.use(
           isRefreshing = false;
           console.error('Token refresh failed:', refreshError.message);
           
-          // ✅ FIXED: Simplified redirect logic to prevent loops
+          // ✅ Enhanced logout handling with cross-tab support
+          handleLogoutAllTabs();
+          
           if (typeof window !== 'undefined') {
             const currentPath = window.location.pathname;
             

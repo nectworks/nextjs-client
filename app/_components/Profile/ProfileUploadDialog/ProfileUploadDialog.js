@@ -132,7 +132,9 @@ function ProfileUploadDialog({ setOpenFileUploadDialog }) {
         headers: {
           'Content-Type': uploadedFile.type,
           'Content-Disposition': 'inline',
+          'Origin': window.location.origin
         },
+        mode: 'cors'
       });
 
       if (res.status !== 200) {

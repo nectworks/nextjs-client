@@ -2,8 +2,13 @@
 
 /*
     FileName - Logout.js
-    Desc - This JavaScript file defines a React component called Logout. The primary purpose of this component is to handle the logout process for a user. It includes logic to send a request to a server to log the user out and provides visual feedback during the logout process.
+    Desc - This JavaScript file defines a React component called Logout.
+    The primary purpose of this component is to handle the logout process for a user.
+    It includes logic to send a request to a server to log the user out and
+    provides visual feedback during the logout process.
+    Updated with cross-tab synchronization and improved error handling.
 */
+
 // Import necessary dependencies and styles
 import { useContext, useEffect } from 'react';
 import usePrivateAxios from '@/Utils/usePrivateAxios';
@@ -16,7 +21,7 @@ import showBottomMessage from '@/Utils/showBottomMessage';
 // Define the Logout component
 const Logout = () => {
   const searchParams = useSearchParams();
-  const { userState } = useContext(UserContext);
+  const { userState, logout: contextLogout } = useContext(UserContext);
   const [user, setUser] = userState;
 
   const privateAxios = usePrivateAxios();
@@ -29,13 +34,22 @@ const Logout = () => {
     try {
       // Send a POST request to the logout endpoint
       await privateAxios.post(url);
-      sessionStorage.clear();
-      setUser(null);
+      
+      // Clear session storage
+      if (typeof window !== 'undefined') {
+        sessionStorage.clear();
+      }
+      
+      // Use context logout to handle cross-tab synchronization
+      contextLogout();
+      
       // navigate user to the login page.
       router.push('/log-in');
     } catch (error) {
-      // An error occurred during logout process
-      // showBottomMessage(`Could not logout`);
+      // Handle logout error - still clear local state
+      console.error('Logout error:', error);
+      contextLogout();
+      router.push('/log-in');
     }
   };
 
