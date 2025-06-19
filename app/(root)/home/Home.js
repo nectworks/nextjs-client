@@ -35,7 +35,7 @@ import Accordion from '../../_components/Accordian/Accordion'; // Using existing
 import './Home.css';
 
 export default function Home() {
-  const { userState } = useContext(UserContext);
+  const { userState, authCheckComplete } = useContext(UserContext);
   const [user, setUser] = userState;
   const [username, setUsername] = useState('');
   const [activeTab, setActiveTab] = useState('referrer'); // Default to 'referrer'
@@ -87,7 +87,7 @@ export default function Home() {
     if (typeof window !== 'undefined') {
       localStorage.setItem('singupval', username);
     }
-
+  
     const inputName = document.querySelector('.input__name');
     if (inputName) {
       inputName.addEventListener('keyup', (e) => {
@@ -96,9 +96,9 @@ export default function Home() {
         }
       });
     }
-
-    // Google One Tap login
-    if (!user && typeof window !== 'undefined') {
+  
+    // Google One Tap login - WAIT for auth check to complete
+    if (!user && authCheckComplete && typeof window !== 'undefined') {
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.defer = true;
@@ -114,7 +114,7 @@ export default function Home() {
       };
       document.body.appendChild(script);
     }
-
+  
     // Setup Intersection Observer for animations
     const observer = new IntersectionObserver(
       (entries) => {
@@ -129,21 +129,21 @@ export default function Home() {
       },
       { threshold: 0.1 }
     );
-
+  
     // Observe all sections with animation-container class
     document.querySelectorAll('.animation-container').forEach((el) => {
       observer.observe(el);
     });
-
+  
     // Observe hero section
     if (heroRef.current) {
       observer.observe(heroRef.current);
     }
-
+  
     return () => {
       observer.disconnect();
     };
-  }, [user, username]);
+  }, [user, username, authCheckComplete]);
 
   return (
     <main className="home">
@@ -160,7 +160,7 @@ export default function Home() {
               and advance your career with our data-driven platform.
             </p>
             
-            {!user && (
+            {!user && authCheckComplete && (
               <div className="hero__signup">
                 <div className="username-input">
                   <span>nectworks<span className="blinking-cursor">/</span></span>
