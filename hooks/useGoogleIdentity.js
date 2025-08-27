@@ -3,14 +3,15 @@
 // hooks/useGoogleIdentity.js
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { useContext } from 'react';
-import { UserContext } from '@/contexts/UserContext';
-import showBottomMessage from './../app/_components/showBottomMessage';
+import { UserContext } from '@/context/User/UserContext';
+import { publicAxios } from '@/config/axiosInstance';
+import showBottomMessage from '@/Utils/showBottomMessage';
 
 const useGoogleIdentity = () => {
   const router = useRouter();
-  const { user, setUser } = useContext(UserContext);
+  const { userState } = useContext(UserContext);
+  const [user, setUser] = userState;
 
   useEffect(() => {
     if (!user) {
@@ -18,7 +19,7 @@ const useGoogleIdentity = () => {
         client_id: process.env.NEXT_PUBLIC_GOOGLE_ONE_TAP_CLIENT,
         callback: async (response) => {
           try {
-            const res = await axios.post(`/api/google/one-tap/register`, {
+            const res = await publicAxios.post(`/google/one-tap/register`, {
               data: response,
             });
 

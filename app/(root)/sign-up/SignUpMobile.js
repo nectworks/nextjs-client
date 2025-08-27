@@ -56,6 +56,7 @@ const SignUpMobile = () => {
 
   const [usernameError, setUsernameError] = useState('');
 
+  // State for OTP sent confirmation popup
   const [isOTPSentAgainSignup, setIsOTPSentAgainSignup] = useState(false);
 
   // -----------------otp for sign__up----------
@@ -361,10 +362,14 @@ const SignUpMobile = () => {
         setTimeout(() => {
           setResendButton(false);
         }, 60000);
-        setIsOTPSentAgainSignup(true);
+        if (typeof setIsOTPSentAgainSignup === 'function') {
+          setIsOTPSentAgainSignup(true);
+        }
         setotpValuesSignUp(['', '', '', '']);
         setTimeout(() => {
-          setIsOTPSentAgainSignup(false);
+          if (typeof setIsOTPSentAgainSignup === 'function') {
+            setIsOTPSentAgainSignup(false);
+          }
         }, 2000); // Hide the OTP sent popup after 2 seconds
       }
     } catch (err) {
@@ -759,7 +764,7 @@ const SignUpMobile = () => {
                 'Resend OTP'
               )}
             </button>
-            {isOTPSentAgainSignup && (
+            {isOTPSentAgainSignup === true && (
               <div className="otp-popup-again-signup">
                 <span className="otp__sent__style">OTP sent ✅</span>
               </div>

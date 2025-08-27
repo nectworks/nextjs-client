@@ -13,7 +13,6 @@ import { createContext, useEffect, useState, useRef } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import {
   privateAxios,
-  tokenResInterceptor,
 } from '../../config/axiosInstance.js';
 import { usePathname } from 'next/navigation';
 
@@ -129,10 +128,7 @@ export default function UserContextProvider({ children }) {
     
     /* Since the context is out of the router, this can not
       utilise the `usePrivateAxios` hook */
-    const customInterceptor = privateAxios.interceptors.response.use(
-      (response) => response,
-      tokenResInterceptor
-    );
+    // The privateAxios instance already has interceptors configured
     
     // ALWAYS check credentials on initial load for consistency
     checkCredentials(true);
@@ -143,7 +139,7 @@ export default function UserContextProvider({ children }) {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
-      privateAxios.interceptors.response.eject(customInterceptor);
+      // No custom interceptor to eject
     };
   }, []);
 
