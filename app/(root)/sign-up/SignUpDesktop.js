@@ -61,6 +61,7 @@ const SignUpDesktop = () => {
 
   const [isOTPSent, setIsOTPSent] = useState(false);
   const [isOTPSentAgainLogin, setIsOTPSentAgainLogin] = useState(false);
+  // State for OTP sent confirmation popup
   const [isOTPSentAgainSignup, setIsOTPSentAgainSignup] = useState(false);
   const [isEmailAndOTPEntered, setEmailAndOTPEntered] = useState(false);
 
@@ -526,10 +527,14 @@ const SignUpDesktop = () => {
           setResendButton(false);
           setSeconds(0);
         }, 60000);
-        setIsOTPSentAgainSignup(true);
+        if (typeof setIsOTPSentAgainSignup === 'function') {
+          setIsOTPSentAgainSignup(true);
+        }
         setotpValuesSignUp(['', '', '', '']);
         setTimeout(() => {
-          setIsOTPSentAgainSignup(false);
+          if (typeof setIsOTPSentAgainSignup === 'function') {
+            setIsOTPSentAgainSignup(false);
+          }
         }, 2000); // Hide the OTP sent popup after 2 seconds
       }
     } catch (err) {
@@ -1212,7 +1217,7 @@ const SignUpDesktop = () => {
                 'Resend OTP'
               )}
             </button>
-            {isOTPSentAgainSignup && (
+            {isOTPSentAgainSignup === true && (
               <div className="otp-popup-again-signup">
                 <span className="otp__sent__style">OTP sent ✅</span>
               </div>
