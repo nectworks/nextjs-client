@@ -48,7 +48,7 @@
     "buffer": "^6.0.3",
     "eslint": "^8",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-next": "14.2.3",
+    "eslint-config-next": "16.0.3",
     "eslint-plugin-react": "^7.33.2",
     "events": "^3.3.0",
     "husky": "^9.0.11",
