@@ -17,7 +17,7 @@ import './Profile.css';
 import { Fragment, useContext, useEffect, useState, useRef, useCallback } from 'react';
 import editIcon from '@/public/Profile/editIcon.svg';
 import addIcon from '@/public/Profile/addIcon.svg';
-import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
+import ProtectedDashboardShell from '@/app/_components/ProtectedDashboardShell/ProtectedDashboardShell';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -1058,9 +1058,7 @@ const ProfilePage = () => {
   // Main component render
   return (
     <ProfileContextProvider initialState={initialState} reducer={reducer}>
-      <>
-      <DashboardMenu />
-      <div className="dashboard-layout">
+      <ProtectedDashboardShell>
 
         {/* Main container */}
         <div className="dashboard_profile_container">
@@ -1912,7 +1910,6 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
-      </div>
       
       {/* Action popup for editing content */}
       {actionPopup && (
@@ -2011,7 +2008,7 @@ const ProfilePage = () => {
       )}
       
       <ToastContainer />
-    </>
+    </ProtectedDashboardShell>
   </ProfileContextProvider>
 );
 };

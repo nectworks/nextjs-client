@@ -6,17 +6,20 @@
   state is accessible in all the components in dashboard.
 */
 
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import usePrivateAxios from '../../Utils/usePrivateAxios';
+import { UserContext } from '../User/UserContext';
 
 export const DashboardContext = createContext(null);
 
 const DashboardContextProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(null);
   const privateAxios = usePrivateAxios();
+  const { userState } = useContext(UserContext);
+  const [user] = userState;
 
   // function to fetch data required for user profile
-  const fetchProfileData = async () => {
+  const fetchProfileData = useCallback(async () => {
     // fetch the user profile info from the API
 
     try {
@@ -24,26 +27,36 @@ const DashboardContextProvider = ({ children }) => {
 
       const { data } = res.data;
       setUserInfo(data.userInfo);
+      sessionStorage.setItem(
+        `userInfo:${user._id}`,
+        JSON.stringify(data.userInfo)
+      );
     } catch (error) {
       // console.log(error);
     }
-  };
+  }, [privateAxios, user?._id]);
 
   useEffect(() => {
-    /* fetch the data only if it is not saved in sessionStorage
-    on the first render */
-    const currUserInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+    if (!user?._id) {
+      setUserInfo(null);
+      return;
+    }
+
+    const currUserInfo = JSON.parse(
+      sessionStorage.getItem(`userInfo:${user._id}`)
+    );
     if (!currUserInfo) {
       fetchProfileData();
     } else {
       setUserInfo(currUserInfo);
     }
-  }, []);
+  }, [fetchProfileData, user?._id]);
 
   useEffect(() => {
-    // update the sessionStorage each time state is updated.
-    sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
-  }, [userInfo]);
+    if (user?._id && userInfo) {
+      sessionStorage.setItem(`userInfo:${user._id}`, JSON.stringify(userInfo));
+    }
+  }, [user?._id, userInfo]);
 
   return (
     <DashboardContext.Provider value={[userInfo, setUserInfo]}>

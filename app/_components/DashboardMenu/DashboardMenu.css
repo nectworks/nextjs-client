@@ -189,6 +189,10 @@
   padding: 20px 10px;
 }
 
+.dashboard_menu_container_mini ~ .dashboard-layout {
+  margin-left: 80px;
+}
+
 .dashboard_menu_container_mini .dashboard_menu_logo {
   padding: 20px 0;
   justify-content: center;
@@ -426,6 +430,10 @@
     z-index: 1001;
     height: 100%;
     border-radius: 0;
+  }
+
+  .dashboard_menu_container_mobile_open {
+    left: 0;
   }
 
   /* display the close icon in tablet/mobile view */

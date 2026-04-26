@@ -66,15 +66,8 @@ function ProfileHeader() {
   // referred referrals in real-time
   useEffect(() => {
     if (!user) return;
-    // Get the user ID from the user object
-    const userId = user._id;
-    let url;
-    // Construct the URL for the server-sent events (SSE) endpoint
-    if (process.env.NODE_ENV !== 'production') {
-      url = `http://localhost:5001/api/v1/refer/private/referred?userId=${userId}`;
-    } else {
-      url = `/api/v1/refer/private/referred?userId=${userId}`;
-    }
+    const apiBaseUrl = process.env.NEXT_PUBLIC_APP_URL || '/api/v1';
+    const url = `${apiBaseUrl}/refer/private/referred`;
 
     // Declare a variable to hold the EventSource object
     let eventSource;
@@ -94,34 +87,29 @@ function ProfileHeader() {
         // Parse the data received from the server
         const referralData = JSON.parse(event.data);
 
-        // Check if the received referral is not already present in the state
-        if (
-          !referredReferrals.find(
-            (referral) => referral._id === referralData._id
-          )
-        ) {
-          try {
-            // Fetch the page of the professional user associated with the referral
-            const profileResponse = await publicAxios.get(
-              `/getUser/${referralData.professionalUserId.username}`
-            );
-            const profile = profileResponse.data.user.profile;
+        try {
+          // Fetch the page of the professional user associated with the referral
+          const profileResponse = await publicAxios.get(
+            `/getUser/${referralData.professionalUserId.username}`
+          );
+          const profile = profileResponse.data.user.profile;
 
-            // Update the referral data with the fetched profile
-            referralData.professionalUserId.profile = profile;
-          } catch (error) {
-            console.error(
-              `Error fetching profile for referral with ID ${referralData._id}:`,
-              error
-            );
-          }
-
-          // Update the state with the new referral data
-          setReferredReferrals((prevReferrals) => [
-            ...prevReferrals,
-            referralData,
-          ]);
+          // Update the referral data with the fetched profile
+          referralData.professionalUserId.profile = profile;
+        } catch (error) {
+          console.error(
+            `Error fetching profile for referral with ID ${referralData._id}:`,
+            error
+          );
         }
+
+        setReferredReferrals((prevReferrals) => {
+          const alreadyExists = prevReferrals.some(
+            (referral) => referral._id === referralData._id
+          );
+
+          return alreadyExists ? prevReferrals : [...prevReferrals, referralData];
+        });
       };
 
       // Event listener for handling errors from the EventSource connection
@@ -143,7 +131,7 @@ function ProfileHeader() {
         eventSource = undefined;
       }
     };
-  }, [referredReferrals, user]); // Dependency array containing variables used inside the effect
+  }, [user]); // Dependency array containing variables used inside the effect
 
   // Effect for dropdown positioning
   useEffect(() => {

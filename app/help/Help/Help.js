@@ -10,7 +10,7 @@
 */
 
 import { useEffect, useRef, useState } from 'react';
-import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
+import ProtectedDashboardShell from '@/app/_components/ProtectedDashboardShell/ProtectedDashboardShell';
 import './Help.css';
 import Image from 'next/image';
 import green_tick from '@/public/greenTick.svg';
@@ -204,9 +204,7 @@ const Help = () => {
   }, []);
 
   return (
-    <>
-      <DashboardMenu />
-      <div className="dashboard-layout">
+    <ProtectedDashboardShell>
       <div className="starting_heading">
         {/* Use the ProfileHeaderWrapper instead of ProfileHeader directly */}
         <ProfileHeaderWrapper />
@@ -304,9 +302,8 @@ const Help = () => {
             </div>
           )}
         </div>
-      </div>
     </div>
-    </>
+    </ProtectedDashboardShell>
   );
 };
 

@@ -34,8 +34,9 @@ const Professional = () => {
       observer.observe(container);
     });
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
+    const heroElement = heroRef.current;
+    if (heroElement) {
+      observer.observe(heroElement);
     }
 
     return () => {
@@ -43,8 +44,8 @@ const Professional = () => {
         observer.unobserve(container);
       });
       
-      if (heroRef.current) {
-        observer.unobserve(heroRef.current);
+      if (heroElement) {
+        observer.unobserve(heroElement);
       }
     };
   }, []);

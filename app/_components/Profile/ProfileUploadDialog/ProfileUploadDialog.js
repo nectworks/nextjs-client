@@ -257,8 +257,13 @@ function ProfileUploadDialog({ setOpenFileUploadDialog }) {
 
     // get the cropped section of the image
     const croppedImage = cropperInstance
-      .getCroppedCanvas()
-      .toDataURL('image/jpeg');
+      .getCroppedCanvas({
+        width: 512,
+        height: 512,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high',
+      })
+      .toDataURL('image/jpeg', 0.92);
 
     // croppedImage is of type dataURL, convert it to blob
     const blob = dataURItoBlob(croppedImage);

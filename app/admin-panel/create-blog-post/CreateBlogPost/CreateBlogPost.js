@@ -4,7 +4,6 @@
   Description: This file contains a rich text editor to create blog posts.
 */
 
-import JoditEditor from 'jodit-react';
 import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDashboardMenu';
 import './CreateBlogPost.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -21,6 +20,12 @@ import {
   Box,
   Chip,
 } from '@mui/material';
+import dynamic from 'next/dynamic';
+
+const JoditEditor = dynamic(() => import('jodit-react'), {
+  ssr: false,
+  loading: () => <CircularProgress size={28} />,
+});
 
 function CreateBlogPost() {
   const router = useRouter();

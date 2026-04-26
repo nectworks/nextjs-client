@@ -750,7 +750,7 @@ const ReferCandidates = () => {
     if (publicProfileUsername === username) return;
 
     try {
-      const res = await publicAxios.get(
+      const res = await privateAxios.get(
         `/refer/private/seeker/${referral.userId}`
       );
 

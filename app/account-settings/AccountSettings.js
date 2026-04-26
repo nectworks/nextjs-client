@@ -13,7 +13,7 @@ import Image from 'next/image';
 import cardGreenTickIcon from '@/public/AccountSettings/CardGreenTick.webp';
 import greenTick from '@/public/AccountSettings/greenTick.webp';
 import editIcon from '@/public/Profile/editIcon.svg';
-import DashboardMenu from '../_components/DashboardMenu/DashboardMenu';
+import ProtectedDashboardShell from '@/app/_components/ProtectedDashboardShell/ProtectedDashboardShell';
 import ClipLoader from 'react-spinners/ClipLoader';
 import infoIcon from '@/public/SignIn/information.webp';
 import { useRouter } from 'next/navigation';
@@ -713,9 +713,7 @@ const AccountSettings = () => {
   }, [userPreferences]);
 
   return (
-    <>
-      <DashboardMenu />
-      <div className="dashboard-layout">
+    <ProtectedDashboardShell>
 
       <div className={`accountSettingsContainer`}>
         <ProfileHeaderWrapper />
@@ -1264,7 +1262,7 @@ const AccountSettings = () => {
                     return (
                       <div key={index} className="dashboard_preference_row">
                         <h3>{formatCamelCaseStr(field)}</h3>
-                        <Image src={seperatorIcon} />
+                        <Image src={seperatorIcon} alt="" />
                         <div className="dashboard_preference_values">
                           {
                             /* if the values is an array, map over
@@ -1392,9 +1390,8 @@ const AccountSettings = () => {
             </div>
           )}
         </div>
-      </div>
     </div>
-  </>
+  </ProtectedDashboardShell>
   );
 };
 

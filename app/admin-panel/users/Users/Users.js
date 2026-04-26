@@ -10,11 +10,10 @@ import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDas
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { privateAxios } from '@/config/axiosInstance';
 import './Users.css';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import AdminDataGrid from '@/app/_components/AdminDataGrid/AdminDataGrid';
 import Link from 'next/link';
 import Image from 'next/image';
 import profileLinkIcon from '@/public/Profile/otherLinkIcon.svg';
-import { LinearProgress } from '@mui/material';
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -313,7 +312,7 @@ function Users() {
         {/* data grid */}
         {showRegisteredUsers === true ? (
           <div className="admin_users_data_grid">
-            <DataGrid
+            <AdminDataGrid
               getRowId={(row) => row._id}
               rows={userPageData}
               columns={userCols}
@@ -323,32 +322,11 @@ function Users() {
               onPaginationModelChange={setUserPaginationModel}
               pageSizeOptions={[5, 10, 15, 20]}
               loading={isLoading}
-              slots={{
-                toolbar: GridToolbar,
-                loadingOverlay: LinearProgress,
-              }}
-              sx={{
-                '& .MuiDataGrid-root': {
-                  borderRadius: '8px',
-                  boxShadow: '1px 1px 4px 0px rgba(0, 0, 0, 0.25)',
-                },
-                '& .MuiDataGrid-columnHeaders': {
-                  backgroundColor: '#EBEBEB',
-                  color: 'black',
-                },
-                '& .MuiDataGrid-cell': {
-                  backgroundColor: '#FFF',
-                  color: 'black',
-                },
-                '& .MuiDataGrid-row': {
-                  margin: '3px 0',
-                },
-              }}
             />
           </div>
         ) : (
           <div className="admin_users_data_grid">
-            <DataGrid
+            <AdminDataGrid
               getRowId={(row) => row._id}
               rows={unRegisteredUserPageData}
               columns={unRegisteredUserCols}
@@ -358,27 +336,6 @@ function Users() {
               onPaginationModelChange={setUnRegisteredUserPaginationModel}
               pageSizeOptions={[5, 10, 15, 20]}
               loading={isLoading}
-              slots={{
-                toolbar: GridToolbar,
-                loadingOverlay: LinearProgress,
-              }}
-              sx={{
-                '& .MuiDataGrid-root': {
-                  borderRadius: '8px',
-                  boxShadow: '1px 1px 4px 0px rgba(0, 0, 0, 0.25)',
-                },
-                '& .MuiDataGrid-columnHeaders': {
-                  backgroundColor: '#EBEBEB',
-                  color: 'black',
-                },
-                '& .MuiDataGrid-cell': {
-                  backgroundColor: '#FFF',
-                  color: 'black',
-                },
-                '& .MuiDataGrid-row': {
-                  margin: '3px 0',
-                },
-              }}
             />
           </div>
         )}

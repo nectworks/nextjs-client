@@ -153,7 +153,7 @@ function SeekerPublicPage() {
         setShowLoader(false);
       }
     } catch (err) {
-      router.push('/page-not-found', { replace: true });
+      router.replace('/page-not-found');
       setShowLoader(false);
     }
   };
@@ -291,8 +291,6 @@ function SeekerPublicPage() {
     try {
       await downloadDocument(userData.resume, fileName);
       showBottomMessage(`Successfully downloaded resume`);
-      //It will refresh the page when resume is deleted successfully
-      window.location.reload();
     } catch (error) {
       showBottomMessage(`Couldn't download resume`);
     }

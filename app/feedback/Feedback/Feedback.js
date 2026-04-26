@@ -18,6 +18,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { UserContext } from '@/context/User/UserContext';
 import { privateAxios } from '@/config/axiosInstance';
+import ProtectedDashboardShell from '@/app/_components/ProtectedDashboardShell/ProtectedDashboardShell';
 
 const Feedback = () => {
   const { userState } = useContext(UserContext);
@@ -155,7 +156,7 @@ const Feedback = () => {
   };
 
   return (
-    <>
+    <ProtectedDashboardShell showDashboard={false}>
       {!enableFeedback && (
         <div className="feedbackContainer">
           <div className="feedbackContent">
@@ -272,7 +273,7 @@ const Feedback = () => {
           </div>
         </div>
       )}
-    </>
+    </ProtectedDashboardShell>
   );
 };
 

@@ -47,6 +47,7 @@ import hashnodeLogo from '@/public/socialsLogo/hashnodeLogo.svg';
 import ProfileImage from '../../_components/Profile/ProfileImage/ProfileImage';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { publicAxios, privateAxios } from '@/config/axiosInstance';
+import { completeAuthSession, navigateAfterAuth } from '@/Utils/authSession';
 import { UserContext } from '@/context/User/UserContext';
 import { getSkillDescription, getSkillEmoji } from '@/Utils/skillDescriptions';
 
@@ -141,7 +142,7 @@ const PublicProfile = () => {
         setShowLoader(false);
       }
     } catch (err) {
-      router.push('/page-not-found', { replace: true });
+      router.replace('/page-not-found');
       setShowLoader(false);
     }
   };
@@ -407,20 +408,11 @@ const PublicProfile = () => {
       const { signUp, user: userData } = res.data;
       
       if (res.status === 200 && userData) {
-        // Set user state first
-        setUser(userData);
+        completeAuthSession(userData, setUser);
         console.log('User state updated:', userData);
         
         showBottomMessage('Successfully authenticated.');
-        
-        // Use window.location for immediate redirect to avoid router issues
-        if (signUp === true) {
-          console.log('New signup - redirecting to profile');
-          window.location.href = '/profile';
-        } else {
-          console.log('Existing user - redirecting to profile');  
-          window.location.href = '/profile';
-        }
+        navigateAfterAuth(router, '/profile');
       } else {
         console.error('Invalid response:', res);
         showBottomMessage('Authentication failed. Please try again.');

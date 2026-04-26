@@ -10,10 +10,9 @@ import showBottomMessage from '@/Utils/showBottomMessage';
 import { privateAxios } from '@/config/axiosInstance';
 import './ReportedJobs.css';
 import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDashboardMenu';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import AdminDataGrid from '@/app/_components/AdminDataGrid/AdminDataGrid';
 import profileLinkIcon from '@/public/Profile/otherLinkIcon.svg';
 import Link from 'next/link';
-import { LinearProgress } from '@mui/material';
 
 function ReportedJobs() {
   const [data, setData] = useState([]);
@@ -243,7 +242,7 @@ function ReportedJobs() {
 
         {/* data grid */}
         <div className="admin_reported_jobs_data_grid">
-          <DataGrid
+          <AdminDataGrid
             rows={currPageData}
             columns={mainDataGridColumns}
             getRowId={(row) => row._id}
@@ -254,27 +253,6 @@ function ReportedJobs() {
             onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[5, 10, 15, 20]}
             loading={isLoading}
-            slots={{
-              toolbar: GridToolbar,
-              loadingOverlay: LinearProgress,
-            }}
-            sx={{
-              '& .MuiDataGrid-root': {
-                borderRadius: '8px',
-                boxShadow: '1px 1px 4px 0px rgba(0, 0, 0, 0.25)',
-              },
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: '#EBEBEB',
-                color: 'black',
-              },
-              '& .MuiDataGrid-cell': {
-                backgroundColor: '#FFF',
-                color: 'black',
-              },
-              '& .MuiDataGrid-row': {
-                margin: '3px 0',
-              },
-            }}
           />
         </div>
       </div>

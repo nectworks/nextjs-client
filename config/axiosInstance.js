@@ -20,13 +20,20 @@ const privateAxios = axios.create({
 let isRefreshing = false;
 let refreshSubscribers = [];
 
-const onTokenRefreshed = (newToken) => {
-  refreshSubscribers.forEach((callback) => callback(newToken));
+const onTokenRefreshed = () => {
+  refreshSubscribers.forEach(({ resolve, request }) => {
+    resolve(privateAxios(request));
+  });
   refreshSubscribers = [];
 };
 
-const addRefreshSubscriber = (callback) => {
-  refreshSubscribers.push(callback);
+const onTokenRefreshFailed = (error) => {
+  refreshSubscribers.forEach(({ reject }) => reject(error));
+  refreshSubscribers = [];
+};
+
+const addRefreshSubscriber = (request, resolve, reject) => {
+  refreshSubscribers.push({ request, resolve, reject });
 };
 
 // Helper function to handle logout across tabs
@@ -37,6 +44,32 @@ const handleLogoutAllTabs = () => {
     // Trigger storage event for other tabs
     localStorage.setItem('userLoggedOut', Date.now().toString());
   }
+};
+
+const redirectToLogin = () => {
+  if (typeof window === 'undefined') return;
+
+  const currentPath = `${window.location.pathname}${window.location.search}`;
+  const isProtectedRoute =
+    currentPath.includes('/dashboard') ||
+    currentPath.includes('/profile') ||
+    currentPath.includes('/account-settings') ||
+    currentPath.includes('/feedback') ||
+    currentPath.includes('/help') ||
+    currentPath.includes('/nectcoins');
+
+  const isOnAuthPage =
+    currentPath.includes('/log-in') ||
+    currentPath.includes('/sign-up') ||
+    currentPath.includes('/admin-panel');
+
+  if (!isProtectedRoute || isOnAuthPage) return;
+
+  const detail = {
+    redirectTo: `/log-in?redirect=${encodeURIComponent(currentPath)}`,
+  };
+
+  window.dispatchEvent(new CustomEvent('auth:expired', { detail }));
 };
 
 privateAxios.interceptors.response.use(
@@ -73,8 +106,6 @@ privateAxios.interceptors.response.use(
           });
 
           if (res.status === 200) {
-            const newToken = res.data.accessToken;
-            
             // Update localStorage for cross-tab sync
             if (typeof window !== 'undefined') {
               localStorage.setItem('userAuthenticated', 'true');
@@ -82,7 +113,7 @@ privateAxios.interceptors.response.use(
             }
             
             // Notify subscribers
-            onTokenRefreshed(newToken);
+            onTokenRefreshed();
             isRefreshing = false;
 
             return privateAxios(prevRequest);
@@ -90,30 +121,12 @@ privateAxios.interceptors.response.use(
         } catch (refreshError) {
           isRefreshing = false;
           console.error('Token refresh failed:', refreshError.message);
+          onTokenRefreshFailed(refreshError);
           
           // ✅ Enhanced logout handling with cross-tab support
           handleLogoutAllTabs();
           
-          if (typeof window !== 'undefined') {
-            const currentPath = window.location.pathname;
-            
-            // Only redirect for specific protected routes
-            const isProtectedRoute = currentPath.includes('/dashboard') || 
-                                   currentPath.includes('/profile') || 
-                                   currentPath.includes('/account-settings') ||
-                                   currentPath.includes('/nectcoins');
-            
-            const isOnAuthPage = currentPath.includes('/signin') ||
-                               currentPath.includes('/signup') ||
-                               currentPath.includes('/admin-panel');
-
-            // Only redirect if user is on a protected route and not already on auth page
-            if (isProtectedRoute && !isOnAuthPage) {
-              setTimeout(() => {
-                window.location.href = '/signin';
-              }, 100);
-            }
-          }
+          redirectToLogin();
           
           return Promise.reject(refreshError);
         }
@@ -121,9 +134,7 @@ privateAxios.interceptors.response.use(
 
       // Queue the request until the token refresh is complete
       return new Promise((resolve, reject) => {
-        addRefreshSubscriber((newToken) => {
-          resolve(privateAxios(prevRequest));
-        });
+        addRefreshSubscriber(prevRequest, resolve, reject);
       });
     }
 

@@ -19,7 +19,7 @@ import infoIcon from '@/public/SignIn/userIcon.png';
 import userNameIcon from '@/public/SignIn/userNameIcon.png';
 import emailIcon from '@/public/SignIn/emailIcon.svg';
 import otpIcon from '@/public/SignIn/otpIcon.svg';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { publicAxios } from '@/config/axiosInstance.js';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -29,6 +29,7 @@ import { UserContext } from '@/context/User/UserContext';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import LinkedInIcon from '@/public/SignIn/LinkedInIcon.svg';
 import GoogleIcon from '@/public/SignIn/GoogleIcon.svg';
+import { completeAuthSession, navigateAfterAuth } from '@/Utils/authSession';
 
 // Safe localStorage getter function
 const getSignupInputValFromMain = () => {
@@ -41,8 +42,9 @@ const getSignupInputValFromMain = () => {
 // Main component
 const SignUpDesktop = () => {
   const router = useRouter();
-  // get the location from where the user was redirected to sign-up page.
-  const [prevLocation, setPrevLocation] = useState(null);
+  const searchParams = useSearchParams();
+  const prevLocation =
+    searchParams.get('from') || searchParams.get('redirect') || '/profile';
 
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
@@ -95,12 +97,6 @@ const SignUpDesktop = () => {
       clearInterval(interval);
     };
   }, [isActive]);
-
-  useEffect(() => {
-    if (router.query && router.query.from) {
-      setPrevLocation(router.query.from);
-    }
-  }, [router.query]);
 
   const [checkUsernameExist, setcheckUsernameExist] = useState(false);
   const [showUsername, setShowUsername] = useState(false);
@@ -555,15 +551,10 @@ const SignUpDesktop = () => {
         enteredOTP: otpInput, // Use the single input value
       });
       if (res.status === 200) {
-        setUser(res.data.user);
+        completeAuthSession(res.data.user, setUser);
         setShowSpinnerLogin(false);
         setOtpVerified(true);
-        router.push(prevLocation || '/profile', {
-          state: {
-            from: '/log-in',
-          },
-          replace: true,
-        });
+        navigateAfterAuth(router, prevLocation);
       }
     } catch (err) {
       const { status, data } = err.response;
@@ -617,18 +608,14 @@ const SignUpDesktop = () => {
   
       if (res.status === 200) {
         showSignupSpinner(false);
-        setUser(res.data.user);
+        completeAuthSession(res.data.user, setUser);
   
         // Set a flag in localStorage to indicate this is a brand new signup
         if (typeof window !== 'undefined') {
           localStorage.setItem('newSignup', 'true');
           sessionStorage.setItem('from', '/sign-up');
         }
-        
-        // Add a small delay before redirecting to ensure storage is set
-        setTimeout(() => {
-          router.push(prevLocation || '/profile');
-        }, 100);
+        navigateAfterAuth(router, prevLocation);
       }
     } catch (err) {
       showSignupSpinner(false);
@@ -680,20 +667,21 @@ const SignUpDesktop = () => {
 
   // Initialize username from localStorage after component mounts
   useEffect(() => {
-    const savedUsername = getSignupInputValFromMain();
+    const savedUsername =
+      searchParams.get('username') || getSignupInputValFromMain();
     if (savedUsername) {
       setUsername(savedUsername);
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     /* if the user is already registered, redirect them to where they came from
                or to the profile page */
     if (user) {
-      router.push(prevLocation || '/profile', { replace: true });
+      navigateAfterAuth(router, prevLocation);
       return;
     }
-  }, []);
+  }, [user, prevLocation, router]);
 
   // JSX return
   return (

@@ -17,7 +17,7 @@ import infoIcon from '@/public/SignIn/userIcon.png';
 import userNameIcon from '@/public/SignIn/userNameIcon.png';
 import emailIcon from '@/public/SignIn/emailIcon.svg';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { publicAxios } from '@/config/axiosInstance.js';
 import ClipLoader from 'react-spinners/ClipLoader';
 import scrollToTop from '@/Utils/scrollToTop';
@@ -26,9 +26,14 @@ import usePrivateAxios from '@/Utils/usePrivateAxios';
 import LinkedInIcon from '@/public/SignIn/LinkedInIcon.svg';
 import GoogleIcon from '@/public/SignIn/GoogleIcon.svg';
 import Image from 'next/image';
+import showBottomMessage from '@/Utils/showBottomMessage';
+import { completeAuthSession, navigateAfterAuth } from '@/Utils/authSession';
 
 const SignUpMobile = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const prevLocation =
+    searchParams.get('from') || searchParams.get('redirect') || '/profile';
   const getSignupInputValFromMain = () => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('singupval') || '';
@@ -39,9 +44,6 @@ const SignUpMobile = () => {
   const [user, setUser] = userState;
 
   const privateAxios = usePrivateAxios();
-
-  // get the location from where the user was redirected to sign-up page.
-  const [prevLocation, setPrevLocation] = useState(null);
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -84,17 +86,12 @@ const SignUpMobile = () => {
   }, [isActive]);
 
   useEffect(() => {
-    const savedUsername = getSignupInputValFromMain();
+    const savedUsername =
+      searchParams.get('username') || getSignupInputValFromMain();
     if (savedUsername) {
       setUsername(savedUsername);
     }
-  }, []);
-
-  useEffect(() => {
-    if (router.query && router.query.from) {
-      setPrevLocation(router.query.from);
-    }
-  }, [router.query]);
+  }, [searchParams]);
 
   // Create refs for each input field
   const inputRefsSignUp = [useRef(), useRef(), useRef(), useRef()];
@@ -408,16 +405,12 @@ const SignUpMobile = () => {
   
       if (res.status === 200) {
         showSignupSpinner(false);
-        setUser(res.data.user);
+        completeAuthSession(res.data.user, setUser);
   
         // Set a flag in localStorage to indicate this is a brand new signup
         localStorage.setItem('newSignup', 'true');
         sessionStorage.setItem('from', '/sign-up');
-        
-        // Add a small delay before redirecting to ensure storage is set
-        setTimeout(() => {
-          router.push(prevLocation || '/profile');
-        }, 100);
+        navigateAfterAuth(router, prevLocation);
       }
     } catch (err) {
       showSignupSpinner(false);
@@ -463,10 +456,10 @@ const SignUpMobile = () => {
     /* if the user is already registered, redirect them to where they came from
                or to the profile page */
     if (user) {
-      router.push(prevLocation || '/profile', { replace: true });
+      navigateAfterAuth(router, prevLocation);
       return;
     }
-  }, []);
+  }, [user, prevLocation, router]);
 
   return (
     <>

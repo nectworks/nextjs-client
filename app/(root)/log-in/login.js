@@ -10,20 +10,22 @@ import '../sign-up/SignUpMobile.css';
 import emailIcon from '@/public/SignIn/emailIcon.svg';
 import otpIcon from '@/public/SignIn/otpIcon.svg';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { privateAxios, publicAxios } from '@/config/axiosInstance.js';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { UserContext } from '@/context/User/UserContext.js';
 import showBottomMessage from '@/Utils/showBottomMessage.js';
 import LinkedInIcon from '@/public/SignIn/LinkedInIcon.svg';
 import GoogleIcon from '@/public/SignIn/GoogleIcon.svg';
+import { completeAuthSession, navigateAfterAuth } from '@/Utils/authSession';
 
 export default function Login() {
   const { userState } = useContext(UserContext);
   const [user, setUser] = userState;
   const router = useRouter();
-  // get the location from where the user was redirected to login page.
-  const [prevLocation, setPrevLocation] = useState(null);
+  const searchParams = useSearchParams();
+  const prevLocation =
+    searchParams.get('from') || searchParams.get('redirect') || '/profile';
   const [email, setEmail] = useState('');
   const [otpInput, setOtpInput] = useState('');
 
@@ -179,10 +181,10 @@ export default function Login() {
         enteredOTP: otpInput, // Use the single input value
       });
       if (res.status === 200) {
-        setUser(res.data.user);
+        completeAuthSession(res.data.user, setUser);
         setShowSpinnerLogin(false);
         setOtpVerified(true);
-        router.replace(prevLocation || '/profile');
+        navigateAfterAuth(router, prevLocation);
       }
     } catch (err) {
       const { status, data } = err.response;
@@ -244,19 +246,13 @@ export default function Login() {
   }, [otpInput]);
 
   useEffect(() => {
-    if (router.query && router.query.from) {
-      setPrevLocation(router.query.from);
-    }
-  }, [router.query]);
-
-  useEffect(() => {
     /* if the user is already registered, redirect them to where they came from
            or to the profile page */
     if (user) {
-      router.replace(prevLocation || '/profile');
+      navigateAfterAuth(router, prevLocation);
       return;
     }
-  }, [user]);
+  }, [user, prevLocation, router]);
 
   return (
     <>

@@ -37,11 +37,12 @@ const AboutUs = () => {
     const animationContainers = document.querySelectorAll('.animation-container');
     animationContainers.forEach((container) => observer.observe(container));
 
-    if (heroRef.current) observer.observe(heroRef.current);
+    const heroElement = heroRef.current;
+    if (heroElement) observer.observe(heroElement);
 
     return () => {
       animationContainers.forEach((container) => observer.unobserve(container));
-      if (heroRef.current) observer.unobserve(heroRef.current);
+      if (heroElement) observer.unobserve(heroElement);
     };
   }, []);
 
@@ -105,11 +106,11 @@ const AboutUs = () => {
               <h2>Why We Do This?</h2>
               <p className="mission-text">
                 We feel the frustration you go through when it comes to looking for a job.
-                We've been there too. The endless applications, the silence, the uncertainty.
+                We&apos;ve been there too. The endless applications, the silence, the uncertainty.
               </p>
               <p className="mission-text">
                 At Nectworks, we manifest this frustration into a product that benefits both
-                referrers and seekers to refer and seek jobs under one umbrella. We've created
+                referrers and seekers to refer and seek jobs under one umbrella. We&apos;ve created
                 a platform where connections matter and opportunities flow naturally.
               </p>
             </div>

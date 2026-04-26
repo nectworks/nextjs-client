@@ -10,6 +10,7 @@ const IOSSwitch = forwardRef((props, ref) => (
     {...props}
   />
 ));
+IOSSwitch.displayName = 'IOSSwitch';
 
 const StyledIOSSwitch = styled(IOSSwitch)(({ theme }) => ({
   width: 42,

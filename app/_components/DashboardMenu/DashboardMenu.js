@@ -19,7 +19,7 @@ import logoutIcon from '../../../public/Dashboard/logout.svg';
 import toggleIcon from '../../../public/Dashboard/toggleIcon.svg';
 import './DashboardMenu.css'; // We'll update this CSS file
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { UserContext } from '../../../context/User/UserContext';
 import io from 'socket.io-client';
 import showBottomMessage from '@/Utils/showBottomMessage';
@@ -28,9 +28,10 @@ let socket;
 
 function DashboardMenu() {
   const { userModeState } = useContext(UserContext);
-  const [userMode, setUserMode] = userModeState;
-  const [pathName, setPathName] = useState('');
-  const router = useRouter();
+  const [userMode] = userModeState;
+  const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const URL = process.env.NEXT_PUBLIC_SOCKET_URL;
 
@@ -40,108 +41,28 @@ function DashboardMenu() {
   // state to indicate if the user has a new referral
   const [newReferral, setNewReferral] = useState(false);
 
-  // function to toggle the dashboard menu in desktop view
   function toggleDashboardMenu(e = null) {
     e?.stopPropagation();
-    
-    const dashboardContainer = document.querySelector(
-      '.dashboard_menu_container'
-    );
-
-    const allDashboardMenuItems = dashboardContainer.querySelectorAll(
-      '.dashboard_menu_item_text'
-    );
-
-    const allItemsToHide = [...allDashboardMenuItems];
-
-    // Toggle text visibility in menu items
-    allItemsToHide.forEach((dashboardItem) => {
-      dashboardItem.classList.toggle('hide');
-    });
-
-    // Toggle minimized class
-    dashboardContainer.classList.toggle('dashboard_menu_container_mini');
-    
-    // Toggle menu-minimized class on the dashboard layout wrapper
-    const dashboardLayout = document.querySelector('.dashboard-layout');
-    if (dashboardLayout) {
-      dashboardLayout.classList.toggle('menu-minimized');
-    }
+    setIsCollapsed((prevState) => !prevState);
   }
 
-  // function to view/hide dashboardMenu tablet and mobile view
   function toggleDashboardMenuMobile() {
-    const menuContainer = document.querySelector('.dashboard_menu_container');
-
-    const menuContainerLeft = parseFloat(
-      window.getComputedStyle(menuContainer, null).getPropertyValue('left')
-    );
-
-    // if menu has negative 'left' value, it is hidden
-    if (menuContainerLeft < 0) {
-      // reveal the hidden menu
-      menuContainer.style.left = '0px';
-      // Add overlay class to body for mobile view
-      document.body.classList.add('menu-overlay');
-    } else {
-      // hide the menu
-      menuContainer.style.left = '-250px';
-      // Remove overlay class from body
-      document.body.classList.remove('menu-overlay');
-    }
+    setIsMobileOpen((prevState) => !prevState);
   }
-
-  function clearActiveStates() {
-    const allActiveMenuItems = document.querySelectorAll(
-      '.dashboard_menu_item_active'
-    );
-    allActiveMenuItems.forEach((activeItem) => {
-      activeItem.classList.remove('dashboard_menu_item_active');
-    });
-  }
-
-  // when window is below certain width, adjust menu behavior
-  const handleResize = () => {
-    if (window.innerWidth <= 800) {
-      const menu = document.querySelector('.dashboard_menu_container');
-      if (menu.classList.contains('dashboard_menu_container_mini')) {
-        toggleDashboardMenu();
-      }
-    }
-  };
 
   useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 800) {
+        setIsCollapsed(false);
+      }
+    };
+
     handleResize();
     window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  useEffect(() => {
-    // clear all the activated states
-    clearActiveStates();
-
-    // get the current path from the url and format it
-    const pathname = router.asPath;
-
-    if (pathname) {
-      const allWords = pathname.split('/');
-      const validWords = allWords.filter((word) => word.length > 0);
-      const path = validWords.join('/');
-      setPathName(path);
-    }
-
-    // get the corresponding menu item from dashboard
-    const menuItem = document.querySelector(`[data-path='${pathName}']`);
-
-    if (menuItem && menuItem.classList) {
-      const nonActiveClass = menuItem.classList[0];
-      const activeClass = `${nonActiveClass}_active`;
-      menuItem.classList.add(activeClass);
-    }
-  }, [router.pathname]);
 
   const [disableFeedbackCard, setDisableFeedbackCard] = useState(true);
 
@@ -151,6 +72,8 @@ function DashboardMenu() {
   }, [userMode]);
 
   useEffect(() => {
+    if (!URL) return;
+
     socket = io(URL);
 
     socket.on('new-referral', (data) => {
@@ -162,29 +85,63 @@ function DashboardMenu() {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [URL]);
 
   useEffect(() => {
-    // Clear the notification when the user navigates to the 'Refer candidates' page
-    if (location.pathname === '/dashboard/refer') {
+    if (pathname === '/dashboard/refer') {
       setNewReferral(false);
       localStorage.removeItem('hasNewReferral');
     }
-  }, [location]);
+  }, [pathname]);
+
+  useEffect(() => {
+    setIsMobileOpen(false);
+
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'auto';
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    document.body.style.overflow = isMobileOpen ? 'hidden' : 'auto';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMobileOpen]);
 
   // Function to open Nectworks in new tab
   const openNectworksWebsite = () => {
     window.open('https://nectworks.com', '_blank');
   };
 
-  // Function to handle hard refresh navigation
-  const handleNavigation = (path, e) => {
-    // Check if this is a link that needs hard refresh
-    if (['/profile', '/help', '/account-settings', '/dashboard/refer'].includes(path)) {
-      e.preventDefault(); // Prevent default Link behavior
-      window.location.href = path; // Hard refresh
-    }
-    // For other links, let Next.js Link handle the navigation
+  const isActivePath = (path) => {
+    if (path === '/profile') return pathname === '/profile';
+    return pathname === path || pathname?.startsWith(`${path}/`);
+  };
+
+  const menuTextClassName = `dashboard_menu_item_text ${
+    isCollapsed ? 'hide' : ''
+  }`;
+
+  const dashboardMenuClassName = [
+    'dashboard_menu_container',
+    isCollapsed ? 'dashboard_menu_container_mini' : '',
+    isMobileOpen ? 'dashboard_menu_container_mobile_open' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const getMenuItemClassName = (path, extraClass = '') => {
+    return [
+      'dashboard_menu_item',
+      isActivePath(path) ? 'dashboard_menu_item_active' : '',
+      extraClass,
+    ]
+      .filter(Boolean)
+      .join(' ');
   };
 
   return (
@@ -199,7 +156,7 @@ function DashboardMenu() {
         />
       </div>
 
-      <div className="dashboard_menu_container">
+      <div className={dashboardMenuClassName}>
         <div className="dashboard_menu_icons_container">
           <div className="dashboard_menu_logo" onClick={openNectworksWebsite}>
             <Image
@@ -235,12 +192,12 @@ function DashboardMenu() {
 
         <ul className="dashboard_menu_item_list">
           <li>
-            <Link href="/profile" onClick={(e) => handleNavigation('/profile', e)}>
-              <div className="dashboard_menu_item" data-path="profile">
+            <Link href="/profile">
+              <div className={getMenuItemClassName('/profile')}>
                 <span className="dashboard_menu_item_icon">
                   <Image src={myProfileIcon} alt="user profile" />
                 </span>
-                <span className="dashboard_menu_item_text">My Profile</span>
+                <span className={menuTextClassName}>My Profile</span>
               </div>
             </Link>
           </li>
@@ -255,21 +212,18 @@ function DashboardMenu() {
                   showBottomMessage('Verify work email. Go to Profile > Update your job status.');
                   return;
                 }
-                // Apply hard refresh for refer page too
-                if (isProfessional) {
-                  handleNavigation('/dashboard/refer', e);
-                }
               }}
             >
               <div
-                className={`dashboard_menu_item
-                ${isProfessional === false ? 'dashboard_menu_item_beta' : ''}`}
-                data-path="dashboard/refer"
+                className={getMenuItemClassName(
+                  '/dashboard/refer',
+                  isProfessional === false ? 'dashboard_menu_item_beta' : ''
+                )}
               >
                 <span className="dashboard_menu_item_icon">
                   <Image src={referIcon} alt="refer candidates" />
                 </span>
-                <span className="dashboard_menu_item_text">
+                <span className={menuTextClassName}>
                   Refer Candidates
                 </span>
                 {newReferral && (
@@ -280,12 +234,12 @@ function DashboardMenu() {
           </li>
 
           <li>
-            <Link href="/help" onClick={(e) => handleNavigation('/help', e)}>
-              <div className="dashboard_menu_item" data-path="help">
+            <Link href="/help">
+              <div className={getMenuItemClassName('/help')}>
                 <span className="dashboard_menu_item_icon">
                   <Image src={helpIcon} alt="help" />
                 </span>
-                <span className="dashboard_menu_item_text">Help</span>
+                <span className={menuTextClassName}>Help</span>
               </div>
             </Link>
           </li>
@@ -295,18 +249,18 @@ function DashboardMenu() {
               <span className="dashboard_menu_item_icon">
                 <Image src={postAJobIcon} alt="post icon" />
               </span>
-              <span className="dashboard_menu_item_text">Jobs</span>
+              <span className={menuTextClassName}>Jobs</span>
               <span className="dashboard_beta_feature_alert">BETA</span>
             </div>
           </li>
 
           <li>
-            <Link href="/account-settings" onClick={(e) => handleNavigation('/account-settings', e)}>
-              <div className="dashboard_menu_item" data-path="account-settings">
+            <Link href="/account-settings">
+              <div className={getMenuItemClassName('/account-settings')}>
                 <span className="dashboard_menu_item_icon">
                   <Image src={settingsIcon} alt="settings icon" />
                 </span>
-                <span className="dashboard_menu_item_text">
+                <span className={menuTextClassName}>
                   Account settings
                 </span>
               </div>
@@ -320,7 +274,7 @@ function DashboardMenu() {
             <span className="dashboard_menu_item_icon">
               <Image src={logoutIcon} alt="logout" />
             </span>
-            <span className="dashboard_menu_item_text">Log out</span>
+            <span className={menuTextClassName}>Log out</span>
           </div>
         </Link>
       </div>

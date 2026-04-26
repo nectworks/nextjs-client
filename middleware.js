@@ -6,8 +6,13 @@ export function middleware(request) {
   const isAuthenticated = request.cookies.get('access') !== undefined;
 
   if (!isAuthenticated) {
-    // If user is not authenticated, redirect to login page
-    return NextResponse.redirect(new URL('/log-in', request.url));
+    // If user is not authenticated, redirect to login page and preserve destination.
+    const loginUrl = new URL('/log-in', request.url);
+    const redirectPath = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+
+    loginUrl.searchParams.set('redirect', redirectPath);
+
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
@@ -18,9 +23,11 @@ export const config = {
   matcher: [
     '/dashboard/job',
     '/dashboard/refer',
+    '/profile',
     '/profile/:username',
     '/feedback',
     '/account-settings',
     '/help',
+    '/nectcoins',
   ],
 };

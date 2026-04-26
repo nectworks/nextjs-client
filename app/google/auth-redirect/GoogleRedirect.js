@@ -13,6 +13,7 @@ import '../../linkedin/auth-redirect/SignUpRedirect.css';
 import { privateAxios } from '@/config/axiosInstance';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { UserContext } from '@/context/User/UserContext';
+import { completeAuthSession, navigateAfterAuth } from '@/Utils/authSession';
 
 function SignUpRedirect() {
   const router = useRouter();
@@ -34,20 +35,16 @@ function SignUpRedirect() {
       const url = `/google/auth/callback?code=${authCode}`;
       const res = await privateAxios.get(url);
       const { signUp } = res.data;
-      setUser(res.data.user);
+      completeAuthSession(res.data.user, setUser);
 
       if (res.status === 200) {
         setMessage('Successfully authenticated.');
         if (signUp === true) {
-          router.push('/profile', {
-            state: {
-              from: '/sign-up',
-            },
-            replace: true,
-          });
+          sessionStorage.setItem('from', '/sign-up');
         } else {
-          router.push('/profile');
+          sessionStorage.removeItem('from');
         }
+        navigateAfterAuth(router, '/profile');
       }
     } catch (error) {
       console.error('Authentication error:', error);

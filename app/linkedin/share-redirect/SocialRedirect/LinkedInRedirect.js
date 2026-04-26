@@ -12,6 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import './SocialRedirect.css';
 import usePrivateAxios from '../../../../Utils/usePrivateAxios';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { navigateAfterAuth } from '@/Utils/authSession';
 
 function SignUpRedirect() {
   const router = useRouter();
@@ -34,9 +35,7 @@ function SignUpRedirect() {
 
       // if user is successfully signed up redirect them to profile page
       if (res.status === 200) {
-        router.push('/profile?post_shared=success', {
-          replace: true,
-        });
+        navigateAfterAuth(router, '/profile?post_shared=success');
       } else {
         setMessage('Unknown error occured, while sharing the post');
         setSharePostErr(true);

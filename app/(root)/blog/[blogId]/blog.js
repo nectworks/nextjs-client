@@ -23,8 +23,8 @@ import {
   AiOutlineArrowLeft,
   AiOutlineArrowRight,
 } from 'react-icons/ai';
-import frame from '@/public/Frame.webp';
 import './blog.css';
+import sanitizeHtml from '@/Utils/sanitizeHtml';
 
 const Blog = () => {
   const params = useParams();
@@ -32,49 +32,26 @@ const Blog = () => {
   const { blogId } = params;
   const [blogData, setBlogData] = useState(null);
   const [blogs, setBlogs] = useState([]);
-  const [currentBlogIndex, setCurrentBlogIndex] = useState(null);
-
-  // Fetch all blogs
-  const fetchBlogs = async () => {
-    try {
-      const res = await publicAxios.get('/blog/all');
-      setBlogs(res.data.blogs);
-    } catch (error) {
-      let { message } = error?.response?.data;
-      if (!message) message = "Couldn't fetch blogs";
-      showBottomMessage(message);
-    }
-  };
-
-  // Fetch single blog data
-  const fetchBlog = async () => {
-    try {
-      const res = await publicAxios.get(`/blog/${blogId}`);
-      setBlogData(res.data.blog);
-    } catch (error) {
-      let { message } = error?.response?.data;
-      if (!message) message = `Couldn't fetch blog by id: ${blogId}`;
-      showBottomMessage(message);
-    }
-  };
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    async function fetchBlogPageData() {
+      try {
+        const [blogsRes, blogRes] = await Promise.all([
+          publicAxios.get('/blog/all'),
+          publicAxios.get(`/blog/${blogId}`),
+        ]);
 
-  useEffect(() => {
-    if (blogs.length > 0) {
-      fetchBlog();
+        setBlogs(blogsRes.data.blogs);
+        setBlogData(blogRes.data.blog);
+      } catch (error) {
+        let { message } = error?.response?.data || {};
+        if (!message) message = `Couldn't fetch blog by id: ${blogId}`;
+        showBottomMessage(message);
+      }
     }
-  }, [blogs]);
 
-
-  useEffect(() => {
-    if (blogs.length > 0 && blogData) {
-      const index = blogs.findIndex((blog) => createSlug(blog.title) === blogId);
-      setCurrentBlogIndex(index);
-    }
-  }, [blogs, blogData]);
+    fetchBlogPageData();
+  }, [blogId]);
 
   const formattedDate = new Date(blogData?.lastUpdateOn).toLocaleDateString(
     'en-US',
@@ -100,6 +77,8 @@ const Blog = () => {
   const createSlug = (title) => {
     return title.toLowerCase().replace(/\s+/g, '-');
   };
+
+  const currentBlogIndex = blogs.findIndex((blog) => createSlug(blog.title) === blogId);
 
   if (!blogData) {
     return <div>Loading...</div>;
@@ -154,7 +133,7 @@ const Blog = () => {
         <div className="blog-content">
           <div
             className="blog-text"
-            dangerouslySetInnerHTML={{ __html: blogData.content }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(blogData.content) }}
           />
         </div>
       </div>

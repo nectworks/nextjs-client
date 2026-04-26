@@ -78,8 +78,10 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
         className="profile_image"
         src={user?.profile}
         alt={`${user?.firstName || ''} Nectworks`}
-        width={50}
-        height={50}
+        width={160}
+        height={160}
+        sizes="160px"
+        quality={95}
       />
     );
   } else if (isLoggedInUser == false && otherUser?.profile) {
@@ -89,6 +91,8 @@ function ProfileImage({ otherUser, isLoggedInUser }) {
         src={otherUser?.profile}
         width={200}
         height={200}
+        sizes="200px"
+        quality={95}
         alt={`${otherUser?.firstName || ''} Nectworks`}
       />
     );

@@ -2,17 +2,14 @@
 /*
     FileName - Wrapper.js
     Desc - This file defines the Wrapper component which wraps its children with 
-    multiple context providers: UserContextProvider, DashboardContextProvider, and 
-    ProfileContextProvider. It initializes Google Analytics (ReactGA) for page views 
-    if the hostname matches the specified client URL. The component tracks a loading 
-    state, displaying a ProgressBar component during loading and rendering the 
-    children within the context providers after a simulated loading time.
+    multiple context providers: UserContextProvider and DashboardContextProvider.
+    It initializes Google Analytics (ReactGA) for page views 
+    if the hostname matches the specified client URL.
 */
 
 import { useEffect } from 'react';
 import UserContextProvider from '@/context/User/UserContext';
 import DashboardContextProvider from '@/context/Dashboard/DashboardContext';
-import ProfileContextProvider from '@/context/UpdateProfile/ProfileContext';
 import ReactGA from 'react-ga4';
 
 const Wrapper = ({ children }) => {
@@ -29,9 +26,7 @@ const Wrapper = ({ children }) => {
 
   return (
     <UserContextProvider>
-      <DashboardContextProvider>
-        <ProfileContextProvider>{children}</ProfileContextProvider>
-      </DashboardContextProvider>
+      <DashboardContextProvider>{children}</DashboardContextProvider>
     </UserContextProvider>
   );
 };

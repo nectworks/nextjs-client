@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import sanitizeHtml from '@/Utils/sanitizeHtml';
 
 function PreviewBlog() {
   const searchParams = useSearchParams();
@@ -19,7 +20,7 @@ function PreviewBlog() {
     }
   }, [searchParams]);
 
-  return <div dangerouslySetInnerHTML={{ __html: blogContent }} />;
+  return <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(blogContent) }} />;
 }
 
 export default PreviewBlog;

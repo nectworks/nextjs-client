@@ -14,7 +14,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import {
   privateAxios,
 } from '../../config/axiosInstance.js';
-import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export const UserContext = createContext(null);
 
@@ -24,7 +24,7 @@ export default function UserContextProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [authCheckComplete, setAuthCheckComplete] = useState(false);
   
-  const pathname = usePathname();
+  const router = useRouter();
   
   // Ref to track and cancel ongoing requests
   const abortControllerRef = useRef(null);
@@ -171,6 +171,25 @@ export default function UserContextProvider({ children }) {
       window.removeEventListener('storage', handleStorageChange);
     };
   }, [user]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleAuthExpired = (event) => {
+      handleLogout();
+      router.replace(event.detail?.redirectTo || '/log-in');
+
+      window.setTimeout(() => {
+        router.refresh();
+      }, 0);
+    };
+
+    window.addEventListener('auth:expired', handleAuthExpired);
+
+    return () => {
+      window.removeEventListener('auth:expired', handleAuthExpired);
+    };
+  }, [router]);
 
   // Optional: Add a function to manually refresh user data if needed
   const refreshUser = () => {

@@ -416,12 +416,9 @@ const RequestReferral = () => {
    */
   const goToSignup = () => {
     document.body.style.overflow = 'auto';
-    router.push('/sign-up', {
-      state: {
-        from: `/${username}/request-referral`,
-        username: username,
-      },
-    });
+    router.push(
+      `/sign-up?from=${encodeURIComponent(`/${username}/request-referral`)}&username=${encodeURIComponent(username)}`
+    );
   };
 
   /**
@@ -691,7 +688,7 @@ const RequestReferral = () => {
       }
     } catch (err) {
       setIsLoading(false);
-      router.push('/page-not-found', { replace: true });
+      router.replace('/page-not-found');
     }
   };
 

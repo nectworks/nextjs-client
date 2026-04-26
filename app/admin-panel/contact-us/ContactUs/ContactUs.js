@@ -10,8 +10,7 @@ import { privateAxios } from '@/config/axiosInstance';
 import './ContactUs.css';
 import Image from 'next/image';
 import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDashboardMenu';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import LinearProgress from '@mui/material/LinearProgress';
+import AdminDataGrid from '@/app/_components/AdminDataGrid/AdminDataGrid';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import mailIcon from '@/public/Profile/otherLinkIcon.svg';
 import phoneIcon from '@/public/AdminPanel/phoneIcon.svg';
@@ -172,7 +171,7 @@ function ContactUs() {
       renderCell: ({ row }) => {
         return (
           <div className="admin_contactus_icon_container">
-            <Image src={mailIcon} />
+            <Image src={mailIcon} alt="Email" />
           </div>
         );
       },
@@ -186,7 +185,7 @@ function ContactUs() {
       renderCell: ({ row }) => {
         return (
           <div className="admin_contactus_icon_container">
-            <Image src={phoneIcon} />
+            <Image src={phoneIcon} alt="Phone" />
           </div>
         );
       },
@@ -200,7 +199,7 @@ function ContactUs() {
       renderCell: ({ row }) => {
         return (
           <div className="admin_contactus_icon_container">
-            <Image src={messageIcon} />
+            <Image src={messageIcon} alt="Message" />
           </div>
         );
       },
@@ -220,7 +219,7 @@ function ContactUs() {
 
             {row.status === 'pending' && (
               <>
-                <Image src={arrowIcon} />
+                <Image src={arrowIcon} alt="" />
 
                 <span
                   className="admin_contactus_status_update"
@@ -302,7 +301,7 @@ function ContactUs() {
         )}
 
         <div className="admin_contactus_data_grid">
-          <DataGrid
+          <AdminDataGrid
             getRowId={(row) => row._id}
             rows={currPageData}
             columns={columns}
@@ -313,29 +312,7 @@ function ContactUs() {
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[5, 10, 15, 20]}
-            // additional features
             loading={isLoading}
-            slots={{
-              toolbar: GridToolbar,
-              loadingOverlay: LinearProgress,
-            }}
-            sx={{
-              '& .MuiDataGrid-root': {
-                borderRadius: '8px',
-                boxShadow: '1px 1px 4px 0px rgba(0, 0, 0, 0.25)',
-              },
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: '#EBEBEB',
-                color: 'black',
-              },
-              '& .MuiDataGrid-cell': {
-                backgroundColor: '#FFF',
-                color: 'black',
-              },
-              '& .MuiDataGrid-row': {
-                margin: '3px 0',
-              },
-            }}
           />
         </div>
       </div>

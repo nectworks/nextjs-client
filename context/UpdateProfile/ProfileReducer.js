@@ -71,7 +71,17 @@ const allSubSections = [
   'projects',
 ];
 
-export const initialState = JSON.parse(localStorage.getItem('dashboard')) || {};
+function readDashboardState() {
+  if (typeof window === 'undefined') return {};
+
+  try {
+    return JSON.parse(localStorage.getItem('dashboard')) || {};
+  } catch {
+    return {};
+  }
+}
+
+export const initialState = readDashboardState();
 
 // function to update current state
 export function reducer(state = initialState, { type, payload }) {
@@ -88,18 +98,16 @@ export function reducer(state = initialState, { type, payload }) {
     case 'UPDATE_EXPERIENCE': {
       const allCurrExperience = state?.experience || [];
       const index = payload.index;
-
-      // incoming experience is new experience
-      if (index >= allCurrExperience.length) {
-        allCurrExperience.push(payload.experience);
-      } else {
-        // currently editing the previously added experience
-        allCurrExperience[index] = payload.experience;
-      }
+      const experience =
+        index >= allCurrExperience.length
+          ? [...allCurrExperience, payload.experience]
+          : allCurrExperience.map((item, currIndex) =>
+              currIndex === index ? payload.experience : item
+            );
 
       const newState = {
         ...state,
-        experience: allCurrExperience,
+        experience,
       };
 
       updateDataLocally(newState);
@@ -109,18 +117,16 @@ export function reducer(state = initialState, { type, payload }) {
     case 'UPDATE_EDUCATION': {
       const allCurrEducation = state?.education || [];
       const index = payload.index;
-
-      // incoming education is new education
-      if (index >= allCurrEducation.length) {
-        allCurrEducation.push(payload.education);
-      } else {
-        // else editing the previously added education
-        allCurrEducation[index] = payload.education;
-      }
+      const education =
+        index >= allCurrEducation.length
+          ? [...allCurrEducation, payload.education]
+          : allCurrEducation.map((item, currIndex) =>
+              currIndex === index ? payload.education : item
+            );
 
       const newState = {
         ...state,
-        education: allCurrEducation,
+        education,
       };
 
       updateDataLocally(newState);
@@ -150,18 +156,16 @@ export function reducer(state = initialState, { type, payload }) {
     case 'UPDATE_ACHIEVEMENTS': {
       const allCurrAchievements = state?.achievements || [];
       const index = payload.index;
-
-      // incoming education is new achievements
-      if (index >= allCurrAchievements.length) {
-        allCurrAchievements.push(payload.achievements);
-      } else {
-        // else editing the previously added achievements
-        allCurrAchievements[index] = payload.achievements;
-      }
+      const achievements =
+        index >= allCurrAchievements.length
+          ? [...allCurrAchievements, payload.achievements]
+          : allCurrAchievements.map((item, currIndex) =>
+              currIndex === index ? payload.achievements : item
+            );
 
       const newState = {
         ...state,
-        achievements: allCurrAchievements,
+        achievements,
       };
 
       updateDataLocally(newState);
@@ -171,18 +175,16 @@ export function reducer(state = initialState, { type, payload }) {
     case 'UPDATE_PROJECTS': {
       const allCurrProjects = state?.projects || [];
       const index = payload.index;
-
-      // incoming experience is new experience
-      if (index >= allCurrProjects.length) {
-        allCurrProjects.push(payload.projects);
-      } else {
-        // currently editing the previously added experience
-        allCurrProjects[index] = payload.projects;
-      }
+      const projects =
+        index >= allCurrProjects.length
+          ? [...allCurrProjects, payload.projects]
+          : allCurrProjects.map((item, currIndex) =>
+              currIndex === index ? payload.projects : item
+            );
 
       const newState = {
         ...state,
-        projects: allCurrProjects,
+        projects,
       };
 
       updateDataLocally(newState);
@@ -215,8 +217,10 @@ export function reducer(state = initialState, { type, payload }) {
 function to save data to localStorage this function is called from children components
 */
 export function updateDataLocally(updatedData) {
+  if (typeof window === 'undefined') return;
+
   // get the current dashboard data
-  const oldDashboardData = JSON.parse(localStorage.getItem('dashboard'));
+  const oldDashboardData = readDashboardState();
 
   // update the data with new changes.
   const newDashboardData = {

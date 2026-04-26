@@ -34,8 +34,9 @@ const JobSeeker = () => {
       observer.observe(container);
     });
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
+    const heroElement = heroRef.current;
+    if (heroElement) {
+      observer.observe(heroElement);
     }
 
     return () => {
@@ -43,8 +44,8 @@ const JobSeeker = () => {
         observer.unobserve(container);
       });
       
-      if (heroRef.current) {
-        observer.unobserve(heroRef.current);
+      if (heroElement) {
+        observer.unobserve(heroElement);
       }
     };
   }, []);
@@ -116,7 +117,7 @@ const JobSeeker = () => {
           <div className="cta-content animation-container">
             <h2 className="cta-title">Ready to Start Your Journey?</h2>
             <p className="cta-description">
-              Have questions or need assistance? We're here to help you navigate your career path and connect with the right opportunities.
+              Have questions or need assistance? We&apos;re here to help you navigate your career path and connect with the right opportunities.
             </p>
             <div className="cta-buttons">
               <Link href="/faq">

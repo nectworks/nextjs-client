@@ -11,14 +11,11 @@ import Image from 'next/image';
 import showBottomMessage from '@/Utils/showBottomMessage';
 import { privateAxios } from '@/config/axiosInstance';
 import AdminDashboardMenu from '../../../_components/AdminDashboardMenu/AdminDashboardMenu';
+import AdminDataGrid from '@/app/_components/AdminDataGrid/AdminDataGrid';
 import documentLinkIcon from '@/public/Profile/documentLinkIcon.svg';
 import Link from 'next/link';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { LinearProgress } from '@mui/material';
 
 function Help() {
-    const [data, setData] = useState(null);
-
     // segregate the data based on it's status
     const [resolvedData, setResolvedData] = useState([]);
     const [resolvedCount, setResolvedCount] = useState(-1);
@@ -119,13 +116,13 @@ function Help() {
             setSelectedData(null);
             showBottomMessage(`Successfully resolved issue with id '${helpId}'`);
 
-            const updatedData = data.map((obj, idx) => {
-                if (obj._id === helpId) {
-                    return { ...obj, status: 'resolved' };
-                }
-                return obj;
-            });
-            setData(updatedData);
+            const resolvedHelp = { ...selectedData, status: 'resolved' };
+            setUnResolvedData((prevData) =>
+                prevData.filter((obj) => obj._id !== helpId)
+            );
+            setResolvedData((prevData) => [...prevData, resolvedHelp]);
+            setUnResolvedCount((prevCount) => prevCount - 1);
+            setResolvedCount((prevCount) => prevCount + 1);
         } catch (error) {
             showBottomMessage(`Couldn't resolve submission`);
         }
@@ -262,7 +259,7 @@ function Help() {
 
                 {/* display data in grid */}
                 <div className="admin_help_data_grid">
-                    <DataGrid
+                    <AdminDataGrid
                         getRowId={(row) => row._id}
                         rows={currPageData}
                         columns={helpDataCols}
@@ -273,27 +270,6 @@ function Help() {
                         onPaginationModelChange={setPaginationModel}
                         pageSizeOptions={[5, 10, 15, 20]}
                         loading={isLoading}
-                        slots={{
-                            toolbar: GridToolbar,
-                            loadingOverlay: LinearProgress,
-                        }}
-                        sx={{
-                            '& .MuiDataGrid-root': {
-                                borderRadius: '8px',
-                                boxShadow: '1px 1px 4px 0px rgba(0, 0, 0, 0.25)',
-                            },
-                            '& .MuiDataGrid-columnHeaders': {
-                                backgroundColor: '#EBEBEB',
-                                color: 'black',
-                            },
-                            '& .MuiDataGrid-cell': {
-                                backgroundColor: '#FFF',
-                                color: 'black',
-                            },
-                            '& .MuiDataGrid-row': {
-                                margin: '3px 0',
-                            },
-                        }}
                     />
                 </div>
             </div>

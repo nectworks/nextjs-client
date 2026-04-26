@@ -9,7 +9,7 @@
 import { useContext, useEffect, useState } from 'react';
 import usePrivateAxios from '@/Utils/usePrivateAxios';
 import './NectCoins.css';
-import DashboardMenu from '../../_components/DashboardMenu/DashboardMenu';
+import ProtectedDashboardShell from '@/app/_components/ProtectedDashboardShell/ProtectedDashboardShell';
 import ProfileHeaderWrapper from '@/app/_components/ProfileHeaderWrapper/ProfileHeaderWrapper';
 import nectCoinsImg from '@/public/Profile/nectCoin.svg';
 import { UserContext } from '@/context/User/UserContext';
@@ -218,9 +218,7 @@ function NectCoins() {
   }, [paginationModel, data]);
 
   return (
-    <>
-      <DashboardMenu />
-      <div className="dashboard-layout">
+    <ProtectedDashboardShell>
         <div className="modern_nectcoins_container">
           <ProfileHeaderWrapper />
 
@@ -391,8 +389,7 @@ function NectCoins() {
             </div>
           </div>
         </div>
-      </div>
-    </>
+    </ProtectedDashboardShell>
   );
 }
 
